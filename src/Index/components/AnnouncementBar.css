@@ -1,0 +1,123 @@
+/* Base Announcement Bar Style */
+.announcement-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    /* Adjust to fit the full screen width */
+    /* max-width: 1200px; */
+    /* Optional: Limit maximum width */
+    margin: 0 auto;
+    /* Center it */
+    background-color: rgba(173, 216, 230, 0.9);
+    /* Light blue with slight opacity */
+    color: #004080;
+    /* Darker blue text */
+    text-align: center;
+    padding: 12px 10px;
+    font-size: 22px;
+    font-weight: bold;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+    border-radius: 10px 10px 2px 2px;
+    display: inline;
+}
+
+
+.announcement-bar .apply-link {
+    color: #002366;
+    text-decoration: underline;
+    font-weight: 800;
+    margin-left: 8px;
+}
+
+.announcement-bar .apply-link:hover {
+    color: #0352a1;
+    /* Slightly darker on hover */
+    text-decoration: underline;
+}
+
+/* Mobile Adjustments (screens up to 600px) */
+@media (max-width: 600px) {
+    .announcement-bar {
+        margin: 0;
+        width: 100%;
+        font-size: 11px;
+        padding: 7px 3px;
+        flex-direction: column;
+        /* Stack text and link on top of each other */
+        line-height: 1.2;
+    }
+
+    .announcement-bar .apply-link {
+        font-size: 10px;
+    }
+}
+
+/* Adjustment for screens around 600-650px */
+@media (min-width: 600px) and (max-width: 650px) {
+    .announcement-bar {
+        width: 95%;
+        /* Slightly narrower */
+        font-size: 10px;
+        /* Smaller font for readability */
+        padding: 8px;
+        /* Slightly less padding */
+        line-height: 1.4;
+    }
+
+    .announcement-bar .apply-link {
+        font-size: 14px;
+    }
+}
+
+/* Tablet Adjustments (screens between 650px and 900px) */
+@media (min-width: 650px) and (max-width: 900px) {
+    .announcement-bar {
+        font-size: 12px;
+        padding: 10px;
+        width: 90%;
+    }
+
+    .announcement-bar .apply-link {
+        font-size: 12px;
+    }
+}
+
+/* Small Laptop Adjustments (screens between 900px and 1200px) */
+@media (min-width: 900px) and (max-width: 1200px) {
+    .announcement-bar {
+        font-size: 16px;
+        padding: 10px 15px;
+        width: 90%;
+    }
+
+    .announcement-bar .apply-link {
+        font-size: 18px;
+    }
+}
+
+/* Large Screen Adjustments (screens larger than 1200px) */
+@media (min-width: 1200px) {
+    .announcement-bar {
+        font-size: 22px;
+        padding: 15px 20px;
+        width: 80%;
+    }
+
+    .announcement-bar .apply-link {
+        font-size: 20px;
+    }
+}
+
+/* Adjusting page content */
+body {
+    margin-top: 60px;
+    /* Prevent content overlap with the bar */
+}

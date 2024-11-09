@@ -1,0 +1,118 @@
+/*=============== NEWS & EVENTS ===============*/
+.parent-testimonials-section {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    height: auto;
+}
+
+.testimonials-section {
+    text-align: center;
+    padding: 50px 20px;
+    background-color: #f9f9f9;
+}
+
+.testimonials-section h2 {
+    font-size: 40px;
+    color: #003366;
+    /* Dark Blue */
+    margin-bottom: 50px !important;
+}
+
+.slider-container {
+    overflow: hidden;
+    width: 80%;
+    position: relative;
+    margin: 0 auto;
+}
+
+.testimonials-slider {
+    display: flex;
+    gap: 10px;
+    transition: transform 0.5s ease;
+}
+
+.testimonial {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 33.33%;
+    /* Show 3 items at a time */
+    box-sizing: border-box;
+    transition: transform 0.5s ease;
+    margin-bottom: 10px;
+}
+
+.testimonial p {
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+    line-height: 1.5;
+    color: #1a1a1a;
+    /* Dark Black */
+}
+
+.testimonial h3 {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #003366;
+    /* Dark Blue */
+}
+
+.testimonial p:last-of-type {
+    font-size: 0.8rem;
+    color: #00509e;
+}
+
+.testimonial:hover {
+    transform: scale(1.02);
+    /* Slightly scale up the card */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    /* Increase shadow for depth */
+    cursor: pointer;
+}
+
+.slider-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.slider-button {
+    background-color: #3b82f6;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 0 10px;
+    border-radius: 50%;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.slider-button:hover {
+    background-color: #2563eb;
+    transform: scale(1.1);
+}
+
+.slider-button:active {
+    transform: scale(1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .testimonials-slider {
+        gap: 0;
+    }
+
+    .testimonial {
+        min-width: 100%;
+        /* Show 1 item at a time on small screens */
+    }
+}
