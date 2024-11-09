@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta charset="utf-8">
+    <title>Error 404 | Campus+</title>
+    <link rel="stylesheet" href="../assets/css/error404.css">
+    <link rel="shortcut icon" href="../assets/images/cp_logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="../assets/css/stickybutton.css">
+
+</head>
+<!--=============== HEADER ===============-->
+<div id="header"></div>
+<script>
+    // Load header.html
+    fetch('head-foot/navbar.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('header').innerHTML = html;
+
+            // Dynamically load header.css
+            const headerCss = document.createElement('link');
+            headerCss.rel = 'stylesheet';
+            headerCss.href = 'head-foot/navbar.css';
+            document.head.appendChild(headerCss);
+
+            // Dynamically load main.js for header
+            const headerJs = document.createElement('script');
+            headerJs.src = 'head-foot/main.js';
+            document.body.appendChild(headerJs);
+        });
+</script>
+
+<body>
+    <!--=============== LOADER ===============-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="loader-wrapper">
+        <div class="loader">
+            <img src="/assets/images/cp_logo.png" alt="Logo" class="loader-logo">
+        </div>
+    </div>
+
+    <style>
+        .loader-wrapper {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #002366;
+            z-index: 9999;
+        }
+
+        .loader {
+            width: 120px;
+            height: 120px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: relative;
+            animation: rotate 1.5s infinite ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(180deg);
+                border-radius: 15%;
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        $(window).on("load", function () {
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
+
+    <br />
+    <br />
+    <br />
+    <div class="video-overlay"></div>
+    <div class="container">
+        <div class="text-container">
+            <h2 class="fade-in">Oops! Page not found.</h2>
+            <p class="fade-in-delay">We can't find the page you're looking for. Let's get you back on track!</p>
+            <a href="/index.html" class="btn-hover">Go back home</a>
+        </div>
+        <div class="svg-container">
+            <img class="img-background" src="../assets/images/error-404.png" />
+        </div>
+    </div>
+
+
+    <!-- Sticky Button -->
+    <div class="sticky-button" id="sticky-btn">
+        <span class="sticky-icon">+</span>
+    </div>
+
+    <!-- Popup with Tabs (Hidden by Default) -->
+    <div class="popup" id="popup">
+        <div class="tabs">
+            <button id="testimonial-tab" class="tab">Submit Testimonial</button>
+            <button id="bug-tab" class="tab">Report Bug</button>
+        </div>
+    </div>
+    <div class="thought-bubble" id="thought-bubble">
+        Report a bug
+    </div>
+    <!-- Link to the external JavaScript file -->
+    <script src="../assets/js/stickybutton.js"></script>
+
+
+
+
+    <!--=============== FOOTER ===============-->
+    <div id="footer" style="display: block !important;"></div>
+    <script>
+        // Load footer.html
+        fetch('head-foot/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer').innerHTML = html;
+
+                // Dynamically load footer.css
+                const footerCss = document.createElement('link');
+                footerCss.rel = 'stylesheet';
+                footerCss.href = 'head-foot/footer.css';
+                document.head.appendChild(footerCss);
+            });
+    </script>
+    <script src="head-foot/main.js"></script>
+</body>
+
+</html>

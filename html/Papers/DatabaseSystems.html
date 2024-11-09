@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Database Systems | Campus+ </title>
+    <link href="../../assets/css/papers.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../assets/css/stickybutton.css">
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="/assets/images/cp_logo.png" type="image/x-icon">
+    </link>
+</head>
+
+<body>
+    <!--=============== LOADER ===============-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="loader-wrapper">
+        <div class="loader">
+            <img src="/assets/images/cp_logo.png" alt="Logo" class="loader-logo">
+        </div>
+    </div>
+
+    <style>
+        .loader-wrapper {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #002366;
+            z-index: 9999;
+        }
+
+        .loader {
+            width: 120px;
+            height: 120px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: relative;
+            animation: rotate 1.5s infinite ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(180deg);
+                border-radius: 15%;
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+
+    <script>
+        $(window).on("load", function () {
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
+
+    <div id="header"></div>
+    <script>
+        // Load navbar.html
+        fetch('../head-foot/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('header').innerHTML = html;
+
+                // Dynamically load navbar.css
+                const headerCss = document.createElement('link');
+                headerCss.rel = 'stylesheet';
+                headerCss.href = '../head-foot/navbar.css';
+                document.head.appendChild(headerCss);
+
+                // Dynamically load main.js for header
+                const headerJs = document.createElement('script');
+                headerJs.src = '../head-foot/main.js';
+                document.body.appendChild(headerJs);
+            });
+    </script>
+
+    <section class="parent-testimonials-section">
+        <div class="testimonials-section">
+            <div class="heading-with-icon">
+                <h2><i class="fas fa-database"></i> &nbsp; Database Systems</h2>
+            </div>
+
+            <div class="slider-container">
+                <div class="testimonials-slider">
+                    <div class="testimonial">
+                        <h3><i class="fas fa-book"></i> &nbsp; Course Code</h3>
+                        <p>CS-2005</p>
+                    </div>
+                    <div class="testimonial">
+                        <h3><i class="fas fa-signal"></i> &nbsp; Difficulty Level</h3>
+                        <i class="fas fa-star" style="color: #FFD43B;"></i>
+                        <i class="fas fa-star" style="color: #FFD43B;"></i>
+                        <i class="fas fa-star" style="color: #FFD43B;"></i>
+                        <i class="fas fa-star-half" style="color: #FFD43B;"></i>
+                    </div>
+                    <div class="testimonial">
+                        <a href="../faculty.html" style="text-decoration: none; color: inherit;">
+                            <h3><i class="fas fa-user-tie"></i> &nbsp; Course Instructors</h3>
+                            <p>Ms. Aleena Ahmed | Mr. Muhammad Naveed | Ms. Zareen Alamgir | Dr. Ishaq Raza </p>
+                        </a>
+                    </div>
+                    <div class="testimonial">
+                        <h3><i class="fas fa-balance-scale"></i> &nbsp; Grading Policy</h3>
+                        <p>Absolute</p>
+                    </div>
+                    <div class="testimonial">
+                        <h3><i class="fas fa-graduation-cap"></i> &nbsp; Course Type</h3>
+                        <p>Core</p>
+                    </div>
+
+                </div>
+
+                <div class="slider-controls">
+                    <button class="slider-button prev" onclick="moveToPreviousSlide()">&#10094;</button>
+                    <button class="slider-button next" onclick="moveToNextSlide()">&#10095;</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="../../assets/css/slider.js"></script>
+    <main>
+        <div class="pp_container">
+            <!--=============== COURSE OUTLINE ===============-->
+            <div class="section" id="course-outline">
+                <h2>Course Outline</h2>
+                <ul>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1Q_5rFTOxCRCjnQIcSjJFzJR70tiwwh1x?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Course Outline </a></li>
+                </ul>
+            </div>
+            <!--=============== FINALS ===============-->
+            <div class="section" id="past-papers">
+                <h2>Finals</h2>
+                <ul>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1IZCCLA7JDa5N0WbZ_lT5ltUQZfGgp4JS?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2012 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1An_Leyhyqf2EUz_qXX8eZDbV4LNigIYi?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2014 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1Xfm0lx_AGPlF44yAxctAV0zP4zxxLD03?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2016 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/19CNjspjUzsC0jHGfFrJmXFnaziA4Hoxk?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2018 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1AEp9rTGF-EHYnk4gwUPxXoNOUanU5kzN?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2019 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1v87sWyDxFsw8aPegZvVlY7jDZbVDNFz3?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2020 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/18KeGbeY-yg18WzkjVDJZYmUG7JHkU0Yw?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2023 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1FdKEcn1KA-EHcLKqOVR3cuMPZggEr2GN?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2024 </a></li>
+                </ul>
+            </div>
+            <!--=============== MID-I ===============-->
+            <div class="section" id="past-papers">
+                <h2>Mid 1</h2>
+                <ul>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1STFepqknzFDyy83FzgnmAwlUFtM3cHmJ?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2012 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1HEhng9GT0zUlgLr96UU5kR377it3vec6?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2014 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1nCtLIz_m134qgOKQJa8fAkA8R4shke-e?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2015 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1y2ZLncWrqnrprCNw-g7GD20G-nCRS_NL?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2018 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1PfoN0fnm63fxnCsx-luyR9sB4Up5zq4W?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2019 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1sZk4TzTKAwKa6VGku3CM6b1Exq6-m3YH?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2020 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1MOFdgusMebq7DaVz6C4Cdxwz32zroV4c?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2022 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1fjX-tsI0Og2qjKyGPz5kbLDEHyjC_T9V?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2024 </a></li>
+                </ul>
+            </div>
+            <!--=============== MID-II ===============-->
+            <div class="section" id="past-papers">
+                <h2>Mid 2</h2>
+                <ul>
+                    <li><a href="https://drive.google.com/file/d/1OLLiyygk633SOlRbx-GdxIMoSggPAwU8/view?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2012 - Mid2 - Fall </a>
+                    </li>
+                    <li><a href="https://drive.google.com/file/d/1BwfXsKnMEx6FmXyhaoEfMxKA3ZQT9M74/view?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2014 - Mid2 - Spring
+                        </a></li>
+                    <li><a href="https://drive.google.com/file/d/1OK8OSDpbONQuZxaIP0X_FbXvwBDs4xIo/view?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2015 - Mid2 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/13tSHd8Sijyj_R7MhI9v2HyzJCSIHrupX?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2018 - Mid2 </a></li>
+                    <li><a href="https://drive.google.com/file/d/1cG25W9jWPSoGSnob-GUerRb_-6awHPd5/view?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2022 - Mid2 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1HFkox49DBYkFm4U0tFtNJQdUwQWIQ4DH?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> 2024 - Mid2 </a></li>
+                </ul>
+            </div>
+            <!--=============== QUIZ ===============-->
+            <div class="section" id="quizzes">
+                <h2>Quizzes</h2>
+                <ul>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/19x7bv16BjOKj4O-eWNCW7ghMR7XN_nCv?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Quiz1 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1jyOw8N-KP4p3934qXdP4Ggl9t2BU_3z0?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Quiz2 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1tbwHw3CBB1RNd0X7a9nRr5pEvadCnLf1?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Quiz3 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1Ts3qJiPs4nkBgWQlw6UK4xd2kHeVzIsW?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Quiz4 </a></li>
+                </ul>
+            </div>
+            <!--=============== ASSIGNMENT ===============-->
+            <div class="section" id="Books">
+                <h2>Assignments</h2>
+                <ul>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1Xd6ujGXASpJw2k2HAKaOQ6zC8XSHdgZr?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Assignments </a></li>
+                </ul>
+            </div>
+            <!--=============== BOOK ===============-->
+            <div class="section" id="lab-tasks">
+                <h2>Books</h2>
+                <ul>
+                    <li><a href="https://drive.google.com/file/d/1cpkvMB1cHfHdeprfEIYWrndb11du-YlR/view?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Books </a></li>
+                </ul>
+            </div>
+            <!--=============== OTHER ===============-->
+            <div class="section" id="others">
+                <h2>Others</h2>
+                <ul>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1v5gV3RD5bHRZQwJK63kJer9l_QD5LU7r?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Slides1 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1HIk5LEyK0HP_KDBHIB-ah0KWASXi610q?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Slides2 </a></li>
+                    <li><a
+                            href="https://drive.google.com/drive/folders/1LLWtNuZuctRa8P7Ikmyg3pWgMPalLEeH?usp=drive_link"><img
+                                src="../../assets/images/google-drive.png" class="drive-icons"> Practice Material </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+
+        <!-- Contribute Button -->
+        <div class="parent-container">
+            <h1>Have More?</h1>
+            <p>If you have material for this subject that isn't here, <br /> please submit the document with its details
+                by
+                clicking
+                the upload button to list it here.</p>
+            <div class="button-container">
+                <a href="https://drive.google.com/drive/folders/1neX-u0kDbgVanUW3S6aODZCFmcps88TT?usp=sharing"
+                    class="button type1"></a>
+            </div>
+        </div>
+
+        <div id="myBtnContainer">
+            <svg class="progress-ring" width="90" height="90">
+                <circle class="progress-ring__circle" cx="45" cy="45" r="34"></circle>
+            </svg>
+
+            <button onclick="topFunction()" id="myBtn" title="Go to top">
+                <i class="fas fa-rocket"></i>
+            </button>
+        </div>
+        <script src="/html/head-foot/topButtonProgress.js"></script>
+    </main>
+    <!-- Sticky Button -->
+    <div class="sticky-button" id="sticky-btn">
+        <span class="sticky-icon">+</span>
+    </div>
+
+    <!-- Popup with Tabs (Hidden by Default) -->
+    <div class="popup" id="popup">
+        <div class="tabs">
+            <button id="testimonial-tab" class="tab">Submit Testimonial</button>
+            <button id="bug-tab" class="tab">Report Bug</button>
+        </div>
+    </div>
+    <div class="thought-bubble" id="thought-bubble">
+        Report a bug
+    </div>
+    <!-- Link to the external JavaScript file -->
+    <script src="../../assets/js/stickybutton.js"></script>
+
+
+
+    <!--=============== FOOTER ===============-->
+    <div id="footer"></div>
+    <script>
+        // Load footer.html
+        fetch('../head-foot/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer').innerHTML = html;
+
+                // Dynamically load footer.css
+                const footerCss = document.createElement('link');
+                footerCss.rel = 'stylesheet';
+                footerCss.href = '../head-foot/footer.css';
+                document.head.appendChild(footerCss);
+            });
+    </script>
+    <!--=============== ICONS ===============-->
+    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="../../assets/js/papers.js"></script>
+</body>
+
+</html>

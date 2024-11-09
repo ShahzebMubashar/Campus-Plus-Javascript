@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us | Campus+</title>
+    <link rel="stylesheet" href="../assets/css/contact.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="shortcut icon" href="../assets/images/cp_logo.png" type="image/x-icon">
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
+
+    <link rel="stylesheet" href="../assets/css/stickybutton.css">
+
+    <script>
+        (function () {
+            emailjs.init("jg7Is29lCuKpAdZxd"); // Replace 'YOUR_USER_ID' with your EmailJS user ID
+        })();
+    </script>
+</head>
+
+<!--=============== HEADER ===============-->
+<div id="header"></div>
+<script>
+    // Load header.html
+    fetch('head-foot/navbar.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('header').innerHTML = html;
+
+            // Dynamically load header.css
+            const headerCss = document.createElement('link');
+            headerCss.rel = 'stylesheet';
+            headerCss.href = 'head-foot/navbar.css';
+            document.head.appendChild(headerCss);
+
+            // Dynamically load main.js for header
+            const headerJs = document.createElement('script');
+            headerJs.src = 'head-foot/main.js';
+            document.body.appendChild(headerJs);
+        });
+</script>
+
+
+<body>
+    <!--=============== LOADER ===============-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="loader-wrapper">
+        <div class="loader">
+            <img src="/assets/images/cp_logo.png" alt="Logo" class="loader-logo">
+        </div>
+    </div>
+
+    <style>
+        .loader-wrapper {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #002366;
+            z-index: 9999;
+        }
+
+        .loader {
+            width: 120px;
+            height: 120px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: relative;
+            animation: rotate 1.5s infinite ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(180deg);
+                border-radius: 15%;
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        $(window).on("load", function () {
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
+
+
+    <section class="parent-contact">
+        <div class="contact_us_8 container-center">
+            <div>
+                <form id="contact-form" class="form-box"> <!-- Updated action attribute -->
+                    <div class="container-block form-wrapper">
+                        <div class="responsive-container-block">
+                            <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-8 wk-ipadp-12"
+                                id="i10mt-9">
+                                <input class="input" id="ijowk-9" name="name" placeholder="Full Name" required>
+                                <!-- Added name attribute -->
+                            </div>
+                            <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-8 wk-ipadp-12" id="ieakm">
+                                <input class="input" id="indfi-7" name="email" placeholder="Email" required>
+                                <!-- Added name attribute -->
+                            </div>
+                            <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-8 wk-ipadp-12" id="iajvf">
+                                <input class="input" id="ipmgh-9" name="phone" placeholder="Phone Number">
+                                <!-- Added name attribute -->
+                            </div>
+                            <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-8 wk-ipadp-12"
+                                id="i634i-9">
+                                <textarea aria-placeholder="What’s on your mind?" class="textinput" id="i5vyy-9"
+                                    name="message" rows="4" placeholder="What’s on your mind?" required></textarea>
+                                <!-- Added name attribute -->
+                            </div>
+                        </div>
+                        <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-8 wk-ipadp-12 checkbox-container"
+                            id="i634i-2-2">
+                            <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-8 wk-ipadp-12 checkbox-container"
+                                id="i634i-2-2">
+                                <div class="checkboc-container">
+                                    <input id="accept" type="checkbox"> <!-- Updated the id to "accept" -->
+                                    <p class="checkbox-text" id="i5ywz">
+                                        I agree to the privacy policy and consent to the processing of my data.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="responsive-cell-block wk-tab-12 wk-mobile-12 wk-desk-8 wk-ipadp-12" id="i0txn-2">
+                            <button type="submit" class="submit-btn">
+                                Submit
+                            </button>
+                        </div>
+                        <div class="right-side-text">
+                            <p class="text-blk contactus-head">
+                                Aao baat karain!
+                            </p>
+                            <p class="text-blk contactus-subhead">
+                                Feel free to get in touch with us. Our team will be available to you.
+                            </p>
+                            <link rel="stylesheet"
+                                href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+                            <div class="social-media-links">
+                                <a href="https://github.com/MultiDexters" id="ix94i-2-3" target="_blank">
+
+                                    <i class="fab fa-github social-icon"></i>
+                                </a>
+                                <a href="https://www.facebook.com/profile.php?id=61560884754001" target="_blank">
+
+                                    <i class="fab fa-facebook-f social-icon"></i>
+                                </a>
+                                <a href="https://www.linkedin.com/in/multidexters/" target="_blank">
+                                    <i class="fab fa-linkedin-in social-icon"></i>
+                                </a>
+                                <a href="https://www.instagram.com/multidexters/" id="izldf-2-3" target="_blank">
+
+                                    <i class="fab fa-instagram social-icon"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div id="myBtnContainer">
+        <svg class="progress-ring" width="90" height="90">
+            <circle class="progress-ring__circle" cx="45" cy="45" r="34"></circle>
+        </svg>
+
+        <button onclick="topFunction()" id="myBtn" title="Go to top">
+            <i class="fas fa-rocket"></i>
+        </button>
+    </div>
+    </div>
+
+    <script>
+        document.getElementById('contact-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            var checkbox = document.getElementById("accept");
+            console.log('Checkbox:', checkbox.checked);
+            if (!checkbox.checked) {
+                alert('Please accept the terms and conditions.');
+                return false;
+            }
+            console.log('Name:', this.elements['name'].value);
+            console.log('Email:', this.elements['email'].value);
+            emailjs.sendForm('service_mj3k7tm', 'template_3yduvdn', this)
+                .then(() => {
+                    alert('Sent!');
+                }, (err) => {
+                    alert(JSON.stringify(err));
+                });
+        });
+    </script>
+
+
+
+
+
+
+    <!-- Sticky Button -->
+    <div class="sticky-button" id="sticky-btn">
+        <span class="sticky-icon">+</span>
+    </div>
+
+    <!-- Popup with Tabs (Hidden by Default) -->
+    <div class="popup" id="popup">
+        <div class="tabs">
+            <button id="testimonial-tab" class="tab">Submit Testimonial</button>
+            <button id="bug-tab" class="tab">Report Bug</button>
+        </div>
+    </div>
+    <div class="thought-bubble" id="thought-bubble">
+        Report a bug
+    </div>
+    <!-- Link to the external JavaScript file -->
+    <script src="../assets/js/stickybutton.js"></script>
+
+
+
+
+
+    <!--=============== FOOTER ===============-->
+    <div id="footer"></div>
+    <script>
+        // Load footer.html
+        fetch('head-foot/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer').innerHTML = html;
+
+                // Dynamically load footer.css
+                const footerCss = document.createElement('link');
+                footerCss.rel = 'stylesheet';
+                footerCss.href = 'head-foot/footer.css';
+                document.head.appendChild(footerCss);
+            });
+    </script>
+
+
+    <!--=============== ICONS ===============-->
+    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="/html/head-foot/topButtonProgress.js"></script>
+</body>
+</body>
+
+</html>

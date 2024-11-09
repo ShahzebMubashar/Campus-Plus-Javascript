@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+  <title>TimeTable Generator | Campus+ </title>
+  <script src="../assets/js/tt_gen_data.js"></script>
+  <script src="../assets/js/tt_gen_cal.js"></script>
+  <link rel="stylesheet" type="text/css" href="../assets/bootstrap/tt_gen.css" />
+  <link rel="stylesheet" type="text/css" href="../assets/css/tt_gen.css" />
+  <link rel="stylesheet" href="../assets/css/stickybutton.css">
+  <link rel="shortcut icon" href="../assets/images/cp_logo.png" type="image/x-icon">
+  <meta name="msapplication-TileColor" content="#ffffff" />
+  <meta name="theme-color" content="#ffffff" />
+  <meta charset="UTF-8" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/ApplicationGen.css">
+  <script src="https://cdn.jsdelivr.net/npm/docx@7.4.0/build/index.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-19EHW1W4K3"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag("js", new Date());
+
+    gtag("config", "G-19EHW1W4K3");
+  </script>
+</head>
+
+<body>
+  <!--=============== LOADER ===============-->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <div class="loader-wrapper">
+    <div class="loader">
+      <img src="/assets/images/cp_logo.png" alt="Logo" class="loader-logo">
+    </div>
+  </div>
+
+  <style>
+    .loader-wrapper {
+      width: 100%;
+      height: 100%;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #002366;
+      z-index: 9999;
+    }
+
+    .loader {
+      width: 120px;
+      height: 120px;
+      background-color: #fff;
+      border-radius: 20px;
+      position: relative;
+      animation: rotate 1.5s infinite ease-in-out;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .loader-logo {
+      width: 60px;
+      height: auto;
+    }
+
+    @keyframes rotate {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      50% {
+        transform: rotate(180deg);
+        border-radius: 15%;
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+  </style>
+  <script>
+    $(window).on("load", function () {
+      $(".loader-wrapper").fadeOut("slow");
+    });
+  </script>
+
+
+  <!--=============== HEADER ===============-->
+  <div id="header"></div>
+  <script>
+    // Load header.html
+    fetch('head-foot/navbar.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('header').innerHTML = html;
+
+        // Dynamically load header.css
+        const headerCss = document.createElement('link');
+        headerCss.rel = 'stylesheet';
+        headerCss.href = 'head-foot/navbar.css';
+        document.head.appendChild(headerCss);
+
+        // Dynamically load main.js for header
+        const headerJs = document.createElement('script');
+        headerJs.src = 'head-foot/main.js';
+        document.body.appendChild(headerJs);
+      });
+  </script>
+
+  <h1 id="title" style="margin-top: 10%;">TimeTable Generator!</h1>
+  <h3 style="padding-bottom: 40px">Version 1.0 - FALL 2024</h3>
+  <div style="margin-bottom: 20px">
+    <label for="rad1" class="form-check-label" style="margin-left: 40%; position: static">
+      <input type="checkbox" style="margin-left: auto; position: static" class="form-check-input me-1"
+        name="togglechecks" default="" value="" id="rad1" />
+      Check All Sections by Default?
+    </label>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-md">
+        <h3>Course 1</h3>
+        <select class="CourseName c1 custom-select my-auto" onchange="AddSections(this)">
+          <option value="Please Select a Course." selected>
+            Please Select a Course.
+          </option>
+        </select>
+        <div id="c1"></div>
+      </div>
+      <br />
+      <div class="col-md">
+        <h3>Course 2</h3>
+        <select class="CourseName c2 custom-select my-auto" onchange="AddSections(this)">
+          <option value="Please Select a Course." selected>
+            Please Select a Course.
+          </option>
+        </select>
+        <div id="c2"></div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="container">
+    <div class="row">
+      <div class="col-md">
+        <h3>Course 3</h3>
+        <select class="CourseName c3 custom-select my-auto" onchange="AddSections(this)">
+          <option value="Please Select a Course." selected>
+            Please Select a Course.
+          </option>
+        </select>
+        <div id="c3"></div>
+      </div>
+      <br />
+      <div class="col-md">
+        <h3>Course 4</h3>
+        <select class="CourseName c4 custom-select my-auto" onchange="AddSections(this)">
+          <option value="Please Select a Course." selected>
+            Please Select a Course.
+          </option>
+        </select>
+        <div id="c4"></div>
+      </div>
+    </div>
+  </div>
+  <br />
+  <div class="container">
+    <div class="center-align">
+      <h3>Course 5</h3>
+      <select class="CourseName c5 custom-select my-auto" onchange="AddSections(this)">
+        <option value="Please Select a Course." selected>
+          Please Select a Course.
+        </option>
+      </select>
+      <div id="c5"></div>
+    </div>
+  </div>
+  <br /><br />
+  <table class="table table-bordered">
+    <thead class="thead-dark">
+      <th></th>
+      <th>8.30-10.00</th>
+      <th>10.00-11.30</th>
+      <th>11.30-1.00</th>
+      <th>1.00-2.30</th>
+      <th>2.30-4.00</th>
+      <th>4.00-5.30</th>
+      <th>5.30-7.00</th>
+      <th>7.00-8.30</th>
+      <th id="sRow">Select Row</th>
+    </thead>
+    <tbody>
+      <tr>
+        <th>Monday</th>
+        <td><input type="checkbox" id="00" checked />&nbsp;</td>
+        <td><input type="checkbox" id="01" checked />&nbsp;</td>
+        <td><input type="checkbox" id="02" checked />&nbsp;</td>
+        <td><input type="checkbox" id="03" checked />&nbsp;</td>
+        <td><input type="checkbox" id="04" checked />&nbsp;</td>
+        <td><input type="checkbox" id="05" checked />&nbsp;</td>
+        <td><input type="checkbox" id="06" checked />&nbsp;</td>
+        <td><input type="checkbox" id="07" checked />&nbsp;</td>
+        <td class="columnBox">
+          <input type="checkbox" id="r0" checked onclick="ToggleRow(this)" />&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <th>Tuesday</th>
+        <td><input type="checkbox" id="10" checked />&nbsp;</td>
+        <td><input type="checkbox" id="11" checked />&nbsp;</td>
+        <td><input type="checkbox" id="12" checked />&nbsp;</td>
+        <td><input type="checkbox" id="13" checked />&nbsp;</td>
+        <td><input type="checkbox" id="14" checked />&nbsp;</td>
+        <td><input type="checkbox" id="15" checked />&nbsp;</td>
+        <td><input type="checkbox" id="16" checked />&nbsp;</td>
+        <td><input type="checkbox" id="17" checked />&nbsp;</td>
+        <td class="columnBox">
+          <input type="checkbox" id="r1" checked onclick="ToggleRow(this)" />&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <th>Wednesday</th>
+        <td><input type="checkbox" id="20" checked />&nbsp;</td>
+        <td><input type="checkbox" id="21" checked />&nbsp;</td>
+        <td><input type="checkbox" id="22" checked />&nbsp;</td>
+        <td><input type="checkbox" id="23" checked />&nbsp;</td>
+        <td><input type="checkbox" id="24" checked />&nbsp;</td>
+        <td><input type="checkbox" id="25" checked />&nbsp;</td>
+        <td><input type="checkbox" id="26" checked />&nbsp;</td>
+        <td><input type="checkbox" id="27" checked />&nbsp;</td>
+        <td class="columnBox">
+          <input type="checkbox" id="r2" checked onclick="ToggleRow(this)" />&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <th>Thursday</th>
+        <td><input type="checkbox" id="30" checked />&nbsp;</td>
+        <td><input type="checkbox" id="31" checked />&nbsp;</td>
+        <td><input type="checkbox" id="32" checked />&nbsp;</td>
+        <td><input type="checkbox" id="33" checked />&nbsp;</td>
+        <td><input type="checkbox" id="34" checked />&nbsp;</td>
+        <td><input type="checkbox" id="35" checked />&nbsp;</td>
+        <td><input type="checkbox" id="36" checked />&nbsp;</td>
+        <td><input type="checkbox" id="37" checked />&nbsp;</td>
+        <td class="columnBox">
+          <input type="checkbox" id="r3" checked onclick="ToggleRow(this)" />&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <th>Friday</th>
+        <td><input type="checkbox" id="40" checked />&nbsp;</td>
+        <td><input type="checkbox" id="41" checked />&nbsp;</td>
+        <td><input type="checkbox" id="42" checked />&nbsp;</td>
+        <td><input type="checkbox" id="43" checked />&nbsp;</td>
+        <td><input type="checkbox" id="44" checked />&nbsp;</td>
+        <td><input type="checkbox" id="45" checked />&nbsp;</td>
+        <td><input type="checkbox" id="46" checked />&nbsp;</td>
+        <td><input type="checkbox" id="47" checked />&nbsp;</td>
+        <td class="columnBox">
+          <input type="checkbox" id="r4" checked onclick="ToggleRow(this)" />&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <th>Saturday</th>
+        <td><input type="checkbox" id="50" checked />&nbsp;</td>
+        <td><input type="checkbox" id="51" checked />&nbsp;</td>
+        <td><input type="checkbox" id="52" checked />&nbsp;</td>
+        <td><input type="checkbox" id="53" checked />&nbsp;</td>
+        <td><input type="checkbox" id="54" checked />&nbsp;</td>
+        <td><input type="checkbox" id="55" checked />&nbsp;</td>
+        <td><input type="checkbox" id="56" checked />&nbsp;</td>
+        <td><input type="checkbox" id="57" checked />&nbsp;</td>
+        <td class="columnBox">
+          <input type="checkbox" id="r5" checked onclick="ToggleRow(this)" />&nbsp;
+        </td>
+      </tr>
+      <tr>
+        <th id="sCol">Select Column</th>
+        <td class="columnBox">
+          <input type="checkbox" id="c0" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+        <td class="columnBox">
+          <input type="checkbox" id="c1" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+        <td class="columnBox">
+          <input type="checkbox" id="c2" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+        <td class="columnBox">
+          <input type="checkbox" id="c3" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+        <td class="columnBox">
+          <input type="checkbox" id="c4" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+        <td class="columnBox">
+          <input type="checkbox" id="c5" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+        <td class="columnBox">
+          <input type="checkbox" id="c6" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+        <td class="columnBox">
+          <input type="checkbox" id="c7" checked onclick="ToggleCol(this)" />&nbsp;
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="text-align: center">
+    <div id="Error"></div>
+    <input class="btn btn-primary btn-lg" type="button" value="Generate TimeTable" onclick="ProduceTimeTable()" />
+  </div>
+  <div id="Output"></div>
+  <div id="myBtnContainer">
+    <svg class="progress-ring" width="90" height="90">
+      <circle class="progress-ring__circle" cx="45" cy="45" r="34"></circle>
+    </svg>
+
+    <button onclick="topFunction()" id="myBtn" title="Go to top">
+      <i class="fas fa-rocket"></i>
+    </button>
+  </div>
+
+
+
+  <!-- Sticky Button -->
+  <div class="sticky-button" id="sticky-btn">
+    <span class="sticky-icon">+</span>
+  </div>
+
+  <!-- Popup with Tabs (Hidden by Default) -->
+  <div class="popup" id="popup">
+    <div class="tabs">
+      <button id="testimonial-tab" class="tab">Submit Testimonial</button>
+      <button id="bug-tab" class="tab">Report Bug</button>
+    </div>
+  </div>
+  <div class="thought-bubble" id="thought-bubble">
+    Report a bug
+  </div>
+  <!-- Link to the external JavaScript file -->
+  <script src="../assets/js/stickybutton.js"></script>s
+
+
+
+  <!--=============== FOOTER ===============-->
+  <div id="footer"></div>
+  <script>
+    // Load footer.html
+    fetch('head-foot/footer.html')
+      .then(response => response.text())
+      .then(html => {
+        document.getElementById('footer').innerHTML = html;
+
+        // Dynamically load footer.css
+        const footerCss = document.createElement('link');
+        footerCss.rel = 'stylesheet';
+        footerCss.href = 'head-foot/footer.css';
+        document.head.appendChild(footerCss);
+      });
+  </script>
+  <script src="/html/head-foot/topButtonProgress.js"></script>
+</body>
+</body>
+
+</html>

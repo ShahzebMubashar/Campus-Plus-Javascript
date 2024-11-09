@@ -1,0 +1,122 @@
+/* sticky-button.css */
+
+/* Sticky Button Style */
+.sticky-button {
+    position: fixed;
+    bottom: 30px;
+    left: 20px;
+    width: 60px;
+    height: 60px;
+    background-color: #014996;
+    /* Blue */
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s ease;
+}
+
+.sticky-icon {
+    color: #fff;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.sticky-button:hover {
+    background-color: black;
+}
+
+/* Popup with Tabs */
+.popup {
+    position: fixed;
+    bottom: 90px;
+    /* Slightly above the button */
+    left: 20px;
+    background-color: white;
+    border: 2px solid #014996;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    display: none;
+    /* Hidden initially */
+    z-index: 1001;
+}
+
+.tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.tab {
+    background-color: #014996;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.tab:hover {
+    background-color: black;
+}
+
+/* Thought Bubble Style */
+.thought-bubble {
+    position: fixed;
+    bottom: 110px;
+    left: 20px;
+    background-color: #014996;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    z-index: 1001;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+}
+
+.thought-bubble::after {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 20px;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 15px solid #014996;
+    /* Color of the bubble */
+}
+
+/* Hide thought bubble */
+.hidden {
+    display: none;
+}
+
+/* Add circle layer around the button on small screens */
+@media (max-width: 600px) {
+    .sticky-button {
+        width: 50px;
+        height: 50px;
+        bottom: 30px;
+        left: 10px;
+        border: 5px solid white;
+        /* White circle border */
+    }
+
+    .popup {
+        padding: 10px;
+    }
+
+    .tab {
+        font-size: 12px;
+    }
+}

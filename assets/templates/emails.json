@@ -1,0 +1,322 @@
+{
+  "greeting": "Dear",
+  "templates": {
+    "assignment-submission": {
+      "subject": "Assignment Submission",
+
+      "body": "I am writing to submit my completed assignment. This submission is in accordance with the deadline and instructions provided for this course.\n\nIn preparing this assignment, I focused on the key areas such as it reflects an in-depth analysis of the course material, demonstrating my understanding of the key concepts covered in the lectures and readings. Similarly, I have incorporated relevant examples and case studies to apply theoretical concepts to real-world scenarios, highlighting the practical implications of the topics discussed. It also includes well-researched content supported by credible academic sources, ensuring that my arguments and conclusions are both valid and reliable.\n\nPlease let me know if there are any additional requirements or further information needed. I would appreciate a confirmation of receipt and am open to any feedback you may have.\n\nThank you for your continued support and guidance. I look forward to your insights on my work."
+    },
+
+    "project-submission": {
+      "subject": "Project Submission",
+
+      "body": "I am writing to formally submit my completed project as per the requirements and deadline outlined for this course.\n\nIn preparing this project, I have ensured the main aspects like the project is grounded in extensive research, incorporating both primary and secondary data to ensure a robust and comprehensive analysis of the topic. Moreover, I have implemented creative solutions and innovative approaches within the project, reflecting a deep engagement with the subject matter and a commitment to delivering a unique and valuable outcome. Every aspect of the project, from design to execution, has been meticulously reviewed to ensure accuracy, coherence, and quality, adhering strictly to the provided guidelines and standards.\n\nPlease let me know if there are any further actions required from my side or if additional information is needed. I would appreciate it if you could confirm the receipt of my submission.\n\nThank you for your continuous support and guidance throughout this project. I look forward to receiving your feedback."
+    },
+
+    "request-to-change-group": {
+      "subject": "Request to Change Group",
+
+      "body": "I am writing this email as a request to change my class group.\n\nI cannot collaborate with others in my present group, so I would like to change my group. While everyone works individually without consultation with each other, I believe that everyone should work together efficiently to save time. Furthermore, my interest is towards cybersecurity, my current group is working on a project related to artificial intelligence. Another group is working on cybersecurity so I would like to be part of their group since it aligns with my interest.\n\nTherefore, it is my humble request that my group is changed so that I can focus on my academic work.\n\nYour attention to this matter will be highly appreciated."
+    },
+
+    "request-for-course-withdrawal": {
+      "subject": "Request for Course Withdrawal",
+
+      "body": "I hope this message finds you well. I am writing to formally request a withdrawal from {courseName} for {classSection}.\n\nThere are several reasons that have led to this difficult decision for example I am currently enrolled in multiple courses, and I have realized that the workload is overwhelming, which is affecting my ability to perform effectively across all subjects. Moreover, due to unforeseen personal challenges, I am unable to dedicate the necessary time and focus to this course, and I believe that continuing would not be in the best interest of my academic progress.After careful consideration, I have determined that the course content is less aligned with my current academic and career goals than I initially anticipated, making it less beneficial for my long-term objectives.\n\nI kindly request your assistance in processing my withdrawal from the course. Please let me know if there are any formalities or further steps I need to complete. I would also appreciate guidance on how this withdrawal might affect my academic standing or any potential options for re-enrollment in the future.\n\nThank you for your understanding and support in this matter."
+    },
+
+    "request-for-extension-on-assignment": {
+      "subject": "Request for Extension on Assignment",
+
+      "body": "I hope you are doing well. I am writing to request an extension for the Assignment.\n\nThere are a few reasons why I am requesting this extension such as i have encountered unforeseen personal challenges that have significantly impacted my ability to focus and complete the assignment on time. I am currently managing several major assignments and exams simultaneously, which has limited the time I can dedicate to this particular project. I want to ensure that the work I submit meets the highest standards of quality, which I believe will require additional time for research and refinement.\n\nI am kindly requesting an extension until next week. Please let me know if this extension is possible or if there are any additional steps I need to take.\n\nThank you for your understanding and consideration. I appreciate your support and look forward to your response."
+    },
+
+    "request-for-internship-opportunity": {
+      "subject": "Request for Internship Opportunity",
+
+      "body": "I hope this message finds you well. I am writing to express my strong interest in pursuing an internship/research opportunity under your guidance within {classSection}.\n\nThere are several reasons why I am particularly interested in working with you such as your work in [specific area of research or field] closely aligns with my academic and career goals. I have previously gained experience in [related coursework, projects, or previous internships/research], which has equipped me with the skills necessary to contribute meaningfully to your work. I am deeply committed to expanding my knowledge and skills in this field, and I believe that working under your supervision will provide me with invaluable learning opportunities.\n\nI am particularly interested in [mention any specific project, research topic, or area of focus]. I am confident that my background and enthusiasm make me a strong candidate for this opportunity. Please let me know if there are any available openings or if there are additional steps I should take to apply formally. I would be grateful for the chance to discuss how I can contribute to your work and learn from your expertise.\n\nThank you for considering my request. I look forward to the possibility of working with you."
+    },
+
+    "request-for-make-up-exam": {
+      "subject": "Request for Make-Up Exam",
+
+      "body": "I hope this message finds you well. I am writing to request a make-up exam for {courseName}, which was scheduled for [Original Exam Date].\n\nI am requesting this make-up exam due to some reasons such as I experienced a medical emergency on the day of the exam that required immediate attention and made it impossible for me to attend.Moreover,I had an unavoidable personal commitment that was scheduled at the same time as the exam, which I could not reschedule.My absence was pre-approved due to [specific reason], and I was advised to contact you to arrange for a make-up exam.\n\nI am requesting to reschedule the exam to a convenient date and time for you. Please let me know the available options or any additional steps I need to follow to arrange this make-up exam.\n\nThank you for your understanding and consideration. I apologize for any inconvenience this may cause and look forward to your response."
+    },
+
+    "request-to-freeze-semester": {
+      "subject": "Request to Freeze Semester",
+
+      "body": "I hope this email finds you well. I am writing to request a semester freeze for the {classSection}.\n\nI am currently enrolled in the [Your Program, e.g., Bachelor of Science in Computer Science], and I am in my [Your Current Semester, e.g., 5th Semester]. Unfortunately, due to a combination of personal and financial challenges, I find myself unable to continue my studies this semester. I have been dealing with some medical issues that require ongoing treatment and rest, which makes it difficult for me to meet the academic demands at this time. Additionally, my family is facing financial constraints that have made it challenging to cover my tuition fees and other associated costs for this semester. Moreover, I am also going through some personal challenges that are affecting my mental well-being. I believe that taking a break this semester will allow me to focus on my recovery and address these issues so that I can return to my studies with renewed focus and energy.\n\nI kindly request your approval for this semester freeze and assure you that I fully intend to resume my studies in the next semester.\n\nThank you for your understanding and consideration."
+    },
+
+    "request-to-add-assignment-marks": {
+      "subject": "Request to Add Assignment Marks",
+
+      "body": "I am writing this email to you in order to request you to upload my last assignment's marks, which was taken the day before yesterday, on my student flex id as they are not uploaded yet.\n\nThe flex portal, as stated by the university's director, was made for the students to access their academic progress. However, I am unable to get to see my marks for the last assignment while my other classmates have them already uploaded on the portal.\n\nTherefore, I request you to kindly upload my marks on the portal so that I can get to see them too and so that I no longer feel being left behind by my other classmates.\n\nI will be grateful if you consider my request. Thank you for your time."
+    },
+
+    "request-to-reconsideration-of-grade": {
+      "subject": "Request for Reconsideration of Grade",
+
+      "body": "I hope this email finds you well. I am writing to respectfully request a reconsideration of my grade for [courseCode] for the [Semester/Year, e.g., Spring 2024]. I have carefully reviewed my performance and believe that there may be an aspect of my work that deserves further consideration.\n/ n Specifically, I would like to discuss [mention any specific assignment, exam, or overall grade] that I believe may not accurately reflect the effort and understanding I demonstrated. I fully understand that grading is a rigorous process, and I greatly appreciate the time and effort you put into assessing my work. However, I would be grateful if we could review the assignment together to ensure that all aspects of my performance were accurately evaluated. I am committed to learning from this experience and improving my understanding of the material. If there are any mistakes or areas where I could have done better, I am eager to receive your feedback.\n\nPlease let me know a convenient time when we can discuss this further.\n\nI appreciate your time and consideration in this matter. Thank you for your understanding."
+    },
+
+    "request-to-grant-scholarship": {
+      "subject": "Request to Grant Scholarship",
+
+      "body": "I am writing to express my interest in applying for the [Name of the Scholarship/Grant] offered by [Institution/Organization Name]. As a [Your Program, e.g., second-year student in the Bachelor of Science in Computer Science] at [University Name], I am eager to further my education and achieve my academic goals with the support of this financial assistance.\n\nRecently, I have encountered financial challenges due to [briefly mention your specific reason, e.g., a sudden change in family circumstances]. These challenges have made it difficult for me to cover my tuition fees and other educational expenses, potentially hindering my academic progress.\n\nI believe that with the support of this scholarship/grant, I will be able to fully focus on my studies without the burden of financial stress. This assistance will allow me to continue excelling academically and participate in extracurricular activities that are crucial to my personal and professional development.\n\nThank you very much for considering my application. I am truly grateful for this opportunity and would be honored to receive this scholarship/grant. Please let me know if you need any additional information or documents. "
+    },
+
+    "request-for-enrollment-in-course": {
+      "subject": "Request for Enrollment in Course",
+
+      "body": "I hope this email finds you well. I am writing to request enrollment in the [Course Name] for the upcoming [Semester/Year]. As a student in [Your Program, e.g., Bachelor of Science in Computer Science], I believe this course will be crucial to my academic and professional development.\n\nI am particularly interested in this course because [briefly mention the reason, e.g., it aligns with my career goals and covers key concepts that are vital for my understanding of the field]. Additionally, this course is a prerequisite for other advanced courses I plan to take, and it will help me stay on track with my degree requirements.\n\nIf there is still space available in the course, I would be grateful if you could assist me with the enrollment process. I am willing to make any necessary adjustments to my schedule and complete any prerequisites that might be required.\n\nThank you for considering my request. I appreciate your guidance and support as I continue my studies. Please let me know if there is any additional information you need from me."
+    },
+
+    "request-for-teaching-assistant-position": {
+      "subject": "Request for Teaching Assistant Position",
+
+      "body": "I hope this message finds you well. I am writing to express my interest in the Teaching Assistant position for [Course Name] for the upcoming [Semester/Term Year].\n\nI am enthusiastic about this opportunity for the following reasons such as I have completed coursework in [related subjects], where I excelled and developed a strong understanding of the material, which I believe will enable me to assist students effectively.I have previously tutored peers in [specific subject or area], honing my ability to explain complex concepts clearly and engage with students to facilitate their learning.I am passionate about [subject matter] and dedicated to supporting both the course objectives and student success, which I believe aligns with the goals of this teaching assistant role.\n\nI am eager to contribute to [specific aspects of the course or department] and assist with [mention any specific tasks, such as grading, leading discussion sections, or providing office hours]. I would be grateful for the opportunity to discuss how my skills and experiences align with the needs of your course.\n\nPlease let me know if there are any additional steps I should take to formally apply or if you require any further information. I look forward to the possibility of contributing to your class and supporting the learning experience of fellow students.\n\nThank you for considering my application. "
+    },
+
+    "request-for-inquiry-about-study-abroad-programs": {
+      "subject": "Request for Inquiry About Study Abroad Programs",
+
+      "body": "I hope this email finds you well. I am writing to inquire about the study abroad programs available through [University Name]. As a [Your Program, e.g., third-year student in the Bachelor of Science in Computer Science], I am eager to explore opportunities to enhance my academic experience and gain international exposure.\n\nI am particularly interested in studying abroad because [briefly mention the reason, e.g., it would provide me with a unique perspective on my field of study and help me develop valuable cross-cultural skills]. Additionally, I believe that immersing myself in a different academic environment will enrich my educational journey and contribute to my personal growth.\n\nCould you please provide information on the available programs, application deadlines, and any prerequisites or requirements? I am open to exploring various options and would appreciate any guidance on selecting a program that aligns with my academic goals and interests.\n\nThank you for your time and assistance. I am excited about the possibility of participating in a study abroad program and look forward to your response. Please let me know if there is any additional information you need from me. "
+    },
+
+    "request-to-change-section": {
+      "subject": "Request to Change Section",
+
+      "body": "I hope this email finds you well. I am writing to request a change of section for the [Course Name] in the [Semester/Year]. After reviewing my current schedule and course load, I believe that a different section would better align with my academic needs and personal commitments.\n\nThe primary reason for my request is [briefly mention the reason, e.g., a scheduling conflict with another required course or personal obligations that make it challenging to attend the current section's timing]. Adjusting my schedule by switching sections would allow me to manage my time more effectively and maintain my focus on all my courses.\n\nIf possible, I would like to be enrolled in [mention the preferred section or time slot if you have one]. I understand that section changes are subject to availability, and I am willing to make any necessary adjustments to accommodate this request.\n\nThank you for considering my request. I appreciate your understanding and assistance in helping me optimize my academic schedule. Please let me know if you need any additional information from me. "
+    }
+  },
+
+  "teachers": [
+    { "name": "Dr. Kashif Zafar", "email": "kashifzafr@nu.edu.pk" },
+    { "name": "Dr. Aamir Wali", "email": "aamir.wali@nu.edu.pk" },
+    { "name": "Dr. Asif Mahmood Gillani", "email": "asif.gilani@nu.edu.pk" },
+    { "name": "Dr. Zareen Alamgir", "email": "zareen.alamgir@nu.edu.pk" },
+    { "name": "Dr. Arshad Ali", "email": "arshad.ali1@nu.edu.pk" },
+    { "name": "Dr. Asma Naseer", "email": "asma.naseer@nu.edu.pk" },
+    { "name": "Dr. Rana Asif Rehman", "email": "r.asif@nu.edu.pk" },
+    { "name": "Dr. Saira Karim", "email": "saira.karim@nu.edu.pk" },
+    { "name": "Dr. Zeeshan Ali Khan", "email": "zeeshanali.khan@nu.edu.pk" },
+    { "name": "Dr. Aatira Anum", "email": "aatira.anum@nu.edu.pk" },
+    { "name": "Dr. Abdul Qadeer", "email": "aqadeer@nu.edu.pk" },
+    { "name": "Dr. Ali Afzal Malik", "email": "ali.afzal@nu.edu.pk" },
+    { "name": "Dr. Ammar Haider", "email": "ammar.haider@nu.edu.pk" },
+    { "name": "Dr. Asma Ahmad Farhan", "email": "asma.ahmad@nu.edu.pk" },
+    { "name": "Dr. Faisal Aslam", "email": "faisal.aslam@nu.edu.pk" },
+    { "name": "Dr. Hajra Waheed", "email": "hajra.waheed@nu.edu.pk" },
+    { "name": "Dr. Haroon Mahmood", "email": "haroon.mahmood@nu.edu.pk" },
+    { "name": "Dr. Iqra Safder", "email": "iqra.safder@nu.edu.pk" },
+    { "name": "Dr. Maryam Bashir", "email": "maryam.bashir@nu.edu.pk" },
+    { "name": "Dr. Mirza Mubasher Baig", "email": "mubasher.baig@nu.edu.pk" },
+    {
+      "name": "Dr. Muhammad Ahmad Raza",
+      "email": "muhammad.ahmadraza@nu.edu.pk"
+    },
+    { "name": "Dr. Syed Mohammad Irteza", "email": "m.Irteza@nu.edu.pk" },
+    { "name": "Dr. Tahir Ejaz", "email": "tahir.ejaz@nu.edu.pk" },
+    { "name": "Dr. Zeeshan Ali Rana", "email": "zeeshan.rana@nu.edu.pk" },
+    { "name": "Dr. Farooq Ahmed", "email": "farooq.ahmad@nu.edu.pk" },
+    { "name": "Dr. Hammad Naveed", "email": "hammad.naveed@nu.edu.pk" },
+    { "name": "Mr. Aamir Raheem", "email": "aamir.raheem@nu.edu.pk" },
+    { "name": "Ms. Abeeda Akram", "email": "abeeda.akram@nu.edu.pk" },
+    { "name": "Ms. Bushra Rashid", "email": "bushra.rashid@nu.edu.pk" },
+    { "name": "Mr. Ishaq Raza", "email": "ishaq.raza@nu.edu.pk" },
+    { "name": "Ms. Lehmia Kiran", "email": "lehmia.kiran@nu.edu.pk" },
+    { "name": "Ms. Maimoona Akram", "email": "maimoona.akram@nu.edu.pk" },
+    { "name": "Mr. Mirza Waqar Baig", "email": "waqar.baig@nu.edu.pk" },
+    { "name": "Ms. Noshaba Nasir", "email": "noshaba.nasir@nu.edu.pk" },
+    { "name": "Mr. Omer Ali", "email": "ali.omer@nu.edu.pk" },
+    { "name": "Ms. Samin Iftikhar", "email": "samin.iftikhar@nu.edu.pk" },
+    { "name": "Ms. Sobia Tariq Javed", "email": "sobia.tariq@nu.edu.pk" },
+    { "name": "Ms. Tahreem Yasir", "email": "tahreem.yasir@nu.edu.pk" },
+    { "name": "Mr. Waqas Manzoor", "email": "waqas.manzoor@nu.edu.pk" },
+    { "name": "Ms. Aleena Ahmad", "email": "aleena.ahmad@nu.edu.pk" },
+    { "name": "Ms. Anosha Khan", "email": "anosha.khan@nu.edu.pk" },
+    { "name": "Ms. Ansa Liaqat", "email": "ansa.liaqat@nu.edu.pk" },
+    { "name": "Ms. Arooj Khalil", "email": "arooj.khalil@nu.edu.pk" },
+    { "name": "Ms. Asbah Khalid", "email": "asbah.khalid@lhr.nu.edu.pk" },
+    { "name": "Mr. Danyal Farhat", "email": "danyal.farhat@nu.edu.pk" },
+    { "name": "Ms. Eesha Tur Razia Babar", "email": "esha.razia@nu.edu.pk" },
+    { "name": "Mr. Fraz Yousaf", "email": "fraz.yousaf@nu.edu.pk" },
+    {
+      "name": "Mr. Hafiz Muhammad Usama Hassan Alvi",
+      "email": "usama.hassan@nu.edu.pk"
+    },
+    { "name": "Ms. Hafsa Tariq Javed", "email": "hafsa.tariq@nu.edu.pk" },
+    { "name": "Mr. Hamad Ul Qudous", "email": "hamad.ulqudous@nu.edu.pk" },
+    { "name": "Ms. Hina Iqbal", "email": "hina.iqbal@nu.edu.pk" },
+    { "name": "Ms. Hira Butt", "email": "hira.butt@nu.edu.pk" },
+    { "name": "Ms. Hira Ilyas", "email": "hira.ilyas@nu.edu.pk" },
+    { "name": "Ms. Kiran Khurshid", "email": "kiran.khurshid@nu.edu.pk" },
+    { "name": "Mr. M. Saif Ul Islam", "email": "muhammad.saif@nu.edu.pk" },
+    { "name": "Ms. Maham Naeem", "email": "maham.naeem@nu.edu.pk" },
+    { "name": "Ms. Mamoona Majid", "email": "mamoona.majid@nu.edu.pk" },
+    { "name": "Ms. Mehroze Khan", "email": "mehroze.khan@nu.edu.pk" },
+    { "name": "Ms. Momna Zaneb", "email": "momna.zaneb@nu.edu.pk" },
+    { "name": "Mr. Mubashar Hussain", "email": "mubashar.hussain@nu.edu.pk" },
+    { "name": "Mr. Muhammad Naveed", "email": "muhammad.naveed@nu.edu.pk" },
+    {
+      "name": "Mr. Muhammad Saifullah Tanvir",
+      "email": "saifullah.tanvir@nu.edu.pk"
+    },
+    {
+      "name": "Mr. Muhammad Zeeshan Nazar",
+      "email": "zeeshan.nazar@nu.edu.pk"
+    },
+    { "name": "Ms. Namra Absar", "email": "namra.absar@nu.edu.pk" },
+    { "name": "Mr. Razi-uddin", "email": "razi.uddin@nu.edu.pk" },
+    { "name": "Ms. Rubab Anam", "email": "rubab.anam@nu.edu.pk" },
+    { "name": "Mr. Sajid Ali Kazmi", "email": "sajid.kazmi@nu.edu.pk" },
+    { "name": "Ms. Tazeem Haider", "email": "tazeem.haider@nu.edu.pk" },
+    { "name": "Ms. Umm E Ammarah", "email": "umme.ammarah@nu.edu.pk" },
+    { "name": "Mr. Aqib Zeeshan", "email": "aqib.zeeshan@nu.edu.pk" },
+    {
+      "name": "Mr. Junaid Hussain Muzammal",
+      "email": "junaid.hussain@nu.edu.pk"
+    },
+    { "name": "Mr. Muhammad Hasan", "email": "m.hasan@nu.edu.pk" },
+    {
+      "name": "Mr. Muhammad Hashir Mohsineen",
+      "email": "hashir.mhsineen@lhr.nu.edu.pk"
+    },
+    {
+      "name": "Mr. Muhammad Usman Anwer",
+      "email": "usman.anwer@lhr.nu.edu.pk"
+    },
+    { "name": "Ms. Seemab Ayub", "email": "seemab.ayub@nu.edu.pk" },
+    { "name": "Mr. Sohaib Ahmad", "email": "sohaib.ahmad@nu.edu.pk" },
+    { "name": "Ms. Sukhan Amir", "email": "sukhan.amir@nu.edu.pk" },
+    { "name": "Ms. Syeda Zehra Batool", "email": "zehra.batool@nu.edu.pk" },
+    { "name": "Ms. Zoha Waheed", "email": "zoha.waheed@nu.edu.pk" },
+    { "name": "Ms. Mamoona Akbar Khan", "email": "mamoona.akbar@nu.edu.pk" },
+    { "name": "Ms. Marwa Khan", "email": "marwa.khan@nu.edu.pk" },
+    { "name": "Mr. Muhammad Amir Iqbal", "email": "amir.iqbal@nu.edu.pk" },
+    { "name": "Mr. Nauman Moazzam Hayat", "email": "nauman.moazzam@nu.edu.pk" },
+    { "name": "Ms. Saba Tariq", "email": "saba.tariq@nu.edu.pk" },
+    { "name": "Ms. Samman Ashraf", "email": "samman.ashraf@nu.edu.pk" },
+    { "name": "Mr. Salman Shoaib", "email": "salman.shoaib@nu.edu.pk" },
+    { "name": "Dr. Saima Zafar", "email": "saima.zafar@nu.edu.pk" },
+    { "name": "Dr. S.M. Sajid", "email": "sm.sajid@nu.edu.pk" },
+    { "name": "Dr. Syed Aun Abbas", "email": "aun.abbas@nu.edu.pk" },
+    { "name": "Dr. Omer Saleem", "email": "omer.saleem@nu.edu.pk" },
+    { "name": "Dr. Jabran Khan", "email": "jabran.khan@nu.edu.pk" },
+    { "name": "Dr. Kashif Saeed", "email": "kashif.saeed@nu.edu.pk" },
+    { "name": "Mr. Abdul Majid", "email": "abdul.majid@nu.edu.pk" },
+    { "name": "Ms. Beenish Fatima", "email": "beenish.fatima@nu.edu.pk" },
+    { "name": "Mr. Haris Mujtaba", "email": "haris.kazmi@nu.edu.pk" },
+    { "name": "Mr. Mohsin Yousaf", "email": "mohsin.yousuf@nu.edu.pk" },
+    { "name": "Ms. Shazia Haque", "email": "shazia.haque@nu.edu.pk" },
+    { "name": "Ms. Tamania Javed", "email": "tamania.javaid@nu.edu.pk" },
+    { "name": "Mr. Ahmad Hamza Nayyar", "email": "ahmad.hamza@nu.edu.pk" },
+    { "name": "Ms. Akbare Yaqub", "email": "akbari.yaqoob@nu.edu.pk" },
+    { "name": "Ms. Aroosa Umair", "email": "aroosa.umair@nu.edu.pk" },
+    { "name": "Mr. Hamza Yousaf", "email": "hamza.yousuf@nu.edu.pk" },
+    { "name": "Ms. Sara Kiran", "email": "sara.kiran@nu.edu.pk" },
+    { "name": "Mr. Syed Maaz Ahmed Rizvi", "email": "maaz.ahmed@nu.edu.pk" },
+    {
+      "name": "Mr. Syed Muhammad Ismail",
+      "email": "muhammad.ismail@nu.edu.pk"
+    },
+    { "name": "Mr. Umer Altaf", "email": "umer.altaf@nu.edu.pk" },
+    { "name": "Ms. Eisha Khan", "email": "eisha.khan@nu.edu.pk" },
+    {
+      "name": "Mr. Hafiz Muhammad Muiz Malik",
+      "email": "muiz.malik@nu.edu.pk"
+    },
+    { "name": "Dr. Tauqir Ahmed", "email": "tauqir.ahmed@nu.edu.pk" },
+    { "name": "Dr. Shahid Ali", "email": "shahid.ali@nu.edu.pk" },
+    { "name": "Dr. Syed Ali Rizwan Bukhari", "email": "syed.ali@nu.edu.pk" },
+    { "name": "Dr. Javaid Ahmad", "email": "Javaid.ahmad@nu.edu.pk" },
+    { "name": "Dr. Waseem Mirza", "email": "waseem.mirza@nu.edu.pk" },
+    { "name": "Dr. Muhammad Abdullah", "email": "abdullah.rana@nu.edu.pk" },
+    { "name": "Dr. Muhammad Umar", "email": "m.umar@nu.edu.pk" },
+    { "name": "Mr. Ali Raza Khalid", "email": "aliraza.khalid@nu.edu.pk" },
+    { "name": "Ms. Sarah Asif", "email": "sarah.asif@nu.edu.pk" },
+    { "name": "Mr. Umar Khan Niazi", "email": "umar.niazi@nu.edu.pk" },
+    { "name": "Mr. Anns Tahir", "email": "anns.tahir@nu.edu.pk" },
+    { "name": "Mr. Asim Iqbal", "email": "asim.iqbal@nu.edu.pk" },
+    { "name": "Mr. Asim Sharif", "email": "asim.sharif@nu.edu.pk" },
+    { "name": "Mr. Fahad Haseeb", "email": "fahad.haseeb@nu.edu.pk" },
+    { "name": "Ms. Mahnoor Akram", "email": "mahnoor.akram@nu.edu.pk" },
+    { "name": "Mr. Muhammad Bilal Zahid", "email": "bilal.zahid@nu.edu.pk" },
+    { "name": "Mr. Abdur Rehman Zahid", "email": "bdur.rehman@nu.edu.pk" },
+    { "name": "Mr. Abu Huraira", "email": "abu.huraira@nu.edu.pk" },
+    { "name": "Mr. Hamza Ali", "email": "hamza.ali@nu.edu.pk" },
+    { "name": "Mr. M. Umer Amin Khan", "email": "umer.amin@nu.edu.pk" },
+    { "name": "Ms. Maham Akram", "email": "maham.akram@nu.edu.pk" },
+    { "name": "Dr. Hamid Hassan", "email": "hamid.hassan@nu.edu.pk" },
+    { "name": "Dr. Akbar Azam", "email": "akbar.azam@nu.edu.pk" },
+    { "name": "Dr. Amna Farrukh", "email": "amna.farrukh@nu.edu.pk" },
+    {
+      "name": "Dr. Brig Mujahid Hussain",
+      "email": "mujahid.hussain@nu.edu.pk"
+    },
+    { "name": "Dr. Fatima Omer", "email": "fatima.omer@nu.edu.pk" },
+    { "name": "Dr. Komal Kamran", "email": "komal.kamran@nu.edu.pk" },
+    { "name": "Dr. Mian Muhammad Atif", "email": "mian.atif@nu.edu.pk" },
+    { "name": "Dr. Munazza Saeed", "email": "munazza.saeed@nu.edu.pk" },
+    { "name": "Dr. Umer Iqbal", "email": "umer.iqbal@nu.edu.pk" },
+    { "name": "Dr. Zia Khan", "email": "zia.khan@nu.edu.pk" },
+    { "name": "Mr. Aamer Allauddin", "email": "allauddin@gmail.com" },
+    { "name": "Mr. Shakeel Ahmad", "email": "shakeel.ahmad@nu.edu.pk" },
+    { "name": "Ms. Aroosa Safdar", "email": "aroosa.safdar@nu.edu.pk" },
+    { "name": "Ms. Ayesha Arshad", "email": "ayesha.arshad@nu.edu.pk" },
+    { "name": "Ms. Beenish Arshad", "email": "beenish.arshad@nu.edu.pk" },
+    { "name": "Ms. Fatima Habib", "email": "fatima.habib@nu.edu.pk" },
+    { "name": "Ms. Irma Tariq", "email": "irma.tariq@nu.edu.pk" },
+    { "name": "Ms. Khadija Aslam", "email": "khadija.aslam@nu.edu.pk" },
+    { "name": "Mr. Muhammad Mobeen Ajmal", "email": "mobeen.ajmal@nu.edu.pk" },
+    { "name": "Ms. Noor Zahid", "email": "noor.zahid@nu.edu.pk" },
+    {
+      "name": "Mr. Salmaan Khalil Rahman",
+      "email": "salmaan.rahman@nu.edu.pk"
+    },
+    { "name": "Ms. Sidra Salman", "email": "sidra.salman@nu.edu.pk" },
+    { "name": "Ms. Sundas Munir", "email": "sundas.munir@nu.edu.pk" },
+    { "name": "Ms. Fatima Zeb", "email": "fatima.zeb@nu.edu.pk" },
+    { "name": "Ms. Ghulam Fatima", "email": "ghulam.fatima@nu.edu.pk" },
+    { "name": "Ms. Iman Ilyas", "email": "iman.ilyas@nu.edu.pk" },
+    { "name": "Ms. Syeda Fatima Naqvi", "email": "fatima.naqvi@nu.edu.pk" },
+    { "name": "Ms. Aiza Aftab", "email": "aiza.aftab@nu.edu.pk" },
+    { "name": "Dr. Mubashir Qayyum", "email": "mubashir.qayyum@nu.edu.pk" },
+    { "name": "Dr. Akhlaq Ahmad Bhatti", "email": "akhlaq.ahmad@nu.edu.pk" },
+    { "name": "Dr. Mazhar Hussain", "email": "mazhar.hussain@nu.edu.pk" },
+    { "name": "Dr. Saman Shahid", "email": "saman.shahid@nu.edu.pk" },
+    { "name": "Dr. Summaira Sarfraz", "email": "sumaira.sarfraz@nu.edu.pk" },
+    { "name": "Dr. Farasat Shamir", "email": "farasat.shamir@nu.edu.pk" },
+    { "name": "Dr. Saeeda Zia", "email": "saeeda.zia@nu.edu.pk" },
+    { "name": "Dr. Hina Firdous", "email": "hina.firdous@nu.edu.pk" },
+    { "name": "Dr. Hira Iqbal", "email": "hira.iqbal@nu.edu.pk" },
+    { "name": "Dr. Iram Amjad", "email": "iram.amjad@nu.edu.pk" },
+    { "name": "Dr. Muhammad Tahir Rashid", "email": "tahir.rashid@nu.edu.pk" },
+    { "name": "Dr. Tayyaba Naz", "email": "tayyaba.naz@nu.edu.pk" },
+    { "name": "Dr. Zahida Mansoor", "email": "zahida.mansoor@nu.edu.pk" },
+    { "name": "Ms. Hajira Ikram Butt", "email": "hajra.ikram@nu.edu.pk" },
+    { "name": "Mr. Zulfiqar Ali", "email": "ali.zulfiqar@nu.edu.pk" },
+    { "name": "Mr. Abdul Sattar", "email": "abdul.sattar@nu.edu.pk" },
+    { "name": "Ms. Aisha Bano", "email": "aisha.bano@nu.edu.pk" },
+    { "name": "Ms. Aqsa Naz", "email": "aqsa.naz@nu.edu.pk" },
+    { "name": "Ms. Ayesha Saeed", "email": "ayesha.saeed@nu.edu.pk" },
+    { "name": "Mr. Hafiz Hamza Janjua", "email": "hamza.janjua@nu.edu.pk" },
+    { "name": "Mr. Hafiz Umair Gulzar", "email": "umair.gulzar@nu.edu.pk" },
+    { "name": "Ms. Iqra Rafiq", "email": "iqra.rafiq@nu.edu.pk" },
+    { "name": "Ms. Kanwal Saleem", "email": "kanwal.saleem@nu.edu.pk" },
+    { "name": "Mr. Muhammad Yaseen", "email": "m.yaseen@nu.edu.pk" },
+    { "name": "Ms. Namra Fazal", "email": "namra.fazal@nu.edu.pk" },
+    { "name": "Ms. Nokhaiz Zahra", "email": "nokhaiz.zahra@nu.edu.pk" },
+    { "name": "Mr. Razm-ul-Zafar", "email": "razm.zafar@nu.edu.pk" },
+    { "name": "Ms. Rubab Arshad", "email": "rubab.arshad@nu.edu.pk" },
+    { "name": "Ms. Sarah Ahmad", "email": "Sarah.ahmad@nu.edu.pk" },
+    {
+      "name": "Mr. Tasaduque Hussain Shah",
+      "email": "tasduque.hussain@nu.edu.pk"
+    },
+    { "name": "Ms. Mahnoor Chaudhry", "email": "mahnoor.chaudhary@nu.edu.pk" },
+    { "name": "Ms. Rida Ahmed", "email": "rida.ahmed@nu.edu.pk" }
+  ]
+}

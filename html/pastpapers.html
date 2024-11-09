@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Papers | Campus+ </title>
+    <link rel="stylesheet" href="../assets/css/pastpapers.css">
+    <link rel="stylesheet" href="../assets/css/stickybutton.css">
+
+
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="shortcut icon" href="../assets/images/cp_logo.png" type="image/x-icon">
+
+</head>
+
+<!--=============== HEADER ===============-->
+<div id="header"></div>
+<script>
+    // Load header.html
+    fetch('head-foot/navbar.html')
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('header').innerHTML = html;
+
+            // Dynamically load header.css
+            const headerCss = document.createElement('link');
+            headerCss.rel = 'stylesheet';
+            headerCss.href = 'head-foot/navbar.css';
+            document.head.appendChild(headerCss);
+
+            // Dynamically load main.js for header
+            const headerJs = document.createElement('script');
+            headerJs.src = 'head-foot/main.js';
+            document.body.appendChild(headerJs);
+        });
+</script>
+
+<body>
+
+    <!--=============== LOADER ===============-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="loader-wrapper">
+        <div class="loader">
+            <img src="/assets/images/cp_logo.png" alt="Logo" class="loader-logo">
+        </div>
+    </div>
+
+    <style>
+        .loader-wrapper {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #002366;
+            z-index: 9999;
+        }
+
+        .loader {
+            width: 120px;
+            height: 120px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: relative;
+            animation: rotate 1.5s infinite ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(180deg);
+                border-radius: 15%;
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+    <script>
+        $(window).on("load", function () {
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
+
+
+
+    <section class="intro-section">
+        <h1>All Past Papers</h1>
+        <p>Last-minute prep? No stress! Past papers hain, bas parho aur ace it!</p>
+    </section>
+
+
+
+
+
+
+    <section class="parent-testimonials-section">
+        <div class="testimonials-section">
+            <div class="heading-with-icon">
+                <i class="fa-solid fa-fire"></i>
+                <h2>Trending <span class="pp-highlighted" style="color: #3b82f6; font-size: 55px;"> Papers</span></h2>
+            </div>
+            <div class="slider-container">
+                <div class="testimonials-slider">
+                    <div class="testimonial">
+                        <a href="../html/Papers/ProgrammingFundamentals.html" target="_blank">
+                            <h3>Programming Fundamentals</h3>
+                            <p>(PF)</p>
+                            <p>Programming fundamentals, including variables, loops, functions, and conditionals, form
+                                the core skills needed for efficient and effective coding.</p>
+                        </a>
+                    </div>
+                    <div class="testimonial">
+                        <a href="../html/Papers/LinearAlgebra.html" target="_blank">
+                            <h3>Linear Algebra</h3>
+                            <p>(LA)</p>
+                            <p>Linear algebra explores vector spaces, linear transformations, and matrix operations.
+                                It’s essential for solving systems of linear equations, performing data analysis, and
+                                applications in computer graphics, optimization, and machine learning.</p>
+                        </a>
+                    </div>
+                    <div class="testimonial">
+                        <a href="../html/Papers/CalculusAndAnalyticalGeometry.html" target="_blank">
+                            <h3>Calculus & Analytical Geometry</h3>
+                            <p>(Cal)</p>
+                            <p>Calculus involves derivatives and integrals to analyze change and accumulation, while
+                                analytical geometry uses algebraic equations to study geometric shapes and their
+                                properties in coordinate systems, bridging algebra and geometry.</p>
+                        </a>
+                    </div>
+                    <div class="testimonial">
+                        <h3>Computer Networks</h3>
+                        <a href="../html/Papers/ComputerNetworks.html" target="_blank">
+                            <p>(CN)</p>
+                            <p>Computer networks connect devices for data sharing and communication, using protocols and
+                                topologies. They enable resource sharing, efficient data transfer, and ensure network
+                                security and reliability.</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="slider-controls">
+                    <button class="slider-button prev" onclick="moveToPreviousSlide()">&#10094;</button>
+                    <button class="slider-button next" onclick="moveToNextSlide()">&#10095;</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="../assets/css/slider.js"></script>
+
+
+
+
+
+    <section class="search-section">
+        <div class="heading-with-icon">
+
+            <h2>Search for <span class="pp-highlighted" style="color: #3b82f6; font-size: 55px;"> Papers</span></h2>
+        </div>
+        <div class="search-bar">
+            <input type="text" placeholder="Search Here">
+            <button type="button">
+                <i class="fas fa-search"></i>
+            </button>
+
+        </div>
+    </section>
+
+    <div class="pp-container" id="container">
+    </div>
+
+
+
+
+    <button id="viewMoreBtn" onclick="loadMoreDivs()">View More</button>
+
+    <div id="myBtnContainer">
+        <svg class="progress-ring" width="90" height="90">
+            <circle class="progress-ring__circle" cx="45" cy="45" r="34"></circle>
+        </svg>
+
+        <button onclick="topFunction()" id="myBtn" title="Go to top">
+            <i class="fas fa-rocket"></i>
+        </button>
+    </div>
+    </div>
+
+
+
+
+
+    <!-- Sticky Button -->
+    <div class="sticky-button" id="sticky-btn">
+        <span class="sticky-icon">+</span>
+    </div>
+
+    <!-- Popup with Tabs (Hidden by Default) -->
+    <div class="popup" id="popup">
+        <div class="tabs">
+            <button id="testimonial-tab" class="tab">Submit Testimonial</button>
+            <button id="bug-tab" class="tab">Report Bug</button>
+        </div>
+    </div>
+    <div class="thought-bubble" id="thought-bubble">
+        Report a bug
+    </div>
+    <!-- Link to the external JavaScript file -->
+    <script src="../assets/js/stickybutton.js"></script>
+
+
+
+
+    <!--=============== FOOTER ===============-->
+    <div id="footer"></div>
+    <script>
+        // Load footer.html
+        fetch('head-foot/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer').innerHTML = html;
+
+                // Dynamically load footer.css
+                const footerCss = document.createElement('link');
+                footerCss.rel = 'stylesheet';
+                footerCss.href = 'head-foot/footer.css';
+                document.head.appendChild(footerCss);
+            });
+    </script>
+    <script src="../assets/js/pastpapers.js"></script>
+    <script src="/html/head-foot/topButtonProgress.js"></script>
+
+    <!--=============== ICONS ===============-->
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <!-- <script src="head-foot/main.js"></script> -->
+</body>
+
+</html>

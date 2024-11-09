@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Big Data | Campus+ </title>
+    <link href="../../assets/css/papers.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="../../assets/css/stickybutton.css">
+
+
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet" />
+
+    <!--=============== REMIXICONS ===============-->
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="/assets/images/cp_logo.png" type="image/x-icon">
+    </link>
+</head>
+
+
+<body>
+    <!--=============== LOADER ===============-->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <div class="loader-wrapper">
+        <div class="loader">
+            <img src="/assets/images/cp_logo.png" alt="Logo" class="loader-logo">
+        </div>
+    </div>
+
+    <style>
+        .loader-wrapper {
+            width: 100%;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #002366;
+            z-index: 9999;
+        }
+
+        .loader {
+            width: 120px;
+            height: 120px;
+            background-color: #fff;
+            border-radius: 20px;
+            position: relative;
+            animation: rotate 1.5s infinite ease-in-out;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .loader-logo {
+            width: 60px;
+            height: auto;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            50% {
+                transform: rotate(180deg);
+                border-radius: 15%;
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+
+
+    <script>
+        $(window).on("load", function () {
+            $(".loader-wrapper").fadeOut("slow");
+        });
+    </script>
+
+
+
+    <div id="header"></div>
+    <script>
+        // Load navbar.html
+        fetch('../head-foot/navbar.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('header').innerHTML = html;
+
+                // Dynamically load navbar.css
+                const headerCss = document.createElement('link');
+                headerCss.rel = 'stylesheet';
+                headerCss.href = '../head-foot/navbar.css';
+                document.head.appendChild(headerCss);
+
+                // Dynamically load main.js for header
+                const headerJs = document.createElement('script');
+                headerJs.src = '../head-foot/main.js';
+                document.body.appendChild(headerJs);
+            });
+    </script>
+
+
+    <section class="parent-testimonials-section">
+        <div class="testimonials-section">
+            <div class="heading-with-icon">
+                <h2> <i class="fas fa-database"></i> &nbsp;Big Data</h2>
+            </div>
+
+            <div class="slider-container">
+                <div class="testimonials-slider">
+                    <div class="testimonial">
+                        <h3><i class="fas fa-book"></i> &nbsp; Course Code</h3>
+                        <p>AI-2003</p>
+                    </div>
+                    <div class="testimonial">
+                        <h3><i class="fas fa-signal"></i> &nbsp; Difficulty Level</h3>
+                        <i class="fas fa-star star-icon" style="color: #FFD43B;"></i>
+                        <i class="fas fa-star star-icon" style="color: #FFD43B;"></i>
+                        <i class="fas fa-star star-icon" style="color: #FFD43B;"></i>
+                        <i class="fas fa-star star-icon" style="color: #FFD43B;"></i>
+                        <i class="fas fa-star-half star-icon" style="color: #FFD43B;"></i>
+                    </div>
+                    <div class="testimonial">
+                        <a href="../faculty.html" style="text-decoration: none; color: inherit;">
+                            <h3><i class="fas fa-user-tie"></i> &nbsp; Course Instructors</h3>
+                            <p>Ms. Mamoona Akbar | Ms. Asbah Khalid</p>
+                        </a>
+                    </div>
+                    <div class="testimonial">
+                        <h3><i class="fas fa-balance-scale"></i> &nbsp; Grading Policy</h3>
+                        <p>Absolute</p>
+                    </div>
+                    <div class="testimonial">
+                        <h3><i class="fas fa-graduation-cap"></i> &nbsp; Course Type</h3>
+                        <p>Core</p>
+                    </div>
+
+                </div>
+
+                <div class="slider-controls">
+                    <button class="slider-button prev" onclick="moveToPreviousSlide()">&#10094;</button>
+                    <button class="slider-button next" onclick="moveToNextSlide()">&#10095;</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="../../assets/css/slider.js"></script>
+    <main>
+
+        <div class="pp_container">
+            <!--=============== COURSE OUTLINE ===============-->
+            <div class="section" id="course-outline">
+                <h2>Course Outline</h2>
+                <ul>
+                    <li><a href="https://docs.google.com/document/d/14Z_Pho68Y6mC-J3uXBGBtFx-AcadDSF4/edit"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons">
+                            Course Outline</a></li>
+                </ul>
+            </div>
+            <!--=============== Finals ===============-->
+            <div class="section" id="finals">
+                <h2>Finals</h2>
+                <ul>
+                    <li><a href="https://drive.google.com/file/d/1wX49N40M-hGSWOa02eB0sizZIN0gckjn/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Finals - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/1vjtglzz4dQldw1oF3VTg-kmalBonIF60/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Finals - Solution - Spring </a></li>
+                </ul>
+            </div>
+            <!--=============== MID 1 ===============-->
+            <div class="section" id="mid1">
+                <h2>Mid 1</h2>
+                <ul>
+                    <li><a href="https://drive.google.com/file/d/1-CDrazeQZT3WmoduQSN4J1x9ULHIHWzq/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - MID - Fall </a></li>
+                </ul>
+            </div>
+            <!--=============== MID 2 ===============-->
+            <div class="section" id="mid2">
+                <h2>Mid 2</h2>
+                <p>No links in MID-II</p>
+            </div>
+            <!--=============== QUIZ ===============-->
+            <div class="section" id="quizzes">
+                <h2>Quizzes</h2>
+                <ul>
+                    <li><a href="https://drive.google.com/file/d/1xhGLqkcCD3gyccRizXsuPOQUifjjAPGU/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Quiz - 1 - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/1S6ziddkVs54qssqq_2M-HRr6arWz7kux/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Quiz - 2 - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/14GVRCyLjw0VA9ahma-Px70IjaCHL9OvM/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Quiz - 3 - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/1Nqo7p85OGpQXd1oud36Y_D_1xcpDm-d9/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Quiz - 4 - Spring </a></li>
+                </ul>
+            </div>
+            <!--=============== ASSIGNMENT ===============-->
+            <div class="section" id="assignments">
+                <h2>Assignments</h2>
+                <ul>
+                    <li><a href="https://drive.google.com/file/d/11JKQAz_83LB9DewBaBW_nfo-Zh8QlUqX/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Assignment - 1 </a></li>
+                    <li><a href="https://drive.google.com/file/d/1WxNlSUlARdzli5NZ7FOAVDF7WNBf0Vol/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Assignment - 2 - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/1qZFAxgKkqt6wBKuc43P5QKmqoEQJh-ih/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Assignment - 3 - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/198acz4pjbULJe-FQXnaEqokm6phadfIA/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Assignment - 4 - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/1hxARlf2bOn4W86PcAfJgQ75wASD4oEc7/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Assignment - 5 - Spring </a></li>
+                    <li><a href="https://drive.google.com/file/d/1NnuhFldP9mw8e2L9bcN-_IFPMS2Kr5eF/view?usp=sharing"
+                            target="_blank"><img src="../../assets/images/google-drive.png" class="drive-icons"> 2018
+                            - Assignment - 6 - Spring </a></li>
+                </ul>
+            </div>
+            <!--=============== LAB TASK ===============-->
+            <div class="section" id="lab-tasks">
+                <h2>Lab Tasks</h2>
+                <p>No links in Lab Tasks</p>
+            </div>
+            <!--=============== BOOK ===============-->
+            <div class="section" id="books">
+                <h2>Books</h2>
+                <p>No links in Books</p>
+            </div>
+
+        </div>
+
+        <!-- Contribute Button -->
+        <div class="parent-container">
+            <h1>Have More?</h1>
+            <p>If you have material for this subject that isn't here, <br /> please submit the document with its details
+                by
+                clicking
+                the upload button to list it here.</p>
+            <div class="button-container">
+                <a href="https://drive.google.com/drive/folders/1neX-u0kDbgVanUW3S6aODZCFmcps88TT?usp=sharing"
+                    class="button type1"></a>
+            </div>
+        </div>
+        <div id="myBtnContainer">
+            <svg class="progress-ring" width="90" height="90">
+                <circle class="progress-ring__circle" cx="45" cy="45" r="34"></circle>
+            </svg>
+
+            <button onclick="topFunction()" id="myBtn" title="Go to top">
+                <i class="fas fa-rocket"></i>
+            </button>
+        </div>
+        <script src="/html/head-foot/topButtonProgress.js"></script>
+    </main>
+
+    <!-- Sticky Button -->
+    <div class="sticky-button" id="sticky-btn">
+        <span class="sticky-icon">+</span>
+    </div>
+
+    <!-- Popup with Tabs (Hidden by Default) -->
+    <div class="popup" id="popup">
+        <div class="tabs">
+            <button id="testimonial-tab" class="tab">Submit Testimonial</button>
+            <button id="bug-tab" class="tab">Report Bug</button>
+        </div>
+    </div>
+    <div class="thought-bubble" id="thought-bubble">
+        Report a bug
+    </div>
+    <!-- Link to the external JavaScript file -->
+    <script src="../../assets/js/stickybutton.js"></script>
+
+
+
+    <!--=============== FOOTER ===============-->
+    <div id="footer"></div>
+    <script>
+        // Load footer.html
+        fetch('../head-foot/footer.html')
+            .then(response => response.text())
+            .then(html => {
+                document.getElementById('footer').innerHTML = html;
+
+                // Dynamically load footer.css
+                const footerCss = document.createElement('link');
+                footerCss.rel = 'stylesheet';
+                footerCss.href = '../head-foot/footer.css';
+                document.head.appendChild(footerCss);
+            });
+    </script>
+
+    <!--=============== ICONS ===============-->
+    <script src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js" type="module"></script>
+    <script src="/assets/js/papers.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+</body>
+
+</html>
