@@ -1,13 +1,11 @@
-// src/components/Header.js
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
 
 const Header = () => {
     useEffect(() => {
-        // Load header.html dynamically
-        fetch("/html/head-foot/navbar.html")
+        fetch('/html/head-foot/navbar.html')
             .then(response => response.text())
             .then(html => {
-                document.getElementById("header").innerHTML = html;
+                document.getElementById('header').innerHTML = html;
             });
     }, []);
 

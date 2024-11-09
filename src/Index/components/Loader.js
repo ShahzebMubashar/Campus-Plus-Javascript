@@ -1,10 +1,10 @@
-// src/components/Loader.js
-import React, { useEffect } from "react";
+import React, { useEffect } from 'react';
+import './Loader.css'; // Add Loader styles here or import from App.css
 
 const Loader = () => {
     useEffect(() => {
-        window.addEventListener("load", () => {
-            document.querySelector(".loader-wrapper").style.display = "none";
+        window.addEventListener('load', () => {
+            document.querySelector('.loader-wrapper').style.display = 'none';
         });
     }, []);
 

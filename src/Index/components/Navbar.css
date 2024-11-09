@@ -1,0 +1,81 @@
+/* General Navbar styling */
+.navbar {
+    position: fixed;
+    /* Makes the navbar stay at the top */
+    top: 0;
+    /* Position at the top of the page */
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    /* Centers content horizontally */
+    align-items: center;
+    /* Aligns items vertically */
+    padding: 1rem 2rem;
+    background-color: #f8f9fa;
+    z-index: 1000;
+    /* Ensures it stays on top of other content */
+}
+
+.logo {
+    font-size: 2rem;
+    /* Increase font size of the logo */
+    font-weight: bold;
+    color: #0056b3;
+    margin-right: 2rem;
+    /* Space between logo and links */
+}
+
+.logo img {
+    width: 120px;
+    /* Adjust logo width */
+    height: auto;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    font-size: 1.2rem;
+    /* Increase the font size for links */
+    font-weight: bold;
+}
+
+.nav-links li {
+    position: relative;
+    cursor: pointer;
+    color: #0d47a1;
+}
+
+.nav-links li:hover {
+    color: #003366;
+}
+
+/* Dropdown Menu */
+.dropdown .dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    min-width: 150px;
+    z-index: 1000;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
+
+.dropdown-menu li {
+    padding: 0.5rem 1rem;
+    white-space: nowrap;
+    color: #555;
+}
+
+.dropdown-menu li:hover {
+    background-color: #f1f1f1;
+}
