@@ -10,6 +10,8 @@ import AboutCampusPlus from './Pages/AboutCampusPlus/AboutCampusPlus'; // Import
 import ComingSoon from './Pages/Coming Soon/ComingSoon'; // Import the ComingSoon component
 import Contact from './Pages/Contact/Contact'; // Import the Contact component
 import Error404 from './Pages/Error404/Error404';
+import FacultySection from './Pages/Faculty/Faculty';
+import PastPapers from './Pages/Past Papers/PastPapers';
 
 function App() {
   return (
@@ -33,6 +35,8 @@ function App() {
           <Route path="/coming-soon" element={<ComingSoon />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/error404" element={<Error404 />} />
+          <Route path="/faculty" element={<FacultySection />} />
+          <Route path="/past-papers" element={<PastPapers />} />
         </Routes>
       </Router>
     </div>

@@ -6,6 +6,8 @@ import AboutCampusPlus from '../Pages/AboutCampusPlus/AboutCampusPlus';  // Impo
 import ComingSoon from '../Pages/Coming Soon/ComingSoon';  // Import ComingSoon
 import Contact from '../Pages/Contact/Contact';  // Import Contact
 import Error404 from '../Pages/Error404/Error404';  // Import Error404
+import FacultySection from '../Pages/Faculty/Faculty';  // Import FacultySection
+import PastPapers from '../Pages/Past Papers/PastPapers';
 
 function AppRoutes() {
     return (
@@ -18,6 +20,8 @@ function AppRoutes() {
             <Route path="/coming-soon" element={<ComingSoon />} />
             <Route path='/contact' element={<Contact />} />
             <Route path='/error404' element={<Error404 />} />
+            <Route path='/faculty' element={<FacultySection />} />
+            <Route path='/past-papers' element={<PastPapers />} />
 
         </Routes>
     );

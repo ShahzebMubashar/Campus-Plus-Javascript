@@ -18,6 +18,8 @@ function Navbar() {
                             <li><Link to="/about-campus-plus">About Campus Plus</Link></li>
                             <li><Link to={"/coming-soon"}>Coming Soon</Link></li>
                             <li><Link to={"/error404"}>Error 404</Link></li>
+                            <li><Link to={"/faculty"}>Faculty</Link></li>
+                            <li><Link to={"/past-papers"}>Past Papers</Link></li>
                         </ul>
                     </li>
                     <li className="dropdown">
