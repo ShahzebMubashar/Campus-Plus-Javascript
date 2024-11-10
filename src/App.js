@@ -1,42 +1,44 @@
+// src/App.js
 import React from 'react';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import Navbar from './Index/components/Navbar';
-import Loader from './Index/components/Loader';
-import Header from './Index/components/Header';
-import CookieBanner from './Index/components/CookieBanner';
-import MainContent from './Index/components/MainContent';
-import FeaturesSection from './Index/components/FeaturesSection';
-import PastPapersSection from './Index/components/PastPapersSection';
-import PlaylistsSection from './Index/components/PlaylistsSection';
-import VideoSection from './Index/components/VideoSection';
-import NewsAndEventsSection from './Index/components/NewsAndEventsSection';
-import BackToTopButton from './Index/components/BackToTop';
-import TestimonialSection from './Index/components/TestimonialSection';
-import BlogSection from './Index/components/Blog';
-import FAQSection from './Index/components/FAQSection';
-import AnnouncementBar from './Index/components/AnnouncementBar';
-import { Nav } from 'react-bootstrap';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import Navbar from './Pages/Index/components/Navbar';
+import AppRoutes from './Routes/AppRoutes';
+import AboutCampusPlus from './Pages/AboutCampusPlus/AboutCampusPlus'; // Import the AboutCampusPlus component
+import ComingSoon from './Pages/Coming Soon/ComingSoon'; // Import the ComingSoon component
+import Contact from './Pages/Contact/Contact'; // Import the Contact component
+import Error404 from './Pages/Error404/Error404';
+import FacultySection from './Pages/Faculty/Faculty';
+import PastPapers from './Pages/Past Papers/PastPapers';
 
 function App() {
   return (
     <div>
-      <Navbar />
-      <Loader />
-      <Header />
-      <CookieBanner />
-      <MainContent />
-      <FeaturesSection />
-      <PastPapersSection />
-      <PlaylistsSection />
-      <VideoSection />
-      <NewsAndEventsSection />
-      <BackToTopButton />
-      <BlogSection />
-      <TestimonialSection />
-      <FAQSection />
-      < AnnouncementBar />
+      <Router>
+        {/* Conditionally render Navbar only if the route is not '/about-campus-plus' */}
+        <Routes>
+          {/* Default Route for Home page */}
+          <Route
+            path="/"
+            element={
+              <>
+                <Navbar /> {/* Render Navbar only on the home page */}
+                <AppRoutes />
+              </>
+            }
+          />
 
+          {/* Route for AboutCampusPlus page (without Navbar) */}
+          <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/error404" element={<Error404 />} />
+          <Route path="/faculty" element={<FacultySection />} />
+          <Route path="/past-papers" element={<PastPapers />} />
+        </Routes>
+      </Router>
     </div>
   );
 }
