@@ -4,9 +4,12 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Navbar from './Index/components/Navbar';
+import Navbar from './Pages/Index/components/Navbar';
 import AppRoutes from './Routes/AppRoutes';
-import AboutCampusPlus from './AboutCampusPlus/AboutCampusPlus'; // Import the AboutCampusPlus component
+import AboutCampusPlus from './Pages/AboutCampusPlus/AboutCampusPlus'; // Import the AboutCampusPlus component
+import ComingSoon from './Pages/Coming Soon/ComingSoon'; // Import the ComingSoon component
+import Contact from './Pages/Contact/Contact'; // Import the Contact component
+import Error404 from './Pages/Error404/Error404';
 
 function App() {
   return (
@@ -27,6 +30,9 @@ function App() {
 
           {/* Route for AboutCampusPlus page (without Navbar) */}
           <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
+          <Route path="/coming-soon" element={<ComingSoon />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/error404" element={<Error404 />} />
         </Routes>
       </Router>
     </div>
