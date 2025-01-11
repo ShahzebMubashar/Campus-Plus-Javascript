@@ -24,7 +24,8 @@
     list-style: none;
     gap: 2rem;
     font-size: 1.2rem;
-    font-weight: bold;
+    font-weight: 600;
+    /* Reduced weight for less boldness */
 }
 
 .nav-links li {
@@ -35,6 +36,8 @@
 .nav-links li a {
     text-decoration: none;
     color: #0d47a1;
+    font-weight: 600;
+    /* Slightly less bold font for links */
     transition: color 0.3s ease;
 }
 
@@ -58,6 +61,7 @@
 .navbar-dropdown-arrow {
     font-size: 16px;
     margin-left: 8px;
+    font-weight: 600;
     transition: transform 0.4s ease, color 0.4s ease;
 }
 
