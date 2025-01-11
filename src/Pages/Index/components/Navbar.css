@@ -72,9 +72,9 @@
     display: none;
     /* Hidden by default */
     position: absolute;
-    top: 70px;
+    top: 50px;
     /* Adjust dropdown position */
-    left: 50%;
+    left: 100px;
     /* Center dropdown */
     transform: translateX(-50%);
     background-color: #ffffff;
@@ -85,7 +85,7 @@
     display: flex;
     gap: 50px;
     /* Space between dropdown sections */
-    width: 90%;
+    width: 1000px;
     /* Width of the dropdown menu */
     z-index: 1000;
     opacity: 0;
