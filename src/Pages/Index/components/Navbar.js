@@ -1,45 +1,71 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Navbar.css';
-import logo from '../../../Assets/images/cp_logo.png';
 import { Link } from 'react-router-dom';
-
+import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
 
 function Navbar() {
     return (
-        <>
-            <nav className="navbar">
-                <div className="logo"><Link to="/">< img src={logo} /></Link></div>
-                <ul className="nav-links">
-                    <li>Past Papers</li>
-                    <li className="dropdown">
-                        <span>Services ▼</span>
-                        <ul className="dropdown-menu">
-                            <li><Link to={"/contact"}>Contact</Link></li>
-                            <li><Link to="/about-campus-plus">About Campus Plus</Link></li>
-                            <li><Link to={"/coming-soon"}>Coming Soon</Link></li>
-                            <li><Link to={"/error404"}>Error 404</Link></li>
-                            <li><Link to={"/faculty"}>Faculty</Link></li>
-                            <li><Link to={"/past-papers"}>Past Papers</Link></li>
-                        </ul>
-                    </li>
-                    <li className="dropdown">
-                        <span>Generators ▼</span>
-                        <ul className="dropdown-menu">
-                            <li>Generator 1</li>
-                            <li>Generator 2</li>
-                        </ul>
-                    </li>
-                    <li>ChatGPT</li>
-                    <li className="dropdown">
-                        <span>Student Support ▼</span>
-                        <ul className="dropdown-menu">
-                            <li>Support 1</li>
-                            <li>Support 2</li>
-                        </ul>
-                    </li>
-                </ul>
-            </nav>
-        </>
+        <nav className="navbar">
+            <div className="logo">
+                <Link to="/">Campus<span className="plus">+</span></Link>
+            </div>
+
+
+            <ul className="nav-links">
+                <li><Link to="/past-papers">Past Papers</Link></li>
+
+                <li className="navbar-dropdown">
+                    <span className="navbar-dropdown-toggle">
+                        Services <AiOutlineDown className="navbar-dropdown-arrow" />
+                    </span>
+                    <div className="navbar-dropdown-menu">
+                        <div className="navbar-dropdown-section">
+                            <AiOutlineHeart className="navbar-dropdown-icon" />
+                            <div>
+                                <h4>Most Viewed Past Papers</h4>
+                                <p>Data Structures (DS)</p>
+                                <p>Calculus (Cal)</p>
+                                <p>Theory of Automata (TOA)</p>
+                                <p>Assembly Language (COAL)</p>
+                            </div>
+                        </div>
+                        <div className="navbar-dropdown-section">
+                            <AiOutlineFileText className="navbar-dropdown-icon" />
+                            <div>
+                                <h4>News & Events</h4>
+                                <p>FDC X</p>
+                                <p>SOFTEC '24</p>
+                                <p>GDSC Hiring Candidates?</p>
+                                <p>Change in HoD</p>
+                            </div>
+                        </div>
+                        <div className="navbar-dropdown-section">
+                            <AiOutlineHome className="navbar-dropdown-icon" />
+                            <div>
+                                <h4>Accessibility</h4>
+                                <p>Faculty Info</p>
+                                <p>Time Table Generator</p>
+                                <p>Faculty Information</p>
+                                <p>To Do List</p>
+                            </div>
+                        </div>
+                        <div className="navbar-dropdown-section">
+                            <AiOutlineLaptop className="navbar-dropdown-icon" />
+                            <div>
+                                <h4>Youtube Playlists</h4>
+                                <p>Abdul Bari (Algorithms)</p>
+                                <p>Neso Academy (DLD)</p>
+                                <p>Code with Harry (PF)</p>
+                                <p>Brain Molder (Database)</p>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                <li><Link to="/generators">Generators</Link></li>
+                <li><Link to="/chatgpt">ChatGPT</Link></li>
+                <li><Link to="/student-support">Student Support</Link></li>
+            </ul>
+        </nav>
     );
 }
 

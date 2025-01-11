@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react';
-// import { IonIcon } from 'react-ionicons'; // Install this package if necessary or use FontAwesome for icons
 import './FeaturesSection.css';
-import { IonIcon } from '@ionic/react'; // Import IonIcon from @ionic/react
+// Import icons from react-icons
+import { IoFileTrayFull, IoPlayCircle, IoPeople, IoCalendar, IoHelpCircle, IoCalculator } from 'react-icons/io5';
 
-import { FileTrayFull } from 'react-ionicons'; // instead of IonIcon
-import { playCircle, people, calendar, helpCircle, calculator } from 'ionicons/icons';
-
-
-const FeatureItem = ({ href, icon, title, description }) => (
+const FeatureItem = ({ href, icon: Icon, title, description }) => (
     <a href={href} className="features-service-box">
         <div className="features-icon">
-            <IonIcon name={icon} />
+            <Icon size="2em" /> {/* Use the icon as a React component */}
         </div>
         <div className="features-content">
             <h2>{title}</h2>
@@ -20,19 +16,6 @@ const FeatureItem = ({ href, icon, title, description }) => (
 );
 
 const FeaturesSection = () => {
-    useEffect(() => {
-        // Dynamically load the Ionicons script
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = 'https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js';
-        document.body.appendChild(script);
-
-        // Cleanup script when component is unmounted
-        return () => {
-            document.body.removeChild(script);
-        };
-    }, []);
-
     return (
         <section className="features-parent-services">
             <div className="features-services">
@@ -40,37 +23,37 @@ const FeaturesSection = () => {
                 <div className="features-services-grid">
                     <FeatureItem
                         href="/html/pastpapers.html"
-                        icon={FileTrayFull}
+                        icon={IoFileTrayFull}
                         title="Past Papers"
                         description="Practice exams, boost scores, understand concepts, and exam pattern insight."
                     />
                     <FeatureItem
                         href="/html/playlist.html"
-                        icon={playCircle}
+                        icon={IoPlayCircle}
                         title="Youtube Playlists"
                         description="Organize videos, seamless learning, easy access, curated content, and continuous playback."
                     />
                     <FeatureItem
                         href="/html/faculty.html"
-                        icon={people}
+                        icon={IoPeople}
                         title="Faculty Information"
                         description="Easily access all the office locations and hours, and faculty contact details."
                     />
                     <FeatureItem
                         href="/html/comingsoon.html"
-                        icon={calendar}
+                        icon={IoCalendar}
                         title="Time Table Generator"
                         description="Create personalized schedules, manage class timings, avoid conflicts, and stay organized."
                     />
                     <FeatureItem
                         href="/html/support.html"
-                        icon={helpCircle}
+                        icon={IoHelpCircle}
                         title="Student Support"
                         description="Access FAQs, find answers, connect with support, and locate key contacts."
                     />
                     <FeatureItem
                         href="/html/calculator.html"
-                        icon={calculator}
+                        icon={IoCalculator}
                         title="GPA Calculator"
                         description="Calculate CGPA and SGPA, track academic progress, and plan your goals."
                     />

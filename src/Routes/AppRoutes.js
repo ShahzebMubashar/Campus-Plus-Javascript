@@ -13,16 +13,15 @@ function AppRoutes() {
     return (
         <Routes>
             {/* Default Route for Home page */}
-            <Route path="/" element={<MainLayout />} />
+            <Route path="*" element={<MainLayout />} /> {/* Updated path from "/" to "*" */}
 
-            {/* Route for AboutCampusPlus page (without the Navbar) */}
+            {/* Other Routes */}
             <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
             <Route path="/coming-soon" element={<ComingSoon />} />
-            <Route path='/contact' element={<Contact />} />
-            <Route path='/error404' element={<Error404 />} />
-            <Route path='/faculty' element={<FacultySection />} />
-            <Route path='/past-papers' element={<PastPapers />} />
-
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/error404" element={<Error404 />} />
+            <Route path="/faculty" element={<FacultySection />} />
+            <Route path="/past-papers" element={<PastPapers />} />
         </Routes>
     );
 }

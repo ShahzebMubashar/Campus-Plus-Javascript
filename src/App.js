@@ -21,10 +21,10 @@ function App() {
         <Routes>
           {/* Default Route for Home page */}
           <Route
-            path="/"
+            path="*"
             element={
               <>
-                <Navbar /> {/* Render Navbar only on the home page */}
+
                 <AppRoutes />
               </>
             }
