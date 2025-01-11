@@ -6,8 +6,6 @@
     padding: 20px 50px;
     background-color: #f8f9fa;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: relative;
-    z-index: 10;
 }
 
 .logo {
@@ -75,19 +73,19 @@
     /* Hidden by default */
     position: absolute;
     top: 70px;
-    /* Adjust dropdown positioning */
+    /* Adjust dropdown position */
     left: 50%;
     /* Center dropdown */
     transform: translateX(-50%);
-    background-color: white;
-    padding: 20px 30px;
-    /* Adjust padding for inner spacing */
+    background-color: #ffffff;
+    padding: 30px 50px;
+    /* Add padding for inner spacing */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    border-radius: 12px;
     display: flex;
-    gap: 30px;
+    gap: 50px;
     /* Space between dropdown sections */
-    width: 80%;
+    width: 90%;
     /* Width of the dropdown menu */
     z-index: 1000;
     opacity: 0;
@@ -107,10 +105,12 @@
 .navbar-dropdown-section {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
-    width: 22%;
+    align-items: center;
+    /* Center icons horizontally */
+    gap: 15px;
+    width: 20%;
     /* Adjust section width */
+    text-align: center;
 }
 
 .navbar-dropdown-section h4 {
@@ -124,7 +124,8 @@
     font-size: 14px;
     color: #555;
     margin: 0;
-    line-height: 1.6;
+    line-height: 1.8;
+    /* Add spacing between lines */
 }
 
 .navbar-dropdown-section p:hover {
@@ -134,7 +135,10 @@
 
 /* Dropdown Section Icon Styling */
 .navbar-dropdown-icon {
-    font-size: 30px;
+    font-size: 40px;
     color: #0d47a1;
     margin-bottom: 10px;
+    background-color: #eef2ff;
+    border-radius: 50%;
+    padding: 10px;
 }
