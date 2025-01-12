@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Fuse from 'fuse.js';
 import './FAQSection.css';
 
@@ -16,47 +16,57 @@ const loadScript = (src) => {
 const FAQSection = () => {
     const [activeFAQ, setActiveFAQ] = useState(null);
     const [searchResults, setSearchResults] = useState([]);
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState('');
 
     const faqs = [
         {
-            question: 'How can I get help if I\'m struggling with a subject?',
-            answer: 'Stay engaged during lectures, actively seek assistance from instructors during office hours, participate in study groups, and utilize online resources to enhance your understanding. The two simple tips are to stay consistent and do your assignments yourself.',
+            question: "How can I get help if I'm struggling with a subject?",
+            answer:
+                'Stay engaged during lectures, actively seek assistance from instructors during office hours, participate in study groups, and utilize online resources to enhance your understanding. The two simple tips are to stay consistent and do your assignments yourself.',
         },
         {
             question: 'How do I contact my professors?',
-            answer: 'You can contact your professors via their university email. Office hours are also available for in-person meetings, and the times are usually listed in the course syllabus. You can also view the faculty info on our website and get their office location and meet them physically.',
+            answer:
+                'You can contact your professors via their university email. Office hours are also available for in-person meetings, and the times are usually listed in the course syllabus. You can also view the faculty info on our website and get their office location and meet them physically.',
         },
         {
             question: 'How can I report the bugs on this website?',
-            answer: 'You can send us any bugs on our email <strong>productionsbymultidexters@gmail.com</strong>. You are requested to email us with a screenshot of the bug and we will fix it promptly.',
+            answer:
+                'You can send us any bugs on our email <strong>productionsbymultidexters@gmail.com</strong>. You are requested to email us with a screenshot of the bug and we will fix it promptly.',
         },
     ];
 
-    useEffect(() => {
-        // Load the external scripts
-        loadScript('https://cdn.jsdelivr.net/npm/fuse.js@6.5.3')
-            .then(() => console.log('Fuse.js loaded'))
-            .catch((error) => console.error('Error loading Fuse.js:', error));
-
-        loadScript('https://cdn.vercel-insights.com/v1/script.js')
-            .then(() => console.log('Vercel Insights loaded'))
-            .catch((error) => console.error('Error loading Vercel Insights:', error));
-    }, []);
-
-    useEffect(() => {
-        const fuse = new Fuse(faqs, {
+    // Create Fuse.js instance once
+    const fuse = useMemo(() => {
+        return new Fuse(faqs, {
             keys: ['question', 'answer'],
             threshold: 0.3,
         });
+    }, []);
 
+    useEffect(() => {
+        const loadExternalScripts = async () => {
+            try {
+                await loadScript('https://cdn.jsdelivr.net/npm/fuse.js@6.5.3');
+                console.log('Fuse.js loaded');
+                await loadScript('https://cdn.vercel-insights.com/v1/script.js');
+                console.log('Vercel Insights loaded');
+            } catch (error) {
+                console.error('Error loading external scripts:', error);
+            }
+        };
+
+        loadExternalScripts();
+    }, []);
+
+    useEffect(() => {
         if (query) {
-            const results = fuse.search(query).map(result => result.item);
+            const results = fuse.search(query).map((result) => result.item);
             setSearchResults(results);
         } else {
             setSearchResults(faqs);
         }
-    }, [query, faqs]);
+    }, [query, fuse]); // Use memoized fuse instance
 
     const toggleFAQ = (index) => {
         setActiveFAQ(activeFAQ === index ? null : index);
@@ -74,7 +84,10 @@ const FAQSection = () => {
                     <button className="faq-question" onClick={() => toggleFAQ(index)}>
                         {faq.question} <span className="arrow">{activeFAQ === index ? '-' : '+'}</span>
                     </button>
-                    <div className="faq-answer" dangerouslySetInnerHTML={{ __html: faq.answer }} />
+                    <div
+                        className="faq-answer"
+                        dangerouslySetInnerHTML={{ __html: faq.answer }}
+                    />
                 </div>
             ))}
         </section>

@@ -1,36 +1,22 @@
-/* General Navbar styling */
-
+/* Navbar Styling */
 .navbar {
-    position: fixed;
-    /* Makes the navbar stay at the top */
-    top: 0;
-    /* Position at the top of the page */
-    left: 0;
-    right: 0;
     display: flex;
-    justify-content: center;
-    /* Centers content horizontally */
+    justify-content: space-between;
     align-items: center;
-    /* Aligns items vertically */
-    padding: 1rem 2rem;
+    padding: 20px 50px;
     background-color: #f8f9fa;
-    z-index: 1000;
-    /* Ensures it stays on top of other content */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
-    font-size: 2rem;
-    /* Increase font size of the logo */
+    font-size: 24px;
     font-weight: bold;
-    color: #0056b3;
-    margin-right: 2rem;
-    /* Space between logo and links */
+    color: #0d47a1;
+    text-decoration: none;
 }
 
-.logo img {
-    width: 120px;
-    /* Adjust logo width */
-    height: auto;
+.logo .plus {
+    color: #0056b3;
 }
 
 .nav-links {
@@ -38,45 +24,125 @@
     list-style: none;
     gap: 2rem;
     font-size: 1.2rem;
-    /* Increase the font size for links */
-    font-weight: bold;
+    font-weight: 600;
+    /* Reduced weight for less boldness */
 }
 
 .nav-links li {
     position: relative;
     cursor: pointer;
-    color: #0d47a1;
 }
 
-.nav-links li:hover {
+.nav-links li a {
+    text-decoration: none;
+    color: #0d47a1;
+    font-weight: 600;
+    /* Slightly less bold font for links */
+    transition: color 0.3s ease;
+}
+
+.nav-links li a:hover {
+    color: #003366;
+}
+
+/* Dropdown Styling */
+.navbar-dropdown {
+    position: relative;
+}
+
+.navbar-dropdown-toggle {
+    display: inline-flex;
+    align-items: center;
+    color: #0d47a1;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.navbar-dropdown-arrow {
+    font-size: 16px;
+    margin-left: 8px;
+    font-weight: 600;
+    transition: transform 0.4s ease, color 0.4s ease;
+}
+
+.navbar-dropdown:hover .navbar-dropdown-arrow {
+    transform: rotate(180deg);
+    /* Rotate arrow on hover */
     color: #003366;
 }
 
 /* Dropdown Menu */
-.dropdown .dropdown-menu {
+.navbar-dropdown-menu {
     display: none;
+    /* Hidden by default */
     position: absolute;
-    top: 100%;
-    left: 0;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 0.5rem;
-    border-radius: 0.25rem;
+    top: 50px;
+    /* Adjust dropdown position */
+    left: 100px;
+    /* Center dropdown */
+    transform: translateX(-50%);
+    background-color: #ffffff;
+    padding: 30px 50px;
+    /* Add padding for inner spacing */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    min-width: 150px;
+    border-radius: 12px;
+    display: flex;
+    gap: 50px;
+    /* Space between dropdown sections */
+    width: 1000px;
+    /* Width of the dropdown menu */
     z-index: 1000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
-.dropdown:hover .dropdown-menu {
-    display: block;
+/* Show dropdown on hover */
+.navbar-dropdown:hover .navbar-dropdown-menu {
+    display: flex;
+    opacity: 1;
+    /* Make dropdown visible */
+    visibility: visible;
 }
 
-.dropdown-menu li {
-    padding: 0.5rem 1rem;
-    white-space: nowrap;
+/* Dropdown Section Styling */
+.navbar-dropdown-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* Center icons horizontally */
+    gap: 15px;
+    width: 20%;
+    /* Adjust section width */
+    text-align: center;
+}
+
+.navbar-dropdown-section h4 {
+    font-size: 16px;
+    font-weight: bold;
+    color: #0d47a1;
+    margin-bottom: 10px;
+}
+
+.navbar-dropdown-section p {
+    font-size: 14px;
     color: #555;
+    margin: 0;
+    line-height: 1.8;
+    /* Add spacing between lines */
 }
 
-.dropdown-menu li:hover {
-    background-color: #f1f1f1;
+.navbar-dropdown-section p:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Dropdown Section Icon Styling */
+.navbar-dropdown-icon {
+    font-size: 40px;
+    color: #0d47a1;
+    margin-bottom: 10px;
+    background-color: #eef2ff;
+    border-radius: 50%;
+    padding: 10px;
 }
