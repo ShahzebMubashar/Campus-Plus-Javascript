@@ -43,7 +43,7 @@ function Navbar() {
                             <AiOutlineHome className="navbar-dropdown-icon" />
                             <div>
                                 <h4>Accessibility</h4>
-                                <p>Faculty Info</p>
+                                <a href="/playlists" className="navbar-link">Youtube Playlists</a>
                                 <p>Time Table Generator</p>
                                 <p>Faculty Information</p>
                                 <p>To Do List</p>
