@@ -37,6 +37,7 @@ function App() {
           <Route path="/error404" element={<Error404 />} />
           <Route path="/faculty" element={<FacultySection />} />
           <Route path="/past-papers" element={<PastPapers />} />
+
         </Routes>
       </Router>
     </div>

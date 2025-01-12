@@ -7,7 +7,7 @@ function Navbar() {
     return (
         <nav className="navbar">
             <div className="logo">
-                <Link to="/">Campus<span className="plus">+</span></Link>
+                <Link to="/log-in">Campus<span className="plus">+</span></Link>
             </div>
 
 
@@ -64,6 +64,7 @@ function Navbar() {
                 <li><Link to="/generators">Generators</Link></li>
                 <li><Link to="/chatgpt">ChatGPT</Link></li>
                 <li><Link to="/student-support">Student Support</Link></li>
+                <li><Link to="/sign-in">Sign In</Link></li> {/* Add this link */}
             </ul>
         </nav>
     );
