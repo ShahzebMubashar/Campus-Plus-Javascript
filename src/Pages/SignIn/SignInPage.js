@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import "./SignInPage.css";
 import rocketImg from "./rocket.png"; // Ensure your image path is correct
+import humanImg from "./human.png"; // Add the new image
 
 function SignInPage() {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -22,7 +23,12 @@ function SignInPage() {
                 <button className="toggle-button" onClick={toggleSignUp}>
                     {isSignUp ? "Sign In" : "Sign Up"}
                 </button>
-                <img src={rocketImg} alt="Rocket" className="rocket-image" />
+                {/* Dynamically render image */}
+                <img
+                    src={isSignUp ? humanImg : rocketImg}
+                    alt={isSignUp ? "Human" : "Rocket"}
+                    className="dynamic-image"
+                />
             </div>
 
             <div className="form-section">
