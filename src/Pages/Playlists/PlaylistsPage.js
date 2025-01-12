@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './PlaylistsPage.css';
+import Navbar from '../Index/components/Navbar';
+import { FaSearch } from "react-icons/fa";
 
 const PlaylistsPage = () => {
     const playlists = [
         {
             name: 'Programming Fundamentals (PF)',
+            shortForm: 'PF',
             watchtime: 'Apna College',
             rating: 4.8,
             students: '20 Students',
@@ -14,6 +17,7 @@ const PlaylistsPage = () => {
         },
         {
             name: 'Applied Physics (AP)',
+            shortForm: 'AP',
             watchtime: 'JE CLASSES Meerut',
             rating: 4.8,
             students: '20 Students',
@@ -23,6 +27,7 @@ const PlaylistsPage = () => {
         },
         {
             name: 'Calculus and Analytical Geometry (CAL)',
+            shortForm: 'CAL',
             watchtime: 'The Organic Chemistry Tutor',
             rating: 4.8,
             students: '20 Students',
@@ -32,6 +37,7 @@ const PlaylistsPage = () => {
         },
         {
             name: 'Object Oriented Programming (OOP)',
+            shortForm: 'OOP',
             watchtime: 'Duration: 20 Hours',
             rating: 4.8,
             students: '20 Students',
@@ -41,6 +47,7 @@ const PlaylistsPage = () => {
         },
         {
             name: 'Digital Logic Design (DLD)',
+            shortForm: 'DLD',
             watchtime: 'Duration: 20 Hours',
             rating: 4.8,
             students: '20 Students',
@@ -50,6 +57,7 @@ const PlaylistsPage = () => {
         },
         {
             name: 'Multivariable Calculus (MVC)',
+            shortForm: 'MVC',
             watchtime: 'Duration: 20 Hours',
             rating: 4.8,
             students: '20 Students',
@@ -59,22 +67,41 @@ const PlaylistsPage = () => {
         },
     ];
 
+    const [searchQuery, setSearchQuery] = useState('');
+    const filteredPlaylists = playlists.filter(
+        (course) =>
+            course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            course.shortForm.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     const handleCardClick = (link) => {
         window.open(link, '_blank');
     };
 
     return (
         <div className="playlists-page">
+            <Navbar />
             {/* Header Section */}
             <div className="header">
                 <h1>All Playlists</h1>
                 <p>Class mein samajh nahi ayi ya teacher se vibe nahi mili? No worries, we got your back!</p>
             </div>
 
+            {/* Search Bar */}
+            <div className="search-bar">
+                <input
+                    type="text"
+                    placeholder="Search playlist..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button> <FaSearch /> </button>
+            </div>
+
             {/* Playlists Section */}
             <div className="playlists-container">
                 <div className="playlists">
-                    {playlists.map((course, index) => (
+                    {filteredPlaylists.map((course, index) => (
                         <div
                             key={index}
                             className="playlist-card stylish-card"
