@@ -9,6 +9,7 @@ import Error404 from '../Pages/Error404/Error404';  // Import Error404
 import FacultySection from '../Pages/Faculty/Faculty';  // Import FacultySection
 import PastPapers from '../Pages/Past Papers/PastPapers';
 import SignInPage from '../Pages/SignIn/SignInPage';
+import PlaylistsPage from '../Pages/Playlists/PlaylistsPage'
 
 
 function AppRoutes() {
@@ -25,6 +26,7 @@ function AppRoutes() {
             <Route path="/faculty" element={<FacultySection />} />
             <Route path="/past-papers" element={<PastPapers />} />
             <Route path="/sign-in" element={<SignInPage />} />
+            <Route path="/playlists" element={<PlaylistsPage />} />
 
         </Routes>
     );
