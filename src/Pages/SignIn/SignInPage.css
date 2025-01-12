@@ -37,9 +37,7 @@
     transform: rotate(180deg);
     clip-path: circle(70% at 75% 50%);
     transition: transform 0.6s ease-in-out;
-    /* Smooth rotation */
     z-index: -1;
-    /* Send it behind the text */
 }
 
 .signin-container.sign-up-mode .left-section {
@@ -106,9 +104,9 @@
 
 .rocket-image {
     position: absolute;
-    bottom: 10%;
-    left: 15%;
-    max-width: 40%;
+    bottom: -2%;
+    left: 25%;
+    max-width: 70%;
 }
 
 /* Form Section */
