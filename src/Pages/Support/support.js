@@ -154,14 +154,16 @@ const Support = () => {
                 </div>
             </section>
 
-            <section className="personal-assistant container my-5">
+
+
+            <section className="personal-assistant my-5">
                 <h2 className="text-center mb-4">
                     Your Personal <span style={{ color: "#3b82f6", fontWeight: "bolder" }}>Assistant</span>
                 </h2>
                 <div className="assistant-cards">
                     <div className="card">
                         <img
-                            src="/assets/images/email_generator.png" // Replace with your actual image path
+                            src="1.svg" // Replace with your actual image path
                             alt="Email Generator"
                             className="card-img-top"
                         />
