@@ -10,6 +10,9 @@ import FacultySection from '../Pages/Faculty/Faculty';  // Import FacultySection
 import PastPapers from '../Pages/Past Papers/PastPapers';
 import SignInPage from '../Pages/SignIn/SignInPage';
 import PlaylistsPage from '../Pages/Playlists/PlaylistsPage'
+import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator';
+import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator';
+import SupportLayout from '../Layouts/SupportLayout'
 
 
 function AppRoutes() {
@@ -27,6 +30,9 @@ function AppRoutes() {
             <Route path="/past-papers" element={<PastPapers />} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
+            <Route path="/email-generator" element={<EmailGenerator />} />
+            <Route path="/application-generator" element={<ApplicationGenerator />} />
+            <Route path="/support-layout" element={<SupportLayout />} />
 
         </Routes>
     );
