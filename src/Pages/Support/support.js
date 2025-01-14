@@ -190,6 +190,55 @@ const Support = () => {
                 </div>
             </section>
 
+
+            <section className="recommended-articles my-5">
+                <h2 className="text-center mb-4">
+                    Recommended <span style={{ color: "#3b82f6", fontWeight: "bolder" }}>Articles</span>
+                </h2>
+                <div className="articles-container">
+                    <div className="article-card">
+                        <img
+                            src="/assets/images/data_science.png" // Replace with your actual image path
+                            alt="Data Science vs. Statistics"
+                            className="article-img"
+                        />
+                        <div className="article-content">
+                            <h3 className="article-title">Data Science vs. Statistics: Unraveling the Mysteries</h3>
+                            <p className="article-description">
+                                Discover the key differences between data science and statistics and how they influence modern analytics.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="article-card">
+                        <img
+                            src="/assets/images/gig_economy.png" // Replace with your actual image path
+                            alt="Navigating the Gig Economy"
+                            className="article-img"
+                        />
+                        <div className="article-content">
+                            <h3 className="article-title">Navigating the Gig Economy: Opportunities and Challenges</h3>
+                            <p className="article-description">
+                                Explore the dynamics of the gig economy and strategies to thrive in a rapidly changing job market.
+                            </p>
+                        </div>
+                    </div>
+                    <div className="article-card">
+                        <img
+                            src="/assets/images/chatgpt_impact.png" // Replace with your actual image path
+                            alt="The Impact of ChatGPT"
+                            className="article-img"
+                        />
+                        <div className="article-content">
+                            <h3 className="article-title">The Impact of ChatGPT on Modern Life</h3>
+                            <p className="article-description">
+                                Learn about how ChatGPT is transforming our daily interactions and the future of AI.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+
         </div>
     );
 };
