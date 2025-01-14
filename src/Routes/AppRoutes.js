@@ -12,7 +12,7 @@ import SignInPage from '../Pages/SignIn/SignInPage';
 import PlaylistsPage from '../Pages/Playlists/PlaylistsPage'
 import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator';
 import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator';
-import SupportLayout from '../Layouts/SupportLayout'
+import Support from '../Pages/Support/support'
 
 
 function AppRoutes() {
@@ -32,7 +32,7 @@ function AppRoutes() {
             <Route path="/playlists" element={<PlaylistsPage />} />
             <Route path="/email-generator" element={<EmailGenerator />} />
             <Route path="/application-generator" element={<ApplicationGenerator />} />
-            <Route path="/support-layout" element={<SupportLayout />} />
+            <Route path="/support" element={<Support />} />
 
         </Routes>
     );
