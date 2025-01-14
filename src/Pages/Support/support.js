@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./support1.css";
+import image1 from './1.svg'
+import image2 from './2.svg'
 
 const Support = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -163,7 +165,7 @@ const Support = () => {
                 <div className="assistant-cards">
                     <div className="card">
                         <img
-                            src="1.svg" // Replace with your actual image path
+                            src={image1}
                             alt="Email Generator"
                             className="card-img-top"
                         />
@@ -174,7 +176,7 @@ const Support = () => {
                     </div>
                     <div className="card">
                         <img
-                            src="/assets/images/application_generator.png" // Replace with your actual image path
+                            src={image2} // Replace with your actual image path
                             alt="Application Generator"
                             className="card-img-top"
                         />

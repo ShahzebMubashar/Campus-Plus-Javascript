@@ -307,7 +307,8 @@ body {
     overflow: hidden;
     background-color: transparent;
     /* Transparent background for the card */
-    box-shadow: none;
+    box-shadow: 0.1px solid #f0f0f0;
+    margin: 2%;
     /* Remove shadow */
     transition: transform 0.3s, box-shadow 0.3s;
 }
