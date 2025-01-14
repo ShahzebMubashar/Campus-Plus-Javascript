@@ -1,4 +1,4 @@
-const pool = require("../config/database");
+const pool = require("../config/database.js");
 
 exports.getCourses = async (request, response) => {
   try {
