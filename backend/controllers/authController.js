@@ -1,8 +1,12 @@
-const pool = require("../config/database.js");
-const bcrypt = require("bcrypt");
-const { randomBytes } = require("crypto");
+// const pool = require("../config/database.js");
+// const bcrypt = require("bcrypt");
+// const { randomBytes } = require("crypto");
 
-exports.register = async (request, response) => {
+import pool from "../config/database.js";
+import bcrypt from "bcrypt";
+import { randomBytes } from "crypto";
+
+export const register = async (request, response) => {
   const { username, email, password, rollnumber } = request.body;
 
   if (!username || !email || !password || !rollnumber) {
@@ -72,7 +76,7 @@ exports.register = async (request, response) => {
   }
 };
 
-exports.login = async (request, response) => {
+export const login = async (request, response) => {
   const {
     body: { username, email, password },
   } = request;
@@ -115,7 +119,7 @@ exports.login = async (request, response) => {
   }
 };
 
-exports.forgotPassword = async (request, response) => {
+export const forgotPassword = async (request, response) => {
   const {
     body: { rollnumber, username, email },
   } = request;
@@ -150,7 +154,7 @@ exports.forgotPassword = async (request, response) => {
   }
 };
 
-exports.resetPassword = async (request, response) => {
+export const resetPassword = async (request, response) => {
   const { newPassword, confirmPassword, token } = request.body;
 
   if (!newPassword || !confirmPassword || !token)
@@ -185,7 +189,7 @@ exports.resetPassword = async (request, response) => {
   }
 };
 
-exports.logout = async (request, response) => {
+export const logout = async (request, response) => {
   try {
     request.session.destroy((error) => {
       if (error) {

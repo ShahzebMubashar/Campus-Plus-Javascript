@@ -1,6 +1,8 @@
-const pool = require("../config/database.js");
+// const pool = require("../config/database.js");
 
-exports.viewUserInfo = async (request, response) => {
+import pool from "../config/database.js";
+
+export const viewUserInfo = async (request, response) => {
   const {
     session: {
       user: { userid },
@@ -21,7 +23,7 @@ exports.viewUserInfo = async (request, response) => {
   }
 };
 
-exports.editUserInfo = async (request, response) => {
+export const editUserInfo = async (request, response) => {
   const {
     body: { batch, degree },
     session: {

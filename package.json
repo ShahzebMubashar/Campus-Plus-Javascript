@@ -55,6 +55,7 @@
       "last 1 safari version"
     ]
   },
+  "type": "module",
   "devDependencies": {
     "nodemon": "^3.1.9"
   }

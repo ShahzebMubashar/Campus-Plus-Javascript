@@ -1,6 +1,8 @@
-const pool = require("../config/database.js");
+// const pool = require("../config/database.js");
 
-exports.getChatrooms = async (request, response) => {
+import pool from "../config/database.js";
+
+export const getChatrooms = async (request, response) => {
   try {
     console.log("Fetching Chatrooms");
     const result = await pool.query("Select * from Rooms");
@@ -15,7 +17,7 @@ exports.getChatrooms = async (request, response) => {
   }
 };
 
-exports.createChatroom = async (request, response) => {
+export const createChatroom = async (request, response) => {
   const {
     body: { roomName, description },
     session: {
@@ -41,7 +43,7 @@ exports.createChatroom = async (request, response) => {
   }
 };
 
-exports.joinRoom = async (request, response) => {
+export const joinRoom = async (request, response) => {
   const {
     body: { roomid, chatRoomName },
     session: {

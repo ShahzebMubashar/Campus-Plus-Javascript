@@ -1,5 +1,8 @@
-const pg = require("pg");
-const dotenv = require("dotenv");
+// const pg = require("pg");
+// const dotenv = require("dotenv");
+
+import pg from "pg";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -11,4 +14,5 @@ const pool = new pg.Pool({
   database: process.env.DB_NAME,
 });
 
-module.exports = pool;
+export default pool;
+// module.exports = pool;

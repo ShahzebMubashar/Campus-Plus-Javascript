@@ -1,4 +1,4 @@
-exports.checkAuthorisation = (request, response, next) => {
+export const checkAuthorisation = (request, response, next) => {
   request.sessionStore.get(request.sessionID, (error, session) => {
     // console.log(session);
   });
@@ -7,7 +7,7 @@ exports.checkAuthorisation = (request, response, next) => {
   next();
 };
 
-exports.checkAdmin = (request, response, next) => {
+export const checkAdmin = (request, response, next) => {
   if (request.session.user.role !== "Admin")
     return response.status(403).send("Forbidden");
   next();

@@ -1,11 +1,17 @@
-const express = require("express");
+// const express = require("express");
 
-const { viewUserInfo, editUserInfo } = require("../controllers/userController");
-const { checkAuthorisation } = require("../middlewares/authMiddleware");
+// const { viewUserInfo, editUserInfo } = require("../controllers/userController");
+// const { checkAuthorisation } = require("../middlewares/authMiddleware");
+
+import express from "express";
+
+import { viewUserInfo, editUserInfo } from "../controllers/userController.js";
+import { checkAuthorisation } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
 router.get("/profile", checkAuthorisation, viewUserInfo);
 router.put("/profile", checkAuthorisation, editUserInfo);
 
-module.exports = router;
+export default router;
+// module.exports = router;
