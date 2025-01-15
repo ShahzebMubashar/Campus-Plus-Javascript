@@ -14,7 +14,8 @@ import NewsAndEventsSection from '../Pages/Index/components/NewsAndEventsSection
 import BackToTopButton from '../Pages/Index/components/BackToTop';
 import TestimonialSection from '../Pages/Index/components/TestimonialSection';
 import BlogSection from '../Pages/Index/components/Blog';
-import FAQSection from '../Pages/Index/components/FAQSection';
+import FAQ from '../Pages/Support/faq'
+import faqData from '../Pages/Support/faqData'
 
 function MainLayout() {
     return (
@@ -32,7 +33,8 @@ function MainLayout() {
             <BackToTopButton />
             <BlogSection />
             <TestimonialSection />
-            <FAQSection />
+            <FAQ faqData={faqData} />
+
         </div>
     );
 }
