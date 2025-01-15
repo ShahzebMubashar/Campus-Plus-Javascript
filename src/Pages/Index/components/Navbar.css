@@ -9,14 +9,30 @@
 }
 
 .logo {
+    display: flex;
+    /* Use flexbox to align items horizontally */
+    align-items: center;
+    /* Vertically center the text and image */
     font-size: 24px;
     font-weight: bold;
     color: #0d47a1;
     text-decoration: none;
 }
 
-.logo .plus {
-    color: #0056b3;
+.logo img {
+    width: 40px;
+    /* Adjust the width of the image */
+    height: auto;
+    /* Maintain aspect ratio */
+    margin-right: 10px;
+    /* Add spacing between the image and text */
+}
+
+.logo span {
+    font-size: 24px;
+    /* Adjust font size to match the desired appearance */
+    color: #0d47a1;
+    /* Ensure it matches the desired color */
 }
 
 .nav-links {

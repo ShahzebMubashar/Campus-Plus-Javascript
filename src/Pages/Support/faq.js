@@ -1,3 +1,5 @@
+// src/components/FAQ/FAQ.js
+
 import React, { useState } from "react";
 
 const FAQ = ({ faqData }) => {
