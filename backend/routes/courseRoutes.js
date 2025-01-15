@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 
 const {
   getCourses,
@@ -8,6 +9,7 @@ const {
 const { checkAuthorisation } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
+router.use(cors());
 
 router.get("/", getCourses);
 router.post("/Rate-Course", checkAuthorisation, rateCourse);
