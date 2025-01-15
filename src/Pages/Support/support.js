@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./support1.css";
-import image1 from './1.svg'
-import image2 from './2.svg'
+import image1 from "./1.svg";
+import image2 from "./2.svg";
+import FAQ from "./faq";
 
 const Support = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [expandedCategory, setExpandedCategory] = useState(null);
-    const [expandedFaq, setExpandedFaq] = useState(null);
     const [loading, setLoading] = useState(true);
 
     const faqData = [
@@ -72,14 +71,6 @@ const Support = () => {
         return () => clearTimeout(timer);
     }, []);
 
-    const toggleCategory = (index) => {
-        setExpandedCategory(expandedCategory === index ? null : index);
-    };
-
-    const toggleFaq = (index) => {
-        setExpandedFaq(expandedFaq === index ? null : index);
-    };
-
     if (loading) {
         return (
             <div className="loader-wrapper">
@@ -109,77 +100,24 @@ const Support = () => {
                 </button>
             </div>
 
-            <section className="faq container my-4">
-                <h2>
-                    Frequently Asked <span style={{ color: "#3b82f6", fontWeight: "bolder" }}>Questions</span>
-                </h2>
-                <div className="accordion" id="accordionExample">
-                    {faqData.map((category, categoryIndex) => (
-                        <div key={categoryIndex} className="accordion-item">
-                            <h2 className="accordion-header">
-                                <button
-                                    className={`accordion-button ${expandedCategory === categoryIndex ? "" : "collapsed"}`}
-                                    type="button"
-                                    onClick={() => toggleCategory(categoryIndex)}
-                                >
-                                    {category.category}
-                                </button>
-                            </h2>
-                            <div
-                                className={`accordion-collapse collapse ${expandedCategory === categoryIndex ? "show" : ""}`}
-                            >
-                                <div className="accordion-body">
-                                    {category.questions.map((question, questionIndex) => (
-                                        <div key={questionIndex} className="accordion-item sub-question">
-                                            <h2 className="accordion-header">
-                                                <button
-                                                    className={`accordion-button collapsed ${expandedFaq === `${categoryIndex}-${questionIndex}` ? "" : ""
-                                                        }`}
-                                                    type="button"
-                                                    onClick={() => toggleFaq(`${categoryIndex}-${questionIndex}`)}
-                                                >
-                                                    {question.question}
-                                                </button>
-                                            </h2>
-                                            <div
-                                                className={`accordion-collapse collapse ${expandedFaq === `${categoryIndex}-${questionIndex}` ? "show" : ""
-                                                    }`}
-                                            >
-                                                <div className="accordion-body">{question.answer}</div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </section>
+            {/* FAQ Section */}
+            <FAQ faqData={faqData} />
 
-
-
+            {/* Personal Assistant Section */}
             <section className="personal-assistant my-5">
                 <h2 className="text-center mb-4">
                     Your Personal <span style={{ color: "#3b82f6", fontWeight: "bolder" }}>Assistant</span>
                 </h2>
                 <div className="assistant-cards">
                     <div className="card">
-                        <img
-                            src={image1}
-                            alt="Email Generator"
-                            className="card-img-top"
-                        />
+                        <img src={image1} alt="Email Generator" className="card-img-top" />
                         <div className="card-body">
                             <h3 className="card-title">Email Generator</h3>
                             <p className="card-text">Create predefined email templates quickly and easily.</p>
                         </div>
                     </div>
                     <div className="card">
-                        <img
-                            src={image2} // Replace with your actual image path
-                            alt="Application Generator"
-                            className="card-img-top"
-                        />
+                        <img src={image2} alt="Application Generator" className="card-img-top" />
                         <div className="card-body">
                             <h3 className="card-title">Application Generator</h3>
                             <p className="card-text">
@@ -190,7 +128,7 @@ const Support = () => {
                 </div>
             </section>
 
-
+            {/* Recommended Articles Section */}
             <section className="recommended-articles my-5">
                 <h2 className="text-center mb-4">
                     Recommended <span style={{ color: "#3b82f6", fontWeight: "bolder" }}>Articles</span>
@@ -198,33 +136,35 @@ const Support = () => {
                 <div className="articles-container">
                     <div className="article-card">
                         <img
-                            src="/assets/images/data_science.png" // Replace with your actual image path
+                            src="/assets/images/data_science.png"
                             alt="Data Science vs. Statistics"
                             className="article-img"
                         />
                         <div className="article-content">
                             <h3 className="article-title">Data Science vs. Statistics: Unraveling the Mysteries</h3>
                             <p className="article-description">
-                                Discover the key differences between data science and statistics and how they influence modern analytics.
+                                Discover the key differences between data science and statistics and how they influence
+                                modern analytics.
                             </p>
                         </div>
                     </div>
                     <div className="article-card">
                         <img
-                            src="/assets/images/gig_economy.png" // Replace with your actual image path
+                            src="/assets/images/gig_economy.png"
                             alt="Navigating the Gig Economy"
                             className="article-img"
                         />
                         <div className="article-content">
                             <h3 className="article-title">Navigating the Gig Economy: Opportunities and Challenges</h3>
                             <p className="article-description">
-                                Explore the dynamics of the gig economy and strategies to thrive in a rapidly changing job market.
+                                Explore the dynamics of the gig economy and strategies to thrive in a rapidly changing
+                                job market.
                             </p>
                         </div>
                     </div>
                     <div className="article-card">
                         <img
-                            src="/assets/images/chatgpt_impact.png" // Replace with your actual image path
+                            src="/assets/images/chatgpt_impact.png"
                             alt="The Impact of ChatGPT"
                             className="article-img"
                         />
@@ -237,8 +177,6 @@ const Support = () => {
                     </div>
                 </div>
             </section>
-
-
         </div>
     );
 };

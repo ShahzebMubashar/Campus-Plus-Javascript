@@ -1,7 +1,7 @@
 // src/routes/AppRoutes.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import MainLayout from '../layouts/MainLayout';  // Import MainLayout
+import MainLayout from '../Layouts/MainLayout';  // Import MainLayout
 import AboutCampusPlus from '../Pages/AboutCampusPlus/AboutCampusPlus';  // Import AboutCampusPlus
 import ComingSoon from '../Pages/Coming Soon/ComingSoon';  // Import ComingSoon
 import Contact from '../Pages/Contact/Contact';  // Import Contact
