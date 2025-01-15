@@ -1,10 +1,9 @@
-/* App.css */
-body {
+/* body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f9f9f9;
     color: #333;
-}
+} */
 
 .pastpapers-app {
     max-width: 1200px;
@@ -16,7 +15,7 @@ body {
     text-align: center;
     background-color: #0056b3;
     color: white;
-    padding: 20px 0;
+    /* padding: 20px 0; */
     margin-bottom: 20px;
 }
 
@@ -32,11 +31,23 @@ body {
 
 .pastpapers-trending {
     text-align: center;
+    margin-bottom: 40px;
 }
 
 .pastpapers-trending h2 {
     font-size: 1.5rem;
     margin-bottom: 20px;
+}
+
+.slider-container {
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.testimonials-slider {
+    display: flex;
+    transition: transform 0.5s ease-in-out;
 }
 
 .pastpapers-card {
@@ -45,13 +56,21 @@ body {
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    text-align: left;
+    text-align: center;
     margin: 0 10px;
+    flex: 0 0 calc(33.33% - 25px);
+    /* Three items at a time */
+    height: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
 }
 
 .pastpapers-card h3 {
     margin: 0 0 10px;
     font-size: 1.2rem;
+    font-weight: bold;
 }
 
 .pastpapers-card h4 {
@@ -66,28 +85,66 @@ body {
     color: #666;
 }
 
-.pastpapers-arrow {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
+/* Controls Styling */
+.slider-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.slider-button {
     background-color: #0056b3;
-    color: white;
     border: none;
+    color: white;
+    padding: 10px;
+    cursor: pointer;
     border-radius: 50%;
+    font-size: 20px;
     width: 40px;
     height: 40px;
-    cursor: pointer;
-    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 10px;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-.pastpapers-prev {
-    left: -50px;
-}
-
-.pastpapers-next {
-    right: -50px;
-}
-
-.pastpapers-arrow:hover {
+.slider-button:hover {
     background-color: #003d80;
+}
+
+.slider-button:active {
+    transform: scale(0.9);
+}
+
+/* Dots Styling */
+.slick-dots {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    list-style: none;
+    padding: 0;
+}
+
+.slick-dots li {
+    margin: 0 5px;
+}
+
+.slick-dots li button:before {
+    font-size: 10px;
+    color: #0056b3;
+}
+
+.slick-dots li.slick-active button:before {
+    color: #003d80;
+}
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+    .pastpapers-card {
+        flex: 0 0 100%;
+        /* Show one item at a time on smaller screens */
+    }
 }

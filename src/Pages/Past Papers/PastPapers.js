@@ -1,9 +1,7 @@
-// App.js
 import React from "react";
 import "./PP.css";
-import "slick-carousel/slick/slick.css";
-import "slick-carousel/slick/slick-theme.css";
-import Slider from "react-slick";
+import SliderComponent from "./Slider";
+import SearchForPapers from './SearchforPapers';
 
 const papers = [
     {
@@ -44,18 +42,7 @@ const papers = [
     },
 ];
 
-function App() {
-    const settings = {
-        dots: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 1,
-        autoplay: false,
-        nextArrow: <button className="pastpapers-arrow pastpapers-next">&gt;</button>,
-        prevArrow: <button className="pastpapers-arrow pastpapers-prev">&lt;</button>,
-    };
-
+const PastPapers = () => {
     return (
         <div className="pastpapers-app">
             <header className="pastpapers-header">
@@ -64,18 +51,11 @@ function App() {
             </header>
             <section className="pastpapers-trending">
                 <h2>Trending Papers</h2>
-                <Slider {...settings}>
-                    {papers.map((paper, index) => (
-                        <div key={index} className="pastpapers-card">
-                            <h3>{paper.title}</h3>
-                            <h4>({paper.code})</h4>
-                            <p>{paper.description}</p>
-                        </div>
-                    ))}
-                </Slider>
+                <SliderComponent items={papers} />
             </section>
+            <SearchForPapers />
         </div>
     );
-}
+};
 
-export default App;
+export default PastPapers;
