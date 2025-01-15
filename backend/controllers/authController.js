@@ -1,7 +1,3 @@
-// const pool = require("../config/database.js");
-// const bcrypt = require("bcrypt");
-// const { randomBytes } = require("crypto");
-
 import pool from "../config/database.js";
 import bcrypt from "bcrypt";
 import { randomBytes } from "crypto";

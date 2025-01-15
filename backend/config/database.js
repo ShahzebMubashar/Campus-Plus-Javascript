@@ -1,6 +1,3 @@
-// const pg = require("pg");
-// const dotenv = require("dotenv");
-
 import pg from "pg";
 import dotenv from "dotenv";
 
@@ -15,4 +12,3 @@ const pool = new pg.Pool({
 });
 
 export default pool;
-// module.exports = pool;

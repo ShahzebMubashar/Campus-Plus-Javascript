@@ -1,8 +1,3 @@
-// const express = require("express");
-
-// const { viewUserInfo, editUserInfo } = require("../controllers/userController");
-// const { checkAuthorisation } = require("../middlewares/authMiddleware");
-
 import express from "express";
 
 import { viewUserInfo, editUserInfo } from "../controllers/userController.js";
@@ -14,4 +9,3 @@ router.get("/profile", checkAuthorisation, viewUserInfo);
 router.put("/profile", checkAuthorisation, editUserInfo);
 
 export default router;
-// module.exports = router;

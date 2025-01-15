@@ -1,13 +1,3 @@
-// const express = require("express");
-// const cors = require("cors");
-
-// const {
-//   getCourses,
-//   rateCourse,
-//   reviewCourse,
-// } = require("../controllers/courseController");
-// const { checkAuthorisation } = require("../middlewares/authMiddleware");
-
 import express from "express";
 import cors from "cors";
 
@@ -26,4 +16,3 @@ router.post("/Rate-Course", checkAuthorisation, rateCourse);
 router.post("/Review-Course", checkAuthorisation, reviewCourse);
 
 export default router;
-// module.exports = router;
