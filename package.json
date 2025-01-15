@@ -14,7 +14,9 @@
     "boxicons": "^2.1.4",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "emailjs-com": "^3.2.0",
+    "express": "^4.21.2",
     "express-session": "^1.18.1",
     "font-awesome": "^4.7.0",
     "fuse.js": "^7.0.0",
@@ -28,6 +30,8 @@
     "react-router-dom": "^6.28.0",
     "react-scripts": "5.0.1",
     "react-scroll": "^1.9.0",
+    "react-slick": "^0.30.3",
+    "slick-carousel": "^1.8.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

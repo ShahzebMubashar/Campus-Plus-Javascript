@@ -1,7 +1,10 @@
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
-
+const bodyParser = require("body-parser");
+const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+// const authRoutes = require("./routes/authRoutes");
 const authRoutes = require("../routes/authRoutes");
 const userRoutes = require("../routes/userRoutes");
 const courseRoutes = require("../routes/courseRoutes");
@@ -21,10 +24,22 @@ app.use(
   })
 );
 
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET || "default_secret",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { maxAge: 600000 }, // 10 minutes
+  })
+);
+
 app.use("/", authRoutes);
 app.use("/User", userRoutes);
 app.use("/Courses", courseRoutes);
 app.use("/Chatrooms", chatroomRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use(errorHandler);
 
