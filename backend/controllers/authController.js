@@ -1,105 +1,95 @@
 const pool = require("../config/database.js");
 const bcrypt = require("bcrypt");
-const { randomBytes } = require("crypto");
 
-exports.register = async (request, response) => {
-  const { username, email, password, rollnumber } = request.body;
+exports.register = async (req, res) => {
+  const { username, email, password } = req.body;
 
-  if (!username || !email || !password || !rollnumber) {
-    return response.status(400).send("Please provide all the fields");
+  if (!username || !email || !password) {
+    return res.status(400).send("Please provide all the fields");
   }
 
   try {
     const client = await pool.connect();
-    await client.query("BEGIN");
 
-    const checkUser = await client.query(
-      `SELECT (SELECT COUNT(*) FROM Users WHERE username = $1) AS usernameCount,
-              (SELECT COUNT(*) FROM Users WHERE email = $2) AS emailCount,
-              (SELECT COUNT(*) FROM Users WHERE rollnumber = $3) AS rollnumberCount`,
-      [username, email, rollnumber]
+    let newUsername = username;
+
+    // Check if username exists, and suggest an alternative if it does
+    while (true) {
+      const userCheck = await client.query(
+        "SELECT * FROM users WHERE username = $1",
+        [newUsername]
+      );
+
+      if (userCheck.rowCount === 0) break;
+
+      // Suggest a new username
+      newUsername = `${username}${Math.floor(Math.random() * 1000)}`;
+    }
+
+    const emailCheck = await client.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
     );
 
-    const { usernamecount, emailcount, rollnumbercount } = checkUser.rows[0];
-
-    if (parseInt(rollnumbercount))
-      return response
-        .status(409)
-        .send(`Roll Number ${rollnumber} already exists`);
-    if (parseInt(emailcount))
-      return response.status(409).send(`Email ${email} already exists`);
-
-    if (parseInt(usernamecount)) {
-      let newUserName = username;
-      let randomUserID = Math.floor(Math.random() * 1000);
-      while (true) {
-        newUserName = `${username}${randomUserID}`;
-        const userCheck = await client.query(
-          "SELECT * FROM Users WHERE username = $1",
-          [newUserName]
-        );
-        if (!userCheck.rowCount) break;
-      }
-      return response
-        .status(409)
-        .send(`Username ${username} already exists. Try ${newUserName}`);
+    if (emailCheck.rowCount > 0) {
+      return res.status(409).send(`Email ${email} already exists`);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const result = await client.query(
-      `INSERT INTO Users (username, email, password, rollnumber) VALUES ($1, $2, $3, $4) RETURNING userid, username, email, rollnumber`,
-      [username, email, hashedPassword, rollnumber]
+      "INSERT INTO users (username, email, password_hash) VALUES ($1, $2, $3) RETURNING id, username, email",
+      [newUsername, email, hashedPassword]
     );
 
-    request.session.user = {
-      userid: parseInt(result.rows[0].userid),
-      username: result.rows[0].username,
-      email: result.rows[0].email,
-      rollnumber: result.rows[0].rollnumber,
-    };
-
-    response.cookie("user", `${result.rows[0].username}`, { maxAge: 600000 });
-    await client.query("COMMIT");
-
-    return response
-      .status(201)
-      .send(`User ${result.rows[0].username} registered successfully`);
+    res.status(201).send(`User ${result.rows[0].username} registered successfully`);
+    client.release();
   } catch (error) {
     console.error(error.message);
-    await pool.query("ROLLBACK");
-    return response.status(500).send("Server Error");
+    res.status(500).send("Server Error");
   }
 };
 
-exports.login = async (request, response) => {
-  const {
-    body: { username, email, password },
-  } = request;
 
-  if (!username && !email)
+exports.login = async (request, response) => {
+  const { username, email, password } = request.body;
+
+  if (!username && !email) {
     return response.status(400).send("Please provide username or email");
-  if (!password) return response.status(400).send("Please provide password");
+  }
+  if (!password) {
+    return response.status(400).send("Please provide password");
+  }
 
   try {
+    // Fetch user by username or email
     const result = await pool.query(
-      "SELECT * FROM Users WHERE username = $1 OR email = $1",
+      "SELECT * FROM users WHERE username = $1 OR email = $1",
       [username || email]
     );
-    if (!result.rowCount)
+
+    if (result.rows.length === 0) {
       return response.status(404).send("Invalid Credentials");
+    }
 
     const user = result.rows[0];
-    const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) return response.status(401).send("Invalid Credentials");
+    // Debugging logs
+    console.log("Plaintext password:", password);
+    console.log("Hashed password from DB:", user.password_hash);
 
+    // Compare the provided password with the stored hashed password
+    const isMatch = await bcrypt.compare(password, user.password_hash);
+
+    if (!isMatch) {
+      return response.status(401).send("Invalid Credentials");
+    }
+
+    // Set session and cookie
     request.session.user = {
-      userid: parseInt(user.userid),
+      userid: user.id,
       username: user.username,
       email: user.email,
-      rollnumber: user.rollnumber,
-      role: user.role,
     };
 
     response.cookie("user", `${user.username}`, { maxAge: 600000 });
@@ -115,88 +105,3 @@ exports.login = async (request, response) => {
   }
 };
 
-exports.forgotPassword = async (request, response) => {
-  const {
-    body: { rollnumber, username, email },
-  } = request;
-
-  if (!rollnumber && !username && !email)
-    return response
-      .status(400)
-      .send("Please provide Roll Number, Username or Email");
-
-  try {
-    const result = await pool.query(
-      "SELECT userid FROM Users WHERE rollnumber = $1 OR email = $1 OR username = $1",
-      [rollnumber || username || email]
-    );
-
-    if (!result.rowCount)
-      return response.status(401).send("Invalid Credentials");
-
-    const token = randomBytes(32).toString("hex");
-    const expiry = new Date(Date.now() + 600000).toISOString();
-
-    await pool.query("INSERT INTO ResetPassword VALUES ($1, $2, $3)", [
-      result.rows[0].userid,
-      token,
-      expiry,
-    ]);
-
-    return response.status(200).send(`Token: ${token}`);
-  } catch (error) {
-    console.error(error.message);
-    return response.status(500).send("Server Error");
-  }
-};
-
-exports.resetPassword = async (request, response) => {
-  const { newPassword, confirmPassword, token } = request.body;
-
-  if (!newPassword || !confirmPassword || !token)
-    return response.status(400).send("Please provide all the fields");
-
-  try {
-    const result = await pool.query(
-      "SELECT * FROM ResetPassword WHERE reset_token = $1 AND token_expiry > current_timestamp",
-      [token]
-    );
-
-    if (!result.rowCount)
-      return response.status(401).send("Invalid Token or Token Expired");
-    if (newPassword !== confirmPassword)
-      return response.status(400).send("Passwords do not match");
-
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    const userId = result.rows[0].userid;
-
-    await pool.query("UPDATE Users SET password = $1 WHERE userid = $2", [
-      hashedPassword,
-      userId,
-    ]);
-    await pool.query("DELETE FROM ResetPassword WHERE reset_token = $1", [
-      token,
-    ]);
-
-    return response.status(200).send("Password Reset Successfully");
-  } catch (error) {
-    console.error(error.message);
-    return response.status(500).send("Server Error");
-  }
-};
-
-exports.logout = async (request, response) => {
-  try {
-    request.session.destroy((error) => {
-      if (error) {
-        console.error("Error destroying session:", error);
-        return response.status(500).send("Server Error");
-      }
-      response.clearCookie("user");
-      return response.status(200).send("Logged Out Successfully");
-    });
-  } catch (error) {
-    console.error("Unexpected error during logout:", error);
-    return response.status(500).send("Unexpected Server Error");
-  }
-};
