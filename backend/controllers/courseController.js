@@ -1,6 +1,6 @@
-const pool = require("../config/database.js");
+import pool from "../config/database.js";
 
-exports.getCourses = async (request, response) => {
+export const getCourses = async (request, response) => {
   try {
     const result = await pool.query("SELECT * FROM ViewCourses");
     if (!result.rowCount)
@@ -12,7 +12,7 @@ exports.getCourses = async (request, response) => {
   }
 };
 
-exports.rateCourse = async (request, response) => {
+export const rateCourse = async (request, response) => {
   const {
     body: { courseid, rating },
     session: {
@@ -65,7 +65,7 @@ exports.rateCourse = async (request, response) => {
   }
 };
 
-exports.reviewCourse = async (request, response) => {
+export const reviewCourse = async (request, response) => {
   const {
     body: { courseid, review },
     session: {

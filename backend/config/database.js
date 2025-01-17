@@ -1,5 +1,5 @@
-const pg = require("pg");
-const dotenv = require("dotenv");
+import pg from "pg";
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -11,15 +11,12 @@ const pool = new pg.Pool({
   database: process.env.DB_NAME,
 });
 
-<<<<<<< HEAD
-=======
 pool.connect((err, client, release) => {
   if (err) {
     console.error("Failed to connect to the database:", err.stack);
   } else {
     console.log("Successfully connected to the database");
     release(); // Release the client back to the pool
->>>>>>> 9e6f5ac56e674826b6e77174f35d807c5d1648e1
 
 (async () => {
   try {
@@ -31,5 +28,5 @@ pool.connect((err, client, release) => {
   }
 });
 
-
 module.exports = pool;
+console.log("Database connection pool created");
