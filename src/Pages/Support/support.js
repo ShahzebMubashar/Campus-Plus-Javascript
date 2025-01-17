@@ -5,8 +5,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./support1.css";
 import image1 from "./1.svg";
 import image2 from "./2.svg";
-import FAQ from "./faq";
-import faqData from "./faqData";
+import FAQ from "./faq.js";
+import faqData from "./faqData.js";
 
 const Support = () => {
     const [searchQuery, setSearchQuery] = useState("");
