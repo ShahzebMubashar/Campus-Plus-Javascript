@@ -1,6 +1,7 @@
-import pool from "../config/database.js";
-import bcrypt from "bcrypt";
-import { randomBytes } from "crypto";
+const pool = require("../config/database.js");
+const bcrypt = require("bcrypt");
+const { randomBytes } = require("crypto");
+
 
 exports.register = async (request, response) => {
   console.log("Register endpoint hit"); // Log to confirm the route is called
