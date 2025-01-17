@@ -2,35 +2,11 @@ import React from "react";
 import "./SearchforPapers.css";
 import { FaSearch, FaFileAlt, FaYoutube } from "react-icons/fa";
 
-const papers = [
-    {
-        title: "Accounting and Finance",
-        code: "AF",
-        description:
-            "Accounting and finance involve recording and analyzing financial transactions to ensure accurate records, regulatory compliance, and informed business decisions, essential for growth and financial health.",
-        difficulty: "EASY",
-    },
-    {
-        title: "Advanced Computer Architecture",
-        code: "ACA",
-        description:
-            "Advanced Computer Architecture (ACA) focuses on optimizing computer systems for enhanced performance through efficient hardware and software integration. It includes parallel processing and memory hierarchy concepts.",
-        difficulty: "MEDIUM",
-    },
-    {
-        title: "Advanced Database Concepts",
-        code: "ADC",
-        description:
-            "Advanced Database Concepts cover topics like database optimization, distributed databases, data warehousing, and advanced querying techniques for efficient data management.",
-        difficulty: "HARD",
-    },
-];
-
-const SearchForPapers = () => {
+const SearchForPapers = ({ courses }) => {
     return (
         <section className="search-for-papers">
             <h2>
-                Search for <span className="highlighted">Papers</span>
+                Search for <span className="highlighted">Courses</span>
             </h2>
             <div className="search-bar">
                 <input type="text" placeholder="Search Here" />
@@ -39,13 +15,15 @@ const SearchForPapers = () => {
                 </button>
             </div>
             <div className="papers-grid">
-                {papers.map((paper, index) => (
+                {courses.map((course, index) => (
                     <div key={index} className="paper-card">
-                        <div className="difficulty-tag">{paper.difficulty}</div>
+                        <div className="difficulty-tag">Difficulty: {course.difficulty}</div>
                         <h3>
-                            {paper.title} <span>({paper.code})</span>
+                            {course.coursename} <span>({course.coursecode})</span>
                         </h3>
-                        <p>{paper.description}</p>
+                        <p>Credits: {course.credits}</p>
+                        <p>Grading: {course.grading}</p>
+                        <p>Rating: {course.rating ? course.rating.toFixed(2) : "No ratings yet"}</p>
                         <div className="icons">
                             <FaFileAlt className="icon" />
                             <FaYoutube className="icon" />
