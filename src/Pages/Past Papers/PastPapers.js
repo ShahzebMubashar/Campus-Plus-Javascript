@@ -1,7 +1,7 @@
 import React from "react";
 import "./PP.css";
-import SliderComponent from "./Slider";
-import SearchForPapers from './SearchforPapers';
+import SliderComponent from "./Slider.js";
+import SearchForPapers from './SearchforPapers.js';
 
 const papers = [
     {
