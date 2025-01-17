@@ -1,18 +1,15 @@
-import express from "express";
-import cors from "cors";
-
-import {
-  getCourses,
-  rateCourse,
-  reviewCourse,
-} from "../controllers/courseController.js";
-import { checkAuthorisation } from "../middlewares/authMiddleware.js";
+const express = require("express");
+const cors = require("cors");
+const { getCourses, rateCourse, reviewCourse } = require("../controllers/courseController.js");
+const { checkAuthorisation } = require("../middlewares/authMiddleware.js");
 
 const router = express.Router();
 router.use(cors());
 
+// Replace test route with the actual function
 router.get("/", getCourses);
-router.post("/Rate-Course", checkAuthorisation, rateCourse);
+
+router.post("/rate-course", checkAuthorisation, rateCourse);
 router.post("/Review-Course", checkAuthorisation, reviewCourse);
 
-export default router;
+module.exports = router;
