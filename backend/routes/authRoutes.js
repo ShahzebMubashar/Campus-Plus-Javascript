@@ -1,11 +1,16 @@
 const express = require("express");
-
 const { login, register, logout } = require("../controllers/authController");
-const { checkAuthorisation } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
+// Test route
+router.get("/test", (req, res) => {
+    res.send("Auth routes are working!");
+});
+
+// Auth routes
 router.post("/login", login);
 router.post("/register", register);
-router.post("/logout", checkAuthorisation, logout);
+router.post("/logout", logout);
+
 module.exports = router;

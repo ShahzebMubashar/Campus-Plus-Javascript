@@ -11,4 +11,13 @@ const pool = new pg.Pool({
   database: process.env.DB_NAME,
 });
 
+pool.connect((err, client, release) => {
+  if (err) {
+    console.error("Failed to connect to the database:", err.stack);
+  } else {
+    console.log("Successfully connected to the database");
+    release(); // Release the client back to the pool
+  }
+});
+
 module.exports = pool;

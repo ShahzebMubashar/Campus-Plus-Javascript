@@ -1,5 +1,6 @@
 import React from 'react';
 import './Navbar.css';
+import Logo from '../cp_logo.png'
 import { Link } from 'react-router-dom';
 import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
 
@@ -7,7 +8,10 @@ function Navbar() {
     return (
         <nav className="navbar">
             <div className="logo">
-                <Link to="/log-in">Campus<span className="plus">+</span></Link>
+                <Link to="*">
+                    <img src={Logo} alt="Logo" />
+                    <span>ampus +</span>
+                </Link>
             </div>
 
 
