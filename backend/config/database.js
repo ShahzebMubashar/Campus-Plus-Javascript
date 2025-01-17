@@ -21,3 +21,4 @@ pool.connect((err, client, release) => {
 });
 
 module.exports = pool;
+console.log("Database connection pool created");
