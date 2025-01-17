@@ -1,0 +1,74 @@
+.dynamic-timetable-container {
+  margin: 20px;
+  font-family: 'Roboto', sans-serif;
+}
+
+.options {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.export-button {
+  padding: 10px 15px;
+  background: linear-gradient(90deg, #ff6b6b, #f7797d);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.export-button:hover {
+  background: linear-gradient(90deg, #d64545, #f24665);
+}
+
+.timetable {
+  overflow: hidden;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+th {
+  background:#1B1212;
+  color: white;
+  font-weight: bold;
+  padding: 15px;
+  border: 1px solid #ccc;
+  text-transform: uppercase;
+}
+
+td {
+  padding: 15px;
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.day-column {
+  background: #191970;
+  color: white;
+  font-weight: bold;
+}
+
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+tbody tr:hover {
+  background-color: #eef6ff;
+  cursor: pointer;
+}
