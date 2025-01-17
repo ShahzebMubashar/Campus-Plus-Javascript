@@ -19,5 +19,6 @@ pool.connect((err, client, release) => {
     release(); // Release the client back to the pool
   }
 });
-//Tets
+
 module.exports = pool;
+console.log("Database connection pool created");
