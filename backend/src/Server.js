@@ -1,45 +1,42 @@
 const express = require("express");
 const session = require("express-session");
-const cors = require("cors"); // Keep only one declaration of cors
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const dotenv = require("dotenv");
+const cors = require("cors");
+
 const authRoutes = require("../routes/authRoutes");
-const userRoutes = require("../routes/userRoutes");
-const courseRoutes = require("../routes/courseRoutes");
-const chatroomRoutes = require("../routes/chatroomRoutes");
-const { errorHandler } = require("../middlewares/errorHandler");
-
-// Load environment variables
-dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT_BACKEND || 5000;
+const PORT = process.env.PORT_BACKEND || 4000;
 
-// Use middleware
-app.use(cors({ origin: "http://localhost:3000", credentials: true })); // Correct CORS usage
+// Middleware
 app.use(express.json());
+app.use(cors());
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || "default_secret",
+    secret: "CampusPlus",
     resave: false,
-    saveUninitialized: false,
-    cookie: { maxAge: 600000 }, // 10 minutes
+    saveUninitialized: true,
   })
 );
-app.use(bodyParser.json());
-app.use(cookieParser());
 
 // Routes
-app.use("/api/auth", authRoutes);
-app.use("/User", userRoutes);
-app.use("/Courses", courseRoutes);
-app.use("/Chatrooms", chatroomRoutes);
+app.use("/", authRoutes);
+
+app.use((req, res, next) => {
+  console.log(`Request received: ${req.method} ${req.url}`);
+  next();
+});
+
+// Test connection
+app.get("/test", (req, res) => {
+  res.send("Server is running and routes are registered!");
+});
 
 // Error handler
-app.use(errorHandler);
+app.use((err, req, res, next) => {
+  console.error("Error:", err.message);
+  res.status(500).send("Server Error");
+});
 
-// Start the server
+// Start server
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
