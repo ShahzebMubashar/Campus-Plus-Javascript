@@ -1,12 +1,16 @@
-import express from "express";
-
-import { login, register, logout } from "../controllers/authController.js";
-import { checkAuthorisation } from "../middlewares/authMiddleware.js";
+const express = require("express");
+const { login, register, logout } = require("../controllers/authController");
 
 const router = express.Router();
 
+// Test route
+router.get("/test", (req, res) => {
+    res.send("Auth routes are working!");
+});
+
+// Auth routes
 router.post("/login", login);
 router.post("/register", register);
-router.post("/logout", checkAuthorisation, logout);
+router.post("/logout", logout);
 
-export default router;
+module.exports = router;
