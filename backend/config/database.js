@@ -17,16 +17,7 @@ pool.connect((err, client, release) => {
   } else {
     console.log("Successfully connected to the database");
     release(); // Release the client back to the pool
-
-(async () => {
-  try {
-    const client = await pool.connect();
-    console.log("Connected to the database successfully!");
-    client.release();
-  } catch (err) {
-    console.error("Database connection error:", err.message);
   }
 });
-
 
 module.exports = pool;
