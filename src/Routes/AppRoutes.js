@@ -13,6 +13,7 @@ import PlaylistsPage from '../Pages/Playlists/PlaylistsPage'
 import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator';
 import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator';
 import Support from '../Pages/Support/support'
+import Timetable from "../Pages/Timetable/Timetable"
 
 
 function AppRoutes() {
@@ -30,6 +31,7 @@ function AppRoutes() {
             <Route path="/past-papers" element={<PastPapers />} />
             <Route path="/sign-in" element={<SignInPage />} />
             <Route path="/playlists" element={<PlaylistsPage />} />
+            <Route path="/timetable" element={<Timetable />} />
             <Route path="/email-generator" element={<EmailGenerator />} />
             <Route path="/application-generator" element={<ApplicationGenerator />} />
             <Route path="/support" element={<Support />} />
