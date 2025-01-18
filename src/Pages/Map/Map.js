@@ -38,12 +38,12 @@ const buildings = [
 const TechSavvyUniversityMap = () => {
     return (
         <div className="tech-savvy-map">
-            <header className="header">
+            <header className="map-header">
                 <h1>Welcome to <span>Campus Navigator</span></h1>
                 <p>Find classrooms, offices, and study spaces with ease.</p>
             </header>
 
-            <main className="main">
+            <main className="map-main">
                 <div className="buildings-grid">
                     {buildings.map((building, index) => (
                         <div key={index} className="building-card">
@@ -68,7 +68,7 @@ const TechSavvyUniversityMap = () => {
                 </div>
             </main>
 
-            <footer className="footer">
+            <footer className="map-footer">
                 <p>© 2025 Campus Navigator. All Rights Reserved.</p>
             </footer>
         </div>

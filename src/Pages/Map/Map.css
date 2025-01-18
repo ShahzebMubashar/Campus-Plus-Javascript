@@ -1,10 +1,10 @@
 /* General Styles */
-body {
+/* body {
     margin: 0;
     font-family: "Poppins", sans-serif;
     background: linear-gradient(to right, #141e30, #243b55);
     color: #e0e0e0;
-}
+} */
 
 .tech-savvy-map {
     display: flex;
@@ -12,8 +12,8 @@ body {
     min-height: 100vh;
 }
 
-/* Header */
-.header {
+/* map-header */
+.map-map-header {
     text-align: center;
     padding: 40px 20px;
     background: linear-gradient(to right, #1c92d2, #f2fcfe);
@@ -22,23 +22,23 @@ body {
     box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-.header h1 {
+.map-header h1 {
     font-size: 3.5rem;
     font-weight: 700;
 }
 
-.header h1 span {
+.map-header h1 span {
     color: #3498db;
     font-weight: 900;
 }
 
-.header p {
+.map-header p {
     font-size: 1.2rem;
     font-weight: 400;
 }
 
 /* Main Section */
-.main {
+.map-main {
     flex: 1;
     padding: 40px;
 }
@@ -65,13 +65,13 @@ body {
     box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
 }
 
-.building-header h2 {
+.building-map-header h2 {
     font-size: 1.8rem;
     color: #00bcd4;
     margin-bottom: 10px;
 }
 
-.building-header p {
+.building-map-header p {
     font-size: 1rem;
     color: #e0e0e0;
     margin-bottom: 20px;
@@ -140,7 +140,7 @@ body {
 
 /* Responsive Design */
 @media (max-width: 768px) {
-    .header h1 {
+    .map-header h1 {
         font-size: 2.5rem;
     }
 
