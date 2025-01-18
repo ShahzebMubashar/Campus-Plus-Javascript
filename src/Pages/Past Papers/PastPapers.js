@@ -62,7 +62,10 @@ const PastPapers = () => {
 
     return (
         <div className="pastpapers-app">
-            <Navbar />
+            <div className="navbar-wrapper">
+                <Navbar />
+            </div>
+
             <header className="pastpapers-header">
                 <h1>All Courses</h1>
                 <p>Rate the courses you love to help others!</p>

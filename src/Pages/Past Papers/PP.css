@@ -5,9 +5,11 @@
     color: #333;
 } */
 .pastpapers-app {
+    max-width: 100%;
     margin: 0;
-    width: 100%;
+    padding: 0;
 }
+
 
 .star {
     cursor: pointer;
@@ -22,11 +24,7 @@
 }
 
 
-.pastpapers-app {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+
 
 .pastpapers-header {
     text-align: center;
