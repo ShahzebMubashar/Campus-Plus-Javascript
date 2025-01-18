@@ -16,6 +16,7 @@ import Support from '../Pages/Support/support.js'
 import Timetable from "../Pages/Timetable/Timetable.js"
 import Footer from '../Pages/Footer/Footer.js'
 import News from '../Pages/Index/components/NewsAndEventsSection.js'
+import Map from "../Pages/Map/Map.js"
 
 
 
@@ -40,6 +41,7 @@ function AppRoutes() {
             <Route path="/support" element={<Support />} />
             <Route path="/news" element={<News />} />
             <Route path="/footer" element={<Footer />} />
+            <Route path="/map" element={<Map />} />
 
         </Routes>
     );

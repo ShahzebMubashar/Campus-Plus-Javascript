@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 1000" width="1400" height="1000">
+  <!-- Background -->
+  <rect width="1400" height="1000" fill="#f2f7fc" />
+
+  <!-- Title -->
+  <text x="700" y="50" font-size="36" font-family="Arial, sans-serif" text-anchor="middle" fill="#003366">
+    University Campus Map
+  </text>
+
+  <!-- Buildings -->
+  <!-- Main Office -->
+  <rect x="100" y="100" width="250" height="180" fill="#4a90e2" rx="15" ry="15" />
+  <text x="225" y="140" font-size="20" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Main Office</text>
+  <text x="225" y="170" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Ground Floor</text>
+  <text x="225" y="200" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Admin Office, Room 101</text>
+  <text x="225" y="230" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Room 102</text>
+
+  <!-- Library -->
+  <rect x="450" y="100" width="350" height="180" fill="#3cba92" rx="15" ry="15" />
+  <text x="625" y="140" font-size="20" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Library</text>
+  <text x="625" y="170" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Ground Floor</text>
+  <text x="625" y="200" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Reading Area, Book Shelves</text>
+  <text x="625" y="230" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Study Rooms</text>
+
+  <!-- Cafeteria -->
+  <rect x="900" y="100" width="300" height="180" fill="#ff9800" rx="15" ry="15" />
+  <text x="1050" y="140" font-size="20" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Cafeteria</text>
+  <text x="1050" y="170" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Ground Floor</text>
+  <text x="1050" y="200" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Dining Area</text>
+  <text x="1050" y="230" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Kitchen</text>
+
+  <!-- CS Building -->
+  <rect x="100" y="400" width="300" height="350" fill="#5c6bc0" rx="15" ry="15" />
+  <text x="250" y="440" font-size="20" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">CS Building</text>
+  <text x="250" y="470" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">1st Floor: Lab 201, Lab 202</text>
+  <text x="250" y="500" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">2nd Floor: Class 301, Class 302</text>
+  <text x="250" y="530" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">3rd Floor: Auditorium</text>
+
+  <!-- Engineering Building -->
+  <rect x="500" y="400" width="350" height="350" fill="#e53935" rx="15" ry="15" />
+  <text x="675" y="440" font-size="20" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Engineering Building</text>
+  <text x="675" y="470" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">1st Floor: Lab 401, Class 402</text>
+  <text x="675" y="500" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">2nd Floor: Class 501, 502</text>
+  <text x="675" y="530" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">3rd Floor: Meeting Room</text>
+
+  <!-- Dormitory -->
+  <rect x="900" y="400" width="300" height="350" fill="#9c27b0" rx="15" ry="15" />
+  <text x="1050" y="440" font-size="20" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">Dormitory</text>
+  <text x="1050" y="470" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">1st Floor: Rooms 601-620</text>
+  <text x="1050" y="500" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">2nd Floor: Rooms 701-720</text>
+  <text x="1050" y="530" font-size="14" font-family="Arial, sans-serif" text-anchor="middle" fill="#fff">3rd Floor: Rooms 801-820</text>
+
+  <!-- Paths -->
+  <line x1="225" y1="280" x2="225" y2="400" stroke="#333" stroke-dasharray="5,5" stroke-width="2" />
+  <line x1="625" y1="280" x2="625" y2="400" stroke="#333" stroke-dasharray="5,5" stroke-width="2" />
+  <line x1="1050" y1="280" x2="1050" y2="400" stroke="#333" stroke-dasharray="5,5" stroke-width="2" />
+
+  <!-- Legend -->
+  <rect x="50" y="800" width="300" height="160" fill="#fff" stroke="#ddd" rx="10" />
+  <text x="200" y="830" font-size="18" font-family="Arial, sans-serif" text-anchor="middle" fill="#333">Legend</text>
+  <rect x="70" y="850" width="20" height="20" fill="#4a90e2" />
+  <text x="100" y="865" font-size="14" font-family="Arial, sans-serif" fill="#333">Main Office</text>
+  <rect x="70" y="880" width="20" height="20" fill="#3cba92" />
+  <text x="100" y="895" font-size="14" font-family="Arial, sans-serif" fill="#333">Library</text>
+  <rect x="70" y="910" width="20" height="20" fill="#ff9800" />
+  <text x="100" y="925" font-size="14" font-family="Arial, sans-serif" fill="#333">Cafeteria</text>
+  <rect x="70" y="940" width="20" height="20" fill="#5c6bc0" />
+  <text x="100" y="955" font-size="14" font-family="Arial, sans-serif" fill="#333">CS Building</text>
+  <rect x="70" y="970" width="20" height="20" fill="#e53935" />
+  <text x="100" y="985" font-size="14" font-family="Arial, sans-serif" fill="#333">Engineering</text>
+  <rect x="70" y="1000" width="20" height="20" fill="#9c27b0" />
+  <text x="100" y="1015" font-size="14" font-family="Arial, sans-serif" fill="#333">Dormitory</text>
+</svg>
