@@ -11,7 +11,7 @@ function Navbar() {
             <nav className="navbar">
                 <div className="nav-main">
                     <div className="logo">
-                        <Link to="/Index">
+                        <Link to="/">
                             <img src={Logo} alt="Logo" />
                             <span>ampus +</span>
                         </Link>
