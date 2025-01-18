@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import './Loader.css'; // Add Loader styles here or import from App.css
+import logo from '../cp_logo.png'
 
 const Loader = () => {
     useEffect(() => {
@@ -11,7 +12,7 @@ const Loader = () => {
     return (
         <div className="loader-wrapper">
             <div className="loader">
-                <img src="/assets/images/cp_logo.png" alt="Logo" className="loader-logo" />
+                <img src={logo} alt="Logo" className="loader-logo" />
             </div>
         </div>
     );
