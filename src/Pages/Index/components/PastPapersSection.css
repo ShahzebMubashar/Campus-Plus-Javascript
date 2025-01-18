@@ -1,5 +1,5 @@
-.category-wrapper {
-    max-width: 85%;
+.pp-category-wrapper {
+    max-width: 80%;
     margin: 0 auto;
     padding: 20px;
     background-color: #ffffff;
@@ -15,21 +15,21 @@
     /* Use rem for scalability */
 }
 
-.category-wrapper:hover {
+.pp-category-wrapper:hover {
     box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.25);
     overflow: hidden;
 }
 
-.category .grid-list {
+.category .pp-grid-list {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    gap: 20px;
-    margin-top: 4%;
+    gap: 10px;
+    margin-top: 2%;
     overflow: hidden;
 }
 
-.category .grid-list li {
+.category .pp-grid-list li {
     flex: 1 1 calc(33.333% - 20px);
     max-width: calc(33.333% - 20px);
     overflow: hidden;
@@ -37,29 +37,37 @@
 
 .category-card {
     display: flex;
-    align-items: flex-start;
-    gap: 20px;
-    border-inline-start: 4px solid transparent;
-    padding: 20px;
+    flex-direction: column;
+    align-items: center;
+    height: 120px;
+    padding: 10px;
+    border: 1px solid #ddd;
     background-color: #fff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     transition: box-shadow 0.3s ease, border-color 0.3s ease;
-    font-size: 1rem;
-    overflow: hidden;
-    /* Use rem for base text */
 }
+
 
 .category-card:is(:hover, :focus-within) {
     border-color: blue;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
+.category-card .title-lg {
+    font-size: 1.3em;
+}
+
 .category-card .title-sm {
-    margin-block-start: 4px;
-    font-size: 1.2rem;
-    overflow: hidden;
-    /* Slightly larger for emphasis */
+
+    font-size: 1.1rem;
+    /* Adjust the font size of "View Papers" */
+    color: #555;
+    margin: 0;
+    /* Remove default margins */
+    text-align: left;
+    /* Align text to the left */
+
 }
 
 .category .btn {
@@ -71,7 +79,6 @@
     border: none;
     border-radius: 5px;
     font-size: 1rem;
-    /* Button text size */
     cursor: pointer;
     text-align: center;
     transition: background-color 0.3s;
@@ -101,12 +108,12 @@
         /* Slight reduction */
     }
 
-    .category .grid-list li {
+    .category .pp-grid-list li {
         flex: 1 1 calc(50% - 20px);
         max-width: calc(50% - 20px);
     }
 
-    .category-wrapper {
+    .pp-category-wrapper {
         padding: 15px;
     }
 
@@ -136,12 +143,12 @@
         /* Reduce for medium devices */
     }
 
-    .category .grid-list li {
+    .category .pp-grid-list li {
         flex: 1 1 calc(100% - 20px);
         max-width: 100%;
     }
 
-    .category-wrapper {
+    .pp-category-wrapper {
         padding: 10px;
     }
 
@@ -172,12 +179,12 @@
         /* Further reduction for mobile */
     }
 
-    .category-wrapper {
+    .pp-category-wrapper {
         max-width: 100%;
         padding: 10px;
     }
 
-    .category .grid-list li {
+    .category .pp-grid-list li {
         flex: 1 1 100%;
         max-width: 100%;
     }
@@ -208,12 +215,12 @@
         font-size: 2.2rem;
     }
 
-    .category-wrapper {
+    .pp-category-wrapper {
         max-width: 100%;
         padding: 8px;
     }
 
-    .category .grid-list li {
+    .category .pp-grid-list li {
         flex: 1 1 100%;
         max-width: 100%;
     }
@@ -239,5 +246,78 @@
     .category .btn {
         padding: 6px 12px;
         font-size: 0.75rem;
+    }
+}
+
+/* Stars Styling */
+.stars {
+    display: flex;
+    /* Ensure stars are inline */
+    gap: 2px;
+    /* Spacing between stars */
+    font-size: 1rem;
+    /* Adjust star size */
+    color: #ffc107;
+    /* Yellow color for filled stars */
+}
+
+.star-filled {
+    color: #ffc107;
+    /* Yellow for filled stars */
+}
+
+.star-empty {
+    color: #ddd;
+    /* Light gray for empty stars */
+}
+
+/* Align "View Papers" and stars in one row */
+.view-papers-row {
+    display: flex;
+    /* Use flexbox for horizontal alignment */
+    align-items: center;
+    /* Align stars and text vertically */
+    justify-content: flex-start;
+    /* Align items to the left */
+    gap: 150px;
+    /* Add spacing between stars and "View Papers" */
+    margin-top: auto;
+    /* Push this row to the bottom of the card */
+    text-align: left;
+    /* Align text to the left */
+    padding-top: 10px;
+    /* Optional: Add space above the row */
+}
+
+.features-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.4em;
+    color: #0a1c2e;
+    text-align: left;
+}
+
+.features-content .title-sm1 {
+    font-size: 1rem;
+    /* Adjust font size of "View Papers" */
+    color: #555;
+    margin: 0;
+
+    /* Remove unwanted margins */
+    text-align: left;
+    /* Align text to the left */
+}
+
+/* Category Card */
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .stars {
+        font-size: 0.9rem;
+        /* Adjust size for smaller screens */
+    }
+
+    .view-papers-row {
+        flex-wrap: wrap;
+        /* Allow wrapping on smaller screens */
     }
 }

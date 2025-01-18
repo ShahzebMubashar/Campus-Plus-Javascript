@@ -1,75 +1,76 @@
 import React from 'react';
 import './PastPapersSection.css';
+import { AiFillStar } from 'react-icons/ai'; // Import star icons
 
 const categories = [
     {
         title: 'Object Oriented Programming',
         link: '/html/Papers/ObjectOrientedProgramming.html',
-        image: '../../../Assets/images/category-1.svg',
-        alt: 'Object Oriented Programming icon',
+        rating: 4.5, // Example rating
     },
     {
         title: 'Discrete Structures',
         link: '/html/Papers/DiscreteStructures.html',
-        image: 'assets/images/category-2.svg',
-        alt: 'Discrete Structures icon',
+        rating: 4.2,
     },
     {
         title: 'Data Structures',
         link: '/html/Papers/DataStructures.html',
-        image: 'assets/images/category-3.svg',
-        alt: 'Data Structures icon',
+        rating: 4.8,
     },
     {
         title: 'Numerical Computing',
         link: '/html/Papers/NumericalComputing.html',
-        image: 'assets/images/category-4.svg',
-        alt: 'Numerical Computing icon',
+        rating: 4.0,
     },
     {
         title: 'Islamic Studies/Ethics',
         link: '/html/Papers/IslamicStudies.html',
-        image: 'assets/images/category-5.svg',
-        alt: 'Islamic Studies/Ethics icon',
+        rating: 4.3,
     },
     {
         title: 'Applied Physics',
         link: '/html/Papers/AppliedPhysics.html',
-        image: 'assets/images/category-6.svg',
-        alt: 'Applied Physics icon',
+        rating: 4.6,
     },
 ];
 
+const StarRating = ({ rating }) => {
+    const stars = Array.from({ length: 5 }, (_, index) => (
+        <AiFillStar
+            key={index}
+            className={index < Math.round(rating) ? 'star-filled' : 'star-empty'}
+        />
+    ));
+    return <div className="stars">{stars}</div>;
+};
+
 const PastPapersSection = () => (
     <section className="section category has-bg-image" aria-labelledby="category-label">
-        <div className="category-wrapper">
-            <div className="container">
+        <div className="pp-category-wrapper">
+            <div className="pp-container">
                 <h2 className="headline-md text-center section-title" style={{ marginTop: '2%' }}>
                     Browse Top <span className="pp-highlighted">Past Papers</span>
                 </h2>
-                <ul className="grid-list">
+                <ul className="pp-grid-list">
                     {categories.map((category, index) => (
                         <li key={index}>
                             <div className="card category-card">
-                                <div className="card-icon">
-                                    <img
-                                        src={category.image}
-                                        width="65"
-                                        height="65"
-                                        loading="lazy"
-                                        alt={category.alt}
-                                    />
-                                </div>
-                                <div>
+                                <div className="features-content">
                                     <h3 className="title-lg">{category.title}</h3>
-                                    <p className="title-sm">View Papers</p>
+                                    <div className="view-papers-row">
+                                        <p className="title-sm1">View Papers</p>
+                                        <StarRating rating={category.rating} />
+                                    </div>
                                 </div>
                                 <a href={category.link} className="layer-link" aria-label={category.title}></a>
                             </div>
                         </li>
                     ))}
                 </ul>
-                <a href="/html/pastpapers.html" className="btn btn-primary">View All Past Papers</a>
+                <a href="/html/pastpapers.html" className="btn btn-primary">
+                    View All Past Papers
+                </a>
             </div>
         </div>
     </section>
