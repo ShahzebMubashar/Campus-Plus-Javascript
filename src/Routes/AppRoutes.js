@@ -14,6 +14,7 @@ import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator.jsx';
 import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator.js';
 import Support from '../Pages/Support/support.js'
 import Timetable from "../Pages/Timetable/Timetable.js"
+import News from '../Pages/Index/components/NewsAndEventsSection.js'
 
 
 function AppRoutes() {
@@ -35,6 +36,7 @@ function AppRoutes() {
             <Route path="/email-generator" element={<EmailGenerator />} />
             <Route path="/application-generator" element={<ApplicationGenerator />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/news" element={<News />} />
 
         </Routes>
     );

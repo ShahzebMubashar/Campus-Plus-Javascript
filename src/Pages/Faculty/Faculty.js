@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './faculty.css';
+import Navbar from '../Index/components/Navbar';
 
 // Define the slowScrollTo function
 const slowScrollTo = (targetPosition, duration) => {
@@ -98,6 +99,7 @@ const FacultySection = () => {
 
     return (
         <main>
+            <Navbar />
             <IntroSection />
             <SchoolsContainer />
             <SearchSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

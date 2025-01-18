@@ -14,7 +14,7 @@ const MainContent = () => (
                     Chatting Forums, GPA Calculators, and everything you need for seamless university life.
                 </p>
                 <div className="button-container">
-                    <a href="/html/aboutCampusPlus.html" className="get-started-btn">
+                    <a href="/sign-in" className="get-started-btn">
                         Get started <i className="fas fa-paper-plane" />
                     </a>
                 </div>

@@ -5,6 +5,7 @@ import cardImage2 from "./7119122_3469564.svg";
 import cardImage3 from "./10839364_4528064.svg";
 import cardImage4 from "./12892955_5098267.svg";
 import cardImage5 from "./6183568_3053908.svg";
+import Navbar from "../Index/components/Navbar.js"
 
 const ApplicationGenerator = () => {
     const [showForm, setShowForm] = useState(false);
@@ -21,6 +22,7 @@ const ApplicationGenerator = () => {
 
     return (
         <div className="application-generator">
+            <Navbar />
             <header>
                 <h1>Application Generator</h1>
                 <p>Generate applications for academic, organizational, and other purposes!</p>
