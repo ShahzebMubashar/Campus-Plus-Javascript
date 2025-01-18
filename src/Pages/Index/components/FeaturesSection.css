@@ -10,20 +10,20 @@ ion-icon {
     background-color: #ffffff;
     color: #0a1c2e;
     padding: 0;
-    line-height: 1.6;
+    line-height: 1.5;
     overflow: hidden;
 }
 
 .features-services {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 50px 20px;
+    padding: 30px 30px;
     text-align: center;
 
 }
 
 .features-services h1 {
-    font-size: 2.5em;
+    font-size: 2.1em;
     color: #0a1c2e;
     margin-bottom: 50px;
     overflow: hidden;
@@ -31,7 +31,7 @@ ion-icon {
 
 .features-highlighted {
     color: #3b82f6;
-    font-size: 60px;
+    font-size: 50px;
 }
 
 .features-services-grid {
@@ -43,6 +43,8 @@ ion-icon {
 
 .features-service-box {
     display: flex;
+    flex-direction: row;
+    /* Ensures the icon appears to the left of the content */
     align-items: center;
     padding: 20px;
     border: 1px solid #ddd;
@@ -57,38 +59,44 @@ ion-icon {
 .features-icon {
     flex-shrink: 0;
     margin-right: 20px;
-    font-size: 35px;
+    /* Adds space between the icon and content */
+    font-size: 24px;
+    /* Adjust font size as needed */
     color: #0056b3;
     /* Dark blue for icons */
+    display: flex;
+    /* Ensures proper alignment */
+    justify-content: center;
+    align-items: center;
 }
 
 .features-content {
     flex-grow: 1;
-    overflow: hidden;
+    /* overflow: hidden; */
+    text-align: left;
 }
 
 .features-service-box h2 {
-    font-size: 1.8em;
-    margin-bottom: 10px;
+    font-size: 1.5em;
+    margin: 0 0 10px 0;
     color: #111;
     text-align: left;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 .features-service-box p {
-    font-size: 1em;
+    font-size: 0.9em;
     color: #666;
+    margin: 0;
     text-align: left;
 }
 
 .features-service-box:hover {
     cursor: pointer;
-    transform: scale(1.02);
+    transform: scale(1.00);
     overflow: hidden;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-
     border-color: #007bff;
-
 }
 
 .features-service-box::after {
