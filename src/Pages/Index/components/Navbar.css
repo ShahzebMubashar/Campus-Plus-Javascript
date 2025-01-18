@@ -14,6 +14,17 @@
     box-sizing: border-box;
 }
 
+.nav-main {
+    position: relative;
+    width: 70%;
+    margin-left: 12%;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .logo {
     display: flex;
     align-items: center;
@@ -76,23 +87,24 @@
 
 .navbar-dropdown-menu {
     position: fixed;
-    /* Change to fixed positioning */
     top: 80px;
-    /* Adjust based on navbar height + padding */
     left: 0;
     right: 0;
     background-color: #ffffff;
-    padding: 40px;
+    padding: 60px;
+    /* Increased padding for larger dropdown */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 0 0 12px 12px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    /* Center the dropdown sections */
+    gap: 40px;
+    /* Add space between sections */
     width: 100%;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     box-sizing: border-box;
-
 }
 
 .navbar-dropdown:hover .navbar-dropdown-menu {
@@ -100,37 +112,59 @@
     visibility: visible;
 }
 
+.navbar-dropdown:hover .navbar {
+    box-shadow: none;
+}
+
 .navbar-dropdown-section {
+    display: flex;
+    flex-direction: column;
+    /* align-items: center;
+    text-align: center; */
+    gap: 5px;
     flex: 1;
-    padding: 0 20px;
-    text-align: left;
-    /* Align text to left */
-    max-width: 250px;
-    /* Limit section width */
-
-}
-
-.navbar-dropdown-section h4 {
-    font-size: 16px;
-    font-weight: bold;
-    color: #0d47a1;
-    margin-bottom: 10px;
-}
-
-.navbar-dropdown-section p {
-    font-size: 14px;
-    color: #555;
-    margin: 0;
-    line-height: 1.8;
+    max-width: 240px;
 }
 
 .navbar-dropdown-icon {
-    font-size: 40px;
+    font-size: 57px;
+    /* Icon size */
     color: #0d47a1;
     background-color: #eef2ff;
     border-radius: 50%;
-    padding: 10px;
+    padding: 15px;
+    display: inline-flex;
+    /* Change to inline-flex to align inline */
+    justify-content: center;
+    /* Center the icon content */
+    align-items: center;
+    /* Vertically center icon content */
+    margin-bottom: 0;
+    /* Remove margin below the icon */
 }
+
+.navbar-dropdown-section h4 {
+    font-size: 17px;
+    /* Font size for title */
+    font-weight: bold;
+    color: #0d47a1;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    /* Remove default margin */
+}
+
+.navbar-dropdown-section p {
+    font-size: 13px;
+    color: #555;
+    margin: 0;
+    font-weight: bold;
+    /* Remove default margin */
+    line-height: 2.2;
+
+    /* Ensure text is centered */
+}
+
+
 
 /* Add main content padding to prevent navbar overlap */
 main {
