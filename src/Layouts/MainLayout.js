@@ -16,6 +16,7 @@ import TestimonialSection from '../Pages/Index/components/TestimonialSection.js'
 import BlogSection from '../Pages/Index/components/Blog.js';
 import FAQ from '../Pages/Support/faq.js'
 import faqData from '../Pages/Support/faqData.js'
+import Footer from '../Pages/Footer/Footer.js'
 
 function MainLayout() {
     return (
@@ -34,6 +35,7 @@ function MainLayout() {
             <BlogSection />
             <TestimonialSection />
             <FAQ faqData={faqData} />
+            <Footer />
 
         </div>
     );

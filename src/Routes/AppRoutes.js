@@ -14,8 +14,9 @@ import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator.jsx';
 import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator.js';
 import Support from '../Pages/Support/support.js'
 import Timetable from "../Pages/Timetable/Timetable.js"
+import Footer from '../Pages/Footer/Footer.js'
 import News from '../Pages/Index/components/NewsAndEventsSection.js'
-import Footer from '../Pages/Footer/Footer.js';
+
 
 
 function AppRoutes() {
