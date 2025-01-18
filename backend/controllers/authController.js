@@ -1,6 +1,7 @@
-import pool from "../config/database.js";
-import bcrypt from "bcrypt";
-import { randomBytes } from "crypto";
+const pool = require("../config/database.js");
+const bcrypt = require("bcrypt");
+const { randomBytes } = require("crypto");
+
 
 exports.register = async (request, response) => {
   console.log("Register endpoint hit"); // Log to confirm the route is called
@@ -92,34 +93,40 @@ exports.register = async (request, response) => {
 
 
 exports.login = async (request, response) => {
+  const { email, password } = request.body;
+
   try {
-    const { username, email, password } = request.body;
-    if (!username && !email) return response.status(400).send("Username or email is required");
-    if (!password) return response.status(400).send("Password is required");
+    // Query the user from the database
+    const result = await pool.query("SELECT * FROM Users WHERE email = $1", [email]);
 
-    const result = await pool.query(
-      "SELECT * FROM Users WHERE username = $1 OR email = $1",
-      [username || email]
-    );
-
-    if (!result.rowCount) return response.status(404).send("Invalid Credentials");
+    if (!result.rowCount) {
+      return response.status(404).send("Invalid credentials");
+    }
 
     const user = result.rows[0];
+
+    // Verify the password
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) return response.status(401).send("Invalid Credentials");
+    if (!isMatch) {
+      return response.status(401).send("Invalid credentials");
+    }
 
-    console.log(`Successfully logged in as ${user.username}`);
-
-    response.status(200).json({
+    // Set the session user
+    request.session.user = {
       userid: user.userid,
-      username: user.username,
       email: user.email,
-      rollnumber: user.rollnumber,
-    });
+      username: user.username,
+      role: user.role,
+    };
+
+    console.log("Session set for user:", request.session.user);
+
+    // Respond with success
+    return response.status(200).send("Login successful");
   } catch (error) {
-    console.error("Login error:", error.message);
-    response.status(500).send("Server Error");
+    console.error("Login error:", error);
+    return response.status(500).send("Server error");
   }
 };
 

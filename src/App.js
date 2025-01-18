@@ -4,7 +4,7 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Navbar from './Pages/Index/components/Navbar.js';
+// import Navbar from './Pages/Index/components/Navbar.js';
 import AppRoutes from './Routes/AppRoutes.js';
 import AboutCampusPlus from './Pages/AboutCampusPlus/AboutCampusPlus.js'; // Import the AboutCampusPlus component
 import ComingSoon from './Pages/Coming Soon/ComingSoon.js'; // Import the ComingSoon component

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import DropdownSelector from "../Index/components/DropDownSelector";
-import CourseList from "../Index/components/CourseList";
-import DynamicTimetable from "./DynamicTimetable";
+import DropdownSelector from "../Index/components/DropDownSelector.js";
+import CourseList from "../Index/components/CourseList.js";
+import DynamicTimetable from "./DynamicTimetable.js";
 import "./Timetable.css";
-import Navbar from '../Index/components/Navbar';
-import Loader from '../Index/components/Loader'
-import BackToTopButton from "../Index/components/BackToTop";
+import Navbar from '../Index/components/Navbar.js';
+import Loader from '../Index/components/Loader.js'
+import BackToTopButton from "../Index/components/BackToTop.js";
 
 const Timetable = () => {
   const [csvData, setCsvData] = useState([]);
