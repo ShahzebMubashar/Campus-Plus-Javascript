@@ -22,7 +22,7 @@ function MainLayout() {
         <div>
             <Navbar />  {/* Navbar will be included in MainLayout */}
             <Loader />
-            <Header />
+            {/* <Header /> */}
             <CookieBanner />
             <MainContent />
             <FeaturesSection />
