@@ -25,46 +25,40 @@ function Navbar() {
                     <div className="navbar-dropdown-menu">
                         <div className="navbar-dropdown-section">
                             <AiOutlineHeart className="navbar-dropdown-icon" />
-                            <div>
-                                <h4>Most Viewed Past Papers</h4>
-                                <p>Data Structures (DS)</p>
-                                <p>Calculus (Cal)</p>
-                                <p>Theory of Automata (TOA)</p>
-                                <p>Assembly Language (COAL)</p>
-                            </div>
+                            <h4>Most Viewed Past Papers</h4>
+                            <p>Data Structures (DS)</p>
+                            <p>Calculus (Cal)</p>
+                            <p>Theory of Automata (TOA)</p>
+                            <p>Assembly Language (COAL)</p>
                         </div>
                         <div className="navbar-dropdown-section">
                             <AiOutlineFileText className="navbar-dropdown-icon" />
-                            <div>
-                                <h4>News & Events</h4>
-                                <p>FDC X</p>
-                                <p>SOFTEC '24</p>
-                                <p>GDSC Hiring Candidates?</p>
-                                <p>Change in HoD</p>
-                            </div>
+                            <h4>News & Events</h4>
+                            <p>FDC X</p>
+                            <p>SOFTEC '24</p>
+                            <p>GDSC Hiring Candidates?</p>
+                            <p>Change in HoD</p>
                         </div>
                         <div className="navbar-dropdown-section">
                             <AiOutlineHome className="navbar-dropdown-icon" />
-                            <div>
-                                <h4>Accessibility</h4>
-                                <a href="/playlists" className="navbar-link">Youtube Playlists</a>
-                                <p>Time Table Generator</p>
-                                <p>Faculty Information</p>
-                                <p>To Do List</p>
-                            </div>
+                            <h4>Accessibility</h4>
+                            <p>Time Table Generator</p>
+                            <p>Faculty Information</p>
+                            <p>To Do List</p>
                         </div>
                         <div className="navbar-dropdown-section">
                             <AiOutlineLaptop className="navbar-dropdown-icon" />
-                            <div>
-                                <h4>Youtube Playlists</h4>
-                                <p>Abdul Bari (Algorithms)</p>
-                                <p>Neso Academy (DLD)</p>
-                                <p>Code with Harry (PF)</p>
-                                <p>Brain Molder (Database)</p>
-                            </div>
+                            <h4>Youtube Playlists</h4>
+                            <p>Abdul Bari (Algorithms)</p>
+                            <p>Neso Academy (DLD)</p>
+                            <p>Code with Harry (PF)</p>
+                            <p>Brain Molder (Database)</p>
                         </div>
                     </div>
                 </li>
+
+
+
                 <li><Link to="/generators">Generators</Link></li>
                 <li><Link to="/chatgpt">ChatGPT</Link></li>
                 <li><Link to="/student-support">Student Support</Link></li>

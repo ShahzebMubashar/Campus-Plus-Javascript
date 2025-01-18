@@ -7,8 +7,10 @@
     background-color: #f8f9fa;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
+    /* Ensure it spans the full viewport width */
     position: relative;
-    left: 0;
+    margin: 0 auto;
+    box-sizing: border-box;
 }
 
 .logo {
@@ -90,51 +92,50 @@
     color: #003366;
 }
 
-/* Dropdown Menu */
 .navbar-dropdown-menu {
     display: none;
     /* Hidden by default */
     position: absolute;
-    top: 50px;
-    /* Adjust dropdown position */
-    left: 100px;
-    /* Center dropdown */
-    transform: translateX(-50%);
+    top: 100%;
+    /* Align the dropdown just below the navbar */
+    left: 0 !important;
+    /* Align to the left of the navbar */
     background-color: #ffffff;
-    padding: 30px 50px;
+    padding: 20px 50px;
     /* Add padding for inner spacing */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 12px;
+    border-radius: 0 0 12px 12px;
     display: flex;
-    gap: 50px;
+    /* gap: 30px; */
     /* Space between dropdown sections */
     width: 1000px;
-    /* Width of the dropdown menu */
+    /* Match navbar width */
     z-index: 1000;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
+    box-sizing: border-box;
+    /* Ensure padding doesn't affect width */
 }
 
 /* Show dropdown on hover */
 .navbar-dropdown:hover .navbar-dropdown-menu {
     display: flex;
     opacity: 1;
-    /* Make dropdown visible */
     visibility: visible;
 }
 
-/* Dropdown Section Styling */
+
 .navbar-dropdown-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    /* Center icons horizontally */
     gap: 15px;
-    width: 20%;
-    /* Adjust section width */
+    flex: 1;
+    /* Ensure all sections take equal width */
     text-align: center;
 }
+
 
 .navbar-dropdown-section h4 {
     font-size: 16px;
@@ -164,7 +165,11 @@
     background-color: #eef2ff;
     border-radius: 50%;
     padding: 10px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
 }
+
 
 .navbar-link {
     color: #0066cc;
