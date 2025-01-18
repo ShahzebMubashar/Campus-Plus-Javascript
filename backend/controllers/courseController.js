@@ -16,25 +16,15 @@ const getCourses = async (request, response) => {
 };
 
 // Controller to rate a course
-const rateCourse = async (request, response) => {
-  const { courseid, rating, userid } = request.body; // Accept userid in the body
 
-  if (!courseid || !rating || !userid) {
-    return response.status(400).send("Missing required fields: courseid, rating, or userid");
+const rateCourse = async (request, response) => {
+  const { courseid, rating } = request.body;
+
+  if (!courseid || !rating) {
+    return response.status(400).send("Missing required fields: courseid or rating");
   }
 
   try {
-    // Check if the user has already rated this course
-    const check = await pool.query(
-      "SELECT * FROM UserCourseRating WHERE userid = $1 AND courseid = $2",
-      [userid, courseid]
-    );
-
-    if (check.rowCount) {
-      return response.status(400).send("You have already rated this course");
-    }
-
-    // Start a transaction
     const client = await pool.connect();
     await client.query("BEGIN");
 
@@ -60,13 +50,6 @@ const rateCourse = async (request, response) => {
       );
     }
 
-    // Insert into UserCourseRating
-    await client.query(
-      "INSERT INTO UserCourseRating (userid, courseid, rating) VALUES ($1, $2, $3)",
-      [userid, courseid, rating]
-    );
-
-    // Commit the transaction
     await client.query("COMMIT");
     client.release();
 
@@ -76,6 +59,7 @@ const rateCourse = async (request, response) => {
     return response.status(500).send("Internal Server Error");
   }
 };
+
 
 
 

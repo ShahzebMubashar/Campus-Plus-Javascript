@@ -9,7 +9,7 @@ router.use(cors());
 // Replace test route with the actual function
 router.get("/", getCourses);
 
-router.post("/rate-course", checkAuthorisation, rateCourse);
+router.post("/rate-course", rateCourse);
 router.post("/Review-Course", checkAuthorisation, reviewCourse);
 
 module.exports = router;

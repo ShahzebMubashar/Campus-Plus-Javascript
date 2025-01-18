@@ -100,7 +100,7 @@ exports.login = async (request, response) => {
     const result = await pool.query("SELECT * FROM Users WHERE email = $1", [email]);
 
     if (!result.rowCount) {
-      return response.status(404).send("Invalid credentials");
+      return response.status(404).json({ error: "Invalid credentials" });
     }
 
     const user = result.rows[0];
@@ -109,7 +109,7 @@ exports.login = async (request, response) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return response.status(401).send("Invalid credentials");
+      return response.status(401).json({ error: "Invalid credentials" });
     }
 
     // Set the session user
@@ -124,10 +124,10 @@ exports.login = async (request, response) => {
     console.log(`Signed in as ${request.session.user.username}`);
 
     // Respond with success
-    return response.status(200).send("Login successful");
+    return response.status(200).json({ message: "Login successful" });
   } catch (error) {
     console.error("Login error:", error);
-    return response.status(500).send("Server error");
+    return response.status(500).json({ error: "Server error" });
   }
 };
 
