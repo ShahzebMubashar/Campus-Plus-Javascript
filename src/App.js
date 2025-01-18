@@ -4,14 +4,14 @@ import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import Navbar from './Pages/Index/components/Navbar';
-import AppRoutes from './Routes/AppRoutes';
-import AboutCampusPlus from './Pages/AboutCampusPlus/AboutCampusPlus'; // Import the AboutCampusPlus component
-import ComingSoon from './Pages/Coming Soon/ComingSoon'; // Import the ComingSoon component
-import Contact from './Pages/Contact/Contact'; // Import the Contact component
-import Error404 from './Pages/Error404/Error404';
-import FacultySection from './Pages/Faculty/Faculty';
-import PastPapers from './Pages/Past Papers/PastPapers';
+import Navbar from './Pages/Index/components/Navbar.js';
+import AppRoutes from './Routes/AppRoutes.js';
+import AboutCampusPlus from './Pages/AboutCampusPlus/AboutCampusPlus.js'; // Import the AboutCampusPlus component
+import ComingSoon from './Pages/Coming Soon/ComingSoon.js'; // Import the ComingSoon component
+import Contact from './Pages/Contact/Contact.js'; // Import the Contact component
+import Error404 from './Pages/Error404/Error404.js';
+import FacultySection from './Pages/Faculty/Faculty.js';
+import PastPapers from './Pages/Past Papers/PastPapers.js';
 
 function App() {
   return (
