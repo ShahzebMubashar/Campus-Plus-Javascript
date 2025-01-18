@@ -91,9 +91,45 @@ function Navbar() {
                                 </div>
                             </div>
                         </li>
+
                         <li><Link to="https://chatgpt.com/">ChatGPT</Link></li>
-                        <li><Link to="/support">Student Support</Link></li>
+                        <li className="navbar-dropdown">
+                            <span className="navbar-dropdown-toggle">
+                                Student Support <AiOutlineDown className="navbar-dropdown-arrow" />
+                            </span>
+                            <div className="navbar-dropdown-menu">
+                                <div className="navbar-dropdown-section">
+                                    <AiOutlineHeart className="navbar-dropdown-icon" />
+                                    <h4><Link to="https://thebrainbytes.blogspot.com/">Blogs</Link></h4>
+                                    <p><Link to="https://thebrainbytesquantum.blogspot.com/">Quantum Computing</Link></p>
+                                    <p><Link to="https://thebrainbytespsychology.blogspot.com/">Psychology</Link></p>
+                                    <p><Link to="https://thebrainbytessports.blogspot.com/">Sports</Link></p>
+                                    <p><Link to="https://thebrainbytesdatascience.blogspot.com/">Data Science</Link></p>
+                                    <p><Link to="https://thebrainbytestechnology.blogspot.com/">Technology</Link></p>
+                                </div>
+                                <div className="navbar-dropdown-section">
+                                    <AiOutlineFileText className="navbar-dropdown-icon" />
+                                    <h4><Link to="/support">Frequently Asked Questions</Link></h4>
+                                    <p><Link to="/support">General Queries</Link></p>
+                                    <p><Link to="/support">Admission Related Queries</Link></p>
+                                    <p><Link to="/support">Finding Go-To Person</Link></p>
+                                    <p><Link to="/support">Technical Queries</Link></p>
+                                    <p><Link to="/support">Others</Link></p>
+                                </div>
+                                <div className="navbar-dropdown-section">
+                                    <AiOutlineHome className="navbar-dropdown-icon" />
+                                    <h4>About Us</h4>
+                                    <p><Link to="/about-campus-plus">About Campus +</Link></p>
+                                    <p><Link to="https://www.multidexters.live/">About MultiDexters</Link></p>
+                                    <p><Link to="/contact">Contact Us</Link></p>
+
+                                </div>
+
+                            </div>
+
+                        </li>
                         <li><Link to="/sign-in">Sign In</Link></li>
+
                     </ul>
                 </div>
             </nav>

@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import Navbar from './AboutCampusPlusNavbar.js';
+import AboutNavbar from './AboutCampusPlusNavbar.js';
 import HeroSection from './HeroSection.js';
 import AboutSection from './AboutSection.js';
 import FeaturesSection from './FeaturesSection.js';
@@ -21,7 +21,7 @@ const AboutCampusPlus = () => {
 
     return (
         <div>
-            <Navbar />
+            <AboutNavbar />
             <HeroSection />
             <AboutSection />
             <FeaturesSection />
