@@ -28,7 +28,7 @@ function MainLayout() {
             <FeaturesSection />
             <PastPapersSection />
             <PlaylistsSection />
-            <VideoSection />
+            {/* <VideoSection /> */}
             <NewsAndEventsSection />
             <BackToTopButton />
             <BlogSection />
