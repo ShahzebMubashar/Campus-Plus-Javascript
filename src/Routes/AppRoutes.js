@@ -15,6 +15,7 @@ import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGener
 import Support from '../Pages/Support/support.js'
 import Timetable from "../Pages/Timetable/Timetable.js"
 import News from '../Pages/Index/components/NewsAndEventsSection.js'
+import Footer from '../Pages/Footer/Footer.js';
 
 
 function AppRoutes() {
@@ -37,6 +38,7 @@ function AppRoutes() {
             <Route path="/application-generator" element={<ApplicationGenerator />} />
             <Route path="/support" element={<Support />} />
             <Route path="/news" element={<News />} />
+            <Route path="/footer" element={<Footer />} />
 
         </Routes>
     );
