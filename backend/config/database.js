@@ -4,11 +4,11 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const pool = new pg.Pool({
-  user: "postgres",
-  password: "123123",
-  host: "localhost",
-  port: "5432",
-  database: "CampusPlus",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  host: process.env.DB_HOST,
+  port: process.env.DB_PORT,
+  database: process.env.DB_NAME,
 });
 
 // Test the database connection

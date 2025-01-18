@@ -121,6 +121,7 @@ exports.login = async (request, response) => {
     };
 
     console.log("Session set for user:", request.session.user);
+    console.log(`Signed in as ${request.session.user.username}`);
 
     // Respond with success
     return response.status(200).send("Login successful");
