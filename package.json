@@ -1,3 +1,4 @@
+
 {
   "name": "camplusplus-js",
   "version": "0.1.0",
@@ -67,3 +68,74 @@
     "nodemon": "^3.1.9"
   }
 }
+=======
+{
+  "name": "camplusplus-js",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@fortawesome/fontawesome-free": "^6.6.0",
+    "@ionic/react": "^8.4.0",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "aos": "^2.3.4",
+    "bcrypt": "^5.1.1",
+    "bootstrap": "^5.3.3",
+    "boxicons": "^2.1.4",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "emailjs-com": "^3.2.0",
+    "express": "^4.21.2",
+    "express-session": "^1.18.1",
+    "font-awesome": "^4.7.0",
+    "fuse.js": "^7.0.0",
+    "html-to-image": "^1.11.11",
+    "ionicons": "^7.4.0",
+    "lineicons": "^1.3.2",
+    "pg": "^8.13.1",
+    "react": "^18.3.1",
+    "react-bootstrap": "^2.10.5",
+    "react-dom": "^18.3.1",
+    "react-icons": "^5.4.0",
+    "react-router-dom": "^6.28.0",
+    "react-scripts": "5.0.1",
+    "react-scroll": "^1.9.0",
+    "react-slick": "^0.30.3",
+    "remixicon": "^4.6.0",
+    "slick-carousel": "^1.8.1",
+    "web-vitals": "^2.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "all": "concurrently \"npm run start\" \"npm run dev\"",
+    "dev": "nodemon backend/src/Server.js"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "nodemon": "^3.1.9"
+  }
+}
+

@@ -1,23 +1,34 @@
+
 /* Navbar Styling */
 .navbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px 50px;
-    background-color: #f8f9fa;
+    background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
-    /* Ensure it spans the full viewport width */
-    position: relative;
-    margin: 0 auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
     box-sizing: border-box;
+}
+
+.nav-main {
+    position: relative;
+    width: 70%;
+    margin-left: 12%;
+    margin-top: 0;
+    margin-bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .logo {
     display: flex;
-    /* Use flexbox to align items horizontally */
     align-items: center;
-    /* Vertically center the text and image */
     font-size: 24px;
     font-weight: bold;
     color: #0d47a1;
@@ -26,27 +37,15 @@
 
 .logo img {
     width: 40px;
-    /* Adjust the width of the image */
     height: auto;
-    /* Maintain aspect ratio */
     margin-right: 10px;
-    /* Add spacing between the image and text */
-}
-
-.logo span {
-    font-size: 24px;
-    /* Adjust font size to match the desired appearance */
-    color: #0d47a1;
-    /* Ensure it matches the desired color */
 }
 
 .nav-links {
     display: flex;
+    align-items: center;
     list-style: none;
     gap: 2rem;
-    font-size: 1.2rem;
-    font-weight: 600;
-    /* Reduced weight for less boldness */
 }
 
 .nav-links li {
@@ -58,7 +57,6 @@
     text-decoration: none;
     color: #0d47a1;
     font-weight: 600;
-    /* Slightly less bold font for links */
     transition: color 0.3s ease;
 }
 
@@ -68,114 +66,109 @@
 
 /* Dropdown Styling */
 .navbar-dropdown {
-    position: relative;
+    position: static;
 }
 
 .navbar-dropdown-toggle {
-    display: inline-flex;
+    display: flex;
     align-items: center;
+    gap: 5px;
     color: #0d47a1;
     cursor: pointer;
-    transition: color 0.3s ease;
 }
 
 .navbar-dropdown-arrow {
-    font-size: 16px;
-    margin-left: 8px;
-    font-weight: 600;
-    transition: transform 0.4s ease, color 0.4s ease;
+    font-size: 14px;
+    transition: transform 0.4s ease;
 }
 
 .navbar-dropdown:hover .navbar-dropdown-arrow {
     transform: rotate(180deg);
-    /* Rotate arrow on hover */
-    color: #003366;
 }
 
 .navbar-dropdown-menu {
-    display: none;
-    /* Hidden by default */
-    position: absolute;
-    top: 100%;
-    /* Align the dropdown just below the navbar */
-    left: 0 !important;
-    /* Align to the left of the navbar */
+    position: fixed;
+    top: 80px;
+    left: 0;
+    right: 0;
     background-color: #ffffff;
-    padding: 20px 50px;
-    /* Add padding for inner spacing */
+    padding: 60px;
+    /* Increased padding for larger dropdown */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border-radius: 0 0 12px 12px;
     display: flex;
-    /* gap: 30px; */
-    /* Space between dropdown sections */
-    width: 1000px;
-    /* Match navbar width */
-    z-index: 1000;
+    justify-content: center;
+    /* Center the dropdown sections */
+    gap: 40px;
+    /* Add space between sections */
+    width: 100%;
     opacity: 0;
     visibility: hidden;
     transition: opacity 0.3s ease, visibility 0.3s ease;
     box-sizing: border-box;
-    /* Ensure padding doesn't affect width */
 }
 
-/* Show dropdown on hover */
 .navbar-dropdown:hover .navbar-dropdown-menu {
-    display: flex;
     opacity: 1;
     visibility: visible;
 }
 
+.navbar-dropdown:hover .navbar {
+    box-shadow: none;
+}
 
 .navbar-dropdown-section {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    gap: 15px;
+    /* align-items: center;
+    text-align: center; */
+    gap: 5px;
     flex: 1;
-    /* Ensure all sections take equal width */
-    text-align: center;
+    max-width: 240px;
 }
 
+.navbar-dropdown-icon {
+    font-size: 57px;
+    /* Icon size */
+    color: #0d47a1;
+    background-color: #eef2ff;
+    border-radius: 50%;
+    padding: 15px;
+    display: inline-flex;
+    /* Change to inline-flex to align inline */
+    justify-content: center;
+    /* Center the icon content */
+    align-items: center;
+    /* Vertically center icon content */
+    margin-bottom: 0;
+    /* Remove margin below the icon */
+}
 
 .navbar-dropdown-section h4 {
-    font-size: 16px;
+    font-size: 17px;
+    /* Font size for title */
     font-weight: bold;
     color: #0d47a1;
+    margin-top: 20px;
     margin-bottom: 10px;
+    /* Remove default margin */
 }
 
 .navbar-dropdown-section p {
-    font-size: 14px;
+    font-size: 13px;
     color: #555;
     margin: 0;
-    line-height: 1.8;
-    /* Add spacing between lines */
-}
+    font-weight: bold;
+    /* Remove default margin */
+    line-height: 2.2;
 
-.navbar-dropdown-section p:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-/* Dropdown Section Icon Styling */
-.navbar-dropdown-icon {
-    font-size: 40px;
-    color: #0d47a1;
-    margin-bottom: 10px;
-    background-color: #eef2ff;
-    border-radius: 50%;
-    padding: 10px;
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
+    /* Ensure text is centered */
 }
 
 
-.navbar-link {
-    color: #0066cc;
-    text-decoration: none;
-}
 
-.navbar-link:hover {
-    text-decoration: underline;
+/* Add main content padding to prevent navbar overlap */
+main {
+    margin-top: 80px;
+    padding: 20px;
 }
