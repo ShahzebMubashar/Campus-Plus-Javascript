@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./PP.css";
+import Navbar from '../Index/components/Navbar.js';
 import SliderComponent from "./Slider.js";
 import SearchForPapers from './SearchforPapers.js';
 
@@ -20,28 +21,27 @@ const PastPapers = () => {
                 }
                 const data = await response.json(); // Parse JSON response
                 console.log("Fetched Courses:", data); // Log the data
-                setCourses(data);
+                setCourses(data); // Update state with courses
             } catch (err) {
                 console.error("Error fetching courses:", err);
                 setError("Unable to load courses at the moment. Please try again later.");
             } finally {
-                setLoading(false);
+                setLoading(false); // Ensure loading is set to false
             }
         };
 
         fetchCourses();
     }, []);
 
-    const handleRateCourse = async (courseId, rating) => {
-        const userId = 1; // Replace with the logged-in user's ID (hardcoded for now)
 
+    const handleRateCourse = async (courseId, rating) => {
         try {
             const response = await fetch("http://localhost:4000/api/courses/rate-course", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ courseid: courseId, rating, userid: userId }),
+                body: JSON.stringify({ courseid: courseId, rating }),
             });
 
             if (!response.ok) {
@@ -59,8 +59,10 @@ const PastPapers = () => {
     };
 
 
+
     return (
         <div className="pastpapers-app">
+            <Navbar />
             <header className="pastpapers-header">
                 <h1>All Courses</h1>
                 <p>Rate the courses you love to help others!</p>

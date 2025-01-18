@@ -4,6 +4,11 @@
     background-color: #f9f9f9;
     color: #333;
 } */
+.pastpapers-app {
+    margin: 0;
+    width: 100%;
+}
+
 .star {
     cursor: pointer;
     font-size: 1.5rem;
