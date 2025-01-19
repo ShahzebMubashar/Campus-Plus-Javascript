@@ -72,3 +72,8 @@ tbody tr:hover {
   background-color: #eef6ff;
   cursor: pointer;
 }
+
+.conflict {
+  color: red;
+  font-weight: bold;
+}
