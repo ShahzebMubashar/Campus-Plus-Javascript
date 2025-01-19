@@ -1,10 +1,10 @@
 .course-list-container {
-    margin: 20px;
-    font-family: 'Roboto', sans-serif;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  margin: 20px;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  flex-direction: column; /* Changed to column layout */
+  align-items: center; /* Center horizontally */
+}
   
   .course-list-title {
     text-align: center;
@@ -44,3 +44,20 @@
     cursor: pointer;
     z-index: 2; /* Ensure button is above content */
   }
+
+.clear-button {
+  margin-top: 20px;
+  padding: 12px 20px; /* Increased padding for better visual weight */
+  font-size: 16px;
+  color: white;
+  background-color: #e74c3c;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  text-align: center; /* Center the text within the button */
+}
+
+.clear-button:hover {
+  background-color: #c0392b;
+}
