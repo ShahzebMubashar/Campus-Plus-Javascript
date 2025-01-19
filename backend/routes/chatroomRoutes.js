@@ -1,7 +1,7 @@
 const express = require("express");
 const {
-  getChatrooms,
-  createChatroom,
+  getRooms,
+  createRoom,
   joinRoom,
   sendMessage,
 } = require("../controllers/chatroomController");
@@ -12,9 +12,9 @@ const {
 
 const router = express.Router();
 
-router.get("/", getChatrooms);
-router.post("/create", checkAuthorisation, checkAdmin, createChatroom);
-router.post("/join", checkAuthorisation, joinRoom);
-router.post("/Send-Message/:roomid", checkAuthorisation, sendMessage);
+router.get("/", getRooms);
+router.post("/create", checkAuthorisation, checkAdmin, createRoom);
+// router.post("/join", checkAuthorisation, joinRoom);
+// router.post("/Send-Message/:roomid", checkAuthorisation, sendMessage);
 
 module.exports = router; // Ensure this is properly exported

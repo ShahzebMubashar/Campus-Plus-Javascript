@@ -8,6 +8,25 @@ const DynamicTimetable = ({ selectedCourses }) => {
 
   const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+  const detectConflicts = (lectures) => {
+    // Add a flag `isConflict` to identify conflicting entries
+    for (let i = 0; i < lectures.length; i++) {
+      for (let j = i + 1; j < lectures.length; j++) {
+        const a = lectures[i];
+        const b = lectures[j];
+        // Check if timings overlap
+        if (
+          (a.start_time < b.start_time && a.end_time > b.start_time) ||
+          (b.start_time < a.start_time && b.end_time > a.start_time) ||
+          (a.start_time === b.start_time)
+        ) {
+          a.isConflict = true;
+          b.isConflict = true;
+        }
+      }
+    }
+  };
+
   const generateTimetable = () => {
     const timetable = {};
     days.forEach((day) => (timetable[day] = []));
@@ -15,22 +34,25 @@ const DynamicTimetable = ({ selectedCourses }) => {
     selectedCourses.forEach((course) => {
       let lectures;
       try {
-        lectures = JSON.parse(course.lectures.replace(/'/g, '"').trim().slice(1,-1));
+        lectures = JSON.parse(course.lectures.replace(/'/g, '"').trim().slice(1, -1));
       } catch (error) {
-        console.error("Invalid lecture format:", course.lectures.replace(/'/g, '"').trim().slice(1,-1)
-        , error.message);
+        console.error(
+          "Invalid lecture format:",
+          course.lectures.replace(/'/g, '"').trim().slice(1, -1),
+          error.message
+        );
         return;
       }
 
       lectures.forEach(({ room, day, start_time, end_time }) => {
         if (timetable[day]) {
-            const formatTime = (time24) => {
-              if (!time24) return ""; // Handle potential null/undefined values
-              let [hours, minutes] = time24.split(':');
-              hours = parseInt(hours);
-              const amOrPm = hours >= 12 ? 'PM' : 'AM';
-              hours = hours % 12 || 12; // Convert to 12-hour format
-              return `${hours}:${minutes} ${amOrPm}`;
+          const formatTime = (time24) => {
+            if (!time24) return ""; // Handle potential null/undefined values
+            let [hours, minutes] = time24.split(":");
+            hours = parseInt(hours);
+            const amOrPm = hours >= 12 ? "PM" : "AM";
+            hours = hours % 12 || 12; // Convert to 12-hour format
+            return `${hours}:${minutes} ${amOrPm}`;
           };
 
           const formattedStartTime = formatTime(start_time);
@@ -40,14 +62,17 @@ const DynamicTimetable = ({ selectedCourses }) => {
             instructor: course.instructor,
             venue: room,
             start_time,
+            end_time,
             time: `${formattedStartTime} - ${formattedEndTime}`,
+            isConflict: false, // Default flag
           });
         }
       });
     });
 
-    // Sort lectures by start_time for each day
+    // Detect conflicts for each day
     for (const day of days) {
+      detectConflicts(timetable[day]);
       timetable[day].sort((a, b) => a.start_time.localeCompare(b.start_time));
     }
 
@@ -109,14 +134,22 @@ const DynamicTimetable = ({ selectedCourses }) => {
                 <td className="day-column">{day}</td>
                 <td>
                   {timetable[day].map((entry, index) => (
-                    <div key={index} className="hex-item">
+                    <div
+                      key={index}
+                      className={entry.isConflict ? "conflict" : ""}
+                    >
                       {entry.courseName}
                     </div>
                   ))}
                 </td>
                 <td>
                   {timetable[day].map((entry, index) => (
-                    <div key={index}>{entry.time}</div>
+                    <div
+                      key={index}
+                      className={entry.isConflict ? "conflict" : ""}
+                    >
+                      {entry.time}
+                    </div>
                   ))}
                 </td>
                 {showInstructor && (

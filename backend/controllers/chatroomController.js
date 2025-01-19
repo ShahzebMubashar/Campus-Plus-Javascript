@@ -49,4 +49,4 @@ const createRoom = async (request, response) => {
   }
 };
 
-module.exports = { getRooms };
+module.exports = { getRooms, createRoom };
