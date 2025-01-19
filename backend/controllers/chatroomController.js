@@ -25,7 +25,7 @@ const createRoom = async (request, response) => {
     },
   } = request;
 
-  let client;
+  let client = await pool.connect();
   try {
     await client.query("BEGIN");
 
@@ -57,12 +57,21 @@ const joinRoom = async (request, response) => {
     },
   } = request;
 
-  let client;
+  if (!roomid) return response.status(400).send(`Room ID is required`);
+
+  let client = await pool.connect();
 
   try {
+    let res = await client.query(`Select * from Rooms where roomid = $1`, [roomid]);
+
+    if (!res.rowCount) {
+      client.release();
+      return response.status(404).send(`Room not found`);
+    }
+    
     await client.query("BEGIN");
 
-    let res = await client.query(
+    res = await client.query(
       `Select * from RoomMembers where roomid = $1 and userid = $2`,
       [roomid, userid]
     );
@@ -89,4 +98,35 @@ const joinRoom = async (request, response) => {
   }
 };
 
-module.exports = { getRooms, createRoom, joinRoom };
+const sendMessage = async (request, response) => {
+  const {
+    body: { message },
+    params: { roomid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  let client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    let res = await client.query(
+      `Insert into Messages(roomid, userid, content, posted_at)
+      values ($1, $2, $3, current_timestamp)`,
+      [roomid, userid, message]
+    );
+
+    await client.query("COMMIT");
+    client.release();
+
+    return response.status(200).send(`Message Sent Successfully`);
+  } catch (error) {
+    console.log("Error in sendMessage:", error);
+    await client.query("ROLLBACK");
+    return response.sendStatus(500);
+  }
+};
+
+module.exports = { getRooms, createRoom, joinRoom, sendMessage };
