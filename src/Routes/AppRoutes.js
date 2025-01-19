@@ -4,7 +4,7 @@ import Loader from '../Pages/Index/components/Loader.js'; // Import Loader compo
 import MainLayout from '../Layouts/MainLayout.js';
 import AboutCampusPlus from '../Pages/AboutCampusPlus/AboutCampusPlus.js';
 import ComingSoon from '../Pages/Coming Soon/ComingSoon.js';
-import Contact from '../Pages/Contact/Contact.js';
+import Contact from '../Pages/Contact/ContactPage.js';
 import Error404 from '../Pages/Error404/Error404.js';
 import FacultySection from '../Pages/Faculty/Faculty.js';
 import PastPapers from '../Pages/Past Papers/PastPapers.js';
