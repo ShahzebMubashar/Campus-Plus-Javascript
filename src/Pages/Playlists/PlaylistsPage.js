@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './PlaylistsPage.css';
 import Navbar from '../Index/components/Navbar.js';
 import { FaSearch } from "react-icons/fa";
+import Footer from '../Footer/Footer.js';
 
 const PlaylistsPage = () => {
     const playlists = [
@@ -82,10 +83,10 @@ const PlaylistsPage = () => {
         <div className="playlists-page">
             <Navbar />
             {/* Header Section */}
-            <div className="header">
-                <h1>All Playlists</h1>
-                <p>Class mein samajh nahi ayi ya teacher se vibe nahi mili? No worries, we got your back!</p>
-            </div>
+            <header className="support-header">
+                <h1>Youtube Playlists</h1>
+                <p>Didn't understand the concept in class? We Got ya!</p>
+            </header>
 
             {/* Search Bar */}
             <div className="search-bar">
@@ -125,6 +126,7 @@ const PlaylistsPage = () => {
                     ))}
                 </div>
             </div>
+            <Footer />
         </div>
     );
 };

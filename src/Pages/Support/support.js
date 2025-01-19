@@ -6,6 +6,7 @@ import image2 from "./2.svg";
 import FAQ from "./faq.js";
 import faqData from "./faqData.js";
 import Navbar from "../Index/components/Navbar.js";
+import Footer from "../Footer/Footer.js";
 
 const Support = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -73,6 +74,7 @@ const Support = () => {
                     </div>
                 </div>
             </section>
+            <Footer />
         </div>
     );
 };

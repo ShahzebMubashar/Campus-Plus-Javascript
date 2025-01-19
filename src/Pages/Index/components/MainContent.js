@@ -7,7 +7,7 @@ const MainContent = () => (
             <div className="text">
                 <h1 style={{ color: '#0e1320' }}>
                     <span>Empower Your Journey With</span>
-                    <span className="highlighted">Campus +</span>
+                    <span className="highlighted"> Campus +</span>
                 </h1>
                 <p style={{ color: '#576074', maxWidth: '80%' }}>
                     Enhance learning with an advanced LMS featuring robust tools like Past Papers, Teachers info,

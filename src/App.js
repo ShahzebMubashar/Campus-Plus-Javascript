@@ -8,7 +8,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import AppRoutes from './Routes/AppRoutes.js';
 import AboutCampusPlus from './Pages/AboutCampusPlus/AboutCampusPlus.js'; // Import the AboutCampusPlus component
 import ComingSoon from './Pages/Coming Soon/ComingSoon.js'; // Import the ComingSoon component
-import Contact from './Pages/Contact/Contact.js'; // Import the Contact component
+import Contact from './Pages/Contact/ContactPage.js'; // Import the Contact component
 import Error404 from './Pages/Error404/Error404.js';
 import FacultySection from './Pages/Faculty/Faculty.js';
 import PastPapers from './Pages/Past Papers/PastPapers.js';
