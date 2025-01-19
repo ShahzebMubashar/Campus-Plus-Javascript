@@ -1,9 +1,6 @@
 const express = require("express");
 const {
-  getChatrooms,
-  createChatroom,
-  joinRoom,
-  sendMessage,
+  getRooms,
 } = require("../controllers/chatroomController");
 const {
   checkAuthorisation,
@@ -12,9 +9,6 @@ const {
 
 const router = express.Router();
 
-router.get("/", getChatrooms);
-router.post("/create", checkAuthorisation, checkAdmin, createChatroom);
-router.post("/join", checkAuthorisation, joinRoom);
-router.post("/Send-Message/:roomid", checkAuthorisation, sendMessage);
+router.get("/", getRooms);
 
 module.exports = router; // Ensure this is properly exported
