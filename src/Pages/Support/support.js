@@ -31,7 +31,7 @@ const Support = () => {
             <Navbar />
             <header className="support-header">
                 <h1>FAST Help Center</h1>
-                <p>Far better than FAST Student Facilitation Centre</p>
+                <p>Answers, Assistance, and Everything You Need</p>
             </header>
 
             <div className="search-bar">

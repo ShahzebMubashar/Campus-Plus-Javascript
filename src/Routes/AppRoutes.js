@@ -1,49 +1,64 @@
-// src/routes/AppRoutes.js
-import React from 'react';
-import { Routes, Route } from 'react-router-dom';
-import MainLayout from '../Layouts/MainLayout.js';  // Import MainLayout
-import AboutCampusPlus from '../Pages/AboutCampusPlus/AboutCampusPlus.js';  // Import AboutCampusPlus
-import ComingSoon from '../Pages/Coming Soon/ComingSoon.js';  // Import ComingSoon
-import Contact from '../Pages/Contact/Contact.js';  // Import Contact
-import Error404 from '../Pages/Error404/Error404.js';  // Import Error404
-import FacultySection from '../Pages/Faculty/Faculty.js';  // Import FacultySection
+import React, { useState, useEffect } from 'react';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import Loader from '../Pages/Index/components/Loader.js'; // Import Loader component
+import MainLayout from '../Layouts/MainLayout.js';
+import AboutCampusPlus from '../Pages/AboutCampusPlus/AboutCampusPlus.js';
+import ComingSoon from '../Pages/Coming Soon/ComingSoon.js';
+import Contact from '../Pages/Contact/Contact.js';
+import Error404 from '../Pages/Error404/Error404.js';
+import FacultySection from '../Pages/Faculty/Faculty.js';
 import PastPapers from '../Pages/Past Papers/PastPapers.js';
 import SignInPage from '../Pages/SignIn/SignInPage.js';
-import PlaylistsPage from '../Pages/Playlists/PlaylistsPage.js'
+import PlaylistsPage from '../Pages/Playlists/PlaylistsPage.js';
 import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator.jsx';
 import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator.js';
-import Support from '../Pages/Support/support.js'
-import Timetable from "../Pages/Timetable/Timetable.js"
-import Footer from '../Pages/Footer/Footer.js'
-import News from '../Pages/Index/components/NewsAndEventsSection.js'
-import Map from "../Pages/Map/Map.js"
-
-
+import Support from '../Pages/Support/support.js';
+import Timetable from '../Pages/Timetable/Timetable.js';
+import Footer from '../Pages/Footer/Footer.js';
+import News from '../Pages/NewsEvents/News.js';
+import Map from '../Pages/Map/Map.js';
 
 function AppRoutes() {
+    const [isLoading, setIsLoading] = useState(false);
+    const location = useLocation();
+
+    useEffect(() => {
+        // Show loader on location change
+        setIsLoading(true);
+
+        // Simulate loading delay (adjust to actual logic if needed)
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 500);
+
+        return () => clearTimeout(timer); // Cleanup timeout on component unmount or location change
+    }, [location]);
+
     return (
-        <Routes>
-            {/* Default Route for Home page */}
-            <Route path="*" element={<MainLayout />} /> {/* Updated path from "/" to "*" */}
+        <>
+            <Loader isLoading={isLoading} />
+            <Routes>
+                {/* Default Route for Home page */}
+                <Route path="*" element={<MainLayout />} />
 
-            {/* Other Routes */}
-            <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
-            <Route path="/coming-soon" element={<ComingSoon />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route path="/error404" element={<Error404 />} />
-            <Route path="/faculty" element={<FacultySection />} />
-            <Route path="/past-papers" element={<PastPapers />} />
-            <Route path="/sign-in" element={<SignInPage />} />
-            <Route path="/playlists" element={<PlaylistsPage />} />
-            <Route path="/timetable" element={<Timetable />} />
-            <Route path="/email-generator" element={<EmailGenerator />} />
-            <Route path="/application-generator" element={<ApplicationGenerator />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/footer" element={<Footer />} />
-            <Route path="/map" element={<Map />} />
-
-        </Routes>
+                {/* Other Routes */}
+                <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
+                <Route path="/coming-soon" element={<ComingSoon />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/error404" element={<Error404 />} />
+                <Route path="/faculty" element={<FacultySection />} />
+                <Route path="/past-papers" element={<PastPapers />} />
+                <Route path="/sign-in" element={<SignInPage />} />
+                <Route path="/playlists" element={<PlaylistsPage />} />
+                <Route path="/timetable" element={<Timetable />} />
+                <Route path="/email-generator" element={<EmailGenerator />} />
+                <Route path="/application-generator" element={<ApplicationGenerator />} />
+                <Route path="/support" element={<Support />} />
+                <Route path="/news" element={<News />} />
+                <Route path="/footer" element={<Footer />} />
+                <Route path="/map" element={<Map />} />
+            </Routes>
+        </>
     );
 }
 

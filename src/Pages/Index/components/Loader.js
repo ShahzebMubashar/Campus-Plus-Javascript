@@ -1,21 +1,16 @@
+import React, { useState, useEffect } from 'react';
+import './Loader.css';
+import logo from '../cp_logo.png';
 
-import React, { useEffect } from 'react';
-import './Loader.css'; // Add Loader styles here or import from App.css
-import logo from '../cp_logo.png'
-
-const Loader = () => {
-    useEffect(() => {
-        window.addEventListener('load', () => {
-            document.querySelector('.loader-wrapper').style.display = 'none';
-        });
-    }, []);
-
+const Loader = ({ isLoading }) => {
     return (
-        <div className="loader-wrapper">
-            <div className="loader">
-                <img src={logo} alt="Logo" className="loader-logo" />
+        isLoading && (
+            <div className="loader-wrapper">
+                <div className="loader">
+                    <img src={logo} alt="Logo" className="loader-logo" />
+                </div>
             </div>
-        </div>
+        )
     );
 };
 
