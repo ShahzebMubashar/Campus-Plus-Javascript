@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom"; // Import useNavigate
 import "./SignInPage.css";
 import rocketImg from "./rocket.png";
 import humanImg from "./human.png";
+import Navbar from "../Index/components/Navbar";
+// import Footer from "../Footer/Footer";
 
 function SignInPage() {
     const [isSignUp, setIsSignUp] = useState(false);
@@ -89,6 +91,7 @@ function SignInPage() {
 
     return (
         <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""}`}>
+            <Navbar />
             <div className="left-section">
                 <div className="background-circle"></div> {/* Rotating background */}
                 <h1>{isSignUp ? "Already a Member?" : "Fresher Ho?"}</h1>
@@ -184,6 +187,7 @@ function SignInPage() {
                 </div>
             </div>
         </div>
+
     );
 }
 
