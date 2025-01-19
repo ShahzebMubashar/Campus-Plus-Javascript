@@ -8,7 +8,7 @@ const pool = new pg.Pool({
   password: "123123",
   host: "localhost",
   port: "5432",
-  database: "CampusPlus",
+  database: "PastPapers",
 });
 
 // Test the database connection
