@@ -49,4 +49,44 @@ const createRoom = async (request, response) => {
   }
 };
 
-module.exports = { getRooms };
+const joinRoom = async (request, response) => {
+  const {
+    params: { roomid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  let client;
+
+  try {
+    await client.query("BEGIN");
+
+    let res = await client.query(
+      `Select * from RoomMembers where roomid = $1 and userid = $2`,
+      [roomid, userid]
+    );
+
+    if (res.rowCount) {
+      client.release();
+      return response.status(400).send(`You are already a member of this room`);
+    }
+
+    res = await client.query(
+      `Insert into RoomMembers (roomid, userid)
+      values ($1, $2)`,
+      [roomid, userid]
+    );
+
+    await client.query("COMMIT");
+    client.release();
+
+    return response.status(200).send(`Joined Room Successfully`);
+  } catch (error) {
+    console.log("Error in joinRoom:", error);
+    await client.query("ROLLBACK");
+    return response.sendStatus(500);
+  }
+};
+
+module.exports = { getRooms, createRoom, joinRoom };
