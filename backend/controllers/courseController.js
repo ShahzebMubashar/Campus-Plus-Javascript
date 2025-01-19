@@ -4,7 +4,7 @@ const pool = require("../config/database.js");
 const getCourses = async (request, response) => {
   try {
     const result = await pool.query("SELECT * FROM ViewCourses");
-    console.log("Courses Data:", result.rows); // Log the result for debugging
+    // console.log("Courses Data:", result.rows); // Log the result for debugging
     if (!result.rowCount) {
       return response.status(404).json({ message: "No Courses Available" });
     }
@@ -21,7 +21,9 @@ const rateCourse = async (request, response) => {
   const { courseid, rating } = request.body;
 
   if (!courseid || !rating) {
-    return response.status(400).send("Missing required fields: courseid or rating");
+    return response
+      .status(400)
+      .send("Missing required fields: courseid or rating");
   }
 
   try {
@@ -59,9 +61,6 @@ const rateCourse = async (request, response) => {
     return response.status(500).send("Internal Server Error");
   }
 };
-
-
-
 
 // Controller to review a course
 const reviewCourse = async (request, response) => {
