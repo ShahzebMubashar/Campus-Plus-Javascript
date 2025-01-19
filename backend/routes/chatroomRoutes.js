@@ -1,17 +1,20 @@
-import express from "express";
-
-import {
-  getChatrooms,
-  createChatroom,
+const express = require("express");
+const {
+  getRooms,
+  createRoom,
   joinRoom,
-} from "../controllers/chatroomController.js";
-
-import { checkAuthorisation, checkAdmin } from "../middlewares/authMiddleware.js";
+  sendMessage,
+} = require("../controllers/chatroomController");
+const {
+  checkAuthorisation,
+  checkAdmin,
+} = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
-router.get("/", getChatrooms);
-router.post("/create", checkAuthorisation, checkAdmin, createChatroom);
-router.post("/join", checkAuthorisation, joinRoom);
+router.get("/", getRooms);
+router.post("/create", checkAuthorisation, checkAdmin, createRoom);
+// router.post("/join", checkAuthorisation, joinRoom);
+// router.post("/Send-Message/:roomid", checkAuthorisation, sendMessage);
 
-export default router;
+module.exports = router; // Ensure this is properly exported

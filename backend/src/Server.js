@@ -6,6 +6,8 @@ const pool = require("../config/database");  // Adjust the path if needed
 
 const authRoutes = require("../routes/authRoutes");
 const courseRoutes = require("../routes/courseRoutes");
+const chatroomRoute = require("../routes/chatroomRoutes");
+
 const app = express();
 const PORT = process.env.PORT_BACKEND || 4000;
 
@@ -26,13 +28,12 @@ app.use(
   })
 );
 
-
 app.options("*", cors());
 
 app.use(
   cors({
     origin: "http://localhost:3000", // Allow requests from this origin
-    credentials: true,              // Allow cookies and credentials
+    credentials: true, // Allow cookies and credentials
     methods: ["GET", "POST", "PUT", "DELETE"], // Specify allowed HTTP methods
     allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
   })
@@ -41,6 +42,7 @@ app.use(
 // Routes
 app.use("/", authRoutes);
 app.use("/api/courses", courseRoutes);
+app.use("/Chatrooms", chatroomRoute);
 
 app.use((req, res, next) => {
   console.log(`Request received: ${req.method} ${req.url}`);

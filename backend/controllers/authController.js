@@ -120,7 +120,7 @@ exports.login = async (request, response) => {
       role: user.role,
     };
 
-    console.log("Session set for user:", request.session.user);
+    // console.log("Session set for user:", request.session.user);
 
     // Respond with success
     return response.status(200).json({ message: "Login successful" });
