@@ -15,20 +15,32 @@ const DynamicTimetable = ({ selectedCourses }) => {
     selectedCourses.forEach((course) => {
       let lectures;
       try {
-        lectures = JSON.parse(course.lectures.replace(/'/g, '"').slice(1,-2));
+        lectures = JSON.parse(course.lectures.replace(/'/g, '"').trim().slice(1,-1));
       } catch (error) {
-        console.error("Invalid lecture format:", course.lectures, error.message);
+        console.error("Invalid lecture format:", course.lectures.replace(/'/g, '"').trim().slice(1,-1)
+        , error.message);
         return;
       }
 
       lectures.forEach(({ room, day, start_time, end_time }) => {
         if (timetable[day]) {
+            const formatTime = (time24) => {
+              if (!time24) return ""; // Handle potential null/undefined values
+              let [hours, minutes] = time24.split(':');
+              hours = parseInt(hours);
+              const amOrPm = hours >= 12 ? 'PM' : 'AM';
+              hours = hours % 12 || 12; // Convert to 12-hour format
+              return `${hours}:${minutes} ${amOrPm}`;
+          };
+
+          const formattedStartTime = formatTime(start_time);
+          const formattedEndTime = formatTime(end_time);
           timetable[day].push({
             courseName: `${course.course} - ${course.section}`,
             instructor: course.instructor,
             venue: room,
             start_time,
-            time: `${start_time} - ${end_time}`,
+            time: `${formattedStartTime} - ${formattedEndTime}`,
           });
         }
       });

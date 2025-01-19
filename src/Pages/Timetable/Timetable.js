@@ -2,10 +2,8 @@ import React, { useEffect, useState } from "react";
 import DropdownSelector from "../Index/components/DropDownSelector";
 import CourseList from "../Index/components/CourseList";
 import DynamicTimetable from "./DynamicTimetable";
+import Select from "react-select"; // React-Select for searchable dropdowns
 import "./Timetable.css";
-import Navbar from '../Index/components/Navbar';
-import Loader from '../Index/components/Loader'
-import BackToTopButton from "../Index/components/BackToTop";
 
 const Timetable = () => {
   const [csvData, setCsvData] = useState([]);
@@ -13,8 +11,6 @@ const Timetable = () => {
   const [courses, setCourses] = useState({});
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [currentCourse, setCurrentCourse] = useState(null);
-
-  // Toggle for showing instructor and venue
   const [showInstructor, setShowInstructor] = useState(true);
   const [showVenue, setShowVenue] = useState(true);
 
@@ -25,7 +21,6 @@ const Timetable = () => {
       .catch((err) => console.error("Error loading CSV:", err));
   }, []);
 
-  // Parse CSV Data
   const parseCsvData = (data) => {
     const rows = data.split("\n").slice(1);
     return rows.map((row) => {
@@ -48,7 +43,6 @@ const Timetable = () => {
     });
   };
 
-  // Process CSV Data into structured format
   const processCsv = (data) => {
     const coursesBySection = {};
     const courseByName = {};
@@ -77,7 +71,6 @@ const Timetable = () => {
     setCsvData(data);
   };
 
-  // Add a course to the selected list
   const addCourse = (courseName, section) => {
     const courseDetails = csvData.find((row) => row.course === courseName && row.section === section);
     if (courseDetails && !selectedCourses.some((c) => c.course === courseName && c.section === section)) {
@@ -85,7 +78,6 @@ const Timetable = () => {
     }
   };
 
-  // Add all courses from a section
   const addSection = (section) => {
     const updatedCourses = [...selectedCourses];
 
@@ -106,48 +98,77 @@ const Timetable = () => {
     setSelectedCourses(updatedCourses);
   };
 
-  // Remove a course from the selected list
   const removeCourse = (courseCode) => {
     setSelectedCourses(selectedCourses.filter((c) => c.courseCode !== courseCode));
   };
 
+  const clearAllCourses = () => {
+    setSelectedCourses([]);
+  };
+  const customstyles = {
+    placeholder: (base) => ({
+      ...base,
+      color: '#333', // Darker placeholder color
+      fontWeight: 'bold', // Make it bold
+      fontSize: '16px', // Slightly larger font
+    }),
+    control: (base, state) => ({
+      ...base,
+      borderColor: state.isFocused ? '#66bb91' : '#ddd', // Highlight on focus
+      boxShadow: state.isFocused ? '0 0 0 3px rgba(102, 187, 145, 0.2)' : 'none',
+      '&:hover': {
+        borderColor: '#66bb91',
+      },
+    }),
+    menu: (base) => ({
+      ...base,
+      zIndex: 10, // Ensure menu is above other elements
+    }),
+  };
+
   return (
     <div className="app-container">
-      <Navbar />
-      <Loader />
-      <h1 className="header">Timetable Generator</h1>
+      <h1 className="header">Timetable Course Selector</h1>
       <div className="selectors">
-        {/* Dropdown for selecting courses */}
-        <DropdownSelector
-          label="Select a Course"
-          options={Object.keys(courses)}
-          onSelect={(courseCode) => setCurrentCourse(courseCode)}
-        />
-        {currentCourse && (
-          <DropdownSelector
-            label={`Select a Section for ${currentCourse}`}
-            options={courses[currentCourse]?.sections?.sort()}
-            onSelect={(section) => addCourse(currentCourse, section)}
+        <div style={{ flex: 1 }}>
+          <Select
+            options={Object.keys(courses).map((course) => ({ label: course, value: course }))}
+            onChange={(selected) => setCurrentCourse(selected?.value)}
+            placeholder="Add a Specific Course"
+            isSearchable
+            styles={customstyles}
           />
+        </div>
+        {currentCourse && (
+          <div style={{ flex: 1 }}>
+            <Select
+              options={courses[currentCourse]?.sections?.sort().map((section) => ({
+                label: section,
+                value: section,
+              }))}
+              onChange={(selected) => addCourse(currentCourse, selected?.value)}
+              placeholder={`Select a Section for ${currentCourse}`}
+              isSearchable
+              styles={customstyles}
+            />
+          </div>
         )}
       </div>
-      {/* Dropdown for selecting sections */}
-      <DropdownSelector
-        label="Select a Section"
-        options={Object.keys(sections)}
-        onSelect={(section) => addSection(section)}
-      />
-
-      {/* Display selected courses */}
-      <CourseList courses={selectedCourses} onRemove={removeCourse} />
-
-      {/* Dynamic timetable display */}
+      <div style={{ flex: 1, marginTop: "15px" }}>
+        <Select
+          options={Object.keys(sections).map((section) => ({ label: section, value: section }))}
+          onChange={(selected) => addSection(selected?.value)}
+          placeholder="Add All Core Courses of a Section"
+          isSearchable
+          styles={customstyles}
+        />
+      </div>
+      <CourseList courses={selectedCourses} onRemove={removeCourse} onRemoveAll={clearAllCourses}/>
       <DynamicTimetable
         selectedCourses={selectedCourses}
         showInstructor={showInstructor}
         showVenue={showVenue}
       />
-      <BackToTopButton />
     </div>
   );
 };
