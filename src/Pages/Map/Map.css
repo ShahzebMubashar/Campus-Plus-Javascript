@@ -1,0 +1,150 @@
+/* General Styles */
+/* body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: linear-gradient(to right, #141e30, #243b55);
+    color: #e0e0e0;
+} */
+
+.tech-savvy-map {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+/* map-header */
+.map-map-header {
+    text-align: center;
+    padding: 40px 20px;
+    background: linear-gradient(to right, #1c92d2, #f2fcfe);
+    color: #333;
+    animation: fadeIn 1s ease-in-out;
+    box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.map-header h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+}
+
+.map-header h1 span {
+    color: #3498db;
+    font-weight: 900;
+}
+
+.map-header p {
+    font-size: 1.2rem;
+    font-weight: 400;
+}
+
+/* Main Section */
+.map-main {
+    flex: 1;
+    padding: 40px;
+}
+
+.buildings-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Building Card */
+.building-card {
+    background: linear-gradient(to bottom, #243b55, #141e30);
+    border-radius: 16px;
+    color: #ffffff;
+    box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+    padding: 20px;
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+}
+
+.building-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0px 15px 25px rgba(0, 0, 0, 0.3);
+}
+
+.building-map-header h2 {
+    font-size: 1.8rem;
+    color: #00bcd4;
+    margin-bottom: 10px;
+}
+
+.building-map-header p {
+    font-size: 1rem;
+    color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+.floors {
+    animation: fadeUp 1s ease-in-out;
+}
+
+.floor h3 {
+    font-size: 1.2rem;
+    color: #03a9f4;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+}
+
+.floor ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.floor li {
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.1);
+    margin-bottom: 8px;
+    border-radius: 8px;
+    transition: background 0.3s ease;
+}
+
+.floor li:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+/* Footer */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background: linear-gradient(to right, #1c92d2, #f2fcfe);
+    color: #333;
+    font-size: 0.9rem;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        transform: translateY(30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .map-header h1 {
+        font-size: 2.5rem;
+    }
+
+    .buildings-grid {
+        grid-template-columns: 1fr;
+    }
+}

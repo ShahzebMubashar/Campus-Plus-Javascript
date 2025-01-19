@@ -5,6 +5,7 @@ import cardImage2 from "./7119122_3469564.svg";
 import cardImage3 from "./10839364_4528064.svg";
 import cardImage4 from "./12892955_5098267.svg";
 import cardImage5 from "./6183568_3053908.svg";
+import Navbar from "../Index/components/Navbar";
 
 
 const EmailGenerator = () => {
@@ -33,6 +34,7 @@ const EmailGenerator = () => {
 
     return (
         <div className="email-generator">
+            <Navbar />
             {/* Fixed Header */}
             <header>
                 <h1>Email Generator</h1>

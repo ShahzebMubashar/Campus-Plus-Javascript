@@ -1,19 +1,23 @@
 // src/routes/AppRoutes.js
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
-import MainLayout from '../Layouts/MainLayout';  // Import MainLayout
-import AboutCampusPlus from '../Pages/AboutCampusPlus/AboutCampusPlus';  // Import AboutCampusPlus
-import ComingSoon from '../Pages/Coming Soon/ComingSoon';  // Import ComingSoon
-import Contact from '../Pages/Contact/Contact';  // Import Contact
-import Error404 from '../Pages/Error404/Error404';  // Import Error404
-import FacultySection from '../Pages/Faculty/Faculty';  // Import FacultySection
-import PastPapers from '../Pages/Past Papers/PastPapers';
-import SignInPage from '../Pages/SignIn/SignInPage';
-import PlaylistsPage from '../Pages/Playlists/PlaylistsPage'
-import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator';
-import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator';
-import Support from '../Pages/Support/support'
-import Timetable from "../Pages/Timetable/Timetable"
+import MainLayout from '../Layouts/MainLayout.js';  // Import MainLayout
+import AboutCampusPlus from '../Pages/AboutCampusPlus/AboutCampusPlus.js';  // Import AboutCampusPlus
+import ComingSoon from '../Pages/Coming Soon/ComingSoon.js';  // Import ComingSoon
+import Contact from '../Pages/Contact/Contact.js';  // Import Contact
+import Error404 from '../Pages/Error404/Error404.js';  // Import Error404
+import FacultySection from '../Pages/Faculty/Faculty.js';  // Import FacultySection
+import PastPapers from '../Pages/Past Papers/PastPapers.js';
+import SignInPage from '../Pages/SignIn/SignInPage.js';
+import PlaylistsPage from '../Pages/Playlists/PlaylistsPage.js'
+import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator.jsx';
+import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator.js';
+import Support from '../Pages/Support/support.js'
+import Timetable from "../Pages/Timetable/Timetable.js"
+import Footer from '../Pages/Footer/Footer.js'
+import News from '../Pages/Index/components/NewsAndEventsSection.js'
+import Map from "../Pages/Map/Map.js"
+
 
 
 function AppRoutes() {
@@ -35,6 +39,9 @@ function AppRoutes() {
             <Route path="/email-generator" element={<EmailGenerator />} />
             <Route path="/application-generator" element={<ApplicationGenerator />} />
             <Route path="/support" element={<Support />} />
+            <Route path="/news" element={<News />} />
+            <Route path="/footer" element={<Footer />} />
+            <Route path="/map" element={<Map />} />
 
         </Routes>
     );

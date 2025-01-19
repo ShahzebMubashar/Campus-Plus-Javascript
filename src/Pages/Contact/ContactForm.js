@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import emailjs from 'emailjs-com';
-import SocialLinks from './SocialLinks'; // Make sure the path is correct based on your folder structure
+import SocialLinks from './SocialLinks.js'; // Make sure the path is correct based on your folder structure
 
 
 const ContactForm = () => {

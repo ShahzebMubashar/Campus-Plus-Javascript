@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './PlaylistsPage.css';
-import Navbar from '../Index/components/Navbar';
+import Navbar from '../Index/components/Navbar.js';
 import { FaSearch } from "react-icons/fa";
 
 const PlaylistsPage = () => {

@@ -1,12 +1,11 @@
-// src/components/Support.js
-
 import React, { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./support1.css";
 import image1 from "./1.svg";
 import image2 from "./2.svg";
-import FAQ from "./faq";
-import faqData from "./faqData";
+import FAQ from "./faq.js";
+import faqData from "./faqData.js";
+import Navbar from "../Index/components/Navbar.js";
 
 const Support = () => {
     const [searchQuery, setSearchQuery] = useState("");
@@ -29,6 +28,7 @@ const Support = () => {
 
     return (
         <div className="support-page">
+            <Navbar />
             <header className="support-header">
                 <h1>FAST Help Center</h1>
                 <p>Far better than FAST Student Facilitation Centre</p>

@@ -1,16 +1,16 @@
 import React, { useEffect } from 'react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
-import Navbar from './AboutCampusPlusNavbar';
-import HeroSection from './HeroSection';
-import AboutSection from './AboutSection';
-import FeaturesSection from './FeaturesSection';
-import CountersSection from './CountersSection';
-import FounderSection from './FounderSection';
-import ContributorsSection from './ContributorsSection';
-import ReviewsSection from './ReviewsSection';
-import ContactSection from './ContactSection';
-import Footer from './CampusPlusFooter';
+import AboutNavbar from './AboutCampusPlusNavbar.js';
+import HeroSection from './HeroSection.js';
+import AboutSection from './AboutSection.js';
+import FeaturesSection from './FeaturesSection.js';
+import CountersSection from './CountersSection.js';
+import FounderSection from './FounderSection.js';
+import ContributorsSection from './ContributorsSection.js';
+import ReviewsSection from './ReviewsSection.js';
+import ContactSection from './ContactSection.js';
+import Footer from './CampusPlusFooter.js';
 import './AboutCampusPlus.css';
 import './lineIcons.css';
 
@@ -21,7 +21,7 @@ const AboutCampusPlus = () => {
 
     return (
         <div>
-            <Navbar />
+            <AboutNavbar />
             <HeroSection />
             <AboutSection />
             <FeaturesSection />
