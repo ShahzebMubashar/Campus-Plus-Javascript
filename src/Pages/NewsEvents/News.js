@@ -3,6 +3,7 @@ import './News.css'; // Import a CSS file for styling
 import NewsAndEventsSection from '../Index/components/NewsAndEventsSection'; // Adjust the import path as needed
 import Footer from '../Footer/Footer'; // Adjust the import path as needed
 import Navbar from '../Index/components/Navbar';
+import NewsForm from './NewsForm';
 
 const NewsPage = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -32,6 +33,7 @@ const NewsPage = () => {
             <div className="news-and-events">
                 <NewsAndEventsSection searchQuery={searchQuery} />
             </div>
+            <NewsForm />
 
             {/* Footer */}
             <Footer />
