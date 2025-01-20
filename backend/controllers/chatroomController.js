@@ -43,6 +43,10 @@ const createRoom = async (request, response) => {
       values ($1, $2, current_timestamp, $3)`,
       [roomname, description, userid]
     );
+
+    await client.query("COMMIT");
+
+    return response.status(201).send(`Room ${roomname} created successfully!`);
   } catch (error) {
     console.log("Error in createRoom:", error);
     return response.sendStatus(500);
@@ -62,13 +66,15 @@ const joinRoom = async (request, response) => {
   let client = await pool.connect();
 
   try {
-    let res = await client.query(`Select * from Rooms where roomid = $1`, [roomid]);
+    let res = await client.query(`Select * from Rooms where roomid = $1`, [
+      roomid,
+    ]);
 
     if (!res.rowCount) {
       client.release();
       return response.status(404).send(`Room not found`);
     }
-    
+
     await client.query("BEGIN");
 
     res = await client.query(
