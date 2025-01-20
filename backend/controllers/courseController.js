@@ -98,9 +98,47 @@ const reviewCourse = async (request, response) => {
   }
 };
 
+const addCourse = async (request, response) => {
+  const {
+    body: { coursename, coursecode, credits, grading, difficulty },
+  } = request;
+
+  try {
+    let res = await pool.query(
+      `Select * from Courses where coursecode ilike $1`,
+      [coursecode]
+    );
+
+    if (res.rowCount)
+      return response.status(400).send(`Course already added to database!`);
+
+    const client = await pool.connect();
+
+    await client.query("BEGIN");
+
+    res = await client.query(
+      `Insert into Courses (coursecode) values ($1) returning courseid`,
+      [coursecode]
+    );
+
+    res = await client.query(
+      `Insert into CourseInfo (courseid, coursename, credits, grading, difficulty)
+      values ($1, $2, $3, $4, $5)`,
+      [courseid, coursename, credits, grading, difficulty]
+    );
+
+    await client.query("COMMIT");
+  } catch (error) {
+    console.error(error);
+    await client.query("ROLLBACK");
+    return response.sendStatus(500);
+  }
+};
+
 // Exporting the functions
 module.exports = {
   getCourses,
   rateCourse,
   reviewCourse,
+  addCourse,
 };
