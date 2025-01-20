@@ -14,7 +14,7 @@ const { checkRoomMember } = require("../middlewares/chatroomMiddlewares");
 const router = express.Router();
 
 router.get("/", getRooms);
-router.post("/create", checkAuthorisation, checkAdmin, createRoom);
+router.post("/create", checkAuthorisation, createRoom);
 router.post("/join/:roomid", checkAuthorisation, joinRoom);
 router.post(
   "/send-message/:roomid",

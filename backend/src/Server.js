@@ -2,6 +2,7 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
 
+
 const authRoutes = require("../routes/authRoutes");
 const courseRoutes = require("../routes/courseRoutes");
 const chatroomRoute = require("../routes/chatroomRoutes");
@@ -51,6 +52,9 @@ app.use((req, res, next) => {
 app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
 });
+
+
+
 
 // Error handler
 app.use((err, req, res, next) => {

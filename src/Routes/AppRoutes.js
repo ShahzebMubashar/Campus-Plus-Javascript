@@ -17,6 +17,7 @@ import Timetable from '../Pages/Timetable/Timetable.js';
 import Footer from '../Pages/Footer/Footer.js';
 import News from '../Pages/NewsEvents/News.js';
 import Map from '../Pages/Map/Map.js';
+import PP from '../Pages/Past Papers/PP.js';
 
 function AppRoutes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -57,6 +58,7 @@ function AppRoutes() {
                 <Route path="/news" element={<News />} />
                 <Route path="/footer" element={<Footer />} />
                 <Route path="/map" element={<Map />} />
+                <Route path="/pp" element={<PP />} />
             </Routes>
         </>
     );

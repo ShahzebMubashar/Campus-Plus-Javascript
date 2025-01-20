@@ -6,7 +6,7 @@ const { checkAuthorisation } = require("../middlewares/authMiddleware.js");
 const router = express.Router();
 router.use(cors());
 
-// Replace test route with the actual function
+
 router.get("/", getCourses);
 
 router.post("/rate-course", rateCourse);

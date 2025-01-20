@@ -4,7 +4,7 @@ const pool = require("../config/database.js");
 const getCourses = async (request, response) => {
   try {
     const result = await pool.query("SELECT * FROM ViewCourses");
-    // console.log("Courses Data:", result.rows); // Log the result for debugging
+    console.log("Courses Data:", result.rows); // Log the result for debugging
     if (!result.rowCount) {
       return response.status(404).json({ message: "No Courses Available" });
     }
@@ -14,6 +14,8 @@ const getCourses = async (request, response) => {
     return response.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+
 
 // Controller to rate a course
 
