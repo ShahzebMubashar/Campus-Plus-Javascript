@@ -1,7 +1,6 @@
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
-const pool = require("../config/database");  // Adjust the path if needed
 
 
 const authRoutes = require("../routes/authRoutes");
@@ -54,32 +53,7 @@ app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
 });
 
-app.get("/api/past-papers/:id", async (req, res) => {
-  const { id } = req.params;
 
-  try {
-    const result = await pool.query(
-      `SELECT file_data, file_name FROM past_papers WHERE id = $1`,
-      [id]
-    );
-
-    if (result.rowCount === 0) {
-      return res.status(404).json({ error: "Paper not found" });
-    }
-
-    const { file_data, file_name } = result.rows[0];
-
-    // Set the appropriate content-type for PDF
-    res.setHeader("Content-Type", "application/pdf");
-    res.setHeader("Content-Disposition", `inline; filename="${file_name}"`);
-
-    // Send the PDF file as the response
-    res.send(file_data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Failed to fetch past paper" });
-  }
-});
 
 
 // Error handler

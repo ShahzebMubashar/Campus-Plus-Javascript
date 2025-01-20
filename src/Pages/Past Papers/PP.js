@@ -20,6 +20,8 @@ const PastPapers = () => {
                 }
                 const data = await response.json();
                 setCourses(data);
+
+
             } catch (err) {
                 setError("Unable to load courses at the moment.");
             } finally {
@@ -30,13 +32,11 @@ const PastPapers = () => {
         fetchCourses();
     }, []);
 
-    const handlePaperClick = async (paperId) => {
+    const handlePaperClick = async (filedata) => {
         try {
-            const response = await fetch(`http://localhost:4000/api/past-papers/${paperId}`);
-            if (!response.ok) {
-                throw new Error(`Failed to fetch paper: ${response.status}`);
-            }
-            const fileBlob = await response.blob();
+
+            console.log(filedata);
+            const fileBlob = await filedata.blob();
             const fileURL = URL.createObjectURL(fileBlob); // Create an object URL to view the PDF
 
             setSelectedPaper(fileURL); // Set the selected paper to be viewed
@@ -69,9 +69,17 @@ const PastPapers = () => {
                             <p>Grading: {course.grading}</p>
                             <p>Difficulty: {course.difficulty}</p>
                             <p>Rating: {course.rating ? course.rating.toFixed(2) : "No ratings yet"}</p>
-
+                            <div
+                                key={course.id}
+                                className="paper-item"
+                                onClick={() => handlePaperClick(course.file_data)} // Handle paper click
+                            >
+                                <h4>{course.paper_type}</h4>
+                                <p>{course.subject}</p>
+                                <p>{course.year}</p>
+                            </div>
                             {/* List all past papers for the course */}
-                            <div className="papers-list">
+                            {/* <div className="papers-list">
                                 {course.past_papers && course.past_papers.map((paper) => (
                                     <div
                                         key={paper.id}
@@ -83,7 +91,7 @@ const PastPapers = () => {
                                         <p>{paper.year}</p>
                                     </div>
                                 ))}
-                            </div>
+                            </div> */}
 
                             <div className="rating">
                                 {[1, 2, 3, 4, 5].map((star) => (

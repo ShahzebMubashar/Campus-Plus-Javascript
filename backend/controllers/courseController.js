@@ -1,28 +1,12 @@
 const pool = require("../config/database.js");
 
 // Controller to fetch all courses
-// const getCourses = async (request, response) => {
-//   try {
-//     const result = await pool.query("SELECT * FROM ViewCourses");
-//     console.log("Courses Data:", result.rows); // Log the result for debugging
-//     if (!result.rowCount) {
-//       return response.status(404).json({ message: "No Courses Available" });
-//     }
-//     return response.status(200).json(result.rows); // Send valid JSON
-//   } catch (error) {
-//     console.error("Error in getCourses:", error);
-//     return response.status(500).json({ error: "Internal Server Error" });
-//   }
-// };
-
-
-// Controller to fetch all courses
 const getCourses = async (request, response) => {
   try {
     const result = await pool.query("SELECT * FROM ViewCourses");
-    // console.log("Courses Data:", result.rows); // Log the result for debugging
+    console.log("Courses Data:", result.rows); // Log the result for debugging
     if (!result.rowCount) {
-      return response.status(404).json({ message: "No Past Papers Available" });
+      return response.status(404).json({ message: "No Courses Available" });
     }
     return response.status(200).json(result.rows); // Send valid JSON
   } catch (error) {
@@ -30,6 +14,7 @@ const getCourses = async (request, response) => {
     return response.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 
 // Controller to rate a course
