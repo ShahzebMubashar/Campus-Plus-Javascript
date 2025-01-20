@@ -9,6 +9,9 @@ const pool = new pg.Pool({
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
+  ssl: {
+    rejectUnauthorized: false, // Set to 'true' if you want strict SSL certificate verification
+  },
   // user: "postgres",
   // password: "123123",
   // host: "localhost",
