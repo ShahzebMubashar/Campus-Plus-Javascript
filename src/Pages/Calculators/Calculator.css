@@ -1,0 +1,78 @@
+.calculator-container {
+    padding: 20px;
+    background-color: #f9f9f9;
+    width: 80%;
+    margin: 20px auto;
+    border-radius: 10px;
+}
+
+.calculator-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.toggle-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+.toggle-btn {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-btn.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.course-input-group,
+.semester-input-group {
+    margin-bottom: 10px;
+}
+
+input,
+select {
+    padding: 8px;
+    margin: 5px 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+#sgpaResult,
+#cgpaResult,
+#aggregateResult {
+    margin-top: 20px;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #999;
+}

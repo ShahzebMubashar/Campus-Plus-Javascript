@@ -18,6 +18,7 @@ import Footer from '../Pages/Footer/Footer.js';
 import News from '../Pages/NewsEvents/News.js';
 import Map from '../Pages/Map/Map.js';
 import PP from '../Pages/Past Papers/PP.js';
+import Calculator from '../Pages/Calculators/Calculator.js';
 
 function AppRoutes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -59,6 +60,7 @@ function AppRoutes() {
                 <Route path="/footer" element={<Footer />} />
                 <Route path="/map" element={<Map />} />
                 <Route path="/pp" element={<PP />} />
+                <Route path="/calculator" element={<Calculator />} />
             </Routes>
         </>
     );
