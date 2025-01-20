@@ -1,11 +1,41 @@
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import Logo from '../cp_logo.png';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
 
 function Navbar() {
+    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if user is logged in by looking for the user object in local storage
+        const user = JSON.parse(localStorage.getItem("user"));
+        setIsLoggedIn(!!user); // Set true if user exists, false otherwise
+    }, []);
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch("http://localhost:4000/logout", {
+                method: "POST", 
+                credentials: "include", // Include cookies in the request
+            });
+    
+            if (response.ok) {
+                localStorage.removeItem("user");
+                console.log(response.text());
+                setIsLoggedIn(false);
+                navigate("/sign-in");
+            } else {
+                console.error("Logout failed:", response.statusText);
+            }
+        } catch (error) {
+            console.error("An error occurred during logout:", error);
+        }
+    };
+    
+
     return (
         <>
             <nav className="navbar">
@@ -128,7 +158,15 @@ function Navbar() {
                             </div>
 
                         </li>
-                        <li><Link to="/sign-in">Sign In</Link></li>
+                        {isLoggedIn ? (
+                            // Show "Logout" if the user is logged in
+                            <li onClick={handleLogout} style={{ cursor: "pointer" }}>
+                                Logout
+                            </li>
+                        ) : (
+                            // Show "Sign In" if the user is not logged in
+                            <li><Link to="/sign-in">Sign In</Link></li>
+                        )}
 
                     </ul>
                 </div>
