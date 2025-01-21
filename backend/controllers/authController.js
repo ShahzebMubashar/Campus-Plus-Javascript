@@ -2,12 +2,13 @@ const pool = require("../config/database.js");
 const bcrypt = require("bcrypt");
 const { randomBytes } = require("crypto");
 
-
 exports.register = async (request, response) => {
-  console.log("Register endpoint hit"); // Log to confirm the route is called
-  console.log("Request body:", request.body); // Log the incoming request body
+  // console.log("Register endpoint hit"); // Log to confirm the route is called
+  // console.log("Request body:", request.body); // Log the incoming request body
 
-  const { username, email, password, rollnumber } = request.body;
+  const {
+    body: { username, email, password, rollnumber },
+  } = request;
 
   if (!username || !email || !password || !rollnumber) {
     console.log("Missing fields in the request body");
@@ -16,7 +17,7 @@ exports.register = async (request, response) => {
 
   try {
     const client = await pool.connect();
-    console.log("Database connection established for registration");
+    // console.log("Database connection established for registration");
     await client.query("BEGIN");
 
     const checkUser = await client.query(
@@ -26,16 +27,18 @@ exports.register = async (request, response) => {
       [username, email, rollnumber]
     );
 
-    console.log("User existence check result:", checkUser.rows[0]); // Log database query result
+    // console.log("User existence check result:", checkUser.rows[0]); // Log database query result
 
     const { usernamecount, emailcount, rollnumbercount } = checkUser.rows[0];
 
     if (parseInt(rollnumbercount)) {
-      console.log(`Roll Number ${rollnumber} already exists`);
-      return response.status(409).send(`Roll Number ${rollnumber} already exists`);
+      // console.log(`Roll Number ${rollnumber} already exists`);
+      return response
+        .status(409)
+        .send(`Roll Number ${rollnumber} already exists`);
     }
     if (parseInt(emailcount)) {
-      console.log(`Email ${email} already exists`);
+      // console.log(`Email ${email} already exists`);
       return response.status(409).send(`Email ${email} already exists`);
     }
 
@@ -50,21 +53,21 @@ exports.register = async (request, response) => {
         );
         if (!userCheck.rowCount) break;
       }
-      console.log(`Suggested new username: ${newUserName}`);
+      // console.log(`Suggested new username: ${newUserName}`);
       return response
         .status(409)
         .send(`Username ${username} already exists. Try ${newUserName}`);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    console.log("Password hashed successfully");
+    // console.log("Password hashed successfully");
 
     const result = await client.query(
       `INSERT INTO Users (username, email, password, rollnumber) VALUES ($1, $2, $3, $4) RETURNING userid, username, email, rollnumber`,
       [username, email, hashedPassword, rollnumber]
     );
 
-    console.log("User successfully registered:", result.rows[0]);
+    // console.log("User successfully registered:", result.rows[0]);
 
     request.session.user = {
       userid: parseInt(result.rows[0].userid),
@@ -83,25 +86,32 @@ exports.register = async (request, response) => {
       email: result.rows[0].email,
       rollnumber: result.rows[0].rollnumber,
     });
-
   } catch (error) {
-    console.error("Registration error:", error.message); // Log the error
+    console.error("Registration error:", error.message);
     await pool.query("ROLLBACK");
     return response.status(500).send("Server Error");
   }
 };
 
-
 exports.login = async (request, response) => {
-  const { email, password } = request.body;
+  const {
+    body: { email, password, username, rollnumber },
+  } = request;
+
+  if (!email && !username && !rollnumber)
+    return response
+      .status(400)
+      .send("Please provide Email, Username or Roll Number");
+
+  if (!password) return response.status(400).send("Please provide Password");
 
   try {
-    // Query the user from the database
-    const result = await pool.query("SELECT * FROM Users WHERE email = $1", [email]);
+    const result = await pool.query("SELECT * FROM Users WHERE email = $1", [
+      email,
+    ]);
 
-    if (!result.rowCount) {
+    if (!result.rowCount)
       return response.status(404).json({ error: "Invalid credentials" });
-    }
 
     const user = result.rows[0];
 
@@ -129,8 +139,6 @@ exports.login = async (request, response) => {
     return response.status(500).json({ error: "Server error" });
   }
 };
-
-
 
 exports.forgotPassword = async (request, response) => {
   const {
@@ -167,7 +175,6 @@ exports.forgotPassword = async (request, response) => {
   }
 };
 
-
 exports.resetPassword = async (request, response) => {
   const { newPassword, confirmPassword, token } = request.body;
 
@@ -202,7 +209,6 @@ exports.resetPassword = async (request, response) => {
     return response.status(500).send("Server Error");
   }
 };
-
 
 exports.logout = async (request, response) => {
   try {

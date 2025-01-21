@@ -1,6 +1,6 @@
-import pool from "../config/database.js";
+const pool = require("../config/database");
 
-export const viewUserInfo = async (request, response) => {
+const viewUserInfo = async (request, response) => {
   const {
     session: {
       user: { userid },
@@ -21,7 +21,7 @@ export const viewUserInfo = async (request, response) => {
   }
 };
 
-export const editUserInfo = async (request, response) => {
+const editUserInfo = async (request, response) => {
   const {
     body: { batch, degree },
     session: {
@@ -51,3 +51,5 @@ export const editUserInfo = async (request, response) => {
     return response.status(500).send("Internal Server Error");
   }
 };
+
+module.exports = { viewUserInfo, editUserInfo };
