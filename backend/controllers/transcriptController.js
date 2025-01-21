@@ -132,4 +132,4 @@ const editCourse = async (request, response) => {
   }
 };
 
-module.exports = { getTranscript, addCourse };
+module.exports = { getTranscript, addCourse, removeCourse, editCourse };
