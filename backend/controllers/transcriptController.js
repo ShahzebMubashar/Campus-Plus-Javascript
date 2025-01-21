@@ -22,4 +22,80 @@ const getTranscript = async (request, response) => {
   }
 };
 
-module.exports = { getTranscript };
+const addCourse = async (request, response) => {
+  const {
+    body: { courseid, credits, grade, semester },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  try {
+    const client = await pool.connect();
+
+    let res = await client.query(
+      `Select * from Transcript where courseid = $1 and userid = $2`,
+      [courseid, userid]
+    );
+
+    if (res.rowCount)
+      return response.status(400).send(`Course already added to transcript!`);
+
+    await client.query("BEGIN");
+
+    res = await client.query(
+      `Insert into Transcript (userid, courseid, credits, grade, semester)
+        values ($1, $2, $3, $4, $5)`,
+      [userid, courseid, credits, grade, semester]
+    );
+
+    await client.query("COMMIT");
+
+    return response
+      .status(201)
+      .send(`Course successfully added to Transcript!`);
+  } catch (error) {
+    console.error("Error in addCourse:", error);
+    await pool.query("ROLLBACK");
+    return response.status(500).send("Internal Server Error");
+  }
+};
+
+const removeCourse = async (request, response) => {
+  const {
+    body: { courseid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  try {
+    const client = await pool.connect();
+
+    let res = await client.query(
+      `Select * from Transcript where courseid = $1 and userid = $2`,
+      [courseid, userid]
+    );
+
+    if (!res.rowCount)
+      return response.status(404).send(`Course not found in transcript!`);
+
+    await client.query("BEGIN");
+
+    res = await client.query(
+      `Delete from Transcript where courseid = $1 and userid = $2`,
+      [courseid, userid]
+    );
+
+    await client.query("COMMIT");
+
+    return response
+      .status(200)
+      .send(`Course successfully removed from Transcript!`);
+  } catch (error) {
+    console.error("Error in removeCourse:", error);
+    await pool.query("ROLLBACK");
+    return response.sendStatus(500);
+  }
+};
+module.exports = { getTranscript, addCourse };
