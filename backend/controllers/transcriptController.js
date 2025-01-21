@@ -98,4 +98,38 @@ const removeCourse = async (request, response) => {
     return response.sendStatus(500);
   }
 };
+
+const editCourse = async (request, response) => {
+  const {
+    body: { courseid, credits, grade, semester },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  try {
+    const client = await pool.connect();
+
+    let res = await client.query(
+      `Update Transcript 
+        set credits = COALESCE($1, credits),
+            grade = COALESCE($2, grade),
+            semester = COALESCE($3, semester)
+            where
+            courseid = $4 and userid = $5`,
+      [credits, grade, semester, courseid, userid]
+    );
+
+    await client.query("COMMIT");
+
+    return response
+      .status(200)
+      .send(`Course successfully updated in Transcript!`);
+  } catch (error) {
+    console.error("Error in editCourse:", error);
+    await pool.query("ROLLBACK");
+    return response.status(500).send("Internal Server Error");
+  }
+};
+
 module.exports = { getTranscript, addCourse };
