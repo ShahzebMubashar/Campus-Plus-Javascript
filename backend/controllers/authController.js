@@ -95,7 +95,7 @@ exports.register = async (request, response) => {
 
 exports.login = async (request, response) => {
   const {
-    bosy: { email, password, username, rollnumber },
+    body: { email, password, username, rollnumber },
   } = request;
 
   if (!email && !username && !rollnumber)
