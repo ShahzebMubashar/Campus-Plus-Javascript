@@ -1,4 +1,3 @@
-const { get } = require("react-scroll/modules/mixins/scroller");
 const pool = require("../config/database");
 
 const getTranscript = async (request, response) => {
