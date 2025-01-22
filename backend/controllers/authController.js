@@ -106,9 +106,10 @@ exports.login = async (request, response) => {
   if (!password) return response.status(400).send("Please provide Password");
 
   try {
-    const result = await pool.query("SELECT * FROM Users WHERE email = $1", [
-      email,
-    ]);
+    const result = await pool.query(
+      "SELECT * FROM Users WHERE email = $1 or username = $1",
+      [email || username]
+    );
 
     if (!result.rowCount)
       return response.status(404).json({ error: "Invalid credentials" });
