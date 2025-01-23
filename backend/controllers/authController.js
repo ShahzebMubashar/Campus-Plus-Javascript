@@ -131,10 +131,16 @@ exports.login = async (request, response) => {
       role: user.role,
     };
 
-    // console.log("Session set for user:", request.session.user);
+    try {
+      await request.session.save();
+      console.log("Session saved successfully:", request.session);
+      return response.status(200).json({ message: "Login successful" });
+    } catch (err) {
+      console.error("Error saving session:", err);
+      return response.status(500).json({ error: "Could not save session" });
+    }
 
-    // Respond with success
-    return response.status(200).json({ message: "Login successful" });
+    console.log("Session set for user:", request.session.user);
   } catch (error) {
     console.error("Login error:", error);
     return response.status(500).json({ error: "Server error" });

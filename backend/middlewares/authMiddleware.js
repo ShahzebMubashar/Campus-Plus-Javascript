@@ -1,7 +1,7 @@
 const checkAuthorisation = (request, response, next) => {
-  console.log("Session ID:", request.sessionID); // Logs the session ID
-  console.log("Session Store:", request.sessionStore); // Logs the session store
-  console.log("Session Data:", request.session); // Logs the session data
+  request.sessionStore.get(request.sessionID, (error, session) => {
+    console.log(session);
+  });
 
   if (!request.session.user) {
     console.log("Authorization failed: No user in session");
@@ -11,7 +11,6 @@ const checkAuthorisation = (request, response, next) => {
   console.log("Authorization successful: User found in session");
   next();
 };
-
 
 const checkAdmin = (request, response, next) => {
   console.log("checkAdmin: Checking if user is an Admin...");
