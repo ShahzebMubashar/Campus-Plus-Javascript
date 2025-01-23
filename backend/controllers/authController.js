@@ -1,6 +1,7 @@
 const pool = require("../config/database.js");
 const bcrypt = require("bcrypt");
 const { randomBytes } = require("crypto");
+const jwt = require("jsonwebtoken");
 
 exports.register = async (request, response) => {
   // console.log("Register endpoint hit"); // Log to confirm the route is called
@@ -230,5 +231,38 @@ exports.logout = async (request, response) => {
   } catch (error) {
     console.error("Unexpected error during logout:", error);
     return response.status(500).send("Unexpected Server Error");
+  }
+};
+
+exports.testLogin = async (request, response) => {
+  const {
+    body: { username, password, email },
+  } = request;
+
+  if (!username && !email)
+    return response.status(400).send("Please provide Username or Email");
+
+  if (!password) return response.status(400).send("Please provide Password");
+
+  try {
+    let res = await pool.query(
+      `Select * from Users where username = $1 or email = $1`,
+      [username || email]
+    );
+
+    if (!res.rowCount) return response.status(404).send("Invalid Credentials");
+
+    const user = res.rows[0];
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) return response.status(401).send("Invalid Credentials");
+
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+
+    return response.status(200).send(`Login Successful! ${accessToken}`);
+  } catch (error) {
+    console.error("Login error:", error);
+    return response.status(500).json({ error: "Server error" });
   }
 };
