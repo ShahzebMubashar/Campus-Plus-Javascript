@@ -15,49 +15,54 @@ const getCourses = async (request, response) => {
   }
 };
 
-
-
 // Controller to rate a course
-
 const rateCourse = async (request, response) => {
-  const { courseid, rating } = request.body;
+  const {
+    body: { courseid, rating },
+    session: {
+      user: { userid },
+    },
+  } = request;
 
-  if (!courseid || !rating) {
-    return response
-      .status(400)
-      .send("Missing required fields: courseid or rating");
-  }
+  if (!courseid || !rating) return response.status(400).send("Invalid Input");
 
   try {
     const client = await pool.connect();
-    await client.query("BEGIN");
 
-    // Update or insert into CourseRating
-    let courseRating = await client.query(
-      "SELECT * FROM CourseRating WHERE courseid = $1",
-      [courseid]
+    let res = await client.query(
+      `Select * from UserCourseRating where userid = $1 and courseid = $2`,
+      [userid, courseid]
     );
 
-    if (!courseRating.rowCount) {
-      // Insert a new rating if none exist
-      await client.query(
-        "INSERT INTO CourseRating (courseid, ratingsum, ratedcount) VALUES ($1, $2, $3)",
+    if (res.rowCount)
+      return response.status(400).send("You have already rated this course");
+
+    res = await client.query(`Select * from CourseRating where courseid = $1`, [
+      courseid,
+    ]);
+
+    await client.query("BEGIN");
+
+    if (!res.rowCount) {
+      res = await client.query(
+        `Insert into CourseRating (courseid, ratingsum, ratedcount) values ($1, $2, $3)`,
         [courseid, rating, 1]
       );
     } else {
-      // Update the existing rating
-      const { ratingsum, ratedcount } = courseRating.rows[0];
-      const newRatingSum = ratingsum + rating;
-      await client.query(
-        "UPDATE CourseRating SET ratingsum = $1, ratedcount = $2 WHERE courseid = $3",
-        [newRatingSum, ratedcount + 1, courseid]
+      res = await client.query(
+        `Update CourseRating set ratingsum = ratingsum + $1, ratedcount = ratedcount + 1 where courseid = $2`,
+        [rating, courseid]
       );
     }
 
-    await client.query("COMMIT");
-    client.release();
+    res = await client.query(
+      `Insert into UserCourseRating (userid, courseid) values ($1, $2)`,
+      [userid, courseid]
+    );
 
-    return response.status(200).send("Rating added successfully");
+    await client.query("COMMIT");
+
+    return response.status(200).send("Course Rating Added Successfully");
   } catch (error) {
     console.error("Error in rateCourse:", error);
     return response.status(500).send("Internal Server Error");
