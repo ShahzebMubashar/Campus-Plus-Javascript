@@ -1,5 +1,5 @@
 const pool = require("../config/database.js");
-
+const fetch = require('node-fetch');
 // Controller to fetch all courses
 const getCourses = async (request, response) => {
   try {
@@ -137,10 +137,50 @@ const addCourse = async (request, response) => {
   }
 };
 
+const getPastPapers = async (req, res) => {
+  const { courseId } = req.params;
+  try {
+      const result = await pool.query(
+          'SELECT paper_id, paper_type, paper_year, file_link FROM past_papers WHERE courseid = $1',
+          [courseId]
+      );
+      res.json(result.rows);
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+  }
+};
+
+const downloadPastPapers = async (req, res) => {
+  const { paperId } = req.params;
+  try {
+      // Query the database for the file_link using paperId
+      const result = await pool.query('SELECT file_link FROM past_papers WHERE paper_id = $1', [paperId]);
+      if (result.rows.length === 0) {
+          return res.status(404).send('Paper not found');
+      }
+      const fileLink = result.rows[0].file_link;
+
+      // Fetch the file from the external link (e.g., Google Drive)
+      const response = await fetch(fileLink);
+      if (!response.ok) {
+          return res.status(500).send('Failed to fetch file');
+      }
+      // Stream the file to the client
+      res.setHeader('Content-Type', 'application/pdf'); // Adjust the type if needed
+      response.body.pipe(res);
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+  }
+};
+
 // Exporting the functions
 module.exports = {
   getCourses,
   rateCourse,
   reviewCourse,
   addCourse,
+  getPastPapers,
+  downloadPastPapers,
 };
