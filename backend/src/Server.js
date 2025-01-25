@@ -2,10 +2,10 @@ const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
 
-
 const authRoutes = require("../routes/authRoutes");
 const courseRoutes = require("../routes/courseRoutes");
 const chatroomRoute = require("../routes/chatroomRoutes");
+const transcriptRoute = require("../routes/transcriptRoutes");
 
 const app = express();
 const PORT = process.env.PORT_BACKEND || 4000;
@@ -40,8 +40,9 @@ app.use(
 
 // Routes
 app.use("/", authRoutes);
-app.use("/api/courses", courseRoutes);
+app.use("/Courses", courseRoutes);
 app.use("/Chatrooms", chatroomRoute);
+app.use("/Transcript", transcriptRoute);
 
 app.use((req, res, next) => {
   console.log(`Request received: ${req.method} ${req.url}`);
@@ -52,9 +53,6 @@ app.use((req, res, next) => {
 app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
 });
-
-
-
 
 // Error handler
 app.use((err, req, res, next) => {

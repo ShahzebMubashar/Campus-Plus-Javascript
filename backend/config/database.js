@@ -1,6 +1,5 @@
 const pg = require("pg");
 const dotenv = require("dotenv");
-
 dotenv.config();
 
 const pool = new pg.Pool({
@@ -11,13 +10,11 @@ const pool = new pg.Pool({
   database: process.env.DB_NAME,
   ssl: {
     rejectUnauthorized: false, // Set to 'true' if you want strict SSL certificate verification
-  },
-  // user: "postgres",
-  // password: "123123",
-  // host: "localhost",
-  // port: "5432",
-  // database: "postgres",
+  }
 });
+console.log('DB_USER:', process.env.DB_USER); // Should output 'postgres'
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD); // Should output '123123'
+
 
 // Test the database connection
 (async () => {

@@ -4,7 +4,7 @@ const fetch = require('node-fetch');
 const getCourses = async (request, response) => {
   try {
     const result = await pool.query("SELECT * FROM ViewCourses");
-    console.log("Courses Data:", result.rows); // Log the result for debugging
+    // console.log("Courses Data:", result.rows); // Log the result for debugging
     if (!result.rowCount) {
       return response.status(404).json({ message: "No Courses Available" });
     }
