@@ -122,7 +122,7 @@ function Navbar() {
                             </div>
                         </li>
 
-                        <li><Link to="https://chatgpt.com/">ChatGPT</Link></li>
+                        <li><Link to="/chatroom">Chatrooms</Link></li>
                         <li className="navbar-dropdown">
                             <span className="navbar-dropdown-toggle">
                                 Student Support <AiOutlineDown className="navbar-dropdown-arrow" />
