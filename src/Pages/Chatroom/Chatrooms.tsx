@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Sidebar from "./components/Sidebar.tsx"
 import RoomList from "./components/RoomList.tsx"
 import RoomView from "./components/RoomView.tsx"
+import Navbar from '../Index/components/Navbar.js';
+import Footer from '../Footer/Footer.js';
 import "./css/Chatroom.css"
 import type { Room } from "./types/types"
 
@@ -46,22 +48,24 @@ export default function App() {
     }
 
     return (
-        <div className="chatroom-app">
-            <Sidebar />
-            <div className="chatroom-main-content">
-                <header className="chatroom-header">
-                    <h1>{activeRoom ? activeRoom.title : "Chatrooms"}</h1>
-                </header>
+        <div className="chatroom-main-top">
+            <div className="chatroom-app">
+                <Navbar />
+                <div className="content-wrapper">
+                    <Sidebar />
+                    <div className="main-content">
+                        <header className="chatroom-header">
+                            <h1>{activeRoom ? activeRoom.title : "Chatrooms"}</h1>
+                        </header>
 
-                {activeRoom ? (
-                    <RoomView room={activeRoom} onBack={handleBackToRooms} />
-                ) : (
-                    <RoomList rooms={rooms} onJoinRoom={handleJoinRoom} />
-                )}
-
-                <footer className="chatroom-footer">
-                    <p>Contact us etc. (Footer)</p>
-                </footer>
+                        {activeRoom ? (
+                            <RoomView room={activeRoom} onBack={handleBackToRooms} />
+                        ) : (
+                            <RoomList rooms={rooms} onJoinRoom={handleJoinRoom} />
+                        )}
+                    </div>
+                </div>
+                <Footer />
             </div>
         </div>
     )

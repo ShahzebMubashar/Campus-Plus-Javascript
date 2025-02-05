@@ -18,10 +18,10 @@ function Navbar() {
     const handleLogout = async () => {
         try {
             const response = await fetch("http://localhost:4000/logout", {
-                method: "POST", 
+                method: "POST",
                 credentials: "include", // Include cookies in the request
             });
-    
+
             if (response.ok) {
                 localStorage.removeItem("user");
                 console.log(response.text());
@@ -34,7 +34,7 @@ function Navbar() {
             console.error("An error occurred during logout:", error);
         }
     };
-    
+
 
     return (
         <>
