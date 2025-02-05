@@ -40,7 +40,7 @@ export default function EmailGenerator() {
     },
   ];
 
-  const [teachers, setTeachers] = useState("")
+  const [teachers, setTeachers] = useState([]);
   const [emailBody, setEmailBody] = useState("");
   const [formData, setFormData] = useState({
     userName: "",
@@ -52,11 +52,11 @@ export default function EmailGenerator() {
     emailType: "select",
   });
   const [showEmailForm, setShowEmailForm] = useState(false);
-  const [showResult, setShowResult] = useState(false)
+  const [showResult, setShowResult] = useState(false);
+
   useEffect(() => {
     // Load email templates and teachers
     const loadTemplates = async () => {
-
       setTeachers(templateData.teachers);
     };
 
@@ -70,19 +70,17 @@ export default function EmailGenerator() {
   }
 
   async function onGenEmail() {
-
     const {
       userName,
       classSection,
       rollNumber,
       selectedTeacher,
-      teacherSalutation, customTeacher,
-      emailType } = formData
+      teacherSalutation,
+      customTeacher,
+      emailType
+    } = formData;
 
-
-    // const templates = await loadEmailTemplates();
     const template = templateData.templates[emailType];
-    console.log(emailType);
     if (template) {
       const greeting = templateData.greeting;
       const subject = template.subject;
@@ -92,21 +90,12 @@ export default function EmailGenerator() {
       body = body.replace("{rollNumber}", rollNumber);
 
       body = `${greeting} ${selectedTeacher === "other"
-          ? teacherSalutation + " " + getLastName(customTeacher)
-          : getLastName(selectedTeacher)
+        ? teacherSalutation + " " + getLastName(customTeacher)
+        : getLastName(selectedTeacher)
         },\n\n${body}\n\nRegards,\n${userName}\nSection: ${classSection}\nRoll No: ${rollNumber}`;
 
-      //   if (selectedTeacher === "other") {
-      //     document.getElementById("teacher-email").value = "";
-      //   } else {
-      //     const teacherEmail =
-      //       templateData.teachers.find((teacher) => teacher.name === selectedTeacher)
-      //         ?.email || "Email not available";
-      //     document.getElementById("teacher-email").value = teacherEmail;
-      //   }
-      setShowResult(true)
-
-      setEmailBody(body)
+      setShowResult(true);
+      setEmailBody(body);
     } else {
       console.error("Email type not found.");
     }
@@ -125,28 +114,35 @@ export default function EmailGenerator() {
         {!showEmailForm ? (
           // Card Phase
           <div className="card-container">
-            {cards.map((card) =>
-              <EmailCard data={card} setShowEmailForm={setShowEmailForm} />
-            )}
+            {cards.map((card) => (
+              <EmailCard key={card.title} data={card} setShowEmailForm={setShowEmailForm} />
+            ))}
           </div>
         ) : (
           // Email Form Phase
-          <EmailForm teachers={templateData.teachers} formData={formData} setFormData={setFormData} onGenEmail={onGenEmail}></EmailForm>
+          <EmailForm
+            teachers={templateData.teachers}
+            formData={formData}
+            setFormData={setFormData}
+            onGenEmail={onGenEmail}
+          />
         )}
-        {showResult ? (<><div className="appResultContainer">
 
-          <button className="closeIcon"></button>
-          <textarea id="app-body" rows="10"
-            readonly>{emailBody}</textarea>
-          <div className="button-container">
-            <button className="btn btn-success" onClick={() => copyEmail(emailBody)}>Copy Application</button>
-            <button className="btn btn-info" onClick={() => downloadEmail(emailBody)}>Download Application</button>
+        {showResult && (
+          <div className="appResultContainer">
+            <button className="closeIcon"></button>
+            <textarea id="app-body" rows="10" readOnly>
+              {emailBody}
+            </textarea>
+            <div className="button-container">
+              <button className="btn btn-success" onClick={() => copyEmail(emailBody)}>Copy Application</button>
+              <button className="btn btn-info" onClick={() => downloadEmail(emailBody)}>Download Application</button>
+            </div>
           </div>
-        </div>
-          <div className="copy-confirmation" id="copy-confirmation">Copied to clipboard!</div>
+        )}
 
-        </>) : (<p></p>)}            </div>
+        <div className="copy-confirmation" id="copy-confirmation">Copied to clipboard!</div>
+      </div>
     </div>
   );
-};
-
+}
