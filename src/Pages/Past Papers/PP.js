@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./PP.css";
 import Navbar from '../Index/components/Navbar.js';
-import SliderComponent from "./Slider.js";
-import SearchForPapers from './SearchforPapers.js';
+import { useNavigate } from "react-router-dom";
+import "./PP.css";
 
 const PastPapers = () => {
     const [courses, setCourses] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState("");
-    const [selectedPaper, setSelectedPaper] = useState(null); // Track selected paper for viewing
-    const [rating, setRating] = useState({});
+    const [selectedCoursePapers, setSelectedCoursePapers] = useState({});
+    const navigate = useNavigate(); 
 
     useEffect(() => {
         const fetchCourses = async () => {
@@ -20,8 +20,6 @@ const PastPapers = () => {
                 }
                 const data = await response.json();
                 setCourses(data);
-
-
             } catch (err) {
                 setError("Unable to load courses at the moment.");
             } finally {
@@ -32,14 +30,31 @@ const PastPapers = () => {
         fetchCourses();
     }, []);
 
-    const handlePaperClick = async (filedata) => {
+    const fetchPastPapers = async (courseId) => {
         try {
+            const response = await fetch(`http://localhost:4000/api/courses/${courseId}/past-papers`);
+            if (!response.ok) {
+                throw new Error(`Failed to fetch past papers: ${response.status}`);
+            }
+            const data = await response.json();
+            setSelectedCoursePapers((prev) => ({ ...prev, [courseId]: data }));
+        } catch (err) {
+            setError("Unable to fetch past papers.");
+        }
+    };
 
-            console.log(filedata);
-            const fileBlob = await filedata.blob();
-            const fileURL = URL.createObjectURL(fileBlob); // Create an object URL to view the PDF
+    const handlePaperClick = async (paperId) => {
+        try {
+            const response = await fetch(`http://localhost:4000/api/courses/past-papers/${paperId}/download`);
+            if (!response.ok) {
+                throw new Error("Failed to download the paper.");
+            }
 
-            setSelectedPaper(fileURL); // Set the selected paper to be viewed
+            const fileBlob = await response.blob();
+            const fileURL = URL.createObjectURL(fileBlob);
+
+            // Navigate to a new route to display the PDF
+            navigate("/view", { state: { fileURL } });
         } catch (err) {
             setError("Failed to load the paper.");
         }
@@ -69,58 +84,32 @@ const PastPapers = () => {
                             <p>Grading: {course.grading}</p>
                             <p>Difficulty: {course.difficulty}</p>
                             <p>Rating: {course.rating ? course.rating.toFixed(2) : "No ratings yet"}</p>
-                            <div
-                                key={course.id}
-                                className="paper-item"
-                                onClick={() => handlePaperClick(course.file_data)} // Handle paper click
-                            >
-                                <h4>{course.paper_type}</h4>
-                                <p>{course.subject}</p>
-                                <p>{course.year}</p>
-                            </div>
-                            {/* List all past papers for the course */}
-                            {/* <div className="papers-list">
-                                {course.past_papers && course.past_papers.map((paper) => (
-                                    <div
-                                        key={paper.id}
-                                        className="paper-item"
-                                        onClick={() => handlePaperClick(paper.id)} // Handle paper click
-                                    >
-                                        <h4>{paper.paper_type}</h4>
-                                        <p>{paper.subject}</p>
-                                        <p>{paper.year}</p>
-                                    </div>
-                                ))}
-                            </div> */}
 
-                            <div className="rating">
-                                {[1, 2, 3, 4, 5].map((star) => (
-                                    <span
-                                        key={star}
-                                        className={`star ${rating[course.courseid] === star ? "selected" : ""}`}
-                                        onClick={() => {
-                                            setRating((prev) => ({ ...prev, [course.courseid]: star }));
-                                            // handleRateCourse(course.courseid, star);
-                                        }}
-                                    >
-                                        ★
-                                    </span>
-                                ))}
-                            </div>
+                            {/* Fetch Past Papers Button */}
+                            <button 
+                                className="fetch-papers-button" 
+                                onClick={() => fetchPastPapers(course.courseid)}
+                            >
+                                Fetch Past Papers
+                            </button>
+
+                            {/* Display Past Papers for the Course */}
+                            {selectedCoursePapers[course.courseid] && (
+                                <div className="papers-list">
+                                    {selectedCoursePapers[course.courseid].map((paper) => (
+                                        <div
+                                            key={paper.paper_id}
+                                            className="paper-item"
+                                            onClick={() => handlePaperClick(paper.paper_id)}
+                                        >
+                                            <h4>{paper.paper_type}</h4>
+                                            <p>Year: {paper.paper_year}</p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     ))}
-                </div>
-            )}
-
-            {/* Display selected paper PDF */}
-            {selectedPaper && (
-                <div className="pdf-viewer">
-                    <iframe
-                        src={selectedPaper}
-                        width="100%"
-                        height="600px"
-                        title="Past Paper"
-                    />
                 </div>
             )}
         </div>

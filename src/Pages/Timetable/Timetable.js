@@ -50,11 +50,13 @@ const Timetable = () => {
     const courseByName = {};
 
     data.forEach(({ courseCode, course, section }) => {
-      if (!coursesBySection[section]) coursesBySection[section] = [];
-      coursesBySection[section].push({ courseCode, course });
+      if (section && course) {
+        if (!coursesBySection[section]) coursesBySection[section] = [];
+        coursesBySection[section].push({ courseCode, course });
 
-      if (!courseByName[course]) courseByName[course] = { course, sections: [] };
-      courseByName[course].sections.push(section);
+        if (!courseByName[course]) courseByName[course] = { course, sections: [] };
+        courseByName[course].sections.push(section);
+      }
     });
 
     setSections(
@@ -130,51 +132,51 @@ const Timetable = () => {
 
   return (
     <div>
-       <Navbar />
-    <div className="app-container">
-      <h1 className="header">Timetable Course Selector</h1>
-      <div className="selectors">
-        <div style={{ flex: 1 }}>
-          <Select
-            options={Object.keys(courses).map((course) => ({ label: course, value: course }))}
-            onChange={(selected) => setCurrentCourse(selected?.value)}
-            placeholder="Add a Specific Course"
-            isSearchable
-            styles={customstyles}
-          />
-        </div>
-        {currentCourse && (
+      <Navbar />
+      <div className="app-container">
+        <h1 className="header">Timetable Course Selector</h1>
+        <div className="selectors">
           <div style={{ flex: 1 }}>
             <Select
-              options={courses[currentCourse]?.sections?.sort().map((section) => ({
-                label: section,
-                value: section,
-              }))}
-              onChange={(selected) => addCourse(currentCourse, selected?.value)}
-              placeholder={`Select a Section for ${currentCourse}`}
+              options={Object.keys(courses).map((course) => ({ label: course, value: course }))}
+              onChange={(selected) => setCurrentCourse(selected?.value)}
+              placeholder="Add a Specific Course"
               isSearchable
               styles={customstyles}
             />
           </div>
-        )}
-      </div>
-      <div style={{ flex: 1, marginTop: "15px" }}>
-        <Select
-          options={Object.keys(sections).map((section) => ({ label: section, value: section }))}
-          onChange={(selected) => addSection(selected?.value)}
-          placeholder="Add All Core Courses of a Section"
-          isSearchable
-          styles={customstyles}
+          {currentCourse && (
+            <div style={{ flex: 1 }}>
+              <Select
+                options={courses[currentCourse]?.sections?.sort().map((section) => ({
+                  label: section,
+                  value: section,
+                }))}
+                onChange={(selected) => addCourse(currentCourse, selected?.value)}
+                placeholder={`Select a Section for ${currentCourse}`}
+                isSearchable
+                styles={customstyles}
+              />
+            </div>
+          )}
+        </div>
+        <div style={{ flex: 1, marginTop: "15px" }}>
+          <Select
+            options={Object.keys(sections).map((section) => ({ label: section, value: section }))}
+            onChange={(selected) => addSection(selected?.value)}
+            placeholder="Add All Core Courses of a Section"
+            isSearchable
+            styles={customstyles}
+          />
+        </div>
+        <CourseList courses={selectedCourses} onRemove={removeCourse} onRemoveAll={clearAllCourses} />
+        <DynamicTimetable
+          selectedCourses={selectedCourses}
+          showInstructor={showInstructor}
+          showVenue={showVenue}
         />
       </div>
-      <CourseList courses={selectedCourses} onRemove={removeCourse} onRemoveAll={clearAllCourses}/>
-      <DynamicTimetable
-        selectedCourses={selectedCourses}
-        showInstructor={showInstructor}
-        showVenue={showVenue}
-      />
-    </div>
-    <BackToTopButton />
+      <BackToTopButton />
     </div>
   );
 };

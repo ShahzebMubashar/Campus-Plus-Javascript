@@ -1,6 +1,7 @@
 const express = require("express");
 const session = require("express-session");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
 
 const authRoutes = require("../routes/authRoutes");
 const courseRoutes = require("../routes/courseRoutes");
@@ -13,6 +14,7 @@ const PORT = process.env.PORT_BACKEND || 4000;
 // Middleware
 app.use(express.json());
 app.use(cors());
+app.use(cookieParser());
 app.use(
   session({
     secret: "CampusPlus", // Use a strong secret

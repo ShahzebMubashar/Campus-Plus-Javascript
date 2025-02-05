@@ -1,5 +1,5 @@
 const pool = require("../config/database.js");
-
+const fetch = require('node-fetch');
 // Controller to fetch all courses
 const getCourses = async (request, response) => {
   try {
@@ -15,49 +15,54 @@ const getCourses = async (request, response) => {
   }
 };
 
-
-
 // Controller to rate a course
-
 const rateCourse = async (request, response) => {
-  const { courseid, rating } = request.body;
+  const {
+    body: { courseid, rating },
+    session: {
+      user: { userid },
+    },
+  } = request;
 
-  if (!courseid || !rating) {
-    return response
-      .status(400)
-      .send("Missing required fields: courseid or rating");
-  }
+  if (!courseid || !rating) return response.status(400).send("Invalid Input");
 
   try {
     const client = await pool.connect();
-    await client.query("BEGIN");
 
-    // Update or insert into CourseRating
-    let courseRating = await client.query(
-      "SELECT * FROM CourseRating WHERE courseid = $1",
-      [courseid]
+    let res = await client.query(
+      `Select * from UserCourseRating where userid = $1 and courseid = $2`,
+      [userid, courseid]
     );
 
-    if (!courseRating.rowCount) {
-      // Insert a new rating if none exist
-      await client.query(
-        "INSERT INTO CourseRating (courseid, ratingsum, ratedcount) VALUES ($1, $2, $3)",
+    if (res.rowCount)
+      return response.status(400).send("You have already rated this course");
+
+    res = await client.query(`Select * from CourseRating where courseid = $1`, [
+      courseid,
+    ]);
+
+    await client.query("BEGIN");
+
+    if (!res.rowCount) {
+      res = await client.query(
+        `Insert into CourseRating (courseid, ratingsum, ratedcount) values ($1, $2, $3)`,
         [courseid, rating, 1]
       );
     } else {
-      // Update the existing rating
-      const { ratingsum, ratedcount } = courseRating.rows[0];
-      const newRatingSum = ratingsum + rating;
-      await client.query(
-        "UPDATE CourseRating SET ratingsum = $1, ratedcount = $2 WHERE courseid = $3",
-        [newRatingSum, ratedcount + 1, courseid]
+      res = await client.query(
+        `Update CourseRating set ratingsum = ratingsum + $1, ratedcount = ratedcount + 1 where courseid = $2`,
+        [rating, courseid]
       );
     }
 
-    await client.query("COMMIT");
-    client.release();
+    res = await client.query(
+      `Insert into UserCourseRating (userid, courseid) values ($1, $2)`,
+      [userid, courseid]
+    );
 
-    return response.status(200).send("Rating added successfully");
+    await client.query("COMMIT");
+
+    return response.status(200).send("Course Rating Added Successfully");
   } catch (error) {
     console.error("Error in rateCourse:", error);
     return response.status(500).send("Internal Server Error");
@@ -137,10 +142,50 @@ const addCourse = async (request, response) => {
   }
 };
 
+const getPastPapers = async (req, res) => {
+  const { courseId } = req.params;
+  try {
+      const result = await pool.query(
+          'SELECT paper_id, paper_type, paper_year, file_link FROM past_papers WHERE courseid = $1',
+          [courseId]
+      );
+      res.json(result.rows);
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+  }
+};
+
+const downloadPastPapers = async (req, res) => {
+  const { paperId } = req.params;
+  try {
+      // Query the database for the file_link using paperId
+      const result = await pool.query('SELECT file_link FROM past_papers WHERE paper_id = $1', [paperId]);
+      if (result.rows.length === 0) {
+          return res.status(404).send('Paper not found');
+      }
+      const fileLink = result.rows[0].file_link;
+
+      // Fetch the file from the external link (e.g., Google Drive)
+      const response = await fetch(fileLink);
+      if (!response.ok) {
+          return res.status(500).send('Failed to fetch file');
+      }
+      // Stream the file to the client
+      res.setHeader('Content-Type', 'application/pdf'); // Adjust the type if needed
+      response.body.pipe(res);
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server error');
+  }
+};
+
 // Exporting the functions
 module.exports = {
   getCourses,
   rateCourse,
   reviewCourse,
   addCourse,
+  getPastPapers,
+  downloadPastPapers,
 };

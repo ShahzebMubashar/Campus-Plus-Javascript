@@ -1,6 +1,7 @@
 const pool = require("../config/database.js");
 const bcrypt = require("bcrypt");
 const { randomBytes } = require("crypto");
+const jwt = require("jsonwebtoken");
 
 exports.register = async (request, response) => {
   // console.log("Register endpoint hit"); // Log to confirm the route is called
@@ -106,9 +107,10 @@ exports.login = async (request, response) => {
   if (!password) return response.status(400).send("Please provide Password");
 
   try {
-    const result = await pool.query("SELECT * FROM Users WHERE email = $1", [
-      email,
-    ]);
+    const result = await pool.query(
+      "SELECT * FROM Users WHERE email = $1 or username = $1",
+      [email || username]
+    );
 
     if (!result.rowCount)
       return response.status(404).json({ error: "Invalid credentials" });
@@ -130,10 +132,16 @@ exports.login = async (request, response) => {
       role: user.role,
     };
 
-    // console.log("Session set for user:", request.session.user);
+    try {
+      await request.session.save();
+      console.log("Session saved successfully:", request.session);
+      return response.status(200).json({ message: "Login successful" });
+    } catch (err) {
+      console.error("Error saving session:", err);
+      return response.status(500).json({ error: "Could not save session" });
+    }
 
-    // Respond with success
-    return response.status(200).json({ message: "Login successful" });
+    console.log("Session set for user:", request.session.user);
   } catch (error) {
     console.error("Login error:", error);
     return response.status(500).json({ error: "Server error" });
@@ -223,5 +231,38 @@ exports.logout = async (request, response) => {
   } catch (error) {
     console.error("Unexpected error during logout:", error);
     return response.status(500).send("Unexpected Server Error");
+  }
+};
+
+exports.testLogin = async (request, response) => {
+  const {
+    body: { username, password, email },
+  } = request;
+
+  if (!username && !email)
+    return response.status(400).send("Please provide Username or Email");
+
+  if (!password) return response.status(400).send("Please provide Password");
+
+  try {
+    let res = await pool.query(
+      `Select * from Users where username = $1 or email = $1`,
+      [username || email]
+    );
+
+    if (!res.rowCount) return response.status(404).send("Invalid Credentials");
+
+    const user = res.rows[0];
+
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) return response.status(401).send("Invalid Credentials");
+
+    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+
+    return response.status(200).send(`Login Successful! ${accessToken}`);
+  } catch (error) {
+    console.error("Login error:", error);
+    return response.status(500).json({ error: "Server error" });
   }
 };
