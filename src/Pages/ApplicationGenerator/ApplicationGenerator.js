@@ -1,24 +1,127 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./ApplicationGenerator.css";
-import cardImage1 from "./7119120_3343837.svg";
-import cardImage2 from "./7119122_3469564.svg";
-import cardImage3 from "./10839364_4528064.svg";
-import cardImage4 from "./12892955_5098267.svg";
-import cardImage5 from "./6183568_3053908.svg";
+import cardImage1 from "./images/7119120_3343837.webp";
+import cardImage2 from "./images/7119122_3469564.webp";
+import cardImage3 from "./images/10839364_4528064.webp";
+import cardImage4 from "./images/12892955_5098267.webp";
+import cardImage5 from "./images/6183568_3053908.webp";
 import Navbar from "../Index/components/Navbar.js"
+import Card from "./Components/Card.js";
+import Form from "./Components/Form.js"
+import templateData from './template.json';
+import { copyApplication, downloadApplication } from "./copy&download.js";
 
-const ApplicationGenerator = () => {
+export default function ApplicationGenerator() {
     const [showForm, setShowForm] = useState(false);
     const [formTitle, setFormTitle] = useState("");
+    const [showResult, setShowResult] = useState(false);
+    const [templates, setTemplates] = useState("")
+    const [formData, setFormData] = useState({
+        name: "",
+        classSection: "",
+        rollNumber: "",
+        phoneNumber: "",
+        salutation: "",
+        recipientName: "",
+        campusName: "",
+        applicationType: "",
+    });
+    const [appBody, setAppBody] = useState("")
+    const Cards = [
+        {
+            title: "Academic Requests",
+            info: "Submit applications related to academic matters, such as leave requests or exam retakes."
+            , image: cardImage1
+        },
+        {
+            title: "Organizational and Event Requests",
+            info: "Apply for permissions to organize events or change classroom settings.",
+            image: cardImage2
+        },
+        {
+            title: "Facility and Resource Requests",
+            info: "Request additional facilities or resources for your campus.",
+            image: cardImage3
+        },
+        {
+            title: "Job and Role Application",
+            info: "Submit your applications for job roles such as Lab Teaching Assistant or similar positions.",
+            image: cardImage4
+        },
+        {
+            title: "Appeals and Ethical Concerns",
+            info: "File appeals for disciplinary actions or raise concerns about ethical matters within the institution.",
+            image: cardImage5
+        }
+
+    ]
+    useEffect(() => {
+        try {
+            const fetchTemplates = async () => {
+                const template = await loadAppTemplates();
+                setTemplates(() => template);
+                console.log("tempaltes ", templates)
+            };
+
+            fetchTemplates(); // Call the async function
+        }
+        catch (e) {
+            console.log(e)
+        }
+        return undefined; // Explicitly return nothing for cleanup
+    }, []);
+
+    async function loadAppTemplates() {
+        console.log('here')
+        const response = await fetch("./template.json?cache_bust=" + new Date().getTime());
+        const data = await response.json();
+        console.log("templates ", data)
+        return data;
+
+    }
+    function formatDate() {
+        const options = { year: "numeric", month: "long", day: "numeric" };
+        const today = new Date();
+        return today.toLocaleDateString("en-US", options);
+    }
+    async function handleAppGen() {
+        setShowResult(() => true)
+        const { name, applicationType, recipientName, todayDate, classSection, rollNumber, phoneNumber, campusName, salutation } = formData
+        console.log(applicationType)
+        console.log("templates in handleAppGen ", templates)
+        //const temp=await loadAppTemplates(); 
+        console.log("here2", templates)
+
+
+
+        const template = templateData.templates[applicationType];
+        if (template) {
+            const greeting = templateData.greeting;
+            const subject = template.subject;
+            // Split the name by spaces
+            const nameParts = recipientName.split(" ");
+            // Get the last name
+            const lastName = nameParts[nameParts.length - 1];
+            let body = template.body;
+            body = body.replace("{todayDate}", todayDate);
+            body = body.replace("{subject}", subject);
+            body = body.replace("{userName}", name);
+            body = body.replace("{classSection}", classSection);
+            body = body.replace("{rollNumber}", rollNumber);
+            body = body.replace("{phoneNumber}", phoneNumber);
+            body = `${formatDate()}\n\n${recipientName}\n\n[Add Department]\n\nFAST-NUCES,\n\n${campusName}.\n\nSubject: ${subject}\n\n${greeting} ${salutation}${lastName},\n\n${body}\n\nYours sincerely,\n${name}\nSection: ${classSection}      Roll No: ${rollNumber}\nPhone No: ${phoneNumber}`;
+            setAppBody(() => body)
+        }
+    }
 
     const handleCardClick = (title) => {
         setFormTitle(title);
         setShowForm(true);
     };
 
-    const handleCloseForm = () => {
-        setShowForm(false);
-    };
+    function handleCloseForm() {
+        setShowForm(false)
+    }
 
     return (
         <div className="application-generator">
@@ -30,86 +133,33 @@ const ApplicationGenerator = () => {
             {!showForm ? (
                 <div className="container">
                     <div className="card-container">
-                        <div className="card" onClick={() => handleCardClick("Academic Requests")}>
-                            <img src={cardImage1} alt="Academic Requests" />
-                            <div className="card-footer">
-                                <h4>Academic Requests</h4>
-                                <p>Submit applications related to academic matters, such as leave requests or exam retakes.</p>
-                            </div>
-                        </div>
-                        <div className="card" onClick={() => handleCardClick("Organizational and Event Requests")}>
-                            <img src={cardImage2} alt="Organizational Requests" />
-                            <div className="card-footer">
-                                <h4>Organizational and Event Requests</h4>
-                                <p>Apply for permissions to organize events or change classroom settings.</p>
-                            </div>
-                        </div>
-                        <div className="card" onClick={() => handleCardClick("Facility and Resource Requests")}>
-                            <img src={cardImage3} alt="Resource Requests" />
-                            <div className="card-footer">
-                                <h4>Facility and Resource Requests</h4>
-                                <p>Request additional facilities or resources for your campus.</p>
-                            </div>
-                        </div>
+
+                        {Cards.map((card) => (
+                            <Card data={card} handleCardClick={handleCardClick}></Card>
+                        ))}
+
                         {/* Add more cards as needed */}
                     </div>
                 </div>
             ) : (
-                <div className="application-form">
-                    <button className="close-icon" onClick={handleCloseForm}>
-                        ×
-                    </button>
-                    <h5>{formTitle}</h5>
-                    <div className="form-group">
-                        <label>Name</label>
-                        <input type="text" placeholder="Enter your name" />
-                    </div>
-                    <div className="form-group">
-                        <label>Class Section</label>
-                        <input type="text" placeholder="Enter your class section" />
-                    </div>
-                    <div className="form-group">
-                        <label>Roll Number</label>
-                        <input type="text" placeholder="Enter your roll number" />
-                    </div>
-                    <div className="form-group">
-                        <label>Phone Number</label>
-                        <input type="text" placeholder="Enter your phone number" />
-                    </div>
-                    <div className="form-group">
-                        <label>Recipient</label>
-                        <div className="recipient-input">
-                            <select>
-                                <option>Salutation</option>
-                                <option>Mr.</option>
-                                <option>Ms.</option>
-                                <option>Dr.</option>
-                            </select>
-                            <input type="text" placeholder="Enter the recipient full name" />
-                        </div>
-                    </div>
-                    <div className="form-group">
-                        <label>Select Campus</label>
-                        <select>
-                            <option>Campus</option>
-                            <option>Main Campus</option>
-                            <option>City Campus</option>
-                        </select>
-                    </div>
-                    <div className="form-group">
-                        <label>Application Type</label>
-                        <select>
-                            <option>Select</option>
-                            <option>Leave Application</option>
-                            <option>Event Request</option>
-                            <option>Resource Request</option>
-                        </select>
-                    </div>
-                    <button className="btn">Generate Application</button>
-                </div>
+                <Form formTitle={formTitle} formData={formData} setFormData={setFormData} setShowForm={setShowForm} handleAppGen={handleAppGen}></Form>
             )}
+            {showResult ? (<><div className="appResultContainer">
+
+                <button className="closeIcon"></button>
+                <textarea id="app-body" rows="10"
+                    readonly>{appBody}</textarea>
+                <div className="button-container">
+                    <button className="btn btn-success" onClick={() => copyApplication(appBody)}>Copy Application</button>
+                    <button className="btn btn-info" onClick={() => downloadApplication(appBody)}>Download Application</button>
+                </div>
+            </div>
+                <div className="copy-confirmation" id="copy-confirmation">Copied to clipboard!</div>
+
+            </>) : (<p></p>)}
+
         </div>
+
     );
 };
 
-export default ApplicationGenerator;
