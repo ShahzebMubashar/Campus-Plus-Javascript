@@ -1,0 +1,46 @@
+.room-list {
+    display: grid;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.room-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.room-info {
+    flex: 1;
+}
+
+.room-title {
+    margin: 0 0 8px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.room-description {
+    color: #666;
+    font-size: 14px;
+    margin: 0;
+}
+
+.join-button {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.join-button:hover {
+    background-color: #2980b9;
+}
