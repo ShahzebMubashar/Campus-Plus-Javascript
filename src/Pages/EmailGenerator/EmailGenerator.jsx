@@ -60,6 +60,7 @@ export default function EmailGenerator() {
       setTeachers(templateData.teachers);
     };
 
+
     loadTemplates();
   }, []);
 
@@ -146,3 +147,4 @@ export default function EmailGenerator() {
     </div>
   );
 }
+

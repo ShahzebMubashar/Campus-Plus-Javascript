@@ -16,6 +16,7 @@ export default function ApplicationGenerator() {
     const [formTitle, setFormTitle] = useState("");
     const [showResult, setShowResult] = useState(false);
     const [templates, setTemplates] = useState("")
+
     const [formData, setFormData] = useState({
         name: "",
         classSection: "",
@@ -25,6 +26,84 @@ export default function ApplicationGenerator() {
         recipientName: "",
         campusName: "",
         applicationType: "",
+      });
+const [appBody,setAppBody]=useState("")
+const Cards=[
+{title:"Academic Requests", 
+    info:"Submit applications related to academic matters, such as leave requests or exam retakes."
+    ,image:cardImage1},
+{title:"Organizational and Event Requests",
+    info:"Apply for permissions to organize events or change classroom settings.",
+    image:cardImage2},
+{title:"Facility and Resource Requests",
+    info:"Request additional facilities or resources for your campus.",
+    image:cardImage3},
+{title:"Job and Role Application",
+    info:"Submit your applications for job roles such as Lab Teaching Assistant or similar positions.",
+    image:cardImage4},
+{title:"Appeals and Ethical Concerns",
+    info:"File appeals for disciplinary actions or raise concerns about ethical matters within the institution.",
+    image:cardImage5}
+
+]
+useEffect(() => {try{
+    const fetchTemplates = async () => {
+      const template = await loadAppTemplates();
+      setTemplates(()=>template);
+      console.log("tempaltes ",templates)
+    };
+
+    fetchTemplates(); // Call the async function
+}
+catch(e){
+    console.log(e)
+}  
+    return undefined; // Explicitly return nothing for cleanup
+  }, []);
+  
+async function loadAppTemplates() {
+    console.log('here')
+    const response = await fetch("./template.json?cache_bust=" + new Date().getTime());
+    const data = await response.json();
+    console.log("templates ",data)
+    return data;
+
+  }
+  function formatDate() {
+    const options = { year: "numeric", month: "long", day: "numeric" };
+    const today = new Date();
+    return today.toLocaleDateString("en-US", options);
+  }
+ async function handleAppGen(){
+ setShowResult(()=>true)
+ const{name,applicationType,recipientName,todayDate,classSection,rollNumber,phoneNumber,campusName,salutation}=formData
+console.log(applicationType)
+console.log("templates in handleAppGen ",templates)
+//const temp=await loadAppTemplates(); 
+console.log("here2", templates)
+
+
+
+ const template = templateData.templates[applicationType];
+ if (template) {
+   const greeting = templateData.greeting;
+   const subject = template.subject;
+   // Split the name by spaces
+   const nameParts = recipientName.split(" ");
+   // Get the last name
+   const lastName = nameParts[nameParts.length - 1];
+   let body = template.body;
+   body = body.replace("{todayDate}", todayDate);
+   body = body.replace("{subject}", subject);
+   body = body.replace("{userName}", name);
+   body = body.replace("{classSection}", classSection);
+   body = body.replace("{rollNumber}", rollNumber);
+   body = body.replace("{phoneNumber}", phoneNumber);
+   body = `${formatDate()}\n\n${recipientName}\n\n[Add Department]\n\nFAST-NUCES,\n\n${campusName}.\n\nSubject: ${subject}\n\n${greeting} ${salutation}${lastName},\n\n${body}\n\nYours sincerely,\n${name}\nSection: ${classSection}      Roll No: ${rollNumber}\nPhone No: ${phoneNumber}`;
+setAppBody(()=>body)
+    }
+ }
+
     });
     const [appBody, setAppBody] = useState("")
     const Cards = [
@@ -119,13 +198,16 @@ export default function ApplicationGenerator() {
         setShowForm(true);
     };
 
+    function handleCloseForm(){
+        setShowForm(false)
+    }
+ 
     function handleCloseForm() {
         setShowForm(false)
     }
-
     return (
         <div className="application-generator">
-            <Navbar />
+            <Navbar/>
             <header>
                 <h1>Application Generator</h1>
                 <p>Generate applications for academic, organizational, and other purposes!</p>
@@ -133,30 +215,33 @@ export default function ApplicationGenerator() {
             {!showForm ? (
                 <div className="container">
                     <div className="card-container">
-
-                        {Cards.map((card) => (
-                            <Card data={card} handleCardClick={handleCardClick}></Card>
-                        ))}
+                      
+                            {Cards.map((card)=>(
+                        <Card data={card} handleCardClick={handleCardClick}></Card>
+                       ))}
+         
 
                         {/* Add more cards as needed */}
                     </div>
                 </div>
             ) : (
-                <Form formTitle={formTitle} formData={formData} setFormData={setFormData} setShowForm={setShowForm} handleAppGen={handleAppGen}></Form>
+
+               <Form formTitle={formTitle} formData={formData} setFormData={setFormData} setShowForm={setShowForm} handleAppGen={handleAppGen}></Form>
             )}
-            {showResult ? (<><div className="appResultContainer">
+             {showResult?(<><div className="appResultContainer">
 
                 <button className="closeIcon"></button>
-                <textarea id="app-body" rows="10"
-                    readonly>{appBody}</textarea>
-                <div className="button-container">
-                    <button className="btn btn-success" onClick={() => copyApplication(appBody)}>Copy Application</button>
-                    <button className="btn btn-info" onClick={() => downloadApplication(appBody)}>Download Application</button>
-                </div>
+        <textarea id="app-body" rows="10"
+                readonly>{appBody}</textarea>
+            <div className="button-container">
+            <button className="btn btn-success" onClick={()=>copyApplication(appBody)}>Copy Application</button>
+            <button className="btn btn-info" onClick={()=>downloadApplication(appBody)}>Download Application</button>
             </div>
-                <div className="copy-confirmation" id="copy-confirmation">Copied to clipboard!</div>
-
-            </>) : (<p></p>)}
+             </div>
+             <div className="copy-confirmation" id="copy-confirmation">Copied to clipboard!</div>
+             
+             </>):(<p></p>)}
+      
 
         </div>
 
