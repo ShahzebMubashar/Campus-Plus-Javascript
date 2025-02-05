@@ -18,10 +18,10 @@ function Navbar() {
     const handleLogout = async () => {
         try {
             const response = await fetch("http://localhost:4000/logout", {
-                method: "POST", 
+                method: "POST",
                 credentials: "include", // Include cookies in the request
             });
-    
+
             if (response.ok) {
                 localStorage.removeItem("user");
                 console.log(response.text());
@@ -34,7 +34,7 @@ function Navbar() {
             console.error("An error occurred during logout:", error);
         }
     };
-    
+
 
     return (
         <>
@@ -122,7 +122,7 @@ function Navbar() {
                             </div>
                         </li>
 
-                        <li><Link to="https://chatgpt.com/">ChatGPT</Link></li>
+                        <li><Link to="/chatroom">Chatrooms</Link></li>
                         <li className="navbar-dropdown">
                             <span className="navbar-dropdown-toggle">
                                 Student Support <AiOutlineDown className="navbar-dropdown-arrow" />

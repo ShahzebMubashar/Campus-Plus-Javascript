@@ -1,0 +1,105 @@
+:root {
+    --primary-color: #3b82f6;
+    --background-color: #f3f4f6;
+    --text-color: #1f2937;
+    --sidebar-bg: #ffffff;
+    --header-bg: #ffffff;
+}
+
+.chatroom-main-top {
+    font-family: "Arial", sans-serif;
+    margin: 0;
+    margin-top: -8%;
+    padding: 0;
+    background-color: var(--background-color);
+    color: var(--text-color);
+}
+
+.chatroom-app {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.content-wrapper {
+    display: flex;
+    flex: 1;
+    margin-top: 80px;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+    background-color: var(--background-color);
+    overflow-y: auto;
+}
+
+.chatroom-header {
+    padding: 20px;
+    background-color: var(--header-bg) !important;
+    border-bottom: 1px solid #e5e7eb;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.chatroom-header h1 {
+    margin: 0;
+    font-size: 24px;
+    color: var(--text-color);
+}
+
+/* Update Sidebar styles */
+.sidebar {
+    width: 250px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid #e5e7eb;
+    padding: 20px;
+}
+
+/* Update RoomList styles */
+.room-list {
+    display: grid;
+    gap: 20px;
+    padding: 20px 0;
+}
+
+.room-card {
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s ease;
+}
+
+.room-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.join-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s;
+}
+
+.join-button:hover {
+    background-color: #2563eb;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .content-wrapper {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #e5e7eb;
+    }
+}
