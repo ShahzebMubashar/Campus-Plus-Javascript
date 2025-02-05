@@ -4,7 +4,11 @@
     color: #333;
     margin: 0;
     padding: 0;
-}
+    /* display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+*/} 
 
 header {
     text-align: center;
@@ -29,23 +33,57 @@ header p {
 
 .container {
     display: flex;
-    flex-direction: column;
     align-items: center;
     margin: 20px auto;
     width: 90%;
-    max-width: 1200px;
+    /* max-width: 100%; */
+    justify-content: center;
+    padding:20px;
 }
 
-.card-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 20px;
+ /* .card-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); */
+    /* gap: 20px;
     width: 100%;
-    margin: 30px 0;
+    margin: 20px auto;
+padding:40px;
+flex-wrap:flex;
+} 
+.card1{
+    background-color: white;
+    height:50%;
+
+    width:100%;
+}
+.card {
+    background-color: white;
+    width:100% !important;
+    
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+    
+}  */
+.card-container {
+    display: flex;
+    flex-wrap: wrap; /* Allows cards to wrap to the next row */
+    justify-content: center; /* Ensures spacing between cards */
+    
+    gap: 20px; /* Adds space between rows or columns */
+    width: 100%; /* Ensures the container spans the full width */
+align-items: center;
+
 }
 
 .card {
     background-color: white;
+    /* width: 54%; Each card takes up 48% of the container width, leaving room for gaps */
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     overflow: hidden;
@@ -189,3 +227,221 @@ textarea {
         width: 100%;
     }
 }
+#app-result-container {
+    display: none;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+    margin: 20px auto;
+    width: 80%;
+    position: relative;
+    color: #333;
+    /* Dark text color */
+  }
+  
+  .closeIcon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+  }
+  
+  .closeIcon::before,
+  .closeIcon::after {
+    content: "";
+    position: absolute;
+    width: 2px;
+    height: 100%;
+    background-color: #333;
+    /* Dark color for close icon */
+    top: 0;
+    left: 50%;
+  }
+  
+  .closeIcon::before {
+    transform: rotate(45deg);
+  }
+  
+  .closeIcon::after {
+    transform: rotate(-45deg);
+  }
+  
+  .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    /* Primary blue color */
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+    /* Darker blue on hover */
+  }
+  
+  .btn-success {
+    background-color: #28a745;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
+  }
+  
+  .btn-success:hover {
+    background-color: #218838;
+    /* Darker green on hover */
+  }
+  
+  .btn-info {
+    background-color: #17a2b8; /* Teal color for informational actions */
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+    display: block;
+    margin: 20px auto;
+  }
+  
+  .btn-info:hover {
+    background-color: #117a8b; /* Darker teal on hover */
+  }
+  
+  .button-container {
+    display: flex;
+    justify-content: center; /* Center the buttons horizontally */
+    gap: 20px; /* Optional: Adds space between the buttons */
+    margin-top: 20px; /* Optional: Add margin to the top if needed */
+  }
+  
+  .button-container .btn {
+    padding: 10px 15px; /* Adjust padding for reduced width */
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #fff;
+    min-width: 100px; /* Optional: Set a minimum width */
+    text-align: center; /* Ensure text is centered */
+  }
+  .btn-primary,
+  .btn-success,
+  .btn-info {
+    width: auto; /* Let buttons adjust their width based on content */
+    padding: 8px 16px; /* Adjust padding for reduced button width */
+  }
+  
+  .button-container .btn + .btn {
+    margin-left: 10px; /* Optional: Add space between the buttons */
+  }
+  .appResultContainer {
+    background-color: #f9f9f9;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+    width: 50%;
+    text-align: center;
+    margin:auto;
+  }
+  
+  #app-result-container h5 {
+    color: #333;
+    /* Dark text color */
+    font-size: 22px;
+    margin-bottom: 15px;
+    font-weight: 600;
+  }
+  
+  #app-subject-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  
+  #app-subject {
+    width: calc(100% - 40px);
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-right: 10px;
+    color: #333;
+    /* Dark text color */
+  }
+  
+  #copy-subject-btn {
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+    font-size: 20px;
+    color: #0056b3;
+    /* Accent color */
+  }
+  
+  #copy-subject-btn:hover {
+    color: #003f8f;
+    /* Darker accent color */
+  }
+  
+  #app-body {
+    width: 100%;
+    min-height: 150px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    resize: none;
+    background-color: #fff;
+    color: #333;
+    /* Dark text color */
+    box-shadow: inset 0 4px 8px rgba(0, 0, 0, 0.05);
+    overflow-y: auto;
+    margin-top: 15px;
+    padding:40px;
+    height:200px;
+  }
+  
+  #app-body:focus {
+    border-color: #007bff;
+    /* Primary blue color */
+  }
+  
+  .copy-confirmation {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #28a745;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    z-index: 1000;
+  }
+  
+  .copy-confirmation.show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .error-message {
+    color: #ff4c4c;
+    /* Red color for errors */
+    font-size: 14px;
+    margin-top: 10px;
+    display: none;
+  }
+  
