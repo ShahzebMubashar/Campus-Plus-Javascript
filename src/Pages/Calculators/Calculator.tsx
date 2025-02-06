@@ -93,9 +93,9 @@ const Calculator = () => {
     }
 
     return (
-        <div className="app-container">
+        <div className="calculator-app-container">
             {!active ? (
-                <div className="landing-page">
+                <div className="calculator-landing-page">
                     <div className="calculator-header">
                         <h1>Academic Calculators</h1>
                         <p>Grades ka Stess ? aao dekhain kitnai paani mai ho aap</p>
