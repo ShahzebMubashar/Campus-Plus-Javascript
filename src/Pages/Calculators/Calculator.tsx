@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import "./Calculator.css"
 import pic1 from "../../Assets/images/3580920.webp"
 import pic2 from "../../Assets/images/8899729.webp"
+import Navbar from "../Index/components/Navbar";
+import Footer from "../Footer/Footer";
 
 interface Course {
     courseName: string;
@@ -94,6 +96,7 @@ const Calculator = () => {
 
     return (
         <div className="calculator-app-container">
+            <Navbar />
             {!active ? (
                 <div className="calculator-landing-page">
                     <div className="calculator-header">
@@ -389,7 +392,9 @@ const Calculator = () => {
                         )}
                     </div>
                 </div>
+
             )}
+            <Footer />
         </div>
     )
 }
