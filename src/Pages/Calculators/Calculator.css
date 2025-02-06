@@ -1,78 +1,305 @@
-.calculator-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    width: 80%;
-    margin: 20px auto;
-    border-radius: 10px;
-}
-
-.calculator-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.toggle-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.toggle-btn {
+.app-container {
+    min-height: 100vh;
     background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
 }
 
-.toggle-btn.active {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.course-input-group,
-.semester-input-group {
-    margin-bottom: 10px;
-}
-
-input,
-select {
-    padding: 8px;
-    margin: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
+.calculator-header {
+    background-color: #0d6efd;
     color: white;
-    border: none;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 8rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.calculator-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.calculator-header p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+.landing-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.calculator-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.calculator-card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
     cursor: pointer;
-    margin-top: 20px;
-    border-radius: 5px;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-button:hover {
-    background-color: #0056b3;
+.calculator-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-#sgpaResult,
-#cgpaResult,
-#aggregateResult {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
+.calculator-card-image {
+    width: 100%;
+    height: 250px;
+    background: white;
+    padding: 1.5rem;
+}
+
+.calculator-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.calculator-card-content {
+    background: #f8f9fa;
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.calculator-card-content h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #212529;
+    margin-bottom: 0.5rem;
+}
+
+.calculator-card-content p {
+    color: #6c757d;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.calculator-page {
+    padding: 2rem;
+}
+
+.calculator-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .close-btn {
     position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 24px;
+    top: 1rem;
+    right: 1rem;
     background: none;
     border: none;
+    font-size: 1.5rem;
     cursor: pointer;
+    color: #666;
+}
+
+.calculator-container h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #0d6efd;
+}
+
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.toggle-btn {
+    padding: 0.5rem 2rem;
+    border: 1px solid #0d6efd;
+    background: white;
+    color: #0d6efd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.toggle-btn.active {
+    background: #0d6efd;
+    color: white;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group label {
+    display: block;
+    color: #0d6efd;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.generate-group {
+    display: flex;
+    gap: 1rem;
+}
+
+.generate-group input {
+    flex: 1;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.generate-btn {
+    padding: 0.5rem 2rem;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.course-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.course-input label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #0d6efd;
+    font-size: 0.875rem;
+}
+
+.course-input input,
+.course-input select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.calculate-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+}
+
+.result {
+    text-align: center;
+    font-size: 1.25rem;
+    font-weight: bold;
+    margin-top: 1.5rem;
+}
+
+.cgpa-form {
+    margin-top: 2rem;
+}
+
+.semester-row {
+    margin-bottom: 1.5rem;
+}
+
+.semester-label {
+    color: #0d6efd;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.semester-inputs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.semester-input label {
+    display: block;
+    color: #0d6efd;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+}
+
+.semester-input input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+/* Add these styles for the aggregate calculator */
+
+.aggregate-form {
+    padding: 1rem;
+}
+
+.aggregate-form h2 {
+    color: #0d6efd;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.test-type-select {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin: 0 auto;
+    display: block;
+    background-color: #0d6efd;
+    color: white;
+    cursor: pointer;
+}
+
+.marks-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.marks-input label {
+    display: block;
+    color: #0d6efd;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.marks-input input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.marks-input input::placeholder {
     color: #999;
 }
