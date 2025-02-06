@@ -1,78 +1,342 @@
-.calculator-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-    width: 80%;
-    margin: 20px auto;
-    border-radius: 10px;
-}
+/* .calculator-landing-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+} */
 
-.calculator-title {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-
-.toggle-buttons {
-    display: flex;
-    justify-content: space-around;
-    margin-bottom: 20px;
-}
-
-.toggle-btn {
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.toggle-btn.active {
-    background-color: #007bff;
-    color: #fff;
-}
-
-.course-input-group,
-.semester-input-group {
-    margin-bottom: 10px;
-}
-
-input,
-select {
-    padding: 8px;
-    margin: 5px 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-button {
-    padding: 10px 20px;
-    background-color: #007bff;
+.calculator-header {
+    background-color: #0d6efd;
+    width: 90%;
+    margin: 0 auto;
     color: white;
-    border: none;
+    text-align: center;
+    padding: 2rem;
+    border-radius: 12px;
+    margin-bottom: 8rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.calculator-header h1 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.calculator-header p {
+    font-size: 1.25rem;
+    opacity: 0.9;
+}
+
+
+
+.calculator-cards-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-bottom: 5%;
+}
+
+.calculator-card {
+    position: relative;
+    width: 400px;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+        box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
     cursor: pointer;
-    margin-top: 20px;
-    border-radius: 5px;
 }
 
-button:hover {
-    background-color: #0056b3;
+.calculator-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
-#sgpaResult,
-#cgpaResult,
-#aggregateResult {
-    margin-top: 20px;
-    font-size: 18px;
-    font-weight: bold;
+.calculator-card-image {
+    width: 100%;
+    overflow: hidden;
+    height: 300px;
+}
+
+.calculator-card-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+.calculator-card:hover .calculator-card-image img {
+    transform: scale(1.03);
+}
+
+.calculator-card-content {
+    padding: 20px;
+    background-color: #e0e0e0;
+}
+
+.calculator-card-content h2 {
+    margin: 0;
+    font-size: 1.4em;
+    font-weight: 500;
+    text-align: center;
+}
+
+.calculator-card-content p {
+    margin: 10px 0 0;
+    color: #666;
+    text-align: center;
+}
+
+/* .calculator-page {
+    padding: 0rem;
+} */
+
+.calculator-container {
+    max-width: 95%;
+    margin: 0 auto;
+    margin-bottom: 5%;
+    background: white;
+    border-radius: 8px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close-btn {
     position: absolute;
-    top: 10px;
-    right: 20px;
-    font-size: 24px;
+    top: 1rem;
+    right: 1rem;
     background: none;
     border: none;
+    font-size: 1.5rem;
     cursor: pointer;
+    color: #666;
+}
+
+.calculator-container h2 {
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+    color: #0d6efd;
+}
+
+.toggle-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.toggle-btn {
+    padding: 0.4rem 1.8rem;
+    border: 1px solid #0d6efd;
+    background: white;
+    color: #0d6efd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 2%;
+}
+
+.toggle-btn.active {
+    background: #0d6efd;
+    color: white;
+}
+
+
+.input-group {
+    margin-bottom: 1.5rem;
+    margin-left: 30%;
+    display: block;
+    /* Ensure .input-group is block-level so it stacks elements vertically */
+}
+
+.input-group label {
+    display: block;
+    color: #0d6efd;
+    font-size: 1rem;
+    margin: 3% 0 0 15%;
+    font-weight: 500;
+}
+
+.generate-group {
+    display: block;
+}
+
+.generate-group input {
+    display: block;
+    width: 30%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin: 3% 0 0 5%;
+    /* Add margin between input and button */
+}
+
+.generate-btn {
+    padding: 0.5rem 2rem;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    width: 10%;
+    margin: 3% 0 0 15%;
+}
+
+
+
+.course-row {
+    margin-top: 5%;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.course-input label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #0d6efd;
+    font-size: 0.875rem;
+}
+
+.course-input input,
+.course-input select {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.calculate-btn {
+    width: 100%;
+    padding: 0.75rem;
+    background: #0d6efd;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 1.5rem;
+    font-size: 1rem;
+}
+
+.result {
+    color: #1074e7;
+    /* Dark gray text */
+    padding: 10px;
+    margin-top: 10px;
+    border-radius: 5px;
+    text-align: center;
+    font-size: 2rem;
+    font-weight: bold;
+}
+
+.semester-row {
+    margin-top: 5%;
+    margin-bottom: 1.5rem;
+    margin-left: 3%;
+    display: flex;
+    /* Use flexbox to align the label and inputs horizontally */
+    align-items: center;
+    /* Align vertically */
+}
+
+.semester-label {
+    color: #0d6efd;
+    font-weight: 600;
+    margin-right: 1rem;
+    font-size: 1.3rem;
+    /* Adjust the font size if needed */
+}
+
+.semester-inputs {
+    display: flex;
+    /* gap: 0rem; */
+    flex: 1;
+}
+
+.semester-input {
+    flex: 1;
+    /* Ensure input fields stretch to fill available space */
+}
+
+.semester-input label {
+    display: block;
+    color: #0d6efd;
+    font-size: 0.875rem;
+    margin-bottom: 0.5rem;
+    margin-left: 15%;
+}
+
+.semester-input input {
+    width: 70%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin: 0 0 0 15%;
+}
+
+/* Add these styles for the aggregate calculator */
+
+.aggregate-form {
+    padding: 1rem;
+}
+
+.aggregate-form h2 {
+    color: #0d6efd;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 2rem;
+}
+
+.test-type-select {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin: 0 auto;
+    display: block;
+    background-color: #0d6efd;
+    color: white;
+    cursor: pointer;
+}
+
+.marks-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+}
+
+.marks-input label {
+    display: block;
+    color: #0d6efd;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.marks-input input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+.marks-input input::placeholder {
     color: #999;
 }
