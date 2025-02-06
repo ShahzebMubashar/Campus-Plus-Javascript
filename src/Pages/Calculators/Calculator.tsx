@@ -1,17 +1,27 @@
 "use client";
-
 import React, { useState } from "react";
 import "./Calculator.css"
 import pic1 from "../../Assets/images/3580920.webp"
 import pic2 from "../../Assets/images/8899729.webp"
 
+interface Course {
+    courseName: string;
+    creditHours: string;
+    grade: string;
+}
+
+interface Semester {
+    creditHours: string;
+    gpa: string;
+}
+
 const Calculator = () => {
     const [active, setActive] = useState(false)
     const [showSGPA, setShowSGPA] = useState(true)
-    const [courses, setCourses] = useState([])
-    const [semesters, setSemesters] = useState([])
-    const [sgpaResult, setSgpaResult] = useState(null)
-    const [cgpaResult, setCgpaResult] = useState(null)
+    const [courses, setCourses] = useState<Course[]>([]);
+    const [semesters, setSemesters] = useState<Semester[]>([]);
+    const [sgpaResult, setSgpaResult] = useState<string | null>(null);
+    const [cgpaResult, setCgpaResult] = useState<string | null>(null);
     const [aggregateResult, setAggregateResult] = useState(null)
     const [numberOfCourses, setNumberOfCourses] = useState("")
     const [numberOfSemesters, setNumberOfSemesters] = useState("")
@@ -27,27 +37,15 @@ const Calculator = () => {
     const [showAggregate, setShowAggregate] = useState(false)
 
     const generateCourses = () => {
-        const coursesArray = []
-        for (let i = 0; i < numberOfCourses; i++) {
-            coursesArray.push({
-                courseName: "",
-                creditHours: "1",
-                grade: "4.00",
-            })
-        }
-        setCourses(coursesArray)
-    }
+        const count = parseInt(numberOfCourses) || 0;
+        setCourses(Array.from({ length: count }, () => ({ courseName: "", creditHours: "1", grade: "4.00" })));
+    };
 
     const generateSemesters = () => {
-        const semestersArray = []
-        for (let i = 0; i < numberOfSemesters; i++) {
-            semestersArray.push({
-                creditHours: "",
-                gpa: "",
-            })
-        }
-        setSemesters(semestersArray)
-    }
+        const count = parseInt(numberOfSemesters) || 0;
+        setSemesters(Array.from({ length: count }, () => ({ creditHours: "", gpa: "" })));
+    };
+
 
     const calculateSGPA = () => {
         let totalCreditHours = 0
