@@ -96,10 +96,10 @@ function Navbar() {
                             <div className="navbar-dropdown-menu">
                                 <div className="navbar-dropdown-section">
                                     <AiOutlineHeart className="navbar-dropdown-icon" />
-                                    <h4>Calculators</h4>
-                                    <p>Aggregate Calculator</p>
-                                    <p>SGPA Calculator</p>
-                                    <p>CGPA Calculator</p>
+                                    <h4><Link to="/calculator">Calculators</Link></h4>
+                                    <p><Link to="/calculator">Aggregate Calculator</Link></p>
+                                    <p><Link to="/calculator">SGPA Calculator</Link></p>
+                                    <p><Link to="/calculator">CGPA Calculator</Link></p>
                                 </div>
                                 <div className="navbar-dropdown-section">
                                     <AiOutlineFileText className="navbar-dropdown-icon" />
