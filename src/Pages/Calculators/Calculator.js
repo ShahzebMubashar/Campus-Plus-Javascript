@@ -74,9 +74,9 @@ const Calculator = () => {
                 100
         } else {
             aggregate =
-                ((Number.parseFloat(marks.obtainedMarks) / Number.parseFloat(marks.totalMarks)) * 0.6 +
-                    (Number.parseFloat(marks.fscObtainedMarks) / Number.parseFloat(marks.fscTotalMarks)) * 0.2 +
-                    (Number.parseFloat(marks.matricObtainedMarks) / Number.parseFloat(marks.matricTotalMarks)) * 0.2) *
+                ((Number.parseFloat(marks.obtainedMarks) / Number.parseFloat(marks.totalMarks)) * 0.5 +
+                    (Number.parseFloat(marks.fscObtainedMarks) / Number.parseFloat(marks.fscTotalMarks)) * 0.4 +
+                    (Number.parseFloat(marks.matricObtainedMarks) / Number.parseFloat(marks.matricTotalMarks)) * 0.1) *
                 100
         }
         setAggregateResult(aggregate.toFixed(2))
