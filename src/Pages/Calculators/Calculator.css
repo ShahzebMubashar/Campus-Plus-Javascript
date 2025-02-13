@@ -330,7 +330,7 @@
 }
 
 .marks-input input {
-    width: 100%;
+    width: 600px;
     padding: 0.5rem;
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -339,4 +339,18 @@
 
 .marks-input input::placeholder {
     color: #999;
+}
+
+.calculateaggregate-btn {
+    width: 100%;
+    max-width: 200px;
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    margin: 0 auto;
+    display: block;
+    background-color: #0d6efd;
+    color: white;
+    cursor: pointer;
 }
