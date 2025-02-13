@@ -69,8 +69,8 @@ const Calculator = () => {
         if (testType === "NU") {
             aggregate =
                 ((Number.parseFloat(marks.obtainedMarks) / Number.parseFloat(marks.totalMarks)) * 0.5 +
-                    (Number.parseFloat(marks.fscObtainedMarks) / Number.parseFloat(marks.fscTotalMarks)) * 0.3 +
-                    (Number.parseFloat(marks.matricObtainedMarks) / Number.parseFloat(marks.matricTotalMarks)) * 0.2) *
+                    (Number.parseFloat(marks.fscObtainedMarks) / Number.parseFloat(marks.fscTotalMarks)) * 0.4 +
+                    (Number.parseFloat(marks.matricObtainedMarks) / Number.parseFloat(marks.matricTotalMarks)) * 0.1) *
                 100
         } else {
             aggregate =
@@ -142,7 +142,7 @@ const Calculator = () => {
                                 <div className="aggregate-form">
                                     <h2>FAST Aggregate Calculator</h2>
 
-                                    <div className="input-group">
+                                    <div className="inputaggregate-group">
                                         <label>Test Type</label>
                                         <select value={testType} onChange={(e) => setTestType(e.target.value)} className="test-type-select">
                                             <option value="NU">NU</option>

@@ -354,3 +354,15 @@
     color: white;
     cursor: pointer;
 }
+
+.inputaggregate-group label {
+    margin-bottom: 1.5rem;
+    display: block;
+    margin-left: 47%;
+    color: #1074e7;
+}
+
+.inputaggregate-group {
+    margin-bottom: 1.5rem;
+    display: block;
+}
