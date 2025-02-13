@@ -79,7 +79,7 @@ const Calculator = () => {
                     (Number.parseFloat(marks.matricObtainedMarks) / Number.parseFloat(marks.matricTotalMarks)) * 0.1) *
                 100
         }
-        setAggregateResult(aggregate.toFixed(2))
+        setAggregateResult(aggregate.toFixed(4))
     }
 
     return (
@@ -145,8 +145,8 @@ const Calculator = () => {
                                     <div className="inputaggregate-group">
                                         <label>Test Type</label>
                                         <select value={testType} onChange={(e) => setTestType(e.target.value)} className="test-type-select">
-                                            <option value="NU">NU</option>
-                                            <option value="NTS">NTS</option>
+                                            <option className="choose" value="NU">NU</option>
+                                            <option className="choose" value="NTS">NTS</option>
                                         </select>
                                     </div>
 
