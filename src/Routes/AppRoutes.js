@@ -18,7 +18,7 @@ import Footer from '../Pages/Footer/Footer.js';
 import News from '../Pages/NewsEvents/News.js';
 import Map from '../Pages/Map/Map.js';
 import PP from '../Pages/Past Papers/PP.js';
-import Calculator from '../Pages/Calculators/Calculator.tsx';
+import Calculator from '../Pages/Calculators/Calculator.js';
 import Chatroom from '../Pages/Chatroom/Chatrooms.tsx'
 import PastPapersDetails from '../Pages/Past Papers/PastPaperDetails.js';
 
