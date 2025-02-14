@@ -67,4 +67,3 @@ router.get("/test-email", async (req, res) => {
 })
 
 module.exports = router
-
