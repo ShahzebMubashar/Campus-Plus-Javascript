@@ -37,7 +37,7 @@ const ContactPage = () => {
         setSubmitMessage("")
 
         try {
-            const response = await fetch("/backend/api/send-email", {
+            const response = await fetch("http://localhost:4000/api/email/send-email", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
