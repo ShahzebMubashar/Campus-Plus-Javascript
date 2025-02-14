@@ -1,61 +1,68 @@
 import React, { useState } from 'react';
 import type { Room, Post } from "../types/types"
 import "../css/RoomView.css"
+import { useEffect } from "react"
 
 interface RoomViewProps {
     room: Room
     onBack: () => void
 }
 
-const MOCK_POSTS: Post[] = [
-    {
-        id: "1",
-        roomId: "1",
-        author: "John Doe",
-        content: "Welcome to our group! Let's make this a great community.",
-        likes: 15,
-        comments: [
-            {
-                id: "1",
-                author: "Jane Smith",
-                content: "Excited to be here!",
-                createdAt: "2024-01-24T12:00:00Z",
-            },
-        ],
-        createdAt: "2024-01-24T10:00:00Z",
-    },
-    {
-        id: "2",
-        roomId: "1",
-        author: "Alice Johnson",
-        content: "Just shared my first project. Looking forward to your feedback!",
-        likes: 8,
-        comments: [],
-        createdAt: "2024-01-24T11:30:00Z",
-    },
-]
-
 export default function RoomView({ room, onBack }: RoomViewProps) {
-    const [posts] = useState<Post[]>(MOCK_POSTS)
+    const [posts, setPosts] = useState<Post[]>([])
     const [activePost, setActivePost] = useState<string | null>(null)
     const [newComment, setNewComment] = useState<string>("")
+    const [newPost, setNewPost] = useState<string>("")
 
-    const handleLike = (postId: string) => {
-        // Implement like functionality
-        console.log("Liked post:", postId)
-    }
+    useEffect(() => {
+        fetchPosts()
+    }, [room]) // Updated dependency
 
-    const handleComment = (postId: string) => {
-        if (newComment.trim()) {
-            // Implement comment functionality
-            console.log("New comment on post:", postId, newComment)
-            setNewComment("")
+    const fetchPosts = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/Chatrooms/${room.roomid}/messages`, {
+                credentials: "include",
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setPosts(data)
+            } else {
+                console.error("Failed to fetch posts")
+            }
+        } catch (error) {
+            console.error("Error fetching posts:", error)
         }
     }
 
-    const handleShare = (postId: string) => {
-        // Implement share functionality
-        console.log("Shared post:", postId)
+    const handleCreatePost = async () => {
+        if (newPost.trim()) {
+            try {
+                const response = await fetch(`http://localhost:4000/Chatrooms/${room.roomid}/sendMessage`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ message: newPost }),
+                    credentials: "include",
+                })
+                if (response.ok) {
+                    setNewPost("")
+                    fetchPosts()
+                } else {
+                    console.error("Failed to create post")
+                }
+            } catch (error) {
+                console.error("Error creating post:", error)
+            }
+        }
+    }
+
+    const handleComment = async (postId: string) => {
+        if (newComment.trim()) {
+            // Implement comment functionality (you'll need to add this to your backend)
+            console.log("New comment on post:", postId, newComment)
+            setNewComment("")
+        }
     }
 
     return (
@@ -65,10 +72,9 @@ export default function RoomView({ room, onBack }: RoomViewProps) {
             </button>
 
             <div className="room-header">
-                <h1>{room.title}</h1>
+                <h1>{room.name}</h1>
                 <div className="room-stats">
-                    <span>{room.memberCount || 0} members</span>
-                    <span>Created {room.createdAt || "recently"}</span>
+                    <span>Created {new Date(room.created_at).toLocaleDateString()}</span>
                 </div>
             </div>
 
@@ -77,44 +83,36 @@ export default function RoomView({ room, onBack }: RoomViewProps) {
                     <h2>About</h2>
                     <p>{room.description}</p>
                 </div>
-
-                <div className="room-rules-box">
-                    <h2>Rules</h2>
-                    <ul>
-                        {room.rules?.map((rule, index) => <li key={index}>{rule}</li>) || <li>Be respectful and kind to others</li>}
-                    </ul>
-                </div>
             </div>
 
             <div className="posts-section">
                 <div className="create-post">
-                    <textarea placeholder="Write a post..." className="post-input" />
-                    <button className="post-button">Post</button>
+                    <textarea
+                        placeholder="Write a post..."
+                        className="post-input"
+                        value={newPost}
+                        onChange={(e) => setNewPost(e.target.value)}
+                    />
+                    <button className="post-button" onClick={handleCreatePost}>
+                        Post
+                    </button>
                 </div>
 
                 {posts.map((post) => (
-                    <div key={post.id} className="post-card">
+                    <div key={post.messageid} className="post-card">
                         <div className="post-header">
-                            <span className="post-author">{post.author}</span>
-                            <span className="post-date">{new Date(post.createdAt).toLocaleDateString()}</span>
+                            <span className="post-author">{post.username}</span>
+                            <span className="post-date">{new Date(post.posted_at).toLocaleString()}</span>
                         </div>
 
                         <div className="post-content">{post.content}</div>
 
                         <div className="post-actions">
-                            <button onClick={() => handleLike(post.id)}>👍 {post.likes}</button>
-                            <button onClick={() => setActivePost(post.id)}>💬 {post.comments.length}</button>
-                            <button onClick={() => handleShare(post.id)}>Share</button>
+                            <button onClick={() => setActivePost(post.messageid)}>💬 Comment</button>
                         </div>
 
-                        {activePost === post.id && (
+                        {activePost === post.messageid && (
                             <div className="comments-section">
-                                {post.comments.map((comment) => (
-                                    <div key={comment.id} className="comment">
-                                        <strong>{comment.author}</strong>
-                                        <p>{comment.content}</p>
-                                    </div>
-                                ))}
                                 <div className="add-comment">
                                     <input
                                         type="text"
@@ -122,7 +120,7 @@ export default function RoomView({ room, onBack }: RoomViewProps) {
                                         value={newComment}
                                         onChange={(e) => setNewComment(e.target.value)}
                                     />
-                                    <button onClick={() => handleComment(post.id)}>Comment</button>
+                                    <button onClick={() => handleComment(post.messageid)}>Comment</button>
                                 </div>
                             </div>
                         )}
