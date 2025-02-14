@@ -9,7 +9,7 @@ const pool = new pg.Pool({
   port: process.env.DB_PORT,
   database: process.env.DB_NAME,
   ssl: {
-    rejectUnauthorized: false, // Set to 'true' if you want strict SSL certificate verification
+    rejectUnauthorized: false,
   }
 });
 console.log('DB_USER:', process.env.DB_USER); // Should output 'postgres'
