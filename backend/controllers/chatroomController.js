@@ -1,138 +1,169 @@
 const pool = require("../config/database");
-const {
-  checkAuthorisation,
-  checkAdmin,
-} = require("../middlewares/authMiddleware");
+// const {
+//   checkAuthorisation,
+//   checkAdmin,
+// } = require("../middlewares/authMiddleware");
+
+// const getRooms = async (request, response) => {
+//   try {
+//     const res = await pool.query(`SELECT * FROM Rooms ORDER BY created_at DESC`)
+
+//     if (!res.rowCount) return response.status(404).send(`No Rooms Available`)
+
+//     return response.status(200).json(res.rows)
+//   } catch (error) {
+//     console.log("Error in getRooms:", error)
+//     return response.status(500).json({ error: "Internal Server Error" })
+//   }
+// }
 
 const getRooms = async (request, response) => {
   try {
-    let res = await pool.query(`Select * from Rooms`);
+    const res = await pool.query(`
+      SELECT r.*, COUNT(rm.userid) as member_count 
+      FROM Rooms r 
+      LEFT JOIN RoomMembers rm ON r.roomid = rm.roomid 
+      GROUP BY r.roomid 
+      ORDER BY r.created_at DESC
+    `);
 
     if (!res.rowCount) return response.status(404).send(`No Rooms Available`);
 
     return response.status(200).json(res.rows);
   } catch (error) {
     console.log("Error in getRooms:", error);
-    return response.sendStatus(500);
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// const createRoom = async (request, response) => {
+//   try {
+//     const { room_name } = request.body
+//     const res = await pool.query(`INSERT INTO Rooms (room_name) VALUES ('${room_name}') RETURNING *`)
+//     response.status(201).json(res.rows[0])
+//   } catch (error) {
+//     console.log("Error in createRoom:", error)
+//     response.status(500).json({ error: "Internal Server Error" })
+//   }
+// }
 
 const createRoom = async (request, response) => {
-  const {
-    body: { roomname, description },
-    session: {
-      user: { userid },
-    },
-  } = request;
+  const { name, description } = request.body;
+  const userId = request.session.user.userid; // Assuming you have user session
 
-  let client = await pool.connect();
   try {
-    await client.query("BEGIN");
-
-    let res = await client.query(`Select * from Rooms where name ilike $1`, [
-      roomname,
-    ]);
-
-    if (res.rowCount) {
-      client.release();
-      return response.status(400).send(`Room Name already exists`);
-    }
-
-    res = await client.query(
-      `Insert into Rooms (name, description, created_at, created_by)
-      values ($1, $2, current_timestamp, $3)`,
-      [roomname, description, userid]
+    const res = await pool.query(
+      `INSERT INTO Rooms (name, description, created_by) 
+       VALUES ($1, $2, $3) RETURNING *`,
+      [name, description, userId]
     );
 
-    await client.query("COMMIT");
-
-    return response.status(201).send(`Room ${roomname} created successfully!`);
+    return response.status(201).json(res.rows[0]);
   } catch (error) {
     console.log("Error in createRoom:", error);
-    return response.sendStatus(500);
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 };
 
+// const joinRoom = async (request, response) => {
+//   try {
+//     const { room_id, user_id } = request.body
+//     const res = await pool.query(`INSERT INTO RoomUsers (room_id, user_id) VALUES (${room_id}, ${user_id}) RETURNING *`)
+//     response.status(201).json(res.rows[0])
+//   } catch (error) {
+//     console.log("Error in joinRoom:", error)
+//     response.status(500).json({ error: "Internal Server Error" })
+//   }
+// }
+
 const joinRoom = async (request, response) => {
-  const {
-    params: { roomid },
-    session: {
-      user: { userid },
-    },
-  } = request;
+  console.log("Received roomid:", request.params.roomid); // Debug log
+  console.log("Request body:", request.body); // Debug log
+  const { roomid } = request.params;
+  // const userId = request.session.user.userid; // Assuming you have user session
+  const userId = 12345;
 
-  if (!roomid) return response.status(400).send(`Room ID is required`);
-
-  let client = await pool.connect();
 
   try {
-    let res = await client.query(`Select * from Rooms where roomid = $1`, [
-      roomid,
-    ]);
-
-    if (!res.rowCount) {
-      client.release();
-      return response.status(404).send(`Room not found`);
-    }
-
-    await client.query("BEGIN");
-
-    res = await client.query(
-      `Select * from RoomMembers where roomid = $1 and userid = $2`,
-      [roomid, userid]
+    const checkMember = await pool.query(
+      `SELECT * FROM RoomMembers WHERE roomid = $1 AND userid = $2`,
+      [roomid, userId]
     );
 
-    if (res.rowCount) {
-      client.release();
-      return response.status(400).send(`You are already a member of this room`);
+    if (checkMember.rowCount > 0) {
+      return response.status(400).json({ error: "User already a member of this room" });
     }
 
-    res = await client.query(
-      `Insert into RoomMembers (roomid, userid)
-      values ($1, $2)`,
-      [roomid, userid]
+    await pool.query(
+      `INSERT INTO RoomMembers (roomid, userid) VALUES ($1, $2)`,
+      [roomid, userId]
     );
 
-    await client.query("COMMIT");
-    client.release();
-
-    return response.status(200).send(`Joined Room Successfully`);
+    return response.status(200).json({ message: "Successfully joined the room" });
   } catch (error) {
     console.log("Error in joinRoom:", error);
-    await client.query("ROLLBACK");
-    return response.sendStatus(500);
+    return response.status(500).json({ error: "Internal Server Error" });
+  }
+};
+
+// const sendMessage = async (request, response) => {
+//   try {
+//     const { room_id, user_id, message } = request.body
+//     const res = await pool.query(
+//       `INSERT INTO Messages (room_id, user_id, message) VALUES (${room_id}, ${user_id}, '${message}') RETURNING *`,
+//     )
+//     response.status(201).json(res.rows[0])
+//   } catch (error) {
+//     console.log("Error in sendMessage:", error)
+//     response.status(500).json({ error: "Internal Server Error" })
+//   }
+// }
+
+const getRoomMessages = async (request, response) => {
+  const { roomid } = request.params;
+
+  try {
+    const res = await pool.query(
+      `SELECT m.*, u.username 
+       FROM Messages m 
+       JOIN Users u ON m.userid = u.userid 
+       WHERE m.roomid = $1 
+       ORDER BY m.posted_at DESC`,
+      [roomid]
+    );
+
+    return response.status(200).json(res.rows);
+  } catch (error) {
+    console.log("Error in getRoomMessages:", error);
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 };
 
 const sendMessage = async (request, response) => {
-  const {
-    body: { message },
-    params: { roomid },
-    session: {
-      user: { userid },
-    },
-  } = request;
-
-  let client = await pool.connect();
+  const { roomid } = request.params;
+  const { content } = request.body;
+  const userId = request.session.user.userid; // Assuming you have user session
 
   try {
-    await client.query("BEGIN");
-
-    let res = await client.query(
-      `Insert into Messages(roomid, userid, content, posted_at)
-      values ($1, $2, $3, current_timestamp)`,
-      [roomid, userid, message]
+    const res = await pool.query(
+      `INSERT INTO Messages (roomid, userid, content) 
+       VALUES ($1, $2, $3) RETURNING *`,
+      [roomid, userId, content]
     );
 
-    await client.query("COMMIT");
-    client.release();
-
-    return response.status(200).send(`Message Sent Successfully`);
+    return response.status(201).json(res.rows[0]);
   } catch (error) {
     console.log("Error in sendMessage:", error);
-    await client.query("ROLLBACK");
-    return response.sendStatus(500);
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 };
 
-module.exports = { getRooms, createRoom, joinRoom, sendMessage };
+module.exports = {
+  getRooms,
+  createRoom,
+  joinRoom,
+  getRoomMessages,
+  sendMessage
+};
+
+// module.exports = { getRooms, createRoom, joinRoom, sendMessage };

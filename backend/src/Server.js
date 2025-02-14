@@ -44,6 +44,7 @@ app.use(
 // Routes
 app.use("/", authRoutes);
 app.use("/Courses", courseRoutes);
+// app.use("/Chatrooms", chatroomRoute);
 app.use("/Chatrooms", chatroomRoute);
 app.use("/Transcript", transcriptRoute);
 app.use("/api/email", emailRoute)
