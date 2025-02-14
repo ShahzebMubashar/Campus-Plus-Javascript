@@ -65,32 +65,6 @@
     gap: 20px;
 }
 
-.form-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-}
-
-.form-group .icon {
-    position: absolute;
-    right: 15px;
-    top: 10px;
-    font-size: 1.2rem;
-    color: #007bff;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-}
-
-.form-group input,
-.form-group textarea {
-    width: 100%;
-    padding: 12px 50px;
-    /* Add padding for the icon */
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-    color: #333;
-    transition: all 0.3s ease-in-out;
-}
 
 .form-group-checkbox input {
     margin-right: 10px;
@@ -123,4 +97,43 @@
 .social-icons a:hover {
     transform: scale(1.2);
     color: #0056b3;
+}
+
+/* Form Styling */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+
+
+
+
+/* Form Styling */
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+
+
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 12px 12px 12px 45px;
+    /* Adjust left padding for icons */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    transition: all 0.3s ease-in-out;
 }

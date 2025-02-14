@@ -80,9 +80,7 @@ const ContactPage = () => {
                     <p>We'd love to hear from you. Send us a message, and our team will respond promptly!</p>
                     <form className="contact-form" onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <span className={`icon ${focusedField === "name" ? "hide" : ""}`}>
-                                <i className="fas fa-user"></i>
-                            </span>
+
                             <input
                                 type="text"
                                 name="name"
@@ -95,9 +93,7 @@ const ContactPage = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <span className={`icon ${focusedField === "email" ? "hide" : ""}`}>
-                                <i className="fas fa-envelope"></i>
-                            </span>
+
                             <input
                                 type="email"
                                 name="email"
@@ -110,9 +106,7 @@ const ContactPage = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <span className={`icon ${focusedField === "phone" ? "hide" : ""}`}>
-                                <i className="fas fa-phone"></i>
-                            </span>
+
                             <input
                                 type="tel"
                                 name="phone"
@@ -125,9 +119,7 @@ const ContactPage = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <span className={`icon ${focusedField === "message" ? "hide" : ""}`}>
-                                <i className="fas fa-comment"></i>
-                            </span>
+
                             <textarea
                                 name="message"
                                 placeholder="What's on your mind?"
