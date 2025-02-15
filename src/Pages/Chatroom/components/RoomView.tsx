@@ -16,16 +16,21 @@ export default function RoomView({ room, onBack }: RoomViewProps) {
 
     useEffect(() => {
         fetchPosts()
-    }, [room]) // Updated dependency
+    }, []) // Updated dependency
 
     const fetchPosts = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/Chatrooms/${room.roomid}/messages`, {
+            const response = await fetch(`http://localhost:4000/Chatrooms/messages/${room.roomid}`, {
                 credentials: "include",
             })
             if (response.ok) {
                 const data = await response.json()
-                setPosts(data)
+                if (Array.isArray(data)) {
+                    setPosts(data)
+                } else {
+                    console.error("Unexpected data format:", data)
+                    setPosts([]) // Fallback to empty array
+                }
             } else {
                 console.error("Failed to fetch posts")
             }
@@ -34,10 +39,11 @@ export default function RoomView({ room, onBack }: RoomViewProps) {
         }
     }
 
+
     const handleCreatePost = async () => {
         if (newPost.trim()) {
             try {
-                const response = await fetch(`http://localhost:4000/Chatrooms/${room.roomid}/sendMessage`, {
+                const response = await fetch(`http://localhost:4000/Chatrooms/send-message/${room.roomid}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -57,12 +63,47 @@ export default function RoomView({ room, onBack }: RoomViewProps) {
         }
     }
 
+    const handleLike = async (postId: string) => {
+        try {
+            const response = await fetch(`http://localhost:4000/Chatrooms/like/${postId}`, {
+                method: "POST",
+                credentials: "include",
+            })
+            if (response.ok) {
+                fetchPosts()
+            } else {
+                console.error("Failed to like post")
+            }
+        } catch (error) {
+            console.error("Error liking post:", error)
+        }
+    }
+
     const handleComment = async (postId: string) => {
         if (newComment.trim()) {
-            // Implement comment functionality (you'll need to add this to your backend)
-            console.log("New comment on post:", postId, newComment)
-            setNewComment("")
+            try {
+                const response = await fetch(`http://localhost:4000/Chatrooms/comment/${postId}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ content: newComment })
+                })
+                if (response.ok) {
+                    setNewComment("")
+                    fetchPosts()
+                } else {
+                    console.error("Failed to add comment")
+                }
+            } catch (error) {
+                console.error("Error adding comment:", error)
+            }
         }
+    }
+
+    const handleShare = (postId: string) => {
+        // Implement share functionality (e.g., copy link to clipboard)
+        console.log("Shared post:", postId)
     }
 
     return (
@@ -98,34 +139,51 @@ export default function RoomView({ room, onBack }: RoomViewProps) {
                     </button>
                 </div>
 
-                {posts.map((post) => (
-                    <div key={post.messageid} className="post-card">
-                        <div className="post-header">
-                            <span className="post-author">{post.username}</span>
-                            <span className="post-date">{new Date(post.posted_at).toLocaleString()}</span>
-                        </div>
-
-                        <div className="post-content">{post.content}</div>
-
-                        <div className="post-actions">
-                            <button onClick={() => setActivePost(post.messageid)}>💬 Comment</button>
-                        </div>
-
-                        {activePost === post.messageid && (
-                            <div className="comments-section">
-                                <div className="add-comment">
-                                    <input
-                                        type="text"
-                                        placeholder="Write a comment..."
-                                        value={newComment}
-                                        onChange={(e) => setNewComment(e.target.value)}
-                                    />
-                                    <button onClick={() => handleComment(post.messageid)}>Comment</button>
-                                </div>
+                {posts && posts.length > 0 ? (
+                    posts.map((post) => (
+                        <div key={post.messageid} className="post-card">
+                            <div className="post-header">
+                                <span className="post-author">{post.userid}</span>
+                                <span className="post-date">{new Date(post.posted_at).toLocaleString()}</span>
                             </div>
-                        )}
-                    </div>
-                ))}
+
+                            <div className="post-content">{post.content}</div>
+
+                            <div className="post-actions">
+                                <button onClick={() => handleLike(post.messageid)}>👍 {post.likes}</button>
+                                <button onClick={() => setActivePost(post.messageid)}>💬 {post.comments?.length || 0}</button>
+                                <button onClick={() => handleShare(post.messageid)}>Share</button>
+                            </div>
+
+                            {activePost === post.messageid && (
+                                <div className="comments-section">
+                                    {post.comments && post.comments.length > 0 ? (
+                                        post.comments.map((comment) => (
+                                            <div key={comment.commentid} className="comment">
+                                                <strong>{comment.userid}</strong>
+                                                <p>{comment.content}</p>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <p>No comments yet</p>
+                                    )}
+                                    <div className="add-comment">
+                                        <input
+                                            type="text"
+                                            placeholder="Write a comment..."
+                                            value={newComment}
+                                            onChange={(e) => setNewComment(e.target.value)}
+                                        />
+                                        <button onClick={() => handleComment(post.messageid)}>Comment</button>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+                    ))
+                ) : (
+                    <p>No posts available</p>
+                )}
+
             </div>
         </div>
     )
