@@ -7,18 +7,37 @@ export interface Room {
     created_at: string;
     created_by: string;
 }
+// export interface Post {
+//     messageid: string;
+//     roomid: string;
+//     userid: string;
+//     username: string;
+//     content: string;
+//     posted_at: string;
+// }
+// export interface Comment {
+//     id: string
+//     author: string
+//     content: string
+//     createdAt: string
+// }
+
 export interface Post {
-    messageid: string;
-    roomid: string;
-    userid: string;
-    username: string;
-    content: string;
-    posted_at: string;
-}
-export interface Comment {
-    id: string
-    author: string
+    messageid: string
+    roomid: string
+    userid: string
     content: string
-    createdAt: string
+    posted_at: string
+    likes: number
+    comments: Comment[]
 }
+
+export interface Comment {
+    commentid: string
+    messageid: string
+    userid: string
+    content: string
+    created_at: string
+}
+
 

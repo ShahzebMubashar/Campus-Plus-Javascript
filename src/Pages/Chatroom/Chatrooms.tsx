@@ -10,53 +10,30 @@ import type { Room } from "./types/types"
 export default function App() {
     const [rooms, setRooms] = useState<Room[]>([])
     const [activeRoom, setActiveRoom] = useState<Room | null>(null)
-    const [username, setUsername] = useState<string>("User Name")
-    const [activePage, setActivePage] = useState<string>("rooms")
-    const [isLoading, setIsLoading] = useState<boolean>(true)
-    const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
         fetchRooms()
-        fetchUserData()
     }, [])
 
     const fetchRooms = async () => {
-        setIsLoading(true)
-        setError(null)
         try {
-            const response = await fetch("http://localhost:4000/Chatrooms/getRooms", {
+            const response = await fetch("http://localhost:4000/Chatrooms", {
                 credentials: "include",
             })
             if (response.ok) {
                 const data = await response.json()
                 setRooms(data)
             } else {
-                setError("Failed to fetch rooms")
+                console.error("Failed to fetch rooms")
             }
         } catch (error) {
-            setError("Error fetching rooms")
             console.error("Error fetching rooms:", error)
-        } finally {
-            setIsLoading(false)
         }
-    }
-
-    const fetchUserData = async () => {
-        // Implement this function to fetch user data from your backend
-        // For now, we'll use a placeholder
-        setUsername("John Doe")
     }
 
     const handleJoinRoom = async (roomId: string) => {
-        console.log("Joining Room with ID:", roomId) // Debugging log
-
-        if (!roomId) {
-            console.error("Error: Room ID is undefined")
-            return
-        }
-
         try {
-            const response = await fetch(`http://localhost:4000/Chatrooms/joinRoom/${roomId}`, {
+            const response = await fetch(`http://localhost:4000/Chatrooms/join/${roomId}`, {
                 method: "POST",
                 credentials: "include",
             })
@@ -73,44 +50,8 @@ export default function App() {
         }
     }
 
-
     const handleBackToRooms = () => {
         setActiveRoom(null)
-        setActivePage("rooms")
-    }
-
-    const handleNavigate = (page: string) => {
-        setActivePage(page)
-        setActiveRoom(null)
-    }
-
-    const renderContent = () => {
-        if (isLoading) {
-            return <div>Loading...</div>
-        }
-
-        if (error) {
-            return <div>Error: {error}</div>
-        }
-
-        switch (activePage) {
-            case "rooms":
-                return activeRoom ? (
-                    <RoomView room={activeRoom} onBack={handleBackToRooms} />
-                ) : (
-                    <RoomList rooms={rooms} onJoinRoom={handleJoinRoom} />
-                )
-            case "profile":
-                return <div>Profile Page (To be implemented)</div>
-            case "settings":
-                return <div>Settings Page (To be implemented)</div>
-            case "myGroups":
-                return <div>My Groups Page (To be implemented)</div>
-            case "notifications":
-                return <div>Notifications Page (To be implemented)</div>
-            default:
-                return <RoomList rooms={rooms} onJoinRoom={handleJoinRoom} />
-        }
     }
 
     return (
@@ -118,12 +59,19 @@ export default function App() {
             <div className="chatroom-app">
                 <Navbar />
                 <div className="content-wrapper">
-                    <Sidebar username={username} onNavigate={handleNavigate} />
+                    <Sidebar username={''} onNavigate={function (page: string): void {
+                        throw new Error('Function not implemented.');
+                    }} />
                     <div className="main-content">
                         <header className="chatroom-header">
-                            <h1>{activeRoom ? activeRoom.name : activePage.charAt(0).toUpperCase() + activePage.slice(1)}</h1>
+                            <h1>{activeRoom ? activeRoom.name : "Chatrooms"}</h1>
                         </header>
-                        {renderContent()}
+
+                        {activeRoom ? (
+                            <RoomView room={activeRoom} onBack={handleBackToRooms} />
+                        ) : (
+                            <RoomList rooms={rooms} onJoinRoom={handleJoinRoom} />
+                        )}
                     </div>
                 </div>
                 <Footer />
@@ -131,4 +79,5 @@ export default function App() {
         </div>
     )
 }
+
 

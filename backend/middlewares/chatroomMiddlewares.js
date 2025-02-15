@@ -1,27 +1,32 @@
 const pool = require("../config/database");
 
 const checkRoomMember = async (request, response, next) => {
-  const {
-    params: { roomid },
-    session: {
-      user: { userid },
-    },
-  } = request;
-
   try {
+    console.log("Middleware Request:", request.params);
+
+    const { roomid } = request.params;
+    const userid = "1"; // Hardcoded user ID (Replace with a valid one from your DB)
+
+    if (!userid || !roomid) {
+      return response.status(400).json({ error: "User ID and Room ID are required" });
+    }
+
     let res = await pool.query(
-      `Select * from RoomMembers where roomid = $1 and userid = $2`,
+      `SELECT * FROM RoomMembers WHERE roomid = $1 AND userid = $2`,
       [roomid, userid]
     );
 
-    if (!res.rowCount)
-      return response.status(400).send(`You are not a member of this room`);
+    if (!res.rowCount) {
+      return response.status(400).send("You are not a member of this room");
+    }
 
     next();
   } catch (error) {
-    console.log("Error in checkRoomMember:", error);
+    console.error("Error in checkRoomMember:", error);
     return response.sendStatus(500);
   }
 };
+
+module.exports = { checkRoomMember };
 
 module.exports = { checkRoomMember };
