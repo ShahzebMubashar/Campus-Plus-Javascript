@@ -14,30 +14,63 @@ const PastPapers = () => {
     const [selectedCoursePapers, setSelectedCoursePapers] = useState({});
     const [expandedCourse, setExpandedCourse] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Check if user is logged in by checking session
+        const checkAuth = async () => {
+            try {
+                const response = await fetch(`${API_BASE_URL}/user/profile`, {
+                    credentials: 'include' // Important for sending cookies
+                });
+                setIsLoggedIn(response.ok);
+            } catch (err) {
+                console.error('Auth check failed:', err);
+                setIsLoggedIn(false);
+            }
+        };
+
+        checkAuth();
+    }, []);
 
     useEffect(() => {
         const fetchCourses = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/Courses`);
+                const response = await fetch(`${API_BASE_URL}/Courses`, {
+                    credentials: 'include' // Important for sending cookies
+                });
                 if (!response.ok) {
                     throw new Error(`Failed to fetch courses: ${response.status}`);
                 }
                 const data = await response.json();
+                console.log('Fetched courses:', data); // Debug log
                 
                 // Fetch past papers for all courses
                 const coursesWithPapers = await Promise.all(
                     data.map(async (course) => {
                         try {
-                            const papersResponse = await fetch(`${API_BASE_URL}/Courses/${course.courseid}/past-papers`);
-                            if (papersResponse.ok) {
-                                const papers = await papersResponse.json();
-                                return { ...course, hasPapers: papers.length > 0 };
+                            const papersResponse = await fetch(`${API_BASE_URL}/Courses/${course.courseid}/past-papers`, {
+                                credentials: 'include' // Important for sending cookies
+                            });
+                            
+                            if (papersResponse.status === 404) {
+                                console.log(`No papers found for course ${course.courseid}`); // Debug log
+                                return { ...course, hasPapers: false };
                             }
+                            
+                            if (!papersResponse.ok) {
+                                console.error(`Error fetching papers for course ${course.courseid}: ${papersResponse.status}`);
+                                return { ...course, hasPapers: false };
+                            }
+                            
+                            const papers = await papersResponse.json();
+                            console.log(`Papers for course ${course.courseid}:`, papers); // Debug log
+                            return { ...course, hasPapers: papers.length > 0 };
                         } catch (err) {
                             console.error(`Error fetching papers for course ${course.courseid}:`, err);
+                            return { ...course, hasPapers: false };
                         }
-                        return { ...course, hasPapers: false };
                     })
                 );
 
@@ -47,6 +80,7 @@ const PastPapers = () => {
                     return a.hasPapers ? -1 : 1;
                 });
 
+                console.log('Sorted courses:', sortedCourses); // Debug log
                 setCourses(sortedCourses);
                 setFilteredCourses(sortedCourses);
             } catch (err) {
@@ -79,12 +113,14 @@ const PastPapers = () => {
         }
 
         try {
-            const response = await fetch(`${API_BASE_URL}/Courses/${courseId}/past-papers`);
+            const response = await fetch(`${API_BASE_URL}/Courses/${courseId}/past-papers`, {
+                credentials: 'include' // Important for sending cookies
+            });
             if (!response.ok) {
                 throw new Error(`Failed to fetch past papers: ${response.status}`);
             }
             const data = await response.json();
-            console.log("Fetched papers:", data); // Debug log
+            console.log("Fetched papers:", data);
             
             if (!Array.isArray(data) || data.length === 0) {
                 setError("No past papers available for this course.");
@@ -112,8 +148,9 @@ const PastPapers = () => {
         }
     };
 
-    const handlePaperClick = (fileLink) => {
-        window.open(fileLink, '_blank');
+    const handlePaperClick = (paper) => {
+        const link = isLoggedIn && paper.file_link_down ? paper.file_link_down : paper.file_link;
+        window.open(link, '_blank');
     };
 
     const getDifficultyColor = (difficulty) => {
@@ -225,7 +262,7 @@ const PastPapers = () => {
                                                     <div
                                                         key={paper.paper_id}
                                                         className="paper-item"
-                                                        onClick={() => handlePaperClick(paper.file_link)}
+                                                        onClick={() => handlePaperClick(paper)}
                                                     >
                                                         <div className="paper-info">
                                                             <span className="paper-year">{paper.paper_year}</span>

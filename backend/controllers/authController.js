@@ -95,57 +95,68 @@ exports.register = async (request, response) => {
 };
 
 exports.login = async (request, response) => {
-  const {
-    body: { email, password, username, rollnumber },
-  } = request;
+    const { email, password, username } = request.body;
 
-  if (!email && !username && !rollnumber)
-    return response
-      .status(400)
-      .send("Please provide Email, Username or Roll Number");
-
-  if (!password) return response.status(400).send("Please provide Password");
-
-  try {
-    const result = await pool.query(
-      "SELECT * FROM Users WHERE email = $1 or username = $1",
-      [email || username]
-    );
-
-    if (!result.rowCount)
-      return response.status(404).json({ error: "Invalid credentials" });
-
-    const user = result.rows[0];
-
-    // Verify the password
-    const isMatch = await bcrypt.compare(password, user.password);
-
-    if (!isMatch) {
-      return response.status(401).json({ error: "Invalid credentials" });
+    if (!email && !username) {
+        return response.status(400).send("Please provide Email or Username");
     }
-
-    // Set the session user
-    request.session.user = {
-      userid: user.userid,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-    };
+    if (!password) {
+        return response.status(400).send("Please provide Password");
+    }
 
     try {
-      await request.session.save();
-      console.log("Session saved successfully:", request.session);
-      return response.status(200).json({ message: "Login successful" });
-    } catch (err) {
-      console.error("Error saving session:", err);
-      return response.status(500).json({ error: "Could not save session" });
-    }
+        const result = await pool.query(
+            "SELECT * FROM Users WHERE email = $1 or username = $1",
+            [email || username]
+        );
 
-    console.log("Session set for user:", request.session.user);
-  } catch (error) {
-    console.error("Login error:", error);
-    return response.status(500).json({ error: "Server error" });
-  }
+        if (!result.rowCount) {
+            return response.status(404).json({ error: "Invalid credentials" });
+        }
+
+        const user = result.rows[0];
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return response.status(401).json({ error: "Invalid credentials" });
+        }
+
+        // Set session data
+        request.session.user = {
+            userid: user.userid,
+            email: user.email,
+            username: user.username,
+            role: user.role
+        };
+
+        // Save session explicitly and wait for it to complete
+        await new Promise((resolve, reject) => {
+            request.session.save((err) => {
+                if (err) {
+                    console.error('Session save error:', err);
+                    reject(err);
+                }
+                resolve();
+            });
+        });
+
+        // Set proper headers
+        response.header('Access-Control-Allow-Credentials', 'true');
+        response.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+
+        return response.status(200).json({
+            message: "Login successful",
+            user: {
+                userid: user.userid,
+                username: user.username,
+                email: user.email,
+                role: user.role
+            }
+        });
+    } catch (error) {
+        console.error('Login error:', error);
+        return response.status(500).json({ error: "Server error" });
+    }
 };
 
 exports.forgotPassword = async (request, response) => {
@@ -219,19 +230,20 @@ exports.resetPassword = async (request, response) => {
 };
 
 exports.logout = async (request, response) => {
-  try {
-    request.session.destroy((error) => {
-      if (error) {
-        console.error("Error destroying session:", error);
+    try {
+        request.session.destroy((error) => {
+            if (error) {
+                console.error('Logout error:', error);
+                return response.status(500).send("Server Error");
+            }
+            
+            response.clearCookie('connect.sid');
+            return response.status(200).send("Logged Out Successfully");
+        });
+    } catch (error) {
+        console.error('Logout error:', error);
         return response.status(500).send("Server Error");
-      }
-      response.clearCookie("user");
-      return response.status(200).send("Logged Out Successfully");
-    });
-  } catch (error) {
-    console.error("Unexpected error during logout:", error);
-    return response.status(500).send("Unexpected Server Error");
-  }
+    }
 };
 
 exports.testLogin = async (request, response) => {
