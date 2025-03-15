@@ -31,6 +31,7 @@ export default function App() {
         }
     }
 
+
     const handleJoinRoom = async (roomId: string) => {
         try {
             const response = await fetch(`http://localhost:4000/Chatrooms/join/${roomId}`, {
