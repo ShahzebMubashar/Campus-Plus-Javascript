@@ -1,24 +1,26 @@
 const checkAuthorisation = (request, response, next) => {
-  request.sessionStore.get(request.sessionID, (error, session) => {
-    console.log(session);
-  });
-
-  if (!request.session.user) {
-    console.log("Authorization failed: No user in session");
-    return response.status(401).send("Unauthorized");
+  console.log('\n[AUTH] Checking session:', request.sessionID);
+  
+  if (!request.session) {
+    console.log('[AUTH] No session object');
+    return response.status(401).send("No session found");
   }
 
-  console.log("Authorization successful: User found in session");
+  if (!request.session.user) {
+    console.log('[AUTH] No user in session');
+    return response.status(401).send("Please log in");
+  }
+
+  console.log('[AUTH] User authenticated:', request.session.user.username);
   next();
 };
 
 const checkAdmin = (request, response, next) => {
-  console.log("checkAdmin: Checking if user is an Admin...");
   if (!request.session.user || request.session.user.role !== "Admin") {
-    console.log("Forbidden: User is not an Admin.");
-    return response.status(403).send("Forbidden");
+    console.log('[AUTH] Admin check failed:', request.session.user?.username);
+    return response.status(403).send("Admin access required");
   }
-  console.log("checkAdmin: User is an Admin:", request.session.user);
+  console.log('[AUTH] Admin verified:', request.session.user.username);
   next();
 };
 

@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import Logo from '../cp_logo.png';
@@ -6,32 +5,48 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
 
 function Navbar() {
-    const [isLoggedIn, setIsLoggedIn] = useState(false); // Track login status
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const navigate = useNavigate();
 
+    const checkSession = async () => {
+        try {
+            const response = await fetch("http://localhost:4000/user/profile", {
+                credentials: "include"
+            });
+            setIsLoggedIn(response.ok);
+            if (!response.ok) {
+                localStorage.removeItem("user");
+            }
+        } catch (error) {
+            console.error("Session check failed:", error);
+            setIsLoggedIn(false);
+            localStorage.removeItem("user");
+        }
+    };
+
     useEffect(() => {
-        // Check if user is logged in by looking for the user object in local storage
-        const user = JSON.parse(localStorage.getItem("user"));
-        setIsLoggedIn(!!user); // Set true if user exists, false otherwise
+        checkSession();
+        // Check session every 5 minutes
+        const interval = setInterval(checkSession, 5 * 60 * 1000);
+        return () => clearInterval(interval);
     }, []);
 
     const handleLogout = async () => {
         try {
             const response = await fetch("http://localhost:4000/logout", {
                 method: "POST",
-                credentials: "include", // Include cookies in the request
+                credentials: "include",
             });
 
             if (response.ok) {
                 localStorage.removeItem("user");
-                console.log(response.text());
                 setIsLoggedIn(false);
                 navigate("/sign-in");
             } else {
                 console.error("Logout failed:", response.statusText);
             }
         } catch (error) {
-            console.error("An error occurred during logout:", error);
+            console.error("Logout error:", error);
         }
     };
 
