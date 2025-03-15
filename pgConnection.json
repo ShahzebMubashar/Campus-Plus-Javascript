@@ -1,0 +1,13 @@
+{
+    "Servers": {
+        "1": {
+            "Name": "campus-plus-connection",
+            "Group": "campus-plus-group",
+            "Host": "campus-plus-ehanayaz-uninet1.l.aivencloud.com",
+            "Port": 18137,
+            "MaintenanceDB": "defaultdb",
+            "Username": "avnadmin",
+            "SSLMode": "require"
+        }
+    }
+}
