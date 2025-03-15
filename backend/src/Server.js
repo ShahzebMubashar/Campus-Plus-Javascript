@@ -7,6 +7,7 @@ const authRoutes = require("../routes/authRoutes");
 const courseRoutes = require("../routes/courseRoutes");
 const chatroomRoute = require("../routes/chatroomRoutes");
 const transcriptRoute = require("../routes/transcriptRoutes");
+const emailRoute = require("../routes/emailRoutes");
 
 const app = express();
 const PORT = process.env.PORT_BACKEND || 4000;
@@ -43,8 +44,10 @@ app.use(
 // Routes
 app.use("/", authRoutes);
 app.use("/Courses", courseRoutes);
+// app.use("/Chatrooms", chatroomRoute);
 app.use("/Chatrooms", chatroomRoute);
 app.use("/Transcript", transcriptRoute);
+app.use("/api/email", emailRoute)
 
 app.use((req, res, next) => {
   console.log(`Request received: ${req.method} ${req.url}`);

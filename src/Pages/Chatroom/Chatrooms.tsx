@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Sidebar from "./components/Sidebar.tsx"
 import RoomList from "./components/RoomList.tsx"
 import RoomView from "./components/RoomView.tsx"
@@ -7,39 +7,47 @@ import Footer from '../Footer/Footer.js';
 import "./css/Chatroom.css"
 import type { Room } from "./types/types"
 
-const MOCK_ROOMS: Room[] = [
-    {
-        id: "1",
-        title: "Room 1",
-        description: "Welcome to Room 1 - A place for general discussion",
-        rules: ["Be respectful to others", "No spam or self-promotion", "Keep discussions on topic"],
-        memberCount: 150,
-        createdAt: "2024-01-01",
-    },
-    {
-        id: "2",
-        title: "Room 2",
-        description: "Technical discussions and coding help",
-        memberCount: 89,
-        createdAt: "2024-01-15",
-    },
-    {
-        id: "3",
-        title: "Room 3",
-        description: "Share your projects and get feedback",
-        memberCount: 234,
-        createdAt: "2024-01-10",
-    },
-]
-
 export default function App() {
-    const [rooms] = useState<Room[]>(MOCK_ROOMS)
+    const [rooms, setRooms] = useState<Room[]>([])
     const [activeRoom, setActiveRoom] = useState<Room | null>(null)
 
-    const handleJoinRoom = (roomId: string) => {
-        const room = rooms.find((r) => r.id === roomId)
-        if (room) {
-            setActiveRoom(room)
+    useEffect(() => {
+        fetchRooms()
+    }, [])
+
+    const fetchRooms = async () => {
+        try {
+            const response = await fetch("http://localhost:4000/Chatrooms", {
+                credentials: "include",
+            })
+            if (response.ok) {
+                const data = await response.json()
+                setRooms(data)
+            } else {
+                console.error("Failed to fetch rooms")
+            }
+        } catch (error) {
+            console.error("Error fetching rooms:", error)
+        }
+    }
+
+
+    const handleJoinRoom = async (roomId: string) => {
+        try {
+            const response = await fetch(`http://localhost:4000/Chatrooms/join/${roomId}`, {
+                method: "POST",
+                credentials: "include",
+            })
+            if (response.ok) {
+                const room = rooms.find((r) => r.roomid === roomId)
+                if (room) {
+                    setActiveRoom(room)
+                }
+            } else {
+                console.error("Failed to join room")
+            }
+        } catch (error) {
+            console.error("Error joining room:", error)
         }
     }
 
@@ -52,10 +60,12 @@ export default function App() {
             <div className="chatroom-app">
                 <Navbar />
                 <div className="content-wrapper">
-                    <Sidebar />
+                    <Sidebar username={''} onNavigate={function (page: string): void {
+                        throw new Error('Function not implemented.');
+                    }} />
                     <div className="main-content">
                         <header className="chatroom-header">
-                            <h1>{activeRoom ? activeRoom.title : "Chatrooms"}</h1>
+                            <h1>{activeRoom ? activeRoom.name : "Chatrooms"}</h1>
                         </header>
 
                         {activeRoom ? (
@@ -70,4 +80,5 @@ export default function App() {
         </div>
     )
 }
+
 

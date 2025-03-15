@@ -1,26 +1,43 @@
 export interface Room {
-    id: string
-    title: string
-    description: string
-    rules?: string[]
-    memberCount?: number
-    createdAt?: string
+    roomid: string;
+    id: string; // Add this for compatibility
+    name: string;
+    title: string; // Add this for compatibility
+    description: string;
+    created_at: string;
+    created_by: string;
 }
+// export interface Post {
+//     messageid: string;
+//     roomid: string;
+//     userid: string;
+//     username: string;
+//     content: string;
+//     posted_at: string;
+// }
+// export interface Comment {
+//     id: string
+//     author: string
+//     content: string
+//     createdAt: string
+// }
 
 export interface Post {
-    id: string
-    roomId: string
-    author: string
+    messageid: string
+    roomid: string
+    userid: string
     content: string
+    posted_at: string
     likes: number
     comments: Comment[]
-    createdAt: string
 }
 
 export interface Comment {
-    id: string
-    author: string
+    commentid: string
+    messageid: string
+    userid: string
     content: string
-    createdAt: string
+    created_at: string
 }
+
 
