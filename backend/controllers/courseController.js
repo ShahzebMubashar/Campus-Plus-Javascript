@@ -146,13 +146,16 @@ const getPastPapers = async (req, res) => {
   const { courseId } = req.params;
   try {
       const result = await pool.query(
-          'SELECT paper_id, paper_type, paper_year, file_link FROM past_papers WHERE courseid = $1',
+          'SELECT paper_id, paper_type, paper_year, file_link, file_link_down FROM past_papers WHERE courseid = $1',
           [courseId]
       );
+      if (result.rows.length === 0) {
+          return res.status(404).json({ message: 'No past papers found for this course' });
+      }
       res.json(result.rows);
   } catch (err) {
-      console.error(err.message);
-      res.status(500).send('Server error');
+      console.error('Error fetching past papers:', err.message);
+      res.status(500).json({ message: 'Server error while fetching past papers' });
   }
 };
 

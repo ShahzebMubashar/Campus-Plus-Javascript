@@ -29,65 +29,58 @@ function SignInPage() {
     };
 
     const handleSignInSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
         try {
             const response = await fetch("http://localhost:4000/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify(signInData),
             });
 
-            console.log("Response Status:", response.status); // Log response status
-            console.log("Response Headers:", response.headers); // Log response headers
-
             const data = await response.json();
-            console.log("Response Data:", data); // Log response body
 
             if (response.ok) {
                 setMessage("Sign in successful!");
-                localStorage.setItem("user", JSON.stringify(data));
-                navigate("/support"); // Use React Router's navigate for routing
+                localStorage.setItem("user", JSON.stringify(data.user));
+                // Redirect after a short delay to ensure session is set
+                setTimeout(() => navigate("/"), 100);
             } else {
-                setMessage(data.message || "Sign in failed. Please try again.");
+                setMessage(data.error || "Sign in failed. Please try again.");
             }
         } catch (error) {
-            console.error("Sign in error:", error); // Log any errors
+            console.error("Sign in error:", error);
             setMessage("An error occurred. Please try again later.");
         }
     };
 
-
     const handleSignUpSubmit = async (e) => {
-        e.preventDefault(); // Prevent default form submission
+        e.preventDefault();
         try {
             const response = await fetch("http://localhost:4000/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
+                credentials: "include",
                 body: JSON.stringify(signUpData),
             });
 
-            console.log("Response Status:", response.status); // Log response status
-            console.log("Response Headers:", response.headers); // Log response headers
-
             const data = await response.json();
-            console.log("Response Data:", data); // Log the response data
 
             if (response.ok) {
-                setMessage(data.message); // Show success message
-                setIsSignUp(false); // Switch to sign-in mode
+                setMessage(data.message);
+                setIsSignUp(false);
             } else {
-                setMessage(data.message || "Sign up failed. Please try again.");
+                setMessage(data.error || "Sign up failed. Please try again.");
             }
         } catch (error) {
-            console.error("Sign up error:", error); // Log any errors
+            console.error("Sign up error:", error);
             setMessage("An error occurred. Please try again later.");
         }
     };
-
 
     return (
         <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""}`}>
@@ -187,7 +180,6 @@ function SignInPage() {
                 </div>
             </div>
         </div>
-
     );
 }
 
