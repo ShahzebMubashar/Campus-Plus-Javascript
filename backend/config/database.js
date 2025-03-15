@@ -12,8 +12,8 @@ const pool = new pg.Pool({
     rejectUnauthorized: false,
   }
 });
-console.log('DB_USER:', process.env.DB_USER); // Should output 'postgres'
-console.log('DB_PASSWORD:', process.env.DB_PASSWORD); // Should output '123123'
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
 
 
 // Test the database connection
