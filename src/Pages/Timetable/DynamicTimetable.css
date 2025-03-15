@@ -9,20 +9,28 @@
   margin-bottom: 15px;
   align-items: center;
 }
-
 .export-button {
-  padding: 10px 15px;
-  background: linear-gradient(90deg, #ff6b6b, #f7797d);
+  padding: 10px 20px;
+  background: #8B0000;
   color: white;
   border: none;
   border-radius: 8px;
-  font-weight: bold;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 }
 
 .export-button:hover {
-  background: linear-gradient(90deg, #d64545, #f24665);
+  transform: translateY(-2px);
+  background: #a50000;
+  box-shadow: 0 10px 20px rgba(139, 0, 0, 0.2),
+              0 6px 6px rgba(139, 0, 0, 0.1);
+}
+
+.export-button:active {
+  transform: translateY(1px);
 }
 
 .timetable {
