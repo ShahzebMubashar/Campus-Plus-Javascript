@@ -2,9 +2,20 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "../Index/components/Navbar.js";
 import "./PastPaperDetails.css";
-import { FaDownload, FaExternalLinkAlt, FaLock, FaArrowLeft } from 'react-icons/fa';
+import { FaDownload, FaExternalLinkAlt, FaLock, FaArrowLeft, FaBook, FaStar, FaClock, FaGraduationCap, FaChalkboardTeacher } from 'react-icons/fa';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+
+const getDifficultyColor = (difficulty) => {
+  const difficultyMap = {
+    '1': '#4CAF50', // Easy
+    '2': '#8BC34A', // Moderate
+    '3': '#FF9800', // Intermediate  
+    '4': '#F44336', // Hard
+    '5': '#D32F2F'  // Very Hard
+  };
+  return difficultyMap[difficulty] || '#757575';
+};
 
 const PastPapersDetails = () => {
   const { courseId } = useParams();
@@ -37,7 +48,7 @@ const PastPapersDetails = () => {
         setError("");
 
         // Fetch course info
-        const courseResponse = await fetch(`${API_BASE_URL}/courses/${courseId}/past-papers`, {
+        const courseResponse = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
           credentials: 'include'
         });
         
@@ -98,7 +109,6 @@ const PastPapersDetails = () => {
   }, [courseId]);
 
   const handlePaperClick = (paper) => {
-    // Always use file_link for non-logged-in users, file_link_down for logged-in users
     const link = isLoggedIn && paper.file_link_down ? paper.file_link_down : paper.file_link;
     if (link) {
       window.open(link, '_blank');
@@ -148,7 +158,50 @@ const PastPapersDetails = () => {
           </button>
           <h1>{courseInfo?.coursename}</h1>
           <p className="course-code">{courseInfo?.coursecode}</p>
-          <p className="course-description">{courseInfo?.description}</p>
+        </div>
+      </div>
+
+      <div className="course-details-card">
+        <div className="details-grid">
+          <div className="detail-item">
+            <FaBook className="detail-icon" />
+            <div className="detail-content">
+              <h3>Credits</h3>
+              <p>{courseInfo?.credits || 'N/A'}</p>
+            </div>
+          </div>
+          <div className="detail-item">
+            <FaGraduationCap className="detail-icon" />
+            <div className="detail-content">
+              <h3>Grading</h3>
+              <p>{courseInfo?.grading || 'N/A'}</p>
+            </div>
+          </div>
+          <div className="detail-item">
+            <FaClock className="detail-icon" />
+            <div className="detail-content">
+              <h3>Difficulty</h3>
+              <div className="difficulty-badge" style={{ 
+                backgroundColor: getDifficultyColor(courseInfo?.difficulty)
+              }}>
+                {courseInfo?.difficulty || 'N/A'}
+              </div>
+            </div>
+          </div>
+          <div className="detail-item">
+            <FaStar className="detail-icon" />
+            <div className="detail-content">
+              <h3>Rating</h3>
+              <p>{courseInfo?.rating ? `${Number(courseInfo.rating).toFixed(1)}/5.0` : 'N/A'}</p>
+            </div>
+          </div>
+          <div className="detail-item">
+            <FaChalkboardTeacher className="detail-icon" />
+            <div className="detail-content">
+              <h3>Instructors</h3>
+              <p>{courseInfo?.instructors || 'N/A'}</p>
+            </div>
+          </div>
         </div>
       </div>
 
