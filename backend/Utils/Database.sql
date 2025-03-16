@@ -345,33 +345,34 @@ ALTER TABLE IF EXISTS public.usertask
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
 
--- Create a simplified view with just instructor names
-CREATE OR REPLACE VIEW ViewCourseInfo AS
-SELECT 
-    c.courseid,
-    c.coursecode,
-    ci.coursename,
-    ci.credits,
-    ci.grading,
-    ci.difficulty,
-    CASE 
-        WHEN cr.ratedcount > 0 THEN CAST(cr.ratingsum AS FLOAT) / cr.ratedcount 
-        ELSE 0 
-    END as rating,
-    string_agg(DISTINCT f.name, ', ') as instructors
-FROM courses c
-LEFT JOIN courseinfo ci ON c.courseid = ci.courseid
-LEFT JOIN courserating cr ON c.courseid = cr.courseid
-LEFT JOIN courseinstructor cin ON c.courseid = cin.courseid
-LEFT JOIN faculty f ON cin.instructorid = f.facultyid
-GROUP BY 
-    c.courseid,
-    c.coursecode,
-    ci.coursename,
-    ci.credits,
-    ci.grading,
-    ci.difficulty,
-    cr.ratingsum,
-    cr.ratedcount;
+
+CREATE or REPLACE VIEW ViewCourseInfo
+AS SELECT c.courseid,
+c.coursecode,
+ci.coursename,
+ci.credits,
+ci.grading,
+ci.difficulty,
+CASE WHEN cr.ratedcount > 0
+	THEN CAST(cr.ratingsum AS FLOAT)
+	/ cr.ratedcount
+	ELSE 0 
+	END 
+as rating,
+string_agg(DISTINCT f.name, ', ') as instructors,
+(SELECT COUNT(*) FROM past_papers pp 
+	WHERE pp.courseid = c.courseid) as past_papers_count
+	FROM courses c LEFT JOIN courseinfo ci ON c.courseid = ci.courseid 
+	LEFT JOIN courserating cr ON c.courseid = cr.courseid 
+	LEFT JOIN courseinstructor cin ON c.courseid = cin.courseid 
+	LEFT JOIN faculty f ON cin.instructorid = f.facultyid 
+GROUP BY c.courseid, 
+c.coursecode,
+ci.coursename,
+ci.credits,
+ci.grading,
+ci.difficulty,
+cr.ratingsum,
+cr.ratedcount;
 
 END;

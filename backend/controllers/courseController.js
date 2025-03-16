@@ -3,12 +3,16 @@ const fetch = require('node-fetch');
 // Controller to fetch all courses
 const getCourses = async (request, response) => {
   try {
-    const result = await pool.query("SELECT * FROM ViewCourses");
-    // console.log("Courses Data:", result.rows); // Log the result for debugging
+    const result = await pool.query(`
+      SELECT *,
+      CASE WHEN past_papers_count > 0 THEN true ELSE false END as has_past_papers
+      FROM ViewCourseInfo
+      ORDER BY has_past_papers DESC
+    `);
     if (!result.rowCount) {
       return response.status(404).json({ message: "No Courses Available" });
     }
-    return response.status(200).json(result.rows); // Send valid JSON
+    return response.status(200).json(result.rows);
   } catch (error) {
     console.error("Error in getCourses:", error);
     return response.status(500).json({ error: "Internal Server Error" });
