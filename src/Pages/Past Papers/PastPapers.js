@@ -24,8 +24,14 @@ const PastPapers = () => {
                     throw new Error('Failed to fetch courses');
                 }
                 const data = await response.json();
-                setCourses(data);
-                setFilteredCourses(data);
+                // Sort courses with past papers to the top
+                const sortedData = data.sort((a, b) => {
+                    if (a.past_papers_count && !b.past_papers_count) return -1;
+                    if (!a.past_papers_count && b.past_papers_count) return 1;
+                    return 0;
+                });
+                setCourses(sortedData);
+                setFilteredCourses(sortedData);
             } catch (err) {
                 setError("Unable to load courses at the moment.");
             } finally {
@@ -63,6 +69,83 @@ const PastPapers = () => {
         return difficultyMap[difficulty] || '#757575';
     };
 
+    const renderCourseCard = (course) => (
+        <div 
+            key={course.courseid}
+            className="course-card"
+            onClick={() => handleCourseClick(course.courseid)}
+        >
+            {course.past_papers_count > 0 && (
+                <div className="papers-available-tag">
+                    Available
+                </div>
+            )}
+            <div className="course-header">
+                <div className="course-icon">
+                    <FaBook />
+                </div>
+                <div className="course-title">
+                    <h3>{course.coursename}</h3>
+                    <span className="course-code">{course.coursecode}</span>
+                </div>
+            </div>
+
+            <div className="course-details">
+                <div className="detail-item">
+                    <span className="label">Credits:</span>
+                    <span className="value">{course.credits}</span>
+                </div>
+                <div className="detail-item">
+                    <span className="label">Grading:</span>
+                    <span className="value">{course.grading}</span>
+                </div>
+                <div className="detail-item">
+                    <span className="label">Difficulty:</span>
+                    <span 
+                        className="value difficulty-badge"
+                        style={{ backgroundColor: getDifficultyColor(course.difficulty) }}
+                    >
+                        {course.difficulty}
+                    </span>
+                </div>
+                <div className="detail-item">
+                    <span className="label">Rating:</span>
+                    <span className="value rating">
+                        <FaStar className="star-icon" />
+                        {course.rating ? Number(course.rating).toFixed(1) : "N/A"}
+                    </span>
+                </div>
+            </div>
+        </div>
+    );
+
+    if (loading) {
+        return (
+            <div className="pastpapers-app">
+                <div className="navbar-wrapper">
+                    <Navbar />
+                </div>
+                <div className="loading-container">
+                    <div className="loading-spinner" />
+                    <p>Loading courses...</p>
+                </div>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="pastpapers-app">
+                <div className="navbar-wrapper">
+                    <Navbar />
+                </div>
+                <div className="error-message">
+                    <p>{error}</p>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <div className="pastpapers-app">
             <div className="navbar-wrapper">
@@ -86,63 +169,9 @@ const PastPapers = () => {
                 </div>
             </div>
 
-            {loading ? (
-                <div className="loading-container">
-                    <div className="loading-spinner" />
-                    <p>Loading courses...</p>
-                </div>
-            ) : error ? (
-                <div className="error-message">
-                    <p>{error}</p>
-                </div>
-            ) : (
-                <div className="courses-grid">
-                    {filteredCourses.map((course) => (
-                        <div 
-                            key={course.courseid}
-                            className="course-card"
-                            onClick={() => handleCourseClick(course.courseid)}
-                        >
-                            <div className="course-header">
-                                <div className="course-icon">
-                                    <FaBook />
-                                </div>
-                                <div className="course-title">
-                                    <h3>{course.coursename}</h3>
-                                    <span className="course-code">{course.coursecode}</span>
-                                </div>
-                            </div>
-
-                            <div className="course-details">
-                                <div className="detail-item">
-                                    <span className="label">Credits:</span>
-                                    <span className="value">{course.credits}</span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="label">Grading:</span>
-                                    <span className="value">{course.grading}</span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="label">Difficulty:</span>
-                                    <span 
-                                        className="value difficulty-badge"
-                                        style={{ backgroundColor: getDifficultyColor(course.difficulty) }}
-                                    >
-                                        {course.difficulty}
-                                    </span>
-                                </div>
-                                <div className="detail-item">
-                                    <span className="label">Rating:</span>
-                                    <span className="value rating">
-                                        <FaStar className="star-icon" />
-                                        {course.rating ? course.rating.toFixed(1) : "N/A"}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
+            <div className="courses-grid">
+                {filteredCourses.map(renderCourseCard)}
+            </div>
         </div>
     );
 };

@@ -24,11 +24,11 @@
   font-weight: 600;
 }
 
-.course-code {
-  font-size: 1.1rem;
-  opacity: 0.9;
+.course-banner .course-code {
+  font-size: 1.2rem;
   margin-bottom: 0;
-  color: #adb5bd;
+  color: #d5dedc;
+  font-weight: 500;
 }
 
 .papers-container {
@@ -213,45 +213,47 @@
 .course-details-card {
   background: white;
   border-radius: 12px;
-  padding: 2rem;
+  padding: 1.5rem;
   margin: -1rem auto 2rem;
   max-width: 1200px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   position: relative;
   z-index: 1;
   overflow: hidden;
+  width: calc(100% - 4rem);
 }
 
 .details-grid {
   display: flex;
-  overflow-x: auto;
-  gap: 2rem;
+  gap: 1.5rem;
   padding: 0.5rem;
-  scroll-behavior: smooth;
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
-.details-grid::-webkit-scrollbar {
-  display: none;
-}
-
-.detail-item {
+.detail-card {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  min-width: 200px;
-  transition: transform 0.2s ease;
+  width: 180px;
+  padding: 1.25rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
-.detail-item:hover {
-  transform: translateY(-5px);
+.detail-card:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .detail-icon {
   font-size: 1.5rem;
   color: #144272;
+  margin-bottom: 0.5rem;
 }
 
 .detail-content {
@@ -262,24 +264,23 @@
 .detail-content h3 {
   font-size: 0.9rem;
   color: #6c757d;
-  margin: 0 0 0.3rem 0;
+  margin-bottom: 0.25rem;
   font-weight: 500;
 }
 
 .detail-content p {
   font-size: 1.1rem;
   color: #0a2647;
-  margin: 0;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .difficulty-badge {
   display: inline-block;
-  padding: 0.3rem 0.8rem;
-  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  border-radius: 4px;
   color: white;
   font-weight: 500;
-  font-size: 1rem;
+  font-size: 0.9rem;
 }
 
 @media (max-width: 768px) {
@@ -290,16 +291,18 @@
 
   .course-details-card {
     margin: -1rem 1rem 2rem;
-    padding: 1.5rem;
+    padding: 1rem;
+    width: calc(100% - 2rem);
   }
 
   .details-grid {
-    gap: 1.5rem;
+    gap: 1rem;
     padding: 0.25rem;
   }
 
-  .detail-item {
-    min-width: 180px;
+  .detail-card {
+    width: 150px;
+    padding: 1rem;
   }
 
   .signin-banner {

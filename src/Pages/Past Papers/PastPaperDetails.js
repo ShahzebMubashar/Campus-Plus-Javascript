@@ -163,22 +163,28 @@ const PastPapersDetails = () => {
 
       <div className="course-details-card">
         <div className="details-grid">
-          <div className="detail-item">
-            <FaBook className="detail-icon" />
+          <div className="detail-card">
+            <div className="detail-icon">
+              <FaBook />
+            </div>
             <div className="detail-content">
               <h3>Credits</h3>
               <p>{courseInfo?.credits || 'N/A'}</p>
             </div>
           </div>
-          <div className="detail-item">
-            <FaGraduationCap className="detail-icon" />
+          <div className="detail-card">
+            <div className="detail-icon">
+              <FaGraduationCap />
+            </div>
             <div className="detail-content">
               <h3>Grading</h3>
               <p>{courseInfo?.grading || 'N/A'}</p>
             </div>
           </div>
-          <div className="detail-item">
-            <FaClock className="detail-icon" />
+          <div className="detail-card">
+            <div className="detail-icon">
+              <FaClock />
+            </div>
             <div className="detail-content">
               <h3>Difficulty</h3>
               <div className="difficulty-badge" style={{ 
@@ -188,15 +194,19 @@ const PastPapersDetails = () => {
               </div>
             </div>
           </div>
-          <div className="detail-item">
-            <FaStar className="detail-icon" />
+          <div className="detail-card">
+            <div className="detail-icon">
+              <FaStar />
+            </div>
             <div className="detail-content">
               <h3>Rating</h3>
               <p>{courseInfo?.rating ? `${Number(courseInfo.rating).toFixed(1)}/5.0` : 'N/A'}</p>
             </div>
           </div>
-          <div className="detail-item">
-            <FaChalkboardTeacher className="detail-icon" />
+          <div className="detail-card">
+            <div className="detail-icon">
+              <FaChalkboardTeacher />
+            </div>
             <div className="detail-content">
               <h3>Instructors</h3>
               <p>{courseInfo?.instructors || 'N/A'}</p>
@@ -256,3 +266,4 @@ const PastPapersDetails = () => {
 };
 
 export default PastPapersDetails;
+

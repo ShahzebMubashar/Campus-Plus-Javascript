@@ -26,8 +26,7 @@
   
   .search-container {
     max-width: 600px;
-    margin: 0 auto;
-    margin-bottom: 3rem;
+    margin: 0 auto 3rem;
   }
   
   .search-wrapper {
@@ -74,6 +73,8 @@
     transition: all 0.3s ease;
     border: 1px solid #e9ecef;
     cursor: pointer;
+    position: relative;
+    overflow: visible;
   }
   
   .course-card:hover {
@@ -128,6 +129,7 @@
     align-items: flex-start;
     gap: 1rem;
     margin-bottom: 1.5rem;
+    margin-top: 0.75rem;
   }
   
   .course-icon {
@@ -155,36 +157,41 @@
     font-weight: 600;
   }
   
-  .course-code {
+  .course-card .course-code {
+    font-size: 1.1rem;
+    margin-bottom: 0;
     color: #6c757d;
-    font-size: 0.9rem;
-    margin-top: 0.25rem;
+    font-weight: 500;
   }
   
   .course-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
-    margin-bottom: 1rem;
-    background: #f8f9fa;
     padding: 1rem;
+    background: #f8f9fa;
     border-radius: 8px;
+    margin-top: 1rem;
   }
   
   .detail-item {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0.5rem;
+    padding: 0.75rem;
   }
   
   .label {
     color: #6c757d;
     font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
   }
   
   .value {
     color: #0a2647;
-    font-weight: 500;
+    font-weight: 600;
+    font-size: 1rem;
   }
   
   .difficulty-badge {
@@ -321,6 +328,12 @@
   
     .course-details {
       grid-template-columns: 1fr;
+      padding: 0.75rem;
+      gap: 0.75rem;
+    }
+  
+    .detail-item {
+      padding: 0.25rem;
     }
   
     .pastpapers-header h1 {
@@ -372,12 +385,6 @@
   font-size: 2.5rem;
   margin-bottom: 0.5rem;
   font-weight: 700;
-}
-
-.course-code {
-  font-size: 1.2rem;
-  opacity: 0.9;
-  margin-bottom: 1rem;
 }
 
 .course-description {
@@ -585,4 +592,104 @@
   .section-title {
     font-size: 1.5rem;
   }
+}
+
+.papers-available-tag {
+  position: absolute;
+  top: -0.5rem;
+  right: 1rem;
+  background: linear-gradient(135deg, #144272 0%, #205295 100%);
+  color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  box-shadow: 0 2px 8px rgba(20, 66, 114, 0.2);
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.papers-available-tag:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(20, 66, 114, 0.3);
+  background: linear-gradient(135deg, #205295 0%, #144272 100%);
+}
+
+/* Past Papers Detail Page Course Info Cards */
+.course-details-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin: -1rem auto 2rem;
+  max-width: 1200px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  width: calc(100% - 4rem);
+}
+
+.details-grid {
+  display: flex;
+  overflow-x: auto;
+  gap: 1.5rem;
+  padding: 0.5rem;
+  scroll-behavior: smooth;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  justify-content: center;
+  margin: 0 auto;
+  max-width: fit-content;
+}
+
+.details-grid::-webkit-scrollbar {
+  display: none;
+}
+
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 160px;
+  max-width: 160px;
+  padding: 1.25rem;
+  background: #f8f9fa;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.detail-card:hover {
+  transform: translateY(-2px);
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+@media (max-width: 768px) {
+  .course-details-card {
+    margin: -1rem 1rem 2rem;
+    padding: 1rem;
+    width: calc(100% - 2rem);
+  }
+
+  .details-grid {
+    gap: 1rem;
+    padding: 0.25rem;
+  }
+
+  .detail-card {
+    min-width: 140px;
+    max-width: 140px;
+    padding: 1rem;
+  }
+}
+
+.course-banner .course-code {
+  font-size: 1.2rem;
+  margin-bottom: 0;
+  color: #a22664;
+  font-weight: 500;
 }
