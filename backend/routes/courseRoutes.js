@@ -1,10 +1,11 @@
 const express = require("express");
-const { getCourses, rateCourse, reviewCourse, getPastPapers, downloadPastPapers } = require("../controllers/courseController.js");
+const { getCourses, rateCourse, reviewCourse, getPastPapers, downloadPastPapers, getCourseDetails } = require("../controllers/courseController.js");
 const { checkAuthorisation } = require("../middlewares/authMiddleware.js");
 
 const router = express.Router();
 
 router.get("/", getCourses);
+router.get("/:courseId", getCourseDetails);
 router.get("/:courseId/past-papers", getPastPapers);
 router.get("/past-papers/:paperId/download", downloadPastPapers);
 router.post("/rate-course", checkAuthorisation, rateCourse);

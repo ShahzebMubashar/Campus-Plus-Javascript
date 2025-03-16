@@ -183,6 +183,29 @@ const downloadPastPapers = async (req, res) => {
   }
 };
 
+const getCourseDetails = async (req, res) => {
+    const { courseId } = req.params;
+    try {
+        const result = await pool.query(
+            `SELECT vci.*, 
+            CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating
+            FROM ViewCourseInfo vci
+            LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
+            WHERE vci.courseid = $1`,
+            [courseId]
+        );
+
+        if (result.rows.length === 0) {
+            return res.status(404).json({ message: 'Course not found' });
+        }
+
+        res.json(result.rows[0]);
+    } catch (err) {
+        console.error('Error fetching course details:', err);
+        res.status(500).json({ message: 'Server error while fetching course details' });
+    }
+};
+
 // Exporting the functions
 module.exports = {
   getCourses,
@@ -191,4 +214,5 @@ module.exports = {
   addCourse,
   getPastPapers,
   downloadPastPapers,
+  getCourseDetails,
 };
