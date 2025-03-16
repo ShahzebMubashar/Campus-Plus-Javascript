@@ -1,70 +1,201 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "../Index/components/Navbar.js";
-import "./PP.css";
+import "./PastPaperDetails.css";
+import { FaDownload, FaExternalLinkAlt, FaLock, FaArrowLeft } from 'react-icons/fa';
+
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const PastPapersDetails = () => {
-  const { courseId } = useParams(); // Get course ID from URL params
-  const [papers, setPapers] = useState([]);
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+  const [papers, setPapers] = useState({});
+  const [courseInfo, setCourseInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const fetchPapers = async () => {
+    const checkAuth = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/courses/${courseId}/past-papers`);
-        if (!response.ok) {
-          throw new Error(`Failed to fetch past papers: ${response.status}`);
-        }
-        const data = await response.json();
-        // Sort papers by type
-        const sortedPapers = data.sort((a, b) => a.type.localeCompare(b.type));
-        setPapers(sortedPapers);
+        const response = await fetch(`${API_BASE_URL}/user/profile`, {
+          credentials: 'include'
+        });
+        setIsLoggedIn(response.ok);
       } catch (err) {
-        setError("Unable to load past papers at the moment. Please try again later.");
+        setIsLoggedIn(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        setError("");
+
+        // Fetch course info
+        const courseResponse = await fetch(`${API_BASE_URL}/courses/${courseId}/past-papers`, {
+          credentials: 'include'
+        });
+        
+        if (!courseResponse.ok) {
+          if (courseResponse.status === 404) {
+            throw new Error('Course not found');
+          }
+          throw new Error('Failed to fetch course info');
+        }
+        
+        const courseData = await courseResponse.json();
+        setCourseInfo(courseData);
+
+        // Fetch papers
+        const papersResponse = await fetch(`${API_BASE_URL}/courses/${courseId}/past-papers`, {
+          credentials: 'include'
+        });
+
+        if (!papersResponse.ok) {
+          if (papersResponse.status === 404) {
+            setPapers({});
+            return;
+          }
+          throw new Error('Failed to fetch past papers');
+        }
+
+        const papersData = await papersResponse.json();
+        
+        if (!Array.isArray(papersData) || papersData.length === 0) {
+          setPapers({});
+          return;
+        }
+
+        // Group papers by type
+        const groupedPapers = papersData.reduce((acc, paper) => {
+          const key = paper.paper_type || 'Other';
+          if (!acc[key]) acc[key] = [];
+          acc[key].push(paper);
+          return acc;
+        }, {});
+
+        // Sort papers by year within each type
+        Object.keys(groupedPapers).forEach(type => {
+          groupedPapers[type].sort((a, b) => b.paper_year - a.paper_year);
+        });
+
+        setPapers(groupedPapers);
+      } catch (err) {
+        setError(err.message || "Unable to load content. Please try again later.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchPapers();
+    if (courseId) {
+      fetchData();
+    }
   }, [courseId]);
 
+  const handlePaperClick = (paper) => {
+    // Always use file_link for non-logged-in users, file_link_down for logged-in users
+    const link = isLoggedIn && paper.file_link_down ? paper.file_link_down : paper.file_link;
+    if (link) {
+      window.open(link, '_blank');
+    }
+  };
+
+  const handleBack = () => {
+    navigate('/past-papers');
+  };
+
+  if (loading) {
+    return (
+      <div className="pastpapers-details">
+        <Navbar />
+        <div className="loading-container">
+          <div className="loading-spinner" />
+          <p>Loading content...</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="pastpapers-details">
+        <Navbar />
+        <div className="error-container">
+          <p>{error}</p>
+          <button onClick={handleBack} className="back-button">
+            <FaArrowLeft /> Back to Courses
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const hasPapers = Object.keys(papers).length > 0;
+
   return (
-    <div className="pastpapers-details-app">
+    <div className="pastpapers-details">
       <Navbar />
+      
+      <div className="course-banner">
+        <div className="course-info">
+          <button onClick={handleBack} className="back-button">
+            <FaArrowLeft /> Back to Courses
+          </button>
+          <h1>{courseInfo?.coursename}</h1>
+          <p className="course-code">{courseInfo?.coursecode}</p>
+          <p className="course-description">{courseInfo?.description}</p>
+        </div>
+      </div>
 
-      <header className="pastpapers-header">
-        <h1 className="header-title">Past Papers</h1>
-        <p className="header-subtitle">Explore past papers for the course.</p>
-      </header>
-
-      <div className="container">
-        {loading ? (
-          <p className="loading-text">Loading past papers...</p>
-        ) : error ? (
-          <p className="error-text">{error}</p>
-        ) : (
-          <div className="papers-grid">
-            {papers.length === 0 ? (
-              <p className="no-papers-text">No past papers available for this course.</p>
-            ) : (
-              papers.map((paper) => (
-                <div key={paper.paperid} className="paper-card">
-                  <h3 className="paper-type">{paper.type}</h3>
-                  <p className="paper-year">Year: {paper.year}</p>
-                  <a
-                    href={paper.downloadLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="download-link"
-                  >
-                    Download
-                  </a>
-                </div>
-              ))
-            )}
+      {!isLoggedIn && (
+        <div className="signin-banner">
+          <FaLock className="lock-icon" />
+          <div className="banner-content">
+            <h3>Sign in to download past papers</h3>
+            <p>You can view all papers now, but sign in to access downloadable versions</p>
+            <Link to="/sign-in" className="signin-button">Sign In</Link>
           </div>
+        </div>
+      )}
+
+      <div className="papers-container">
+        {!hasPapers ? (
+          <div className="no-papers">
+            <h2>No Past Papers Available</h2>
+            <p>There are currently no past papers available for this course.</p>
+          </div>
+        ) : (
+          Object.entries(papers).map(([type, typePapers]) => (
+            <div key={type} className="paper-section">
+              <h2 className="section-title">{type}</h2>
+              <div className="papers-grid">
+                {typePapers.map((paper) => (
+                  <div 
+                    key={paper.paperid} 
+                    className="paper-card"
+                    onClick={() => handlePaperClick(paper)}
+                  >
+                    <div className="paper-info">
+                      <h3>{paper.paper_year} {type}</h3>
+                      <p>{paper.description || `${courseInfo?.coursecode} - ${paper.paper_year}`}</p>
+                    </div>
+                    <div className="paper-actions">
+                      {isLoggedIn && paper.file_link_down ? (
+                        <FaDownload className="action-icon download" />
+                      ) : (
+                        <FaExternalLinkAlt className="action-icon external" />
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
         )}
       </div>
     </div>

@@ -1,0 +1,247 @@
+.pastpapers-details {
+  min-height: 100vh;
+  background: #f8f9fa;
+  padding-bottom: 3rem;
+}
+
+.course-banner {
+  background: linear-gradient(135deg, #0a2647 0%, #144272 100%);
+  color: white;
+  padding: 3rem 2rem;
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.course-info {
+  max-width: 1200px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.course-info h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.course-code {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-bottom: 1rem;
+  color: #adb5bd;
+}
+
+.course-description {
+  font-size: 1rem;
+  opacity: 0.8;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.papers-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.paper-section {
+  margin-bottom: 3rem;
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 1.8rem;
+  color: #0a2647;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e9ecef;
+}
+
+.papers-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.paper-card {
+  background: #f8f9fa;
+  border-radius: 8px;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid #e9ecef;
+}
+
+.paper-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #144272;
+}
+
+.paper-card.locked {
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+.paper-info {
+  flex: 1;
+}
+
+.paper-info h3 {
+  font-size: 1.1rem;
+  color: #0a2647;
+  margin-bottom: 0.3rem;
+}
+
+.paper-info p {
+  font-size: 0.9rem;
+  color: #6c757d;
+}
+
+.paper-actions {
+  margin-left: 1rem;
+}
+
+.action-icon {
+  font-size: 1.2rem;
+}
+
+.action-icon.download {
+  color: #2ecc71;
+}
+
+.action-icon.external {
+  color: #3498db;
+}
+
+.action-icon.locked {
+  color: #95a5a6;
+}
+
+.signin-banner {
+  background: #fff;
+  border-radius: 12px;
+  padding: 2rem;
+  margin: 2rem auto;
+  max-width: 1200px;
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+.lock-icon {
+  font-size: 2rem;
+  color: #6c757d;
+}
+
+.banner-content {
+  flex: 1;
+}
+
+.banner-content h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #0a2647;
+}
+
+.banner-content p {
+  color: #6c757d;
+  margin-bottom: 1rem;
+}
+
+.signin-button {
+  display: inline-block;
+  padding: 0.8rem 2rem;
+  background: #144272;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.signin-button:hover {
+  background: #0a2647;
+  transform: translateY(-1px);
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  transition: all 0.2s ease;
+}
+
+.back-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateX(-2px);
+}
+
+.error-container .back-button {
+  background: #144272;
+  color: white;
+  margin-top: 1rem;
+}
+
+.error-container .back-button:hover {
+  background: #0a2647;
+}
+
+.no-papers {
+  text-align: center;
+  padding: 3rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.no-papers h2 {
+  color: #0a2647;
+  margin-bottom: 1rem;
+  font-size: 1.8rem;
+}
+
+.no-papers p {
+  color: #6c757d;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .course-banner {
+    padding: 2rem 1rem;
+  }
+
+  .course-info h1 {
+    font-size: 2rem;
+  }
+
+  .papers-container {
+    padding: 0 1rem;
+  }
+
+  .papers-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .signin-banner {
+    flex-direction: column;
+    text-align: center;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+} 
