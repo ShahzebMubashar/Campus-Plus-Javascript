@@ -95,32 +95,40 @@ exports.register = async (request, response) => {
 };
 
 exports.login = async (request, response) => {
+    console.log('Login attempt received:', request.body);
     const { email, password, username } = request.body;
 
     if (!email && !username) {
+        console.log('No email or username provided');
         return response.status(400).send("Please provide Email or Username");
     }
     if (!password) {
+        console.log('No password provided');
         return response.status(400).send("Please provide Password");
     }
 
     try {
+        console.log('Attempting to find user with:', email || username);
         const result = await pool.query(
             "SELECT * FROM Users WHERE email = $1 or username = $1",
             [email || username]
         );
 
         if (!result.rowCount) {
+            console.log('No user found with provided credentials');
             return response.status(404).json({ error: "Invalid credentials" });
         }
 
         const user = result.rows[0];
+        console.log('User found, verifying password');
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
+            console.log('Password mismatch');
             return response.status(401).json({ error: "Invalid credentials" });
         }
 
+        console.log('Password verified, setting session');
         // Set session data
         request.session.user = {
             userid: user.userid,
@@ -140,6 +148,7 @@ exports.login = async (request, response) => {
             });
         });
 
+        console.log('Session saved, sending response');
         // Set proper headers
         response.header('Access-Control-Allow-Credentials', 'true');
         response.header('Access-Control-Allow-Origin', 'http://localhost:3000');

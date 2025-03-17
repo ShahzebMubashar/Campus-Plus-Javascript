@@ -30,8 +30,9 @@ function SignInPage() {
 
     const handleSignInSubmit = async (e) => {
         e.preventDefault();
+        console.log('Attempting login with:', signInData);
         try {
-            const response = await fetch("http://localhost:4000/login", {
+            const response = await fetch("http://localhost:4000/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -40,7 +41,9 @@ function SignInPage() {
                 body: JSON.stringify(signInData),
             });
 
+            console.log('Login response status:', response.status);
             const data = await response.json();
+            console.log('Login response data:', data);
 
             if (response.ok) {
                 setMessage("Sign in successful!");
@@ -59,7 +62,7 @@ function SignInPage() {
     const handleSignUpSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:4000/register", {
+            const response = await fetch("http://localhost:4000/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
