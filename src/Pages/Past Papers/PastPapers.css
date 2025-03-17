@@ -204,14 +204,75 @@
     text-align: center;
   }
   
-  .rating {
+  .detail-item:has(.rating) {
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 0.25rem;
+    justify-content: center;
+    min-height: 120px;
+    grid-column: 1 / -1;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 400px;
   }
   
-  .star-icon {
-    color: #ffc107;
+  .detail-item:has(.rating) .label {
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    color: #6c757d;
+    font-weight: 500;
+  }
+  
+  .rating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 12px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 12px;
+    backdrop-filter: blur(5px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    margin: 4px auto;
+    transition: all 0.3s ease;
+    border: 1px solid rgba(20, 66, 114, 0.15);
+  }
+  
+  .rating-bars {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    padding: 6px;
+    background: rgba(20, 66, 114, 0.03);
+    border-radius: 8px;
+    border: 1px solid rgba(20, 66, 114, 0.08);
+  }
+  
+  .rating-bar {
+    flex: 1;
+    height: 12px;
+    background: #e9ecef;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #dee2e6;
+  }
+  
+  .average-rating {
+    font-weight: 600;
+    color: #333;
+    font-size: 18px;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 4px 12px;
+    border-radius: 10px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
   
   .fetch-papers-button {
