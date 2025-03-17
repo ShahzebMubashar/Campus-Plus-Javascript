@@ -354,9 +354,8 @@ ci.credits,
 ci.grading,
 ci.difficulty,
 CASE WHEN cr.ratedcount > 0
-	THEN CAST(cr.ratingsum AS FLOAT)
-	/ cr.ratedcount
-	ELSE 0 
+	THEN (CAST(cr.ratingsum AS FLOAT) + ci.difficulty) / (cr.ratedcount + 1)
+	ELSE ci.difficulty 
 	END 
 as rating,
 string_agg(DISTINCT f.name, ', ') as instructors,

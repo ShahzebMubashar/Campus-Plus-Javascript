@@ -26,6 +26,13 @@ app.use(cors({
     exposedHeaders: ['Set-Cookie']
 }));
 
+// Set CORS headers for all responses
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+    next();
+});
+
 // Session configuration
 app.use(
     session({
@@ -40,19 +47,13 @@ app.use(
             httpOnly: true,
             secure: false,
             sameSite: 'lax'
-        }
+        },
+        proxy: true
     })
 );
 
-// Set CORS headers for all responses
-app.use((req, res, next) => {
-    res.header('Access-Control-Allow-Credentials', 'true');
-    res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-    next();
-});
-
 // Routes
-app.use("/", authRoutes);
+app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/Courses", courseRoutes);
 app.use("/Chatrooms", chatroomRoute);

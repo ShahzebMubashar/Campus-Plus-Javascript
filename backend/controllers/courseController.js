@@ -188,26 +188,82 @@ const downloadPastPapers = async (req, res) => {
 };
 
 const getCourseDetails = async (req, res) => {
-    const { courseId } = req.params;
-    try {
-        const result = await pool.query(
-            `SELECT vci.*, 
-            CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating
-            FROM ViewCourseInfo vci
-            LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
-            WHERE vci.courseid = $1`,
-            [courseId]
-        );
+  const { courseId } = req.params;
+  try {
+    const result = await pool.query(
+      `SELECT vci.*, 
+      CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count,
+      ci.difficulty as difficulty,
+      CASE WHEN EXISTS (
+        SELECT 1 FROM UserCourseRating 
+        WHERE courseid = vci.courseid 
+        AND userid = $2
+      ) THEN true ELSE false END as has_rated
+      FROM ViewCourseInfo vci
+      LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
+      LEFT JOIN CourseInfo ci ON vci.courseid = ci.courseid
+      WHERE vci.courseid = $1`,
+      [courseId, req.session?.user?.userid || 0]
+    );
 
-        if (result.rows.length === 0) {
-            return res.status(404).json({ message: 'Course not found' });
-        }
-
-        res.json(result.rows[0]);
-    } catch (err) {
-        console.error('Error fetching course details:', err);
-        res.status(500).json({ message: 'Server error while fetching course details' });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: 'Course not found' });
     }
+
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error('Error fetching course details:', err);
+    res.status(500).json({ message: 'Server error while fetching course details' });
+  }
+};
+
+// Controller to rate course difficulty
+const rateCourseDifficulty = async (request, response) => {
+  const {
+    body: { courseid, rating },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  if (!courseid || !rating || rating < 1 || rating > 5) {
+    return response.status(400).json({ message: "Invalid Input" });
+  }
+
+  try {
+    const client = await pool.connect();
+
+    // Update the difficulty in courseinfo table
+    await client.query(
+      `UPDATE CourseInfo 
+       SET difficulty = $1 
+       WHERE courseid = $2`,
+      [rating, courseid]
+    );
+
+    // Get the updated course details
+    const result = await client.query(
+      `SELECT vci.*, 
+       CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
+       CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count,
+       ci.difficulty as difficulty,
+       CASE WHEN EXISTS (
+           SELECT 1 FROM UserCourseRating 
+           WHERE courseid = vci.courseid 
+           AND userid = $2
+       ) THEN true ELSE false END as has_rated
+       FROM ViewCourseInfo vci
+       LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
+       LEFT JOIN CourseInfo ci ON vci.courseid = ci.courseid
+       WHERE vci.courseid = $1`,
+      [courseid, userid]
+    );
+
+    return response.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error("Error in rateCourseDifficulty:", error);
+    return response.status(500).json({ message: "Internal Server Error" });
+  }
 };
 
 // Exporting the functions
@@ -219,4 +275,5 @@ module.exports = {
   getPastPapers,
   downloadPastPapers,
   getCourseDetails,
+  rateCourseDifficulty,
 };
