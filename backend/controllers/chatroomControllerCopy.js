@@ -86,4 +86,32 @@ const joinRoom = async (request, response) => {
   }
 };
 
+const sendMessage = async (request, response) => {
+  const {
+    body: { message, roomid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    let res = await client.query(
+      `Insert into Messages (roomid, userid, content, posted_at)
+      values ($1, $2, $3, current_timestamp)`,
+      [roomid, userid, message]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).send("Message sent successfully");
+  } catch (error) {
+    console.error("Send message error:", error.message);
+    return response.status(500).send("Server Error");
+  }
+};
+
 module.exports = { getRooms, createRoom, joinRoom };
