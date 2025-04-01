@@ -136,7 +136,7 @@ exports.login = async (request, response) => {
             username: user.username,
             role: user.role
         };
-
+console.log(`request.session.user.userid: ${request.session.user.userid}`);
         // Save session explicitly and wait for it to complete
         await new Promise((resolve, reject) => {
             request.session.save((err) => {
