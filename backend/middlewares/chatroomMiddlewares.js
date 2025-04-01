@@ -4,11 +4,17 @@ const checkRoomMember = async (request, response, next) => {
   try {
     console.log("Middleware Request:", request.params);
 
-    const { roomid } = request.params;
-    const userid = "1"; // Hardcoded user ID (Replace with a valid one from your DB)
+    const {
+      params: { roomid },
+      session: {
+        user: { userid },
+      },
+    } = request;
 
     if (!userid || !roomid) {
-      return response.status(400).json({ error: "User ID and Room ID are required" });
+      return response
+        .status(400)
+        .json({ error: "User ID and Room ID are required" });
     }
 
     let res = await pool.query(
@@ -26,7 +32,5 @@ const checkRoomMember = async (request, response, next) => {
     return response.sendStatus(500);
   }
 };
-
-module.exports = { checkRoomMember };
 
 module.exports = { checkRoomMember };

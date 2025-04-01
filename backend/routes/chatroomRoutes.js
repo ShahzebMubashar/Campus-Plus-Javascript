@@ -3,7 +3,7 @@ const {
   getRooms,
   createRoom,
   joinRoom,
-//   sendMessage,
+  sendMessage,
 } = require("../controllers/chatroomControllerCopy");
 const {
   checkAuthorisation,
@@ -16,11 +16,11 @@ const router = express.Router();
 router.get("/", getRooms);
 router.post("/create", checkAuthorisation, createRoom);
 router.post("/join/:roomid", checkAuthorisation, joinRoom);
-// router.post(
-//   "/send-message/:roomid",
-//   checkAuthorisation,
-//   checkRoomMember,
-//   sendMessage
-// );
+router.post(
+  "/send-message/:roomid",
+  checkAuthorisation,
+  checkRoomMember,
+  sendMessage
+);
 
 module.exports = router; // Ensure this is properly exported

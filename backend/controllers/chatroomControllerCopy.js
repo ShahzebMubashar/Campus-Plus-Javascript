@@ -54,8 +54,10 @@ const createRoom = async (request, response) => {
 
 const joinRoom = async (request, response) => {
   const {
-    body: { roomid },
-    user: { userid },
+    params: { roomid },
+    session: {
+      user: { userid },
+    },
   } = request;
 
   try {
@@ -73,7 +75,7 @@ const joinRoom = async (request, response) => {
 
     res = await client.query(
       `Insert into RoomMembers (roomid, userid, joined_at)
-      values ($1, $2)`,
+      values ($1, $2, current_timestamp)`,
       [roomid, userid]
     );
 
@@ -88,7 +90,8 @@ const joinRoom = async (request, response) => {
 
 const sendMessage = async (request, response) => {
   const {
-    body: { message, roomid },
+    body: { message },
+    params: { roomid },
     session: {
       user: { userid },
     },
@@ -111,7 +114,9 @@ const sendMessage = async (request, response) => {
   } catch (error) {
     console.error("Send message error:", error.message);
     return response.status(500).send("Server Error");
+  } finally {
+    if (client) client.release();
   }
 };
 
-module.exports = { getRooms, createRoom, joinRoom };
+module.exports = { getRooms, createRoom, joinRoom, sendMessage };
