@@ -1,20 +1,7 @@
 import React from 'react';
-import "../css/RoomList.css"
+import "../css/RoomList.css";
 
-interface Room {
-
-    roomid: string
-    title: string
-    description: string
-
-}
-
-interface RoomListProps {
-    rooms: Room[]
-    onJoinRoom: (roomId: string) => void
-}
-
-export default function RoomList({ rooms, onJoinRoom }: RoomListProps) {
+export default function RoomList({ rooms, onJoinRoom }) {
     return (
         <div className="room-list">
             {rooms.map((room) => (
@@ -24,12 +11,10 @@ export default function RoomList({ rooms, onJoinRoom }: RoomListProps) {
                         <p className="room-description">{room.description}</p>
                     </div>
                     <button className="join-button" onClick={() => onJoinRoom(room.roomid)}>
-
                         Join
                     </button>
                 </div>
             ))}
         </div>
-    )
+    );
 }
-

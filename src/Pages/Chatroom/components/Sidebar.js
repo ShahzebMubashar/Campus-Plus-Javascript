@@ -1,15 +1,9 @@
 import React from 'react';
-import "../css/Sidebar.css"
-import Picture from '../../../Assets/images/Shahzeb Mubashar (lesser size).webp'
-import { User, Settings, Users, Bell } from "lucide-react"
+import "../css/Sidebar.css";
+import Picture from '../../../Assets/images/Shahzeb Mubashar (lesser size).webp';
+import { User, Settings, Users, Bell } from "lucide-react";
 
-
-interface SidebarProps {
-    username: string
-    onNavigate: (page: string) => void
-}
-
-export default function Sidebar({ username, onNavigate }: SidebarProps) {
+export default function Sidebar({ username, onNavigate }) {
     return (
         <div className="sidebar">
             <div className="profile">
@@ -37,6 +31,5 @@ export default function Sidebar({ username, onNavigate }: SidebarProps) {
                 </li>
             </ul>
         </div>
-    )
+    );
 }
-
