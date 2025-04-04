@@ -4,11 +4,14 @@ const {
   createRoom,
   joinRoom,
   sendMessage,
-} = require("../controllers/chatroomControllerCopy");
+  sendReply,
+} = require("../controllers/chatroomController");
+
 const {
   checkAuthorisation,
   checkAdmin,
 } = require("../middlewares/authMiddleware");
+
 const { checkRoomMember } = require("../middlewares/chatroomMiddlewares");
 
 const router = express.Router();
@@ -21,6 +24,12 @@ router.post(
   checkAuthorisation,
   checkRoomMember,
   sendMessage
+);
+router.post(
+  "/reply/:roomid/:parentMessage",
+  checkAuthorisation,
+  checkRoomMember,
+  sendReply
 );
 
 module.exports = router; // Ensure this is properly exported
