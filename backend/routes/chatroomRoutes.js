@@ -22,7 +22,7 @@ const {
 
 const router = express.Router();
 
-router.get("/", getRooms);
+router.get("/:roomid?", getRooms);
 router.post("/create", checkAuthorisation, createRoom);
 router.post("/join/:roomid", checkAuthorisation, validateRoom, joinRoom);
 router.post(

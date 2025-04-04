@@ -2,10 +2,46 @@ const { request } = require("http");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
+  const {
+    params: { roomid },
+  } = request;
+
   try {
-    const res = await pool.query("SELECT * FROM Rooms");
+    let res;
+
+    if (roomid)
+      res = await pool.query(
+        `SELECT * FROM ViewRoomMessages WHERE roomid = $1`,
+        [roomid]
+      );
+    else
+      res = await pool.query("SELECT * FROM Rooms");
 
     if (!res.rowCount) return response.status(404).send("No rooms found");
+
+    // Structure the data
+    if (roomid) {
+      const roomMessages = res.rows;
+
+      if (roomMessages.length === 0)
+        return response.status(404).send("No messages found for this room");
+
+      const structuredResponse = {
+        roomid: roomMessages[0].roomid,
+        roomname: roomMessages[0].roomname,
+        description: roomMessages[0].description,
+        messages: roomMessages.map((msg) => ({
+          author: msg.name, // Assuming 'name' is the username
+          rollnumber: msg.rollnumber,
+          content: msg.content,
+          posted_at: msg.posted_at,
+        })),
+      };
+
+      return response.status(200).json(structuredResponse);
+    }
+
+    // If no roomid is provided, return the list of rooms
     return response.status(200).json(res.rows);
   } catch (error) {
     console.error("Get rooms error:", error.message);
