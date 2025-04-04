@@ -136,7 +136,7 @@ const sendReply = async (request, response) => {
 
   try {
     let res = await client.query(
-      `Select * from Messages where messageid = $1 and roomid = $2`,
+      `Select * from Messages where messageid = $1 and roomid = $2 and status = 'Approved'`,
       [parentMessage, roomid]
     );
 
