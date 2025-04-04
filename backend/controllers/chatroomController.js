@@ -1,3 +1,4 @@
+const { request } = require("http");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -46,6 +47,7 @@ const createRoom = async (request, response) => {
     return response.status(201).send(`Room: ${roomName} created successfully`);
   } catch (error) {
     console.error("Create room error:", error.message);
+    await client.query("ROLLBACK");
     return response.status(500).send("Server Error");
   } finally {
     if (client) client.release();
@@ -84,6 +86,7 @@ const joinRoom = async (request, response) => {
     return response.status(201).send(`Joined room successfully`);
   } catch (error) {
     console.error("Join room error:", error.message);
+    await client.query("ROLLBACK");
     return response.status(500).send("Server Error");
   }
 };
@@ -113,6 +116,7 @@ const sendMessage = async (request, response) => {
     return response.status(200).send("Message sent successfully");
   } catch (error) {
     console.error("Send message error:", error.message);
+    await client.query("ROLLBACK");
     return response.status(500).send("Server Error");
   } finally {
     if (client) client.release();
@@ -152,10 +156,48 @@ const sendReply = async (request, response) => {
     return response.status(200).send("Reply sent successfully");
   } catch (error) {
     console.error("Send reply error:", error.message);
+    await client.query("ROLLBACK");
     return response.status(500).send("Server Error");
   } finally {
     if (client) client.release();
   }
 };
 
-module.exports = { getRooms, createRoom, joinRoom, sendMessage, sendReply };
+const leaveRoom = async (request, response) => {
+  const {
+    params: { roomid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    let res = await client.query(
+      `Delete from RoomMembers where roomid = $1 and userid = $2`,
+      [roomid, userid]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).send("Left room successfully");
+  } catch (error) {
+    console.error("Leave room error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).send("Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
+module.exports = {
+  getRooms,
+  createRoom,
+  joinRoom,
+  sendMessage,
+  sendReply,
+  leaveRoom,
+};

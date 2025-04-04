@@ -1,3 +1,4 @@
+const { request } = require("http");
 const pool = require("../config/database");
 
 const checkRoomMember = async (request, response, next) => {
@@ -33,4 +34,26 @@ const checkRoomMember = async (request, response, next) => {
   }
 };
 
-module.exports = { checkRoomMember };
+const validateRoom = async (request, response, next) => {
+  const {
+    params: { roomid },
+  } = request;
+
+  try {
+    const res = await pool.query(`Select * from Rooms where roomid = $1`, [
+      roomid,
+    ]);
+
+    if (!res.rowCount) return response.status(404).send("Room not found");
+    
+    if (res.rows[0].isDeleted)
+      return response.status(400).send("Room has been deleted");
+
+    next();
+  } catch (error) {
+    console.error("Error in validateRoom:", error);
+    return response.sendStatus(500);
+  }
+};
+
+module.exports = { checkRoomMember, validateRoom };
