@@ -1,14 +1,21 @@
+const { request } = require("http");
 const pool = require("../config/database");
 
 const checkRoomMember = async (request, response, next) => {
   try {
     console.log("Middleware Request:", request.params);
 
-    const { roomid } = request.params;
-    const userid = "1"; // Hardcoded user ID (Replace with a valid one from your DB)
+    const {
+      params: { roomid },
+      session: {
+        user: { userid },
+      },
+    } = request;
 
     if (!userid || !roomid) {
-      return response.status(400).json({ error: "User ID and Room ID are required" });
+      return response
+        .status(400)
+        .json({ error: "User ID and Room ID are required" });
     }
 
     let res = await pool.query(
@@ -27,6 +34,41 @@ const checkRoomMember = async (request, response, next) => {
   }
 };
 
-module.exports = { checkRoomMember };
+const validateRoom = async (request, response, next) => {
+  const {
+    params: { roomid },
+  } = request;
 
-module.exports = { checkRoomMember };
+  try {
+    const res = await pool.query(`Select * from Rooms where roomid = $1`, [
+      roomid,
+    ]);
+
+    if (!res.rowCount) return response.status(404).send("Room not found");
+
+    if (res.rows[0].isDeleted)
+      return response.status(400).send("Room has been deleted");
+
+    next();
+  } catch (error) {
+    console.error("Error in validateRoom:", error);
+    return response.sendStatus(500);
+  }
+};
+
+const checkModerator = async (request, response, next) => {
+  const {
+    session: { user },
+  } = request;
+  console.log("Middleware Request:", request.params);
+  console.log("User:", user);
+  console.log("User Role:", user.role);
+  if (!user.role || (user.role !== "Moderator" && user.role !== "Admin"))
+    return response
+      .status(403)
+      .send("You are not authorized to perform this action");
+  console.log("Moderator check passed for user:", user.username);
+  next();
+};
+
+module.exports = { checkRoomMember, validateRoom, checkModerator };
