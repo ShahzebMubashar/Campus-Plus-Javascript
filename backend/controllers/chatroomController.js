@@ -193,6 +193,42 @@ const leaveRoom = async (request, response) => {
   }
 };
 
+const processPost = async (request, response) => {
+  const {
+    body: { messageid, status },
+    params: { roomid },
+  } = request;
+
+  if (status !== "Approved" && status !== "Rejected")
+    return response.status(400).send("Please provide valid status");
+
+  const client = await pool.connect();
+
+  try {
+    let res = await client.query(
+      `Select * from Messages where messageid = $1`,
+      [messageid]
+    );
+
+    if (!res.rowCount) return response.status(400).send("Message not found");
+
+    await client.query("BEGIN");
+
+    res = await client.query(
+      `Update Messages set status = $1 where messageid = $2 and roomid = $3`,
+      [status, messageid, roomid]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).send("Message status updated successfully");
+  } catch (error) {
+    console.error("Process post error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).send("Server Error");
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -200,4 +236,5 @@ module.exports = {
   sendMessage,
   sendReply,
   leaveRoom,
+  processPost,
 };

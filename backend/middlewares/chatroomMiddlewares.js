@@ -45,7 +45,7 @@ const validateRoom = async (request, response, next) => {
     ]);
 
     if (!res.rowCount) return response.status(404).send("Room not found");
-    
+
     if (res.rows[0].isDeleted)
       return response.status(400).send("Room has been deleted");
 
@@ -56,4 +56,19 @@ const validateRoom = async (request, response, next) => {
   }
 };
 
-module.exports = { checkRoomMember, validateRoom };
+const checkModerator = async (request, response, next) => {
+  const {
+    session: { user },
+  } = request;
+  console.log("Middleware Request:", request.params);
+  console.log("User:", user);
+  console.log("User Role:", user.role);
+  if (!user.role || (user.role !== "Moderator" && user.role !== "Admin"))
+    return response
+      .status(403)
+      .send("You are not authorized to perform this action");
+  console.log("Moderator check passed for user:", user.username);
+  next();
+};
+
+module.exports = { checkRoomMember, validateRoom, checkModerator };

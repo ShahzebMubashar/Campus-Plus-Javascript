@@ -6,6 +6,7 @@ const {
   sendMessage,
   sendReply,
   leaveRoom,
+  processPost,
 } = require("../controllers/chatroomController");
 
 const {
@@ -16,6 +17,7 @@ const {
 const {
   checkRoomMember,
   validateRoom,
+  checkModerator,
 } = require("../middlewares/chatroomMiddlewares");
 
 const router = express.Router();
@@ -35,12 +37,18 @@ router.post(
   checkRoomMember,
   sendReply
 );
-router.post(
+router.delete(
   "/leave/:roomid",
   checkAuthorisation,
   validateRoom,
   checkRoomMember,
   leaveRoom
+);
+router.post(
+  "/process/:roomid",
+  checkAuthorisation,
+  checkModerator,
+  processPost
 );
 
 module.exports = router; // Ensure this is properly exported
