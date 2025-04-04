@@ -90,42 +90,65 @@ const createRoom = async (request, response) => {
   }
 };
 
-const joinRoom = async (request, response) => {
-  const {
-    params: { roomid },
-    session: {
-      user: { userid },
-    },
-  } = request;
+// const joinRoom = async (request, response) => {
+//   const {
+//     params: { roomid },
+//     session: {
+//       user: { userid },
+//     },
+//   } = request;
+
+//   try {
+//     const client = await pool.connect();
+
+//     let res = await client.query(
+//       `Select * from RoomMembers where roomid = $1 and userid = $2`,
+//       [roomid, userid]
+//     );
+
+//     if (res.rowCount)
+//       return response.status(400).send("Already a member of this room");
+
+//     client.query("BEGIN");
+
+//     res = await client.query(
+//       `Insert into RoomMembers (roomid, userid, joined_at)
+//       values ($1, $2, current_timestamp)`,
+//       [roomid, userid]
+//     );
+
+//     await client.query("COMMIT");
+
+//     return response.status(201).send(`Joined room successfully`);
+//   } catch (error) {
+//     console.error("Join room error:", error.message);
+//     await client.query("ROLLBACK");
+//     return response.status(500).send("Server Error");
+//   }
+// };
+
+
+const joinRoom = async (req, res) => {
+  const { roomid } = req.params;
+  const { userid } = req.session.user;
+
+  if (!userid || !roomid) {
+    return res.status(400).send("User ID and Room ID are required");
+  }
 
   try {
-    const client = await pool.connect();
-
-    let res = await client.query(
-      `Select * from RoomMembers where roomid = $1 and userid = $2`,
+    const result = await pool.query(
+      `INSERT INTO RoomMembers (roomid, userid) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
       [roomid, userid]
     );
 
-    if (res.rowCount)
-      return response.status(400).send("Already a member of this room");
-
-    client.query("BEGIN");
-
-    res = await client.query(
-      `Insert into RoomMembers (roomid, userid, joined_at)
-      values ($1, $2, current_timestamp)`,
-      [roomid, userid]
-    );
-
-    await client.query("COMMIT");
-
-    return response.status(201).send(`Joined room successfully`);
+    res.status(200).send("Joined successfully");
   } catch (error) {
-    console.error("Join room error:", error.message);
-    await client.query("ROLLBACK");
-    return response.status(500).send("Server Error");
+    console.error("Error joining room:", error);
+    res.status(500).send("Server error");
   }
 };
+
 
 const sendMessage = async (request, response) => {
   const {

@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 import Sidebar from "./components/Sidebar.tsx"
 import RoomList from "./components/RoomList.tsx"
 import RoomView from "./components/RoomView.tsx"
-import Navbar from '../Index/components/Navbar.js';
-import Footer from '../Footer/Footer.js';
+import Navbar from '../Index/components/Navbar.js'
+import Footer from '../Footer/Footer.js'
 import "./css/Chatroom.css"
 import type { Room } from "./types/types"
 
-export default function App() {
+export default function Chatrooms() {
     const [rooms, setRooms] = useState<Room[]>([])
     const [activeRoom, setActiveRoom] = useState<Room | null>(null)
 
+    // Fetch rooms on initial render
     useEffect(() => {
         fetchRooms()
     }, [])
@@ -31,7 +32,7 @@ export default function App() {
         }
     }
 
-
+    // Handles joining a room and activating RoomView
     const handleJoinRoom = async (roomId: string) => {
         try {
             const response = await fetch(`http://localhost:4000/Chatrooms/join/${roomId}`, {
@@ -51,6 +52,7 @@ export default function App() {
         }
     }
 
+    // Return to the room list
     const handleBackToRooms = () => {
         setActiveRoom(null)
     }
@@ -60,9 +62,12 @@ export default function App() {
             <div className="chatroom-app">
                 <Navbar />
                 <div className="content-wrapper">
-                    <Sidebar username={''} onNavigate={function (page: string): void {
-                        throw new Error('Function not implemented.');
-                    }} />
+                    <Sidebar
+                        username={''}
+                        onNavigate={(page: string) => {
+                            console.log("Navigate to:", page)
+                        }}
+                    />
                     <div className="main-content">
                         <header className="chatroom-header">
                             <h1>{activeRoom ? activeRoom.name : "Chatrooms"}</h1>
@@ -80,5 +85,3 @@ export default function App() {
         </div>
     )
 }
-
-
