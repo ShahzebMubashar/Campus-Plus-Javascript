@@ -53,4 +53,4 @@ router.post(
 );
 router.post('/:roomid/messages', createPost);
 
-module.exports = router; // Ensure this is properly exported
+module.exports = router;

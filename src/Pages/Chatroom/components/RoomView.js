@@ -110,12 +110,12 @@ export default function RoomView({ room, onBack }) {
     const handleComment = async (postId) => {
         if (newComment.trim()) {
             try {
-                const response = await fetch(`http://localhost:4000/Chatrooms/comment/${postId}`, {
+                const response = await fetch(`http://localhost:4000/Chatrooms/reply/${room.roomid}/${postId}`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ content: newComment }),
+                    body: JSON.stringify({ message: newComment }),
                     credentials: "include",
                 });
                 if (response.ok) {
