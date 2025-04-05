@@ -1,6 +1,55 @@
 const { request } = require("http");
 const pool = require("../config/database");
 
+// const getRooms = async (request, response) => {
+//   const {
+//     params: { roomid },
+//   } = request;
+
+//   try {
+//     let res;
+
+//     if (roomid)
+//       res = await pool.query(
+//         `SELECT * FROM ViewRoomMessages WHERE roomid = $1`,
+//         [roomid]
+//       );
+//     else
+//       res = await pool.query("SELECT * FROM Rooms");
+
+//     if (!res.rowCount) return response.status(404).send("No rooms found");
+
+//     // Structure the data
+//     if (roomid) {
+//       const roomMessages = res.rows;
+
+//       if (roomMessages.length === 0)
+//         return response.status(404).send("No messages found for this room");
+
+//       const structuredResponse = {
+//         roomid: roomMessages[0].roomid,
+//         roomname: roomMessages[0].roomname,
+//         description: roomMessages[0].description,
+//         messages: roomMessages.map((msg) => ({
+//           author: msg.name, // Assuming 'name' is the username
+//           rollnumber: msg.rollnumber,
+//           content: msg.content,
+//           posted_at: msg.posted_at,
+//         })),
+//       };
+
+//       return response.status(200).json(structuredResponse);
+//     }
+
+//     // If no roomid is provided, return the list of rooms
+//     return response.status(200).json(res.rows);
+//   } catch (error) {
+//     console.error("Get rooms error:", error.message);
+//     return response.status(500).send("Server Error");
+//   }
+// };
+
+
 const getRooms = async (request, response) => {
   const {
     params: { roomid },
@@ -9,43 +58,99 @@ const getRooms = async (request, response) => {
   try {
     let res;
 
-    if (roomid)
+    if (roomid) {
+      console.log("Middleware Request received for roomid:", roomid);
+
       res = await pool.query(
-        `SELECT * FROM ViewRoomMessages WHERE roomid = $1`,
+        `SELECT * FROM viewroommessages1 WHERE roomid = $1`,
         [roomid]
       );
-    else
-      res = await pool.query("SELECT * FROM Rooms");
 
-    if (!res.rowCount) return response.status(404).send("No rooms found");
+      console.log("Raw DB Response:", res);
 
-    // Structure the data
-    if (roomid) {
+      if (!res.rowCount) {
+        console.log("No messages found for this room:", roomid);
+        return response.status(404).send("No messages found for this room");
+      }
+
       const roomMessages = res.rows;
 
-      if (roomMessages.length === 0)
-        return response.status(404).send("No messages found for this room");
+      console.log("Fetched Room Messages:", roomMessages);
 
       const structuredResponse = {
         roomid: roomMessages[0].roomid,
         roomname: roomMessages[0].roomname,
         description: roomMessages[0].description,
         messages: roomMessages.map((msg) => ({
-          author: msg.name, // Assuming 'name' is the username
+          messageid: msg.messageid,
+          userid: msg.userid,
+          username: msg.username,
           rollnumber: msg.rollnumber,
           content: msg.content,
           posted_at: msg.posted_at,
         })),
       };
 
+      console.log("Structured Response sent to frontend:", structuredResponse);
+
       return response.status(200).json(structuredResponse);
     }
 
-    // If no roomid is provided, return the list of rooms
+    // If no roomid provided → Fetch All Rooms
+    console.log("Fetching All Rooms from DB");
+
+    res = await pool.query("SELECT * FROM rooms");
+
+    console.log("Fetched All Rooms:", res.rows);
+
+    if (!res.rowCount) {
+      console.log("No rooms found in DB");
+      return response.status(404).send("No rooms found");
+    }
+
     return response.status(200).json(res.rows);
   } catch (error) {
-    console.error("Get rooms error:", error.message);
+    console.error("Get Rooms Error:", error.message);
     return response.status(500).send("Server Error");
+  }
+};
+
+const getRoomMessages = async (req, res) => {
+  const { roomid } = req.params;  // Extract roomid from the URL params
+  console.log("Fetching posts for room:", roomid);
+
+  try {
+    const result = await pool.query(
+      `SELECT * from viewroommessages1 WHERE roomid = $1 `,
+      [roomid]
+    );
+
+    console.log("Fetched from DB:", result.rows);
+
+    if (result.rowCount === 0) {
+      return res.status(404).send("No messages found for this room");
+    }
+
+    const structuredResponse = {
+      roomid: result.rows[0].roomid,
+      roomname: result.rows[0].roomname,
+      description: result.rows[0].description,
+      messages: result.rows.map((msg) => ({
+        messageid: msg.messageid,
+        userid: msg.userid,
+        username: msg.username,
+        rollnumber: msg.rollnumber,
+        content: msg.content,
+        posted_at: msg.posted_at,
+      })),
+    };
+
+    console.log("Structured Response sent to frontend:", structuredResponse);
+    return res.status(200).json(structuredResponse);
+
+  } catch (error) {
+    console.error("Error fetching posts:", error);
+    return res.status(500).json({ error: "Internal Server Error" });
   }
 };
 
@@ -288,6 +393,61 @@ const processPost = async (request, response) => {
   }
 };
 
+// Like a Post
+const likePost = async (req, res) => {
+  const messageid = req.params.messageid;
+  const userid = req.session.user.userid; // Retrieve user ID from session
+
+  // if (!userid) {
+  //   console.log('[AUTH] User not authenticated');
+  //   return res.status(401).send("User is not authenticated");
+  // }
+
+  try {
+    // Insert the like
+    await pool.query(
+      `INSERT INTO messagereactions (messageid, userid, reaction_type) VALUES ($1, $2, 'Like')`,
+      [messageid, userid]
+    );
+
+    // Get the updated like count
+    const result = await pool.query(
+      `SELECT COUNT(*) FROM messagereactions WHERE messageid = $1 AND reaction_type = 'Like'`,
+      [messageid]
+    );
+    const likeCount = result.rows[0].count;
+
+    // Return the updated like count
+    res.status(200).json({ message: 'Like added successfully', likeCount });
+  } catch (error) {
+    console.error("Error liking post:", error);
+    res.status(500).send({ message: 'Error liking post' });
+  }
+};
+
+
+// Get the Number of Likes for a Post
+const getLikeCount = async (req, res) => {
+  const messageid = req.params.messageid;
+
+  // if (!req.session.user.userid) {
+  //   return res.status(401).send("User not authenticated");
+  // }
+
+  try {
+    const result = await pool.query(
+      `SELECT COUNT(*) FROM messagereactions WHERE messageid = $1 AND reaction_type = 'Like'`,
+      [messageid]
+    );
+    const likeCount = result.rows[0].count;
+    res.status(200).json({ likeCount });
+  } catch (error) {
+    console.error("Error fetching like count:", error);
+    res.status(500).send({ message: 'Error fetching like count' });
+  }
+};
+
+
 module.exports = {
   getRooms,
   createRoom,
@@ -296,4 +456,7 @@ module.exports = {
   sendReply,
   leaveRoom,
   processPost,
+  likePost,
+  getLikeCount,
+  getRoomMessages
 };
