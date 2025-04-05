@@ -503,8 +503,30 @@ const getLikeCount = async (req, res) => {
   }
 };
 
+const createPost = async (req, res) => {
+  const { roomid } = req.params;
+  const { message } = req.body;
 
+  // Validate input
+  if (!message || message.trim() === "") {
+    return res.status(400).json({ error: "Message content cannot be empty" });
+  }
 
+  try {
+    const result = await pool.query(
+      `INSERT INTO messages (roomid, userid, content, posted_at, status) 
+           VALUES ($1, $2, $3, NOW(), 'Pending') 
+           RETURNING messageid, roomid, userid, content, posted_at, status`,
+      [roomid, req.session.user.userid, message]  // Assuming `req.user.id` is the current user's ID
+    );
+
+    // Return the newly created message
+    return res.status(201).json({ message: result.rows[0] });
+  } catch (error) {
+    console.error("Error creating post:", error);
+    return res.status(500).json({ error: "Failed to create post" });
+  }
+};
 module.exports = {
   getRooms,
   createRoom,
@@ -515,5 +537,6 @@ module.exports = {
   processPost,
   likePost,
   getLikeCount,
-  getRoomMessages
+  getRoomMessages,
+  createPost
 };

@@ -7,6 +7,7 @@ const {
   sendReply,
   leaveRoom,
   processPost,
+  createPost
 } = require("../controllers/chatroomController");
 
 const {
@@ -50,5 +51,6 @@ router.post(
   checkModerator,
   processPost
 );
+router.post('/:roomid/messages', createPost);
 
 module.exports = router; // Ensure this is properly exported
