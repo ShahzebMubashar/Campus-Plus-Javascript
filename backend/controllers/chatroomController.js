@@ -436,7 +436,10 @@ const getLikeCount = async (req, res) => {
 
   try {
     const result = await pool.query(
-      `SELECT COUNT(*) FROM messagereactions WHERE messageid = $1 AND reaction_type = 'Like'`,
+      `SELECT messageid, COUNT(*) AS like_count 
+       FROM messagereactions 
+       WHERE messageid = $1 AND reaction_type = 'Like'
+       GROUP BY messageid`,
       [messageid]
     );
     const likeCount = result.rows[0].count;

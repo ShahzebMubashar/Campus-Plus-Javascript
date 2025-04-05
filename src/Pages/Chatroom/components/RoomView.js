@@ -79,17 +79,26 @@ export default function RoomView({ room, onBack }) {
             // Send the like request to the backend
             const response = await fetch(`http://localhost:4000/Chatrooms/like/${postId}`, {
                 method: "POST",
-                credentials: "include",
+                credentials: "include",  // Ensure the session is sent with the request
             });
 
             if (response.ok) {
-                // Fetch the updated like count after liking the post
-                const likeCountResponse = await fetch(`http://localhost:4000/Chatrooms/likes/${postId}`);
+                // After liking the post, fetch the updated like count for that post
+                const likeCountResponse = await fetch(`http://localhost:4000/Chatrooms/likes/${postId}`, {
+                    credentials: "include",  // Include the session cookie with the request
+                });
+
                 if (likeCountResponse.ok) {
                     const data = await likeCountResponse.json();
-                    setLikeCount(data.likeCount); // Update the like count state
+                    // Update the like count for the specific post
+                    setPosts((prevPosts) =>
+                        prevPosts.map((post) =>
+                            post.messageid === postId
+                                ? { ...post, likeCount: data.likeCount } // Update the like count for the specific post
+                                : post
+                        )
+                    );
                 }
-                fetchPosts();  // Optionally refresh posts
             } else {
                 console.error("Failed to like post");
             }
@@ -97,6 +106,7 @@ export default function RoomView({ room, onBack }) {
             console.error("Error liking post:", error);
         }
     };
+
 
 
 
@@ -150,18 +160,6 @@ export default function RoomView({ room, onBack }) {
             </div>
 
             <div className="posts-section">
-                <div className="create-post">
-                    <textarea
-                        placeholder="Write a post..."
-                        className="post-input"
-                        value={newPost}
-                        onChange={(e) => setNewPost(e.target.value)}
-                    />
-                    <button className="post-button" onClick={handleCreatePost}>
-                        Post
-                    </button>
-                </div>
-
                 {posts && posts.length > 0 ? (
                     posts.map((post) => (
                         <div key={post.messageid} className="post-card">
@@ -173,12 +171,10 @@ export default function RoomView({ room, onBack }) {
                             <div className="post-content">{post.content}</div>
 
                             <div className="post-actions">
-                                {/* Like count and button */}
-                                <div>
-                                    <p>Likes: {likeCount}</p> {/* Displaying the like count */}
-                                    <button onClick={() => handleLike(post.messageid)}>👍 Like</button>
-                                </div>
-
+                                {/* Show the correct like count */}
+                                <button onClick={() => handleLike(post.messageid)}>
+                                    👍 {post.likeCount || 0} {/* If likeCount is undefined, show 0 */}
+                                </button>
                                 <button onClick={() => setActivePost(post.messageid)}>💬 {post.comments?.length || 0}</button>
                                 <button onClick={() => handleShare(post.messageid)}>Share</button>
                             </div>
@@ -212,6 +208,7 @@ export default function RoomView({ room, onBack }) {
                     <p>No posts yet.</p>
                 )}
             </div>
+
         </div>
     );
 
