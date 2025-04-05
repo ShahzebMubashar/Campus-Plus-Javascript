@@ -115,44 +115,96 @@ const getRooms = async (request, response) => {
   }
 };
 
+// const getRoomMessages = async (req, res) => {
+//   const { roomid } = req.params;  // Extract roomid from the URL params
+//   console.log("Fetching posts for room:", roomid);
+
+//   try {
+//     const result = await pool.query(
+//       `SELECT * from viewroommessages1 WHERE roomid = $1 `,
+//       [roomid]
+//     );
+
+//     console.log("Fetched from DB:", result.rows);
+
+//     if (result.rowCount === 0) {
+//       return res.status(404).send("No messages found for this room");
+//     }
+
+//     const structuredResponse = {
+//       roomid: result.rows[0].roomid,
+//       roomname: result.rows[0].roomname,
+//       description: result.rows[0].description,
+//       messages: result.rows.map((msg) => ({
+//         messageid: msg.messageid,
+//         userid: msg.userid,
+//         username: msg.username,
+//         rollnumber: msg.rollnumber,
+//         content: msg.content,
+//         posted_at: msg.posted_at,
+//       })),
+//     };
+
+//     console.log("Structured Response sent to frontend:", structuredResponse);
+//     return res.status(200).json(structuredResponse);
+
+//   } catch (error) {
+//     console.error("Error fetching posts:", error);
+//     return res.status(500).json({ error: "Internal Server Error" });
+//   }
+// };
+
+
 const getRoomMessages = async (req, res) => {
-  const { roomid } = req.params;  // Extract roomid from the URL params
-  console.log("Fetching posts for room:", roomid);
+  const { roomid } = req.params;
 
   try {
-    const result = await pool.query(
-      `SELECT * from viewroommessages1 WHERE roomid = $1 `,
+    // Fetch messages from the room
+    const messagesResult = await pool.query(
+      `SELECT * from viewroommessages1 WHERE roomid = $1`,
       [roomid]
     );
 
-    console.log("Fetched from DB:", result.rows);
-
-    if (result.rowCount === 0) {
+    if (messagesResult.rowCount === 0) {
       return res.status(404).send("No messages found for this room");
     }
 
+    // Fetch comments (replies) for each message
+    const commentsResult = await pool.query(
+      `SELECT * FROM Replies WHERE roomid = $1`,
+      [roomid]
+    );
+
+    // Structure the response to include comments for each post
     const structuredResponse = {
-      roomid: result.rows[0].roomid,
-      roomname: result.rows[0].roomname,
-      description: result.rows[0].description,
-      messages: result.rows.map((msg) => ({
+      roomid: messagesResult.rows[0].roomid,
+      roomname: messagesResult.rows[0].roomname,
+      description: messagesResult.rows[0].description,
+      messages: messagesResult.rows.map((msg) => ({
         messageid: msg.messageid,
         userid: msg.userid,
         username: msg.username,
         rollnumber: msg.rollnumber,
         content: msg.content,
         posted_at: msg.posted_at,
+        comments: commentsResult.rows
+          .filter((comment) => comment.messageid === msg.messageid)  // Only include comments for this message
+          .map((comment) => ({
+            commentid: comment.replyid,
+            userid: comment.userid,
+            content: comment.content,
+            posted_at: comment.posted_at,
+          })),
       })),
     };
 
-    console.log("Structured Response sent to frontend:", structuredResponse);
     return res.status(200).json(structuredResponse);
-
   } catch (error) {
-    console.error("Error fetching posts:", error);
+    console.error("Error fetching room messages:", error);
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 
 const createRoom = async (request, response) => {
   const {
@@ -430,10 +482,6 @@ const likePost = async (req, res) => {
 const getLikeCount = async (req, res) => {
   const messageid = req.params.messageid;
 
-  // if (!req.session.user.userid) {
-  //   return res.status(401).send("User not authenticated");
-  // }
-
   try {
     const result = await pool.query(
       `SELECT messageid, COUNT(*) AS like_count 
@@ -442,13 +490,19 @@ const getLikeCount = async (req, res) => {
        GROUP BY messageid`,
       [messageid]
     );
-    const likeCount = result.rows[0].count;
-    res.status(200).json({ likeCount });
+
+    if (result.rows.length > 0) {
+      const likeCount = result.rows[0].like_count;
+      res.status(200).json({ likeCount });
+    } else {
+      res.status(200).json({ likeCount: 0 });
+    }
   } catch (error) {
     console.error("Error fetching like count:", error);
     res.status(500).send({ message: 'Error fetching like count' });
   }
 };
+
 
 
 module.exports = {

@@ -68,7 +68,6 @@ export default function RoomView({ room, onBack }) {
         }
     };
 
-    // Handle liking a post
     const handleLike = async (postId) => {
         if (!postId) {
             console.error('Post ID is undefined!');
@@ -202,6 +201,7 @@ export default function RoomView({ room, onBack }) {
                                     </div>
                                 </div>
                             )}
+
                         </div>
                     ))
                 ) : (
