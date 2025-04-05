@@ -13,7 +13,6 @@ export default function RoomView({ room, onBack }) {
         fetchPosts();
     }, [room.roomid]);
 
-    // Fetch posts for the current room
     const fetchPosts = async () => {
         try {
             const response = await fetch(`http://localhost:4000/Chatrooms/messages/${room.roomid}`, {
@@ -22,13 +21,12 @@ export default function RoomView({ room, onBack }) {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("Fetched posts:", data);  // Log the fetched data to check structure
+                console.log("Fetched posts:", data);
 
                 // Ensure posts data is in the correct format
                 if (data && data.messages && Array.isArray(data.messages)) {
                     setPosts(data.messages);  // Set the state with the message data
                 } else if (Array.isArray(data)) {
-                    // In case your backend sends the data directly in an array
                     setPosts(data);
                 } else {
                     console.error("No messages data found or incorrect format");
@@ -43,12 +41,10 @@ export default function RoomView({ room, onBack }) {
     };
 
 
-
-    // Create a new post
     const handleCreatePost = async () => {
         if (newPost.trim()) {
             try {
-                const response = await fetch(`http://localhost:4000/Chatrooms/send-message/${room.roomid}`, {
+                const response = await fetch(`http://localhost:4000/Chatrooms/${room.roomid}/messages`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -68,7 +64,7 @@ export default function RoomView({ room, onBack }) {
         }
     };
 
-    // Handle liking a post
+
     const handleLike = async (postId) => {
         if (!postId) {
             console.error('Post ID is undefined!');
@@ -79,17 +75,26 @@ export default function RoomView({ room, onBack }) {
             // Send the like request to the backend
             const response = await fetch(`http://localhost:4000/Chatrooms/like/${postId}`, {
                 method: "POST",
-                credentials: "include",
+                credentials: "include",  // Ensure the session is sent with the request
             });
 
             if (response.ok) {
-                // Fetch the updated like count after liking the post
-                const likeCountResponse = await fetch(`http://localhost:4000/Chatrooms/likes/${postId}`);
+                // After liking the post, fetch the updated like count for that post
+                const likeCountResponse = await fetch(`http://localhost:4000/Chatrooms/likes/${postId}`, {
+                    credentials: "include",  // Include the session cookie with the request
+                });
+
                 if (likeCountResponse.ok) {
                     const data = await likeCountResponse.json();
-                    setLikeCount(data.likeCount); // Update the like count state
+                    // Update the like count for the specific post
+                    setPosts((prevPosts) =>
+                        prevPosts.map((post) =>
+                            post.messageid === postId
+                                ? { ...post, likeCount: data.likeCount } // Update the like count for the specific post
+                                : post
+                        )
+                    );
                 }
-                fetchPosts();  // Optionally refresh posts
             } else {
                 console.error("Failed to like post");
             }
@@ -97,6 +102,7 @@ export default function RoomView({ room, onBack }) {
             console.error("Error liking post:", error);
         }
     };
+
 
 
 
@@ -131,9 +137,7 @@ export default function RoomView({ room, onBack }) {
 
     return (
         <div className="room-view">
-            <button className="back-button" onClick={onBack}>
-                ← Back to Rooms
-            </button>
+            <button className="back-button" onClick={onBack}>← Back to Rooms</button>
 
             <div className="room-header">
                 <h1>{room.roomname}</h1>
@@ -149,20 +153,18 @@ export default function RoomView({ room, onBack }) {
                 </div>
             </div>
 
-            <div className="posts-section">
-                <div className="create-post">
-                    <textarea
-                        placeholder="Write a post..."
-                        className="post-input"
-                        value={newPost}
-                        onChange={(e) => setNewPost(e.target.value)}
-                    />
-                    <button className="post-button" onClick={handleCreatePost}>
-                        Post
-                    </button>
-                </div>
+            <div className="create-post-section">
+                <input
+                    type="text"
+                    placeholder="What's on your mind?"
+                    value={newPost}
+                    onChange={(e) => setNewPost(e.target.value)}
+                />
+                <button onClick={handleCreatePost}>Post</button>
+            </div>
 
-                {posts && posts.length > 0 ? (
+            <div className="posts-section">
+                {posts.length > 0 ? (
                     posts.map((post) => (
                         <div key={post.messageid} className="post-card">
                             <div className="post-header">
@@ -173,19 +175,16 @@ export default function RoomView({ room, onBack }) {
                             <div className="post-content">{post.content}</div>
 
                             <div className="post-actions">
-                                {/* Like count and button */}
-                                <div>
-                                    <p>Likes: {likeCount}</p> {/* Displaying the like count */}
-                                    <button onClick={() => handleLike(post.messageid)}>👍 Like</button>
-                                </div>
-
+                                <button onClick={() => handleLike(post.messageid)}>
+                                    👍 {post.likeCount || 0}
+                                </button>
                                 <button onClick={() => setActivePost(post.messageid)}>💬 {post.comments?.length || 0}</button>
                                 <button onClick={() => handleShare(post.messageid)}>Share</button>
                             </div>
 
                             {activePost === post.messageid && (
                                 <div className="comments-section">
-                                    {post.comments && post.comments.length > 0 ? (
+                                    {post.comments?.length > 0 ? (
                                         post.comments.map((comment) => (
                                             <div key={comment.commentid} className="comment">
                                                 <strong>{comment.userid}</strong>
@@ -214,5 +213,4 @@ export default function RoomView({ room, onBack }) {
             </div>
         </div>
     );
-
 }
