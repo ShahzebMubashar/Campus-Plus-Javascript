@@ -80,7 +80,7 @@ const getRoomMessages = async (req, res) => {
     }
 
     const commentsResult = await pool.query(
-      `SELECT * FROM Replies WHERE roomid = $1`,
+      `SELECT * FROM MessageReplies1 WHERE roomid = $1`,
       [roomid]
     );
 
@@ -100,6 +100,8 @@ const getRoomMessages = async (req, res) => {
           .map((comment) => ({
             commentid: comment.replyid,
             userid: comment.userid,
+            username: comment.username,
+            rollnumber: comment.rollnumber,
             content: comment.content,
             posted_at: comment.posted_at,
           })),

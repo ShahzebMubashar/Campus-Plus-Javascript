@@ -168,7 +168,7 @@ export default function RoomView({ room, onBack }) {
                     posts.map((post) => (
                         <div key={post.messageid} className="post-card">
                             <div className="post-header">
-                                <span className="post-author">{post.author}</span>
+                                <span className="post-author">{post.username}</span>
                                 <span className="post-date">{new Date(post.posted_at).toLocaleString()}</span>
                             </div>
 
@@ -187,7 +187,7 @@ export default function RoomView({ room, onBack }) {
                                     {post.comments?.length > 0 ? (
                                         post.comments.map((comment) => (
                                             <div key={comment.commentid} className="comment">
-                                                <strong>{comment.userid}</strong>
+                                                <strong>{comment.username}</strong>
                                                 <p>{comment.content}</p>
                                             </div>
                                         ))
