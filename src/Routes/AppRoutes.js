@@ -20,6 +20,7 @@ import Map from '../Pages/Map/Map.js';
 import Calculator from '../Pages/Calculators/Calculator.js';
 import Chatroom from '../Pages/Chatroom/Chatrooms.js'
 import PastPapersDetails from '../Pages/Past Papers/PastPaperDetails.js';
+import Datesheet from '../Pages/Datesheet/Datesheet.js';
 
 function AppRoutes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -63,7 +64,7 @@ function AppRoutes() {
                 <Route path="/calculator" element={<Calculator />} />
                 <Route path="/chatroom" element={<Chatroom />} />
                 <Route path="/past-papers/:courseId" element={<PastPapersDetails />} />
-
+                <Route path="/datesheet" element= {<Datesheet/>}/>
             </Routes>
         </>
     );

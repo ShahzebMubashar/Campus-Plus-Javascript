@@ -1,0 +1,108 @@
+/* Main container */
+.dynamic-datesheet-container{
+  margin: 20px;
+  overflow-x: auto;
+  font-family: "Roboto", sans-serif;
+}
+
+/* Table header */
+.datesheet-table h3 {
+  text-align: center;
+  margin-bottom: 15px;
+  font-size: 24px;
+  color: #444;
+  font-weight: 600;
+}
+
+/* Table styling */
+.datesheet-table table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: #fff;
+  border: 2px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.datesheet-table th,
+.datesheet-table td {
+  padding: 15px;
+  border: 1px solid #ccc;
+  text-align: center;
+  font-size: 16px;
+}
+
+/* Table header styling */
+.datesheet-table th {
+  background: #1b1212;
+  color: white;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+/* Alternating row colors */
+.datesheet-table tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.datesheet-table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Hover effect on rows */
+.datesheet-table tr:hover {
+  background-color: #eef6ff;
+  cursor: pointer;
+}
+
+/* Date and time styling */
+.date-cell,
+.time-slot {
+  color: #555;
+}
+
+/* Course name styling */
+.course-name {
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+/* Conflict styling */
+.conflict {
+  color: red;
+  font-weight: bold;
+}
+
+/* Export button styling */
+.dynamic-datesheet-container .export-button {
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  background: #8b0000;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.export-button:hover {
+  transform: translateY(-2px);
+  background: #a50000;
+  box-shadow: 0 10px 20px rgba(139, 0, 0, 0.2), 0 6px 6px rgba(139, 0, 0, 0.1);
+}
+
+.export-button:active {
+  transform: translateY(1px);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .datesheet-table th,
+  .datesheet-table td {
+    padding: 10px;
+    font-size: 12px;
+  }
+}
