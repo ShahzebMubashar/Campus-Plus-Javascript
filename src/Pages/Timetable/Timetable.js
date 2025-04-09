@@ -17,7 +17,7 @@ const Timetable = () => {
   const [showVenue, setShowVenue] = useState(true);
 
   useEffect(() => {
-    fetch(require("./courses.csv"))
+    fetch(require("../../Assets/data/courses.csv"))
       .then((response) => response.text())
       .then((data) => processCsv(parseCsvData(data)))
       .catch((err) => console.error("Error loading CSV:", err));

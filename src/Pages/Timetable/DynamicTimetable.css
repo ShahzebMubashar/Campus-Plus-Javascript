@@ -34,10 +34,10 @@
 }
 
 .timetable {
-  overflow: hidden;
+  overflow-x: auto;
 }
 
-table {
+.timetable table {
   width: 100%;
   border-collapse: collapse;
   margin: 20px 0;
@@ -47,19 +47,22 @@ table {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-th {
+.timetable th {
   background:#1B1212;
   color: white;
   font-weight: bold;
   padding: 15px;
   border: 1px solid #ccc;
   text-transform: uppercase;
+  font-size: 16px;
 }
 
-td {
+.timetable td {
   padding: 15px;
   border: 1px solid #ccc;
   text-align: center;
+  font-size: 16px
+  
 }
 
 .day-column {
@@ -84,4 +87,13 @@ tbody tr:hover {
 .conflict {
   color: red;
   font-weight: bold;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .timetable th,
+  .timetable td {
+    padding: 10px;
+    font-size: 12px;
+  }
 }
