@@ -1,4 +1,3 @@
-const { request } = require("http");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -21,7 +20,7 @@ const getRooms = async (request, response) => {
 
       if (!res.rowCount) {
         console.log("No messages found for this room:", roomid);
-        return response.status(404).send("No messages found for this room");
+        return response.status(404).json("No messages found for this room");
       }
 
       const roomMessages = res.rows;
@@ -56,13 +55,13 @@ const getRooms = async (request, response) => {
 
     if (!res.rowCount) {
       console.log("No rooms found in DB");
-      return response.status(404).send("No rooms found");
+      return response.status(404).json("No rooms found");
     }
 
     return response.status(200).json(res.rows);
   } catch (error) {
     console.error("Get Rooms Error:", error.message);
-    return response.status(500).send("Server Error");
+    return response.status(500).json("Server Error");
   }
 };
 
@@ -76,7 +75,7 @@ const getRoomMessages = async (req, res) => {
     );
 
     if (messagesResult.rowCount === 0) {
-      return res.status(404).send("No messages found for this room");
+      return res.status(404).json("No messages found for this room");
     }
 
     const commentsResult = await pool.query(
@@ -126,7 +125,7 @@ const createRoom = async (request, response) => {
   console.log(`[CREATE ROOM] Request received for room: ${roomName}`);
 
   if (!roomName || !description)
-    return response.status(400).send("Please provide all required fields");
+    return response.status(400).json("Please provide all required fields");
 
   const client = await pool.connect();
   try {
@@ -136,7 +135,7 @@ const createRoom = async (request, response) => {
       roomName,
     ]);
 
-    if (res.rowCount) return response.status(400).send("Room already exists");
+    if (res.rowCount) return response.status(400).json("Room already exists");
 
     res = await client.query(
       `Insert into Rooms (name, description, created_at, created_by)
@@ -146,11 +145,11 @@ const createRoom = async (request, response) => {
 
     await client.query("COMMIT");
 
-    return response.status(201).send(`Room: ${roomName} created successfully`);
+    return response.status(201).json(`Room: ${roomName} created successfully`);
   } catch (error) {
     console.error("Create room error:", error.message);
     await client.query("ROLLBACK");
-    return response.status(500).send("Server Error");
+    return response.status(500).json("Server Error");
   } finally {
     if (client) client.release();
   }
@@ -161,7 +160,7 @@ const joinRoom = async (req, res) => {
   const { userid } = req.session.user;
 
   if (!userid || !roomid) {
-    return res.status(400).send("User ID and Room ID are required");
+    return res.status(400).json("User ID and Room ID are required");
   }
 
   try {
@@ -170,10 +169,10 @@ const joinRoom = async (req, res) => {
       [roomid, userid]
     );
 
-    res.status(200).send("Joined successfully");
+    res.status(200).json("Joined successfully");
   } catch (error) {
     console.error("Error joining room:", error);
-    res.status(500).send("Server error");
+    res.status(500).json("Server error");
   }
 };
 
@@ -199,11 +198,11 @@ const sendMessage = async (request, response) => {
 
     await client.query("COMMIT");
 
-    return response.status(200).send("Message sent successfully");
+    return response.status(200).json("Message sent successfully");
   } catch (error) {
     console.error("Send message error:", error.message);
     await client.query("ROLLBACK");
-    return response.status(500).send("Server Error");
+    return response.status(500).json("Server Error");
   } finally {
     if (client) client.release();
   }
@@ -227,53 +226,23 @@ const sendReply = async (request, response) => {
     );
 
     if (!res.rowCount)
-      return response.status(400).send("Parent message not found");
+      return response.status(400).json("Parent message not found");
 
     await client.query("BEGIN");
-    
+
     res = await client.query(
       `Insert into Replies (messageid, roomid, userid, content, posted_at)
       values ($1, $2, $3, $4, current_timestamp)`,
       [parentMessage, roomid, userid, message]
     );
-    
+
     await client.query("COMMIT");
-    
-    return response.status(200).send("Reply sent successfully");
+
+    return response.status(200).json("Reply sent successfully");
   } catch (error) {
     console.error("Send reply error:", error.message);
     await client.query("ROLLBACK");
-    return response.status(500).send("Server Error");
-  } finally {
-    if (client) client.release();
-  }
-};
-
-const leaveRoom = async (request, response) => {
-  const {
-    params: { roomid },
-    session: {
-      user: { userid },
-    },
-  } = request;
-
-  const client = await pool.connect();
-
-  try {
-    await client.query("BEGIN");
-
-    let res = await client.query(
-      `Delete from RoomMembers where roomid = $1 and userid = $2`,
-      [roomid, userid]
-    );
-
-    await client.query("COMMIT");
-
-    return response.status(200).send("Left room successfully");
-  } catch (error) {
-    console.error("Leave room error:", error.message);
-    await client.query("ROLLBACK");
-    return response.status(500).send("Server Error");
+    return response.status(500).json("Server Error");
   } finally {
     if (client) client.release();
   }
@@ -286,7 +255,7 @@ const processPost = async (request, response) => {
   } = request;
 
   if (status !== "Approved" && status !== "Rejected")
-    return response.status(400).send("Please provide valid status");
+    return response.status(400).json("Please provide valid status");
 
   const client = await pool.connect();
 
@@ -296,7 +265,7 @@ const processPost = async (request, response) => {
       [messageid]
     );
 
-    if (!res.rowCount) return response.status(400).send("Message not found");
+    if (!res.rowCount) return response.status(400).json("Message not found");
 
     await client.query("BEGIN");
 
@@ -307,11 +276,11 @@ const processPost = async (request, response) => {
 
     await client.query("COMMIT");
 
-    return response.status(200).send("Message status updated successfully");
+    return response.status(200).json("Message status updated successfully");
   } catch (error) {
     console.error("Process post error:", error.message);
     await client.query("ROLLBACK");
-    return response.status(500).send("Server Error");
+    return response.status(500).json("Server Error");
   }
 };
 
@@ -334,7 +303,7 @@ const likePost = async (req, res) => {
     res.status(200).json({ message: "Like added successfully", likeCount });
   } catch (error) {
     console.error("Error liking post:", error);
-    res.status(500).send({ message: "Error liking post" });
+    res.status(500).json({ message: "Error liking post" });
   }
 };
 
@@ -358,7 +327,7 @@ const getLikeCount = async (req, res) => {
     }
   } catch (error) {
     console.error("Error fetching like count:", error);
-    res.status(500).send({ message: "Error fetching like count" });
+    res.status(500).json({ message: "Error fetching like count" });
   }
 };
 
@@ -385,13 +354,47 @@ const createPost = async (req, res) => {
   }
 };
 
+const LeaveRoom = async (request, response) => {
+  const {
+    params: { roomid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+  console.log(`[LEAVE ROOM] Request received for room: ${roomid}`);
+  console.log(`[LEAVE ROOM] User ID: ${userid}`);
+  if (!roomid) return response.status(400).json("Room ID is required");
+
+  const client = await pool.connect();
+
+  try {
+    console.log("Leaving room:", roomid, "for user:", userid);
+    client.query(`BEGIN`);
+    console.log("Deleting from RoomMembers table");
+    let res = await client.query(
+      `Delete from RoomMembers where roomid = $1 and userid = $2`,
+      [roomid, userid]
+    );
+    console.log("Deleted from RoomMembers table:", res.rowCount);
+    client.query(`COMMIT`);
+    console.log("Left room successfully:", roomid, "for user:", userid);
+    return response.status(200).json("Left Room Successfully!");
+  } catch (error) {
+    console.error("Leave room error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
   joinRoom,
   sendMessage,
   sendReply,
-  leaveRoom,
+  LeaveRoom,
   processPost,
   likePost,
   getLikeCount,
