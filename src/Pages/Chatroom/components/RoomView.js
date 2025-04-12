@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import "../css/RoomView.css";
-import { redirect } from 'react-router-dom';
+import { Navigate, redirect } from 'react-router-dom';
 
 export default function RoomView({ room, onBack, onLeave }) {
     const [posts, setPosts] = useState([]);
@@ -128,6 +128,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
             if (response.ok) {
                 console.log("Left room successfully");
+                window.location.reload();
             }else {
                 console.error("Failed to leave room");
             }
