@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import "../css/RoomView.css";
+import { redirect } from 'react-router-dom';
 
-export default function RoomView({ room, onBack }) {
+export default function RoomView({ room, onBack, onLeave }) {
     const [posts, setPosts] = useState([]);
     const [activePost, setActivePost] = useState(null);
     const [newComment, setNewComment] = useState("");
     const [newPost, setNewPost] = useState("");
     const [likeCount, setLikeCount] = useState(0);
 
-    // Fetch posts whenever the room changes
     useEffect(() => {
         fetchPosts();
     }, [room.roomid]);
@@ -21,16 +21,13 @@ export default function RoomView({ room, onBack }) {
 
             if (response.ok) {
                 const data = await response.json();
-                console.log("Fetched posts:", data);
-
-                // Ensure posts data is in the correct format
                 if (data && data.messages && Array.isArray(data.messages)) {
-                    setPosts(data.messages);  // Set the state with the message data
+                    setPosts(data.messages);
                 } else if (Array.isArray(data)) {
                     setPosts(data);
                 } else {
-                    console.error("No messages data found or incorrect format");
-                    setPosts([]);  // Clear the posts if format is wrong
+                    setPosts([]);
+                    console.error("Unexpected post data format");
                 }
             } else {
                 console.error("Failed to fetch posts");
@@ -39,7 +36,6 @@ export default function RoomView({ room, onBack }) {
             console.error("Error fetching posts:", error);
         }
     };
-
 
     const handleCreatePost = async () => {
         if (newPost.trim()) {
@@ -53,8 +49,8 @@ export default function RoomView({ room, onBack }) {
                     credentials: "include",
                 });
                 if (response.ok) {
-                    setNewPost("");  // Clear post input
-                    fetchPosts();  // Refresh posts after creating a new post
+                    setNewPost("");
+                    fetchPosts();
                 } else {
                     console.error("Failed to create post");
                 }
@@ -64,49 +60,36 @@ export default function RoomView({ room, onBack }) {
         }
     };
 
-
     const handleLike = async (postId) => {
-        if (!postId) {
-            console.error('Post ID is undefined!');
-            return;
-        }
+        if (!postId) return;
 
         try {
-            // Send the like request to the backend
             const response = await fetch(`http://localhost:4000/Chatrooms/like/${postId}`, {
                 method: "POST",
-                credentials: "include",  // Ensure the session is sent with the request
+                credentials: "include",
             });
 
             if (response.ok) {
-                // After liking the post, fetch the updated like count for that post
                 const likeCountResponse = await fetch(`http://localhost:4000/Chatrooms/likes/${postId}`, {
-                    credentials: "include",  // Include the session cookie with the request
+                    credentials: "include",
                 });
 
                 if (likeCountResponse.ok) {
                     const data = await likeCountResponse.json();
-                    // Update the like count for the specific post
-                    setPosts((prevPosts) =>
-                        prevPosts.map((post) =>
+                    setPosts((prev) =>
+                        prev.map((post) =>
                             post.messageid === postId
-                                ? { ...post, likeCount: data.likeCount } // Update the like count for the specific post
+                                ? { ...post, likeCount: data.likeCount }
                                 : post
                         )
                     );
                 }
-            } else {
-                console.error("Failed to like post");
             }
         } catch (error) {
             console.error("Error liking post:", error);
         }
     };
 
-
-
-
-    // Handle adding a comment to a post
     const handleComment = async (postId) => {
         if (newComment.trim()) {
             try {
@@ -118,9 +101,10 @@ export default function RoomView({ room, onBack }) {
                     body: JSON.stringify({ message: newComment }),
                     credentials: "include",
                 });
+
                 if (response.ok) {
-                    setNewComment("");  // Clear comment input
-                    fetchPosts();  // Refresh posts after commenting
+                    setNewComment("");
+                    fetchPosts();
                 } else {
                     console.error("Failed to add comment");
                 }
@@ -130,14 +114,32 @@ export default function RoomView({ room, onBack }) {
         }
     };
 
-    // Handle post sharing (dummy function here)
     const handleShare = (postId) => {
         console.log("Shared post:", postId);
     };
 
+    const handleLeaveRoom = async () => {
+        const confirmLeave = window.confirm("Are you sure you want to leave this room?");
+        if (confirmLeave) {
+            const response = await fetch(`http://localhost:4000/Chatrooms/leave/${room.roomid}`, {
+                method: "DELETE",
+                credentials: "include",
+            });
+
+            if (response.ok) {
+                console.log("Left room successfully");
+            }else {
+                console.error("Failed to leave room");
+            }
+        }
+    };
+
     return (
         <div className="room-view">
-            <button className="back-button" onClick={onBack}>← Back to Rooms</button>
+            <div className="room-view-header">
+                <button className="back-button" onClick={onBack}>← Back to Rooms</button>
+                <button className="leave-button" onClick={handleLeaveRoom}>🚪 Leave Room</button>
+            </div>
 
             <div className="room-header">
                 <h1>{room.roomname}</h1>
@@ -175,9 +177,7 @@ export default function RoomView({ room, onBack }) {
                             <div className="post-content">{post.content}</div>
 
                             <div className="post-actions">
-                                <button onClick={() => handleLike(post.messageid)}>
-                                    👍 {post.likeCount || 0}
-                                </button>
+                                <button onClick={() => handleLike(post.messageid)}>👍 {post.likeCount || 0}</button>
                                 <button onClick={() => setActivePost(post.messageid)}>💬 {post.comments?.length || 0}</button>
                                 <button onClick={() => handleShare(post.messageid)}>Share</button>
                             </div>

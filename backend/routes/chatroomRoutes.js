@@ -5,9 +5,9 @@ const {
   joinRoom,
   sendMessage,
   sendReply,
-  leaveRoom,
   processPost,
-  createPost
+  createPost,
+  LeaveRoom,
 } = require("../controllers/chatroomController");
 
 const {
@@ -38,19 +38,19 @@ router.post(
   checkRoomMember,
   sendReply
 );
-router.delete(
-  "/leave/:roomid",
-  checkAuthorisation,
-  validateRoom,
-  checkRoomMember,
-  leaveRoom
-);
 router.post(
   "/process/:roomid",
   checkAuthorisation,
   checkModerator,
   processPost
 );
-router.post('/:roomid/messages', createPost);
+router.post("/:roomid/messages", createPost);
+router.delete(
+  "/leave/:roomid",
+  checkAuthorisation,
+  validateRoom,
+  checkRoomMember,
+  LeaveRoom
+);
 
 module.exports = router;
