@@ -143,8 +143,12 @@ const Calculator = () => {
                     {active && !showAggregate && (
                         <div className="sgpa-cgpa-section">
                             <div className="toggle-buttons">
-                                <button onClick={() => setShowSGPA(true)} className={showSGPA ? "active" : ""}>SGPA</button>
-                                <button onClick={() => setShowSGPA(false)} className={!showSGPA ? "active" : ""}>CGPA</button>
+                                <button onClick={() => setShowSGPA(true)} className={`toggle-btn ${showSGPA ? "active" : ""}`}>
+                                    SGPA
+                                </button>
+                                <button onClick={() => setShowSGPA(false)} className={`toggle-btn ${!showSGPA ? "active" : ""}`}>
+                                    CGPA
+                                </button>
                             </div>
 
                             {showSGPA ? (
@@ -296,54 +300,96 @@ const Calculator = () => {
 
                     {active && showAggregate && (
                         <div className="aggregate-calculator">
-                            <h2>Aggregate Calculator</h2>
-                            <label>Test Type</label>
-                            <select value={testType} onChange={(e) => setTestType(e.target.value)}>
-                                <option value="NU">NU</option>
-                                <option value="NTS">NTS</option>
-                            </select>
-                            <label>Marks Obtained</label>
-                            <input
-                                type="number"
-                                value={marks.obtainedMarks}
-                                onChange={(e) => setMarks({ ...marks, obtainedMarks: e.target.value })}
-                            />
-                            <label>Total Marks</label>
-                            <input
-                                type="number"
-                                value={marks.totalMarks}
-                                onChange={(e) => setMarks({ ...marks, totalMarks: e.target.value })}
-                            />
-                            <label>FSC Marks</label>
-                            <input
-                                type="number"
-                                value={marks.fscObtainedMarks}
-                                onChange={(e) => setMarks({ ...marks, fscObtainedMarks: e.target.value })}
-                            />
-                            <label>FSC Total</label>
-                            <input
-                                type="number"
-                                value={marks.fscTotalMarks}
-                                onChange={(e) => setMarks({ ...marks, fscTotalMarks: e.target.value })}
-                            />
-                            <label>Matric Marks</label>
-                            <input
-                                type="number"
-                                value={marks.matricObtainedMarks}
-                                onChange={(e) => setMarks({ ...marks, matricObtainedMarks: e.target.value })}
-                            />
-                            <label>Matric Total</label>
-                            <input
-                                type="number"
-                                value={marks.matricTotalMarks}
-                                onChange={(e) => setMarks({ ...marks, matricTotalMarks: e.target.value })}
-                            />
-                            <button onClick={calculateAggregate}>Calculate Aggregate</button>
-                            {aggregateResult && <p>Your Aggregate is: {aggregateResult}%</p>}
+                            <button className="close-btn" onClick={() => setActive(false)}>
+                                ×
+                            </button>
+                            <h1 className="calculator-title">FAST Aggregate Calculator</h1>
+
+                            <h2 className="test-type-title">Test Type</h2>
+                            <div className="test-type-container">
+                                <select className="test-type-select" value={testType} onChange={(e) => setTestType(e.target.value)}>
+                                    <option value="NU">NU</option>
+                                    <option value="NTS">NTS</option>
+                                </select>
+                            </div>
+
+                            <div className="marks-container">
+                                <div className="marks-row">
+                                    <div className="marks-field">
+                                        <label>Obtained Marks</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Obtained Marks"
+                                            value={marks.obtainedMarks}
+                                            onChange={(e) => setMarks({ ...marks, obtainedMarks: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="marks-field">
+                                        <label>Total Marks</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Total Marks"
+                                            value={marks.totalMarks}
+                                            onChange={(e) => setMarks({ ...marks, totalMarks: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="marks-row">
+                                    <div className="marks-field">
+                                        <label>FSc. Obtained Marks</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter FSc Obtained Marks"
+                                            value={marks.fscObtainedMarks}
+                                            onChange={(e) => setMarks({ ...marks, fscObtainedMarks: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="marks-field">
+                                        <label>FSc Total Marks</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter FSc Total Marks"
+                                            value={marks.fscTotalMarks}
+                                            onChange={(e) => setMarks({ ...marks, fscTotalMarks: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+
+                                <div className="marks-row">
+                                    <div className="marks-field">
+                                        <label>Matric Obtained Marks</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Matric Obtained Marks"
+                                            value={marks.matricObtainedMarks}
+                                            onChange={(e) => setMarks({ ...marks, matricObtainedMarks: e.target.value })}
+                                        />
+                                    </div>
+                                    <div className="marks-field">
+                                        <label>Matric Total Marks</label>
+                                        <input
+                                            type="text"
+                                            placeholder="Enter Matric Total Marks"
+                                            value={marks.matricTotalMarks}
+                                            onChange={(e) => setMarks({ ...marks, matricTotalMarks: e.target.value })}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div className="calculate-button-container">
+                                <button onClick={calculateAggregate} className="calculate-btn">
+                                    Calculate
+                                </button>
+                            </div>
+
+                            {aggregateResult && <p className="result">Your Aggregate is: {aggregateResult}%</p>}
                         </div>
                     )}
                 </div>
-            )}
+            )
+            }
         </div>
     );
 };
