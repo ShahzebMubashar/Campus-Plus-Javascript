@@ -148,67 +148,78 @@ const Calculator = () => {
                             </div>
 
                             {showSGPA ? (
-                                <div className="flex flex-col items-center">
-                                    <h2 className="text-[#0d6efd] text-xl font-medium mb-4">Number of Courses</h2>
-                                    <input
-                                        type="number"
-                                        placeholder="Enter Number of Courses"
-                                        className="w-full max-w-md px-4 py-3 border border-gray-300 rounded-full mb-6"
-                                        value={numberOfCourses}
-                                        onChange={(e) => setNumberOfCourses(e.target.value)}
-                                    />
-                                    <button onClick={generateCourses} className="px-8 py-2 bg-[#0d6efd] text-white rounded-full">
-                                        Generate
-                                    </button>
+                                <div className="sgpa-calculator">
+                                    <h2 className="courses-title">Number of Courses</h2>
+                                    <div className="input-container">
+                                        <input
+                                            type="number"
+                                            value={numberOfCourses}
+                                            onChange={(e) => setNumberOfCourses(e.target.value)}
+                                            className="courses-input"
+                                        />
+                                    </div>
+                                    <div className="generate-button-container">
+                                        <button onClick={generateCourses} className="generate-btn">
+                                            Generate
+                                        </button>
+                                    </div>
 
                                     {courses.length > 0 && (
-                                        <div className="w-full mt-6">
+                                        <div className="courses-container">
                                             {courses.map((course, index) => (
-                                                <div key={index} className="course-input">
-                                                    <input
-                                                        type="text"
-                                                        placeholder="Course Name"
-                                                        value={course.courseName}
-                                                        onChange={(e) => {
-                                                            const updated = [...courses]
-                                                            updated[index].courseName = e.target.value
-                                                            setCourses(updated)
-                                                        }}
-                                                    />
-                                                    <select
-                                                        value={course.creditHours}
-                                                        onChange={(e) => {
-                                                            const updated = [...courses]
-                                                            updated[index].creditHours = e.target.value
-                                                            setCourses(updated)
-                                                        }}
-                                                    >
-                                                        <option value="0">0</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                    </select>
-                                                    <select
-                                                        value={course.grade}
-                                                        onChange={(e) => {
-                                                            const updated = [...courses]
-                                                            updated[index].grade = e.target.value
-                                                            setCourses(updated)
-                                                        }}
-                                                    >
-                                                        <option value="4.00">A+</option>
-                                                        <option value="4.00">A</option>
-                                                        <option value="3.67">A-</option>
-                                                        <option value="3.33">B+</option>
-                                                        <option value="3.00">B</option>
-                                                        <option value="2.67">B-</option>
-                                                        <option value="2.33">C+</option>
-                                                        <option value="2.00">C</option>
-                                                        <option value="1.67">D+</option>
-                                                        <option value="1.33">D</option>
-                                                        <option value="0.00">F</option>
-                                                    </select>
+                                                <div key={index} className="course-row">
+                                                    <div className="course-field">
+                                                        <label>Course Name</label>
+                                                        <input
+                                                            type="text"
+                                                            placeholder="Enter Course Name"
+                                                            value={course.courseName}
+                                                            onChange={(e) => {
+                                                                const updated = [...courses]
+                                                                updated[index].courseName = e.target.value
+                                                                setCourses(updated)
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="course-field">
+                                                        <label>Credit Hours</label>
+                                                        <select
+                                                            value={course.creditHours}
+                                                            onChange={(e) => {
+                                                                const updated = [...courses]
+                                                                updated[index].creditHours = e.target.value
+                                                                setCourses(updated)
+                                                            }}
+                                                        >
+                                                            <option value="0">0</option>
+                                                            <option value="1">1</option>
+                                                            <option value="2">2</option>
+                                                            <option value="3">3</option>
+                                                            <option value="4">4</option>
+                                                        </select>
+                                                    </div>
+                                                    <div className="course-field">
+                                                        <label>Grade</label>
+                                                        <select
+                                                            value={course.grade}
+                                                            onChange={(e) => {
+                                                                const updated = [...courses]
+                                                                updated[index].grade = e.target.value
+                                                                setCourses(updated)
+                                                            }}
+                                                        >
+                                                            <option value="4.00">A/A+</option>
+                                                            <option value="3.67">A-</option>
+                                                            <option value="3.33">B+</option>
+                                                            <option value="3.00">B</option>
+                                                            <option value="2.67">B-</option>
+                                                            <option value="2.33">C+</option>
+                                                            <option value="2.00">C</option>
+                                                            <option value="1.67">D+</option>
+                                                            <option value="1.33">D</option>
+                                                            <option value="0.00">F</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             ))}
                                             <button onClick={calculateSGPA} className="calculate-btn">
@@ -220,42 +231,68 @@ const Calculator = () => {
                                 </div>
                             ) : (
                                 <div className="cgpa-calculator">
-                                    <h2>CGPA Calculator</h2>
-                                    <label>Number of Semesters:</label>
-                                    <input type="number" value={numberOfSemesters} onChange={(e) => setNumberOfSemesters(e.target.value)} />
-                                    <button onClick={generateSemesters}>Generate</button>
-                                    {semesters.map((semester, index) => (
-                                        <div key={index} className="semester-input">
-                                            <label>Semester {index + 1}</label>
-                                            <input
-                                                type="number"
-                                                placeholder="Credit Hours"
-                                                value={semester.creditHours}
-                                                onChange={(e) => {
-                                                    const updated = [...semesters]
-                                                    updated[index].creditHours = e.target.value
-                                                    setSemesters(updated)
-                                                }}
-                                            />
-                                            <input
-                                                type="number"
-                                                placeholder="GPA"
-                                                value={semester.gpa}
-                                                onChange={(e) => {
-                                                    const updated = [...semesters]
-                                                    updated[index].gpa = e.target.value
-                                                    setSemesters(updated)
-                                                }}
-                                            />
+                                    <h2 className="courses-title">Number of Semesters</h2>
+                                    <div className="input-container">
+                                        <input
+                                            type="number"
+                                            value={numberOfSemesters}
+                                            onChange={(e) => setNumberOfSemesters(e.target.value)}
+                                            className="courses-input"
+                                        />
+                                    </div>
+                                    <div className="generate-button-container">
+                                        <button onClick={generateSemesters} className="generate-btn">
+                                            Generate
+                                        </button>
+                                    </div>
+
+                                    {semesters.length > 0 && (
+                                        <div className="semesters-container">
+                                            {semesters.map((semester, index) => (
+                                                <div key={index} className="semester-row">
+                                                    <div className="semester-field">
+                                                        <label>Semester {index + 1}</label>
+                                                    </div>
+                                                    <div className="semester-field">
+                                                        <label>Credit Hours</label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder="Credit Hours"
+                                                            value={semester.creditHours}
+                                                            onChange={(e) => {
+                                                                const updated = [...semesters]
+                                                                updated[index].creditHours = e.target.value
+                                                                setSemesters(updated)
+                                                            }}
+                                                        />
+                                                    </div>
+                                                    <div className="semester-field">
+                                                        <label>GPA</label>
+                                                        <input
+                                                            type="number"
+                                                            placeholder="GPA"
+                                                            value={semester.gpa}
+                                                            onChange={(e) => {
+                                                                const updated = [...semesters]
+                                                                updated[index].gpa = e.target.value
+                                                                setSemesters(updated)
+                                                            }}
+                                                        />
+                                                    </div>
+                                                </div>
+                                            ))}
+                                            <button onClick={calculateCGPA} className="calculate-btn">
+                                                Calculate CGPA
+                                            </button>
+                                            {cgpaResult && <p className="result">Your CGPA is: {cgpaResult}</p>}
                                         </div>
-                                    ))}
-                                    <button onClick={calculateCGPA}>Calculate CGPA</button>
-                                    {cgpaResult && <p>Your CGPA is: {cgpaResult}</p>}
+                                    )}
                                 </div>
                             )}
                         </div>
                     )
                     }
+
 
                     {active && showAggregate && (
                         <div className="aggregate-calculator">
