@@ -1,17 +1,18 @@
 import React, { useState } from "react";
 import "./Calculator.css";
+import Navbar from "../Index/components/Navbar"
 
 const Calculator = () => {
     const [active, setActive] = useState(false);
     const [showSGPA, setShowSGPA] = useState(true);
+    const [showAggregate, setShowAggregate] = useState(false);
+
     const [courses, setCourses] = useState([]);
-    const [semesters, setSemesters] = useState([]);
-    const [sgpaResult, setSgpaResult] = useState(null);
-    const [cgpaResult, setCgpaResult] = useState(null);
-    const [aggregateResult, setAggregateResult] = useState(null);
     const [numberOfCourses, setNumberOfCourses] = useState("");
+
+    const [semesters, setSemesters] = useState([]);
     const [numberOfSemesters, setNumberOfSemesters] = useState("");
-    const [testType, setTestType] = useState("NTS");
+
     const [marks, setMarks] = useState({
         obtainedMarks: "",
         totalMarks: "",
@@ -20,7 +21,12 @@ const Calculator = () => {
         matricObtainedMarks: "",
         matricTotalMarks: "",
     });
-    const [showAggregate, setShowAggregate] = useState(false);
+
+    const [testType, setTestType] = useState("NTS");
+
+    const [sgpaResult, setSgpaResult] = useState(null);
+    const [cgpaResult, setCgpaResult] = useState(null);
+    const [aggregateResult, setAggregateResult] = useState(null);
 
     const generateCourses = () => {
         const count = Number.parseInt(numberOfCourses) || 0;
@@ -75,35 +81,22 @@ const Calculator = () => {
         let aggregate;
         if (testType === "NU") {
             aggregate =
-                ((Number.parseFloat(marks.obtainedMarks) /
-                    Number.parseFloat(marks.totalMarks)) *
-                    0.5 +
-                    (Number.parseFloat(marks.fscObtainedMarks) /
-                        Number.parseFloat(marks.fscTotalMarks)) *
-                    0.3 +
-                    (Number.parseFloat(marks.matricObtainedMarks) /
-                        Number.parseFloat(marks.matricTotalMarks)) *
-                    0.2) *
-                100;
+                ((Number.parseFloat(marks.obtainedMarks) / Number.parseFloat(marks.totalMarks)) * 0.5 +
+                    (Number.parseFloat(marks.fscObtainedMarks) / Number.parseFloat(marks.fscTotalMarks)) * 0.3 +
+                    (Number.parseFloat(marks.matricObtainedMarks) / Number.parseFloat(marks.matricTotalMarks)) * 0.2) * 100;
         } else {
             aggregate =
-                ((Number.parseFloat(marks.obtainedMarks) /
-                    Number.parseFloat(marks.totalMarks)) *
-                    0.6 +
-                    (Number.parseFloat(marks.fscObtainedMarks) /
-                        Number.parseFloat(marks.fscTotalMarks)) *
-                    0.2 +
-                    (Number.parseFloat(marks.matricObtainedMarks) /
-                        Number.parseFloat(marks.matricTotalMarks)) *
-                    0.2) *
-                100;
+                ((Number.parseFloat(marks.obtainedMarks) / Number.parseFloat(marks.totalMarks)) * 0.6 +
+                    (Number.parseFloat(marks.fscObtainedMarks) / Number.parseFloat(marks.fscTotalMarks)) * 0.2 +
+                    (Number.parseFloat(marks.matricObtainedMarks) / Number.parseFloat(marks.matricTotalMarks)) * 0.2) * 100;
         }
         setAggregateResult(aggregate.toFixed(2));
     };
 
     return (
         <div className="calculator-app-container">
-            <nav className="navbar">Navbar</nav>
+            <Navbar />
+
             {!active ? (
                 <div className="calculator-landing-page">
                     <div className="calculator-header">
@@ -127,7 +120,6 @@ const Calculator = () => {
                         <div className="calculator-card" onClick={() => {
                             setActive(true);
                             setShowAggregate(true);
-                            setShowSGPA(false);
                         }}>
                             <div className="calculator-card-image">
                                 <img src="/placeholder.svg" alt="Aggregate Calculator" />
@@ -147,71 +139,114 @@ const Calculator = () => {
                     </div>
 
                     {active && !showAggregate && (
-                        <div className="sgpa-calculator">
-                            <h2>SGPA Calculator</h2>
-                            <div className="input-section">
-                                <label>Number of Courses:</label>
-                                <input
-                                    type="number"
-                                    value={numberOfCourses}
-                                    onChange={(e) => setNumberOfCourses(e.target.value)}
-                                />
-                                <button onClick={generateCourses}>Generate</button>
+                        <div className="sgpa-cgpa-section">
+                            <div className="toggle-buttons">
+                                <button onClick={() => setShowSGPA(true)} className={showSGPA ? "active" : ""}>SGPA</button>
+                                <button onClick={() => setShowSGPA(false)} className={!showSGPA ? "active" : ""}>CGPA</button>
                             </div>
-                            {courses.map((course, index) => (
-                                <div key={index} className="course-input">
-                                    <label>Course {index + 1}:</label>
+
+                            {showSGPA ? (
+                                <div className="sgpa-calculator">
+                                    <h2>SGPA Calculator</h2>
+                                    <label>Number of Courses:</label>
                                     <input
-                                        type="text"
-                                        placeholder="Course Name"
-                                        value={course.courseName}
-                                        onChange={(e) => {
-                                            const updated = [...courses];
-                                            updated[index].courseName = e.target.value;
-                                            setCourses(updated);
-                                        }}
+                                        type="number"
+                                        value={numberOfCourses}
+                                        onChange={(e) => setNumberOfCourses(e.target.value)}
                                     />
-                                    <select
-                                        value={course.creditHours}
-                                        onChange={(e) => {
-                                            const updated = [...courses];
-                                            updated[index].creditHours = e.target.value;
-                                            setCourses(updated);
-                                        }}
-                                    >
-                                        <option value="0">0 CH</option>
-                                        <option value="1">1 CH</option>
-                                        <option value="2">2 CH</option>
-                                        <option value="3">3 CH</option>
-                                        <option value="4">4 CH</option>
-                                    </select>
-                                    <select
-                                        value={course.grade}
-                                        onChange={(e) => {
-                                            const updated = [...courses];
-                                            updated[index].grade = e.target.value;
-                                            setCourses(updated);
-                                        }}
-                                    >
-                                        <option value="4.00">A+</option>
-                                        <option value="4.00">A</option>
-                                        <option value="3.67">A-</option>
-                                        <option value="3.33">B+</option>
-                                        <option value="3.00">B</option>
-                                        <option value="2.67">B-</option>
-                                        <option value="2.33">C+</option>
-                                        <option value="2.00">C</option>
-                                        <option value="1.67">D+</option>
-                                        <option value="1.33">D</option>
-                                        <option value="0.00">F</option>
-                                    </select>
+                                    <button onClick={generateCourses}>Generate</button>
+                                    {courses.map((course, index) => (
+                                        <div key={index} className="course-input">
+                                            <input
+                                                type="text"
+                                                placeholder="Course Name"
+                                                value={course.courseName}
+                                                onChange={(e) => {
+                                                    const updated = [...courses];
+                                                    updated[index].courseName = e.target.value;
+                                                    setCourses(updated);
+                                                }}
+                                            />
+                                            <select
+                                                value={course.creditHours}
+                                                onChange={(e) => {
+                                                    const updated = [...courses];
+                                                    updated[index].creditHours = e.target.value;
+                                                    setCourses(updated);
+                                                }}
+                                            >
+                                                <option value="0">0 CH</option>
+                                                <option value="1">1 CH</option>
+                                                <option value="2">2 CH</option>
+                                                <option value="3">3 CH</option>
+                                                <option value="4">4 CH</option>
+                                            </select>
+                                            <select
+                                                value={course.grade}
+                                                onChange={(e) => {
+                                                    const updated = [...courses];
+                                                    updated[index].grade = e.target.value;
+                                                    setCourses(updated);
+                                                }}
+                                            >
+                                                <option value="4.00">A+</option>
+                                                <option value="4.00">A</option>
+                                                <option value="3.67">A-</option>
+                                                <option value="3.33">B+</option>
+                                                <option value="3.00">B</option>
+                                                <option value="2.67">B-</option>
+                                                <option value="2.33">C+</option>
+                                                <option value="2.00">C</option>
+                                                <option value="1.67">D+</option>
+                                                <option value="1.33">D</option>
+                                                <option value="0.00">F</option>
+                                            </select>
+                                        </div>
+                                    ))}
+                                    <button onClick={calculateSGPA}>Calculate SGPA</button>
+                                    {sgpaResult && <p>Your SGPA is: {sgpaResult}</p>}
                                 </div>
-                            ))}
-                            <button onClick={calculateSGPA}>Calculate SGPA</button>
-                            {sgpaResult && <p>Your SGPA is: {sgpaResult}</p>}
+                            ) : (
+                                <div className="cgpa-calculator">
+                                    <h2>CGPA Calculator</h2>
+                                    <label>Number of Semesters:</label>
+                                    <input
+                                        type="number"
+                                        value={numberOfSemesters}
+                                        onChange={(e) => setNumberOfSemesters(e.target.value)}
+                                    />
+                                    <button onClick={generateSemesters}>Generate</button>
+                                    {semesters.map((semester, index) => (
+                                        <div key={index} className="semester-input">
+                                            <label>Semester {index + 1}</label>
+                                            <input
+                                                type="number"
+                                                placeholder="Credit Hours"
+                                                value={semester.creditHours}
+                                                onChange={(e) => {
+                                                    const updated = [...semesters];
+                                                    updated[index].creditHours = e.target.value;
+                                                    setSemesters(updated);
+                                                }}
+                                            />
+                                            <input
+                                                type="number"
+                                                placeholder="GPA"
+                                                value={semester.gpa}
+                                                onChange={(e) => {
+                                                    const updated = [...semesters];
+                                                    updated[index].gpa = e.target.value;
+                                                    setSemesters(updated);
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
+                                    <button onClick={calculateCGPA}>Calculate CGPA</button>
+                                    {cgpaResult && <p>Your CGPA is: {cgpaResult}</p>}
+                                </div>
+                            )}
                         </div>
                     )}
-
 
                     {showAggregate && (
                         <div className="aggregate-section">
@@ -224,49 +259,37 @@ const Calculator = () => {
                                 type="number"
                                 placeholder="Entry Test Marks"
                                 value={marks.obtainedMarks}
-                                onChange={(e) =>
-                                    setMarks({ ...marks, obtainedMarks: e.target.value })
-                                }
+                                onChange={(e) => setMarks({ ...marks, obtainedMarks: e.target.value })}
                             />
                             <input
                                 type="number"
                                 placeholder="Total Entry Test Marks"
                                 value={marks.totalMarks}
-                                onChange={(e) =>
-                                    setMarks({ ...marks, totalMarks: e.target.value })
-                                }
+                                onChange={(e) => setMarks({ ...marks, totalMarks: e.target.value })}
                             />
                             <input
                                 type="number"
                                 placeholder="FSC Marks"
                                 value={marks.fscObtainedMarks}
-                                onChange={(e) =>
-                                    setMarks({ ...marks, fscObtainedMarks: e.target.value })
-                                }
+                                onChange={(e) => setMarks({ ...marks, fscObtainedMarks: e.target.value })}
                             />
                             <input
                                 type="number"
                                 placeholder="Total FSC Marks"
                                 value={marks.fscTotalMarks}
-                                onChange={(e) =>
-                                    setMarks({ ...marks, fscTotalMarks: e.target.value })
-                                }
+                                onChange={(e) => setMarks({ ...marks, fscTotalMarks: e.target.value })}
                             />
                             <input
                                 type="number"
                                 placeholder="Matric Marks"
                                 value={marks.matricObtainedMarks}
-                                onChange={(e) =>
-                                    setMarks({ ...marks, matricObtainedMarks: e.target.value })
-                                }
+                                onChange={(e) => setMarks({ ...marks, matricObtainedMarks: e.target.value })}
                             />
                             <input
                                 type="number"
                                 placeholder="Total Matric Marks"
                                 value={marks.matricTotalMarks}
-                                onChange={(e) =>
-                                    setMarks({ ...marks, matricTotalMarks: e.target.value })
-                                }
+                                onChange={(e) => setMarks({ ...marks, matricTotalMarks: e.target.value })}
                             />
                             <button onClick={calculateAggregate}>Calculate Aggregate</button>
                             {aggregateResult && <p>Your Aggregate is: {aggregateResult}%</p>}
