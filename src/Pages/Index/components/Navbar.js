@@ -130,7 +130,8 @@ function Navbar() {
                                 </div>
                                 <div className="navbar-dropdown-section">
                                     <AiOutlineHome className="navbar-dropdown-icon" />
-                                    <h4>Time Table Support</h4>
+                                    <h4>Time Table & Date Sheet</h4>
+                                    <p><Link to="/datesheet">Date Sheet Generator</Link></p>
                                     <p><Link to="/timetable">Time Table Generator</Link></p>
                                     <p><Link to="/past-papers">Courses List</Link></p>
                                 </div>
