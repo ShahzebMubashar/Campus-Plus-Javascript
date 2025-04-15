@@ -64,7 +64,7 @@ function AppRoutes() {
                 <Route path="/calculator" element={<Calculator />} />
                 <Route path="/chatroom" element={<Chatroom />} />
                 <Route path="/past-papers/:courseId" element={<PastPapersDetails />} />
-                <Route path="/datesheet" element= {<Datesheet/>}/>
+                <Route path="/datesheet" element={<Datesheet />} />
             </Routes>
         </>
     );

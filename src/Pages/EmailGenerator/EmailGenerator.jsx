@@ -7,7 +7,7 @@ import cardImage4 from "./images/12892955_5098267.webp";
 import cardImage5 from "./images/6183568_3053908.webp";
 import Navbar from "../Index/components/Navbar";
 import templateData from './emails.json';
-import EmailForm from "./components/EmailForm";
+// import EmailForm from "./components/EmailForm";
 import EmailCard from "./components/EmailCard";
 import { copyEmail, downloadEmail } from "./copy&download";
 
