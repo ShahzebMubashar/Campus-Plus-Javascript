@@ -112,7 +112,7 @@ const Calculator = () => {
                             setShowSGPA(true);
                         }}>
                             <div className="calculator-card-image">
-                                <img src="" alt="SGPA Calculator" />
+                                <img src={pic2} alt="SGPA Calculator" />
                             </div>
                             <div className="calculator-card-content">
                                 <h2>SGPA/CGPA Calculator</h2>
@@ -124,7 +124,7 @@ const Calculator = () => {
                             setShowAggregate(true);
                         }}>
                             <div className="calculator-card-image">
-                                <img src="/placeholder.svg" alt="Aggregate Calculator" />
+                                <img src={pic1} alt="Aggregate Calculator" />
                             </div>
                             <div className="calculator-card-content">
                                 <h2>Aggregate Calculator</h2>
