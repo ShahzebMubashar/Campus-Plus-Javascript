@@ -452,58 +452,6 @@
     margin-bottom: 1.5rem;
 }
 
-.toggle-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-.toggle-btn {
-    padding: 0.5rem 2rem;
-    border: none;
-    border-radius: 9999px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    font-size: 1rem;
-    min-width: 100px;
-}
-
-.toggle-btn.active {
-    background-color: #0056d6;
-    color: white;
-}
-
-.courses-title {
-    color: #0056d6;
-    text-align: center;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
-}
-
-.input-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
-}
-
-.courses-input {
-    width: 100%;
-    max-width: 350px;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 9999px;
-    text-align: center;
-    font-size: 1rem;
-}
-
-.generate-button-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
-}
-
-
 .calculate-btn {
     background-color: #0056d6;
     color: white;
