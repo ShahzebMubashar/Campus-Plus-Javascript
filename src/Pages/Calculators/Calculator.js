@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import "./Calculator.css";
 import Navbar from "../Index/components/Navbar"
+import pic1 from "../../Assets/images/3580920.webp"
+import pic2 from "../../Assets/images/8899729.webp"
 
 const Calculator = () => {
     const [active, setActive] = useState(false);
@@ -110,7 +112,7 @@ const Calculator = () => {
                             setShowSGPA(true);
                         }}>
                             <div className="calculator-card-image">
-                                <img src="/placeholder.svg" alt="SGPA Calculator" />
+                                <img src="" alt="SGPA Calculator" />
                             </div>
                             <div className="calculator-card-content">
                                 <h2>SGPA/CGPA Calculator</h2>

@@ -370,3 +370,22 @@
 .choose {
     background-color: #0d6efd;
 }
+
+.calculator-toggle-buttons {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.calculator-toggle-buttons button {
+    padding: 10px 20px;
+    background-color: #eee;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.calculator-toggle-buttons button.active {
+    background-color: #007bff;
+    color: white;
+}
