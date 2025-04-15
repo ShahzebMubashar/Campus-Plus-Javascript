@@ -8,7 +8,7 @@ import cardImage5 from "./images/6183568_3053908.webp";
 import Navbar from "../Index/components/Navbar.js";
 import Card from "./Components/Card.js";
 import Form from "./Components/Form.js";
-import templateData from './check.json';
+// import templateData from './check.json';
 // import { copyApplication, downloadApplication } from "./copyanddownload.js";
 
 export default function ApplicationGenerator() {
