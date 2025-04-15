@@ -388,6 +388,44 @@ const LeaveRoom = async (request, response) => {
   }
 };
 
+const changeRoomDetails = async (request, response) => {
+  const {
+    params: { roomid },
+    body: { newName, description },
+  } = request;
+
+  if (!newName && !description)
+    return response.status(400).json("Enter at least one of the fields");
+
+  const client = await pool.connect();
+
+  try {
+    let res = await client.query(`Select * from Rooms where roomid = $1`, [
+      roomid,
+    ]);
+
+    if (!res.rowCount)
+      return response.status(404).json(`Invalid RoomId Entered!`);
+
+    await client.query(`BEGIN`);
+
+    res = await client.query(
+      `Update Rooms set name = COALESCE($1, name), description = COALESCE($2, description) where roomid = $3`,
+      [newName, description, roomid]
+    );
+
+    await client.query(`COMMIT`);
+
+    return response.status(200).json(`Room Details Changed Successfully`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -400,4 +438,5 @@ module.exports = {
   getLikeCount,
   getRoomMessages,
   createPost,
+  changeRoomDetails,
 };
