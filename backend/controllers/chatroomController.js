@@ -70,7 +70,7 @@ const getRoomMessages = async (req, res) => {
 
   try {
     const messagesResult = await pool.query(
-      `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved'`,
+      `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved'order by posted_at desc`,
       [roomid]
     );
 
@@ -79,7 +79,7 @@ const getRoomMessages = async (req, res) => {
     }
 
     const commentsResult = await pool.query(
-      `SELECT * FROM MessageReplies1 WHERE roomid = $1`,
+      `SELECT * FROM MessageReplies1 WHERE roomid = $1 order by posted_at`,
       [roomid]
     );
 
