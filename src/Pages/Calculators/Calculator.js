@@ -143,6 +143,10 @@ const Calculator = () => {
                     {active && !showAggregate && (
                         <div className="sgpa-cgpa-section">
                             <h1>SGPA/CGPA Calculator</h1>
+                            <div className="close-button-container">
+                                <button className="close-btn" onClick={() => setActive(false)}>×</button>
+                            </div>
+
                             <div className="toggle-buttons">
                                 <button onClick={() => setShowSGPA(true)} className={`toggle-btn ${showSGPA ? "active" : ""}`}>
                                     SGPA
