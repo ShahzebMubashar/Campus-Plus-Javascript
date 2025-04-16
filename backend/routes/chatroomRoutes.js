@@ -8,6 +8,7 @@ const {
   processPost,
   createPost,
   LeaveRoom,
+  changeRoomDetails,
 } = require("../controllers/chatroomController");
 
 const {
@@ -51,6 +52,13 @@ router.delete(
   validateRoom,
   checkRoomMember,
   LeaveRoom
+);
+router.post(
+  "/change-room-name/:roomid",
+  checkAuthorisation,
+  checkModerator,
+  validateRoom,
+  changeRoomDetails
 );
 
 module.exports = router;
