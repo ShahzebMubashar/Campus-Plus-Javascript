@@ -52,18 +52,24 @@
 
 /* Paper Section */
 .paper-section {
-  background: #ffffff;
+  background: #f9f9fb; /* Light background color for more visibility */
   border-radius: 10px;
   padding: 1.25rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Enhanced shadow for better visibility */
   display: flex;
   flex-direction: column;
   height: auto; /* important for dynamic height */
   overflow: visible;
   margin-bottom: 1.5rem;
   break-inside: avoid; /* Prevent paper sections from breaking across columns */
+  border: 1px solid #bcbec0; /* Border with light gray color */
 }
 
+.paper-section:hover {
+  border-color: #144272; /* Border color changes on hover to match theme */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+  background-color: #f0f4f8; /* Slightly darker background on hover */
+}
 
 .section-title {
   font-size: 1.5rem; /* Reduced size to align with paper year */
