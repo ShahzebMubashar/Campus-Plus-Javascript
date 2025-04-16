@@ -172,27 +172,13 @@
     font-size: 1rem;
 }
 
-
-/* .result {
-    color: #1074e7;
-  
-padding: 10px;
-margin-top: 10px;
-border-radius: 5px;
-text-align: center;
-font-size: 2rem;
-font-weight: bold;
-}
-
-*/
 .semester-row {
     margin-top: 5%;
     margin-bottom: 1.5rem;
     margin-left: 3%;
     display: flex;
-    /* Use flexbox to align the label and inputs horizontally */
     align-items: center;
-    /* Align vertically */
+
 }
 
 .semester-label {
@@ -200,18 +186,15 @@ font-weight: bold;
     font-weight: 600;
     margin-right: 1rem;
     font-size: 1.3rem;
-    /* Adjust the font size if needed */
 }
 
 .semester-inputs {
     display: flex;
-    /* gap: 0rem; */
     flex: 1;
 }
 
 .semester-input {
     flex: 1;
-    /* Ensure input fields stretch to fill available space */
 }
 
 .semester-input label {
@@ -231,7 +214,6 @@ font-weight: bold;
     margin: 0 0 0 15%;
 }
 
-/* Add these styles for the aggregate calculator */
 
 .aggregate-form {
     padding: 1rem;
@@ -378,44 +360,6 @@ font-weight: bold;
     background-color: #0b5ed7;
 }
 
-/* .calculator-container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-} */
-
-/* .calculator-title {
-    color: #0056d6;
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
-} */
-
-/* .result {
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #0056d6;
-    margin-top: 1.5rem;
-} */
-
-/* Base container styles */
-/* .calculator-container {
-    width: 90%;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-} */
-
-/* Close button */
 .close-btn {
     position: absolute;
     top: 1rem;
