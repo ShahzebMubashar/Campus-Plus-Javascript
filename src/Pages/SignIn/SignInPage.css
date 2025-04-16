@@ -1,4 +1,10 @@
-/* General Container */
+.signincontainerfull {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    position: relative;
+}
+
 .signin-container {
     position: relative;
     width: 100vw;
@@ -9,7 +15,6 @@
     font-family: "Arial", sans-serif;
     transition: all 0.5s ease-in-out;
     margin: 5% auto;
-    overflow: hidden;
 }
 
 /* Left Section */
@@ -25,33 +30,41 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    transition: clip-path 0.6s ease-in-out, transform 0.6s ease-in-out;
+    transition: transform 0.8s cubic-bezier(0.65, 0, 0.35, 1);
     z-index: 1;
 }
 
+/* Improved background circle with smoother transitions */
 .background-circle {
     position: absolute;
     top: 0;
     left: 0;
-    width: 90%;
+    width: 100%;
     height: 100%;
     background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
-    transform: rotate(180deg);
-    clip-path: circle(70% at 75% 50%);
     z-index: -1;
-    transition: transform 0.5s ease-in-out;
+    transition: all 1s cubic-bezier(0.65, 0, 0.35, 1);
+    border-radius: 0 100% 100% 0 / 50%;
+    transform-origin: left center;
+}
+
+.signin-container.sign-up-mode .background-circle {
+    border-radius: 100% 0 0 100% / 50%;
+    transform-origin: right center;
 }
 
 .signin-container.sign-up-mode .left-section {
     transform: translateX(100%);
 }
 
-.signin-container.sign-up-mode .left-section .background-circle {
-    transform: none;
-    margin-left: 80px;
+.animated-text {
+    transition: opacity 0.3s ease, transform 0.5s ease;
 }
 
-
+.signin-container.animating .animated-text {
+    opacity: 0;
+    transform: translateY(20px);
+}
 
 .left-section h1 {
     font-size: 2.5rem;
@@ -83,12 +96,48 @@
     position: absolute;
     left: 33%;
     top: 30%;
+    overflow: hidden;
+}
 
+.toggle-button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+}
+
+.toggle-button:hover:before {
+    left: 100%;
 }
 
 .toggle-button:hover {
     background-color: #007bff;
     color: white;
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.toggle-button:active {
+    transform: translateY(0);
+}
+
+.button-text {
+    position: relative;
+    z-index: 2;
+}
+
+.button-icon {
+    display: inline-block;
+    margin-left: 8px;
+    transition: transform 0.3s ease;
+}
+
+.toggle-button:hover .button-icon {
+    transform: translateX(5px);
 }
 
 .dynamic-image {
@@ -96,7 +145,12 @@
     bottom: -4%;
     left: 25%;
     max-width: 70%;
-    transition: opacity 0.1s ease-in-out, transform 0.1s ease-in-out;
+    transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.signin-container.animating .dynamic-image {
+    opacity: 0;
+    transform: translateY(20px);
 }
 
 .signin-container.sign-up-mode .dynamic-image {
@@ -144,33 +198,68 @@
     justify-content: center;
     align-items: center;
     z-index: 100;
-    transition: all 0.6s ease-in-out;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    position: relative;
+    padding-top: 60px;
+    /* Make room for the character */
+}
 
+.form-container.fade {
+    opacity: 0;
+    transform: translateY(20px);
+}
 
 .signin-form,
 .signup-form {
     width: 100%;
-    max-width: 400px;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
 }
 
 .hidden {
     opacity: 0;
     visibility: hidden;
+    transform: translateY(20px);
+    position: absolute;
 }
 
-.form-section h2 {
+.form-title {
     font-size: 2rem;
     margin-bottom: 20px;
     color: #333;
+    position: relative;
+    display: inline-block;
+}
+
+.form-title:after {
+    content: "";
+    position: absolute;
+    width: 50%;
+    height: 3px;
+    background: linear-gradient(to right, #4481eb, #04befe);
+    bottom: -5px;
+    left: 0;
+    transition: width 0.3s ease;
+}
+
+.form-title:hover:after {
+    width: 100%;
 }
 
 .form-section form {
     display: flex;
     flex-direction: column;
     gap: 15px;
+}
+
+.input-group {
+    position: relative;
+    margin-bottom: 10px;
 }
 
 .form-input {
@@ -181,23 +270,389 @@
     background-color: #f5f5f5;
     outline: none;
     transition: all 0.3s ease;
+    width: 100%;
+}
+
+.input-highlight {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(to right, #4481eb, #04befe);
+    transition: width 0.3s ease, left 0.3s ease;
 }
 
 .form-input:focus {
     border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+}
+
+.form-input:focus+.input-highlight {
+    width: 100%;
+    left: 0;
 }
 
 .form-button {
     padding: 12px 20px;
     font-size: 1rem;
     color: white;
-    background-color: #007bff;
+    background: linear-gradient(to right, #4481eb, #04befe);
     border: none;
     border-radius: 30px;
     cursor: pointer;
     transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.form-button:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+}
+
+.form-button:hover:before {
+    left: 100%;
 }
 
 .form-button:hover {
-    background-color: #0056b3;
+    background: linear-gradient(to right, #04befe, #4481eb);
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
+}
+
+.form-button:active {
+    transform: translateY(0);
+}
+
+.form-button.success {
+    background: linear-gradient(to right, #28a745, #20c997);
+    animation: pulse 1s;
+}
+
+.form-button.error {
+    background: linear-gradient(to right, #dc3545, #f86b6b);
+    animation: shake 0.5s;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(5px);
+    }
+}
+
+.message {
+    margin-top: 15px;
+    color: #333;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+/* Improved Animated Character Styles */
+.animated-character {
+    position: absolute;
+    top: -70px;
+    right: 20px;
+    width: 120px;
+    height: 150px;
+    transition: all 0.3s ease;
+    z-index: 200;
+}
+
+/* Graduation Cap */
+.graduation-cap {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.cap-top {
+    width: 90px;
+    height: 25px;
+    background-color: #333;
+    border-radius: 5px 5px 0 0;
+    position: relative;
+}
+
+.cap-top:after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 10px;
+    background-color: #555;
+    border-radius: 50% 50% 0 0;
+}
+
+.cap-tassel {
+    position: absolute;
+    top: 5px;
+    right: -5px;
+    width: 15px;
+    height: 30px;
+    background-color: #f0c420;
+    border-radius: 0 0 10px 10px;
+    transform: rotate(10deg);
+    transform-origin: top center;
+    animation: swingTassel 3s ease-in-out infinite;
+}
+
+@keyframes swingTassel {
+
+    0%,
+    100% {
+        transform: rotate(10deg);
+    }
+
+    50% {
+        transform: rotate(5deg);
+    }
+}
+
+/* Improved Character Head */
+.character-head {
+    position: relative;
+    width: 80px;
+    height: 90px;
+    background-color: #e6c7a5;
+    /* More mature skin tone */
+    border-radius: 40px 40px 35px 35px;
+    margin: 0 auto;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+.character-face {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+/* Eyebrows for more mature look */
+.eyebrows {
+    position: absolute;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.eyebrows:before,
+.eyebrows:after {
+    content: "";
+    width: 20px;
+    height: 3px;
+    background-color: #333;
+    position: absolute;
+    border-radius: 3px;
+}
+
+.eyebrows:before {
+    left: 0;
+    transform: rotate(-10deg);
+}
+
+.eyebrows:after {
+    right: 0;
+    transform: rotate(10deg);
+}
+
+.character-eyes {
+    position: absolute;
+    top: 35px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 20px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.eye {
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.eyeball {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #333;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: transform 0.3s ease;
+}
+
+/* Add nose for more mature look */
+.character-nose {
+    position: absolute;
+    top: 55px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 10px;
+    background-color: #d4a98c;
+    border-radius: 50%;
+}
+
+.character-mouth {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 8px;
+    background-color: #c55;
+    border-radius: 0 0 15px 15px;
+}
+
+/* Professional body with tie */
+.character-body {
+    width: 90px;
+    height: 50px;
+    background-color: #2c3e50;
+    /* Dark professional color */
+    margin: 0 auto;
+    border-radius: 20px 20px 0 0;
+    position: relative;
+}
+
+.character-tie {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 15px;
+    height: 30px;
+    background-color: #e74c3c;
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+}
+
+/* Eye animations */
+.hiding-eyes .eye::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #e6c7a5;
+    animation: blinkEyes 0.3s ease forwards;
+}
+
+@keyframes blinkEyes {
+    0% {
+        transform: translateY(-100%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Character reactions */
+.animated-character.hiding-eyes {
+    animation: nervousShake 0.5s ease infinite;
+}
+
+@keyframes nervousShake {
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    25% {
+        transform: translateX(-2px) rotate(-1deg);
+    }
+
+    75% {
+        transform: translateX(2px) rotate(1deg);
+    }
+}
+
+/* Eye tracking animation */
+.eye .eyeball {
+    transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* Add some fun animations when form is submitted */
+.form-button.success~.animated-character {
+    animation: jump 0.5s ease;
+}
+
+@keyframes jump {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.form-button.error~.animated-character {
+    animation: scared 0.5s ease;
+}
+
+@keyframes scared {
+
+    0%,
+    100% {
+        transform: translateY(0) scale(1);
+    }
+
+    50% {
+        transform: translateY(5px) scale(0.95);
+    }
 }
