@@ -142,6 +142,11 @@ const Calculator = () => {
 
                     {active && !showAggregate && (
                         <div className="sgpa-cgpa-section">
+                            <h1>SGPA/CGPA Calculator</h1>
+                            <div className="close-button-container">
+                                <button className="close-btn" onClick={() => setActive(false)}>×</button>
+                            </div>
+
                             <div className="toggle-buttons">
                                 <button onClick={() => setShowSGPA(true)} className={`toggle-btn ${showSGPA ? "active" : ""}`}>
                                     SGPA
@@ -300,9 +305,10 @@ const Calculator = () => {
 
                     {active && showAggregate && (
                         <div className="aggregate-calculator">
-                            <button className="close-btn" onClick={() => setActive(false)}>
-                                ×
-                            </button>
+                            <div className="close-button-container">
+                                <button className="close-btn" onClick={() => setActive(false)}>×</button>
+                            </div>
+
                             <h1 className="calculator-title">FAST Aggregate Calculator</h1>
 
                             <h2 className="test-type-title">Test Type</h2>
@@ -378,11 +384,9 @@ const Calculator = () => {
                                 </div>
                             </div>
 
-                            <div className="calculate-button-container">
-                                <button onClick={calculateAggregate} className="calculate-btn">
-                                    Calculate
-                                </button>
-                            </div>
+                            <button onClick={calculateAggregate} className="calculate-btn">
+                                Calculate Aggregate
+                            </button>
 
                             {aggregateResult && <p className="result">Your Aggregate is: {aggregateResult}%</p>}
                         </div>
