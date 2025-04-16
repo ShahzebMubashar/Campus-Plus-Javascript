@@ -384,11 +384,9 @@ const Calculator = () => {
                                 </div>
                             </div>
 
-                            <div className="calculate-button-container">
-                                <button onClick={calculateAggregate} className="calculate-btn">
-                                    Calculate
-                                </button>
-                            </div>
+                            <button onClick={calculateAggregate} className="calculate-btn">
+                                Calculate Aggregate
+                            </button>
 
                             {aggregateResult && <p className="result">Your Aggregate is: {aggregateResult}%</p>}
                         </div>

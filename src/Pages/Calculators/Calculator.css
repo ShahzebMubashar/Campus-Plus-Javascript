@@ -427,11 +427,6 @@
     font-size: 0.9rem;
 }
 
-/* Calculate button */
-.calculate-button-container {
-    display: flex;
-    justify-content: center;
-}
 
 .calculate-btn {
     background-color: #0056d6;
@@ -443,6 +438,10 @@
     cursor: pointer;
     width: 100%;
     margin-top: 1rem;
+}
+
+.calculate-btn:hover {
+    background-color: #0b5ed7;
 }
 
 /* Result display */
