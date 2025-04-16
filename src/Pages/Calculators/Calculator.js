@@ -305,9 +305,10 @@ const Calculator = () => {
 
                     {active && showAggregate && (
                         <div className="aggregate-calculator">
-                            <button className="close-btn" onClick={() => setActive(false)}>
-                                ×
-                            </button>
+                            <div className="close-button-container">
+                                <button className="close-btn" onClick={() => setActive(false)}>×</button>
+                            </div>
+
                             <h1 className="calculator-title">FAST Aggregate Calculator</h1>
 
                             <h2 className="test-type-title">Test Type</h2>
