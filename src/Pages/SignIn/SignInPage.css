@@ -219,6 +219,7 @@
 .signup-form {
     width: 100%;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+    margin-top: -300px;
 }
 
 .hidden {
@@ -386,8 +387,8 @@
 /* Improved Animated Character Styles */
 .animated-character {
     position: absolute;
-    top: -70px;
-    right: 20px;
+    top: -400px;
+    right: 140px;
     width: 120px;
     height: 150px;
     transition: all 0.3s ease;
