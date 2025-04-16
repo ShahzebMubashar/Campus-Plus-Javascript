@@ -327,32 +327,46 @@ const PastPapersDetails = () => {
             <p>There are currently no past papers available for this course.</p>
           </div>
         ) : (
-          Object.entries(papers).map(([type, typePapers]) => (
-            <div key={type} className="paper-section">
-              <h2 className="section-title">{type}</h2>
-              <div className="papers-grid">
-                {typePapers.map((paper) => (
-                  <div 
-                    key={paper.paperid} 
-                    className="paper-card"
-                    onClick={() => handlePaperClick(paper)}
-                  >
-                    <div className="paper-info">
-                      <h3>{paper.paper_year} {type}</h3>
-                      <p>{paper.description || `${courseInfo?.coursecode} - ${paper.paper_year}`}</p>
-                    </div>
-                    <div className="paper-actions">
-                      {isLoggedIn && paper.file_link_down ? (
-                        <FaDownload className="action-icon download" />
-                      ) : (
-                        <FaExternalLinkAlt className="action-icon external" />
-                      )}
+          Object.entries(papers).map(([type, typePapers]) => {
+            // Group papers by year within each type
+            const papersByYear = typePapers.reduce((acc, paper) => {
+              const year = paper.paper_year || 'Unknown Year';
+              if (!acc[year]) acc[year] = [];
+              acc[year].push(paper);
+              return acc;
+            }, {});
+
+            return (
+              <div key={type} className="paper-section">
+                <h2 className="section-title">{type}</h2>
+                {Object.entries(papersByYear).map(([year, yearPapers]) => (
+                  <div key={year}>
+                    <h3 className="year-title">{year}</h3>
+                    <div className="papers-grid">
+                      {yearPapers.map((paper) => (
+                        <div 
+                          key={paper.paperid} 
+                          className="paper-card"
+                          onClick={() => handlePaperClick(paper)}
+                        >
+                          <div className="paper-info">
+                            <p>{paper.file_name}</p>
+                          </div>
+                          <div className="paper-actions">
+                            {isLoggedIn && paper.file_link_down ? (
+                              <FaDownload className="action-icon download" />
+                            ) : (
+                              <FaExternalLinkAlt className="action-icon external" />
+                            )}
+                          </div>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}
               </div>
-            </div>
-          ))
+            );
+          })
         )}
       </div>
     </div>

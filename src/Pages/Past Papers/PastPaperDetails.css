@@ -31,68 +31,108 @@
   font-weight: 500;
 }
 
+/* General adjustments for the past papers section */
 .papers-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 2rem;
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 2rem;
-}
-
-.paper-section {
-  background: white;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-}
-
-.section-title {
-  font-size: 1.5rem;
-  color: #0a2647;
-  margin-bottom: 1.5rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e9ecef;
+  padding: 1rem 1.5rem;
+  display: block; 
+  column-count: 3; /* Display paper sections in 2 columns */
+  column-gap: 1.5rem;
 }
 
 .papers-grid {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
+  margin-bottom: 1rem;
 }
 
+/* Adjusting the paper year and paper type alignment and colors */
+
+/* Paper Section */
+.paper-section {
+  background: #ffffff;
+  border-radius: 10px;
+  padding: 1.25rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  height: auto; /* important for dynamic height */
+  overflow: visible;
+  margin-bottom: 1.5rem;
+  break-inside: avoid; /* Prevent paper sections from breaking across columns */
+}
+
+
+.section-title {
+  font-size: 1.5rem; /* Reduced size to align with paper year */
+  color: #0a2647; /* Darker color for better contrast */
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  border-bottom: 2px solid #e9ecef;
+  padding-bottom: 0.5rem;
+}
+
+/* Year Section */
+.year-title {
+  font-size: 1.1rem; /* Slightly smaller than section title */
+  color: #144272; /* Consistent with the theme */
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+/* Paper Card */
 .paper-card {
-  background: #f8f9fa;
+  background: #f8f9fa; /* Lighter background for better readability */
   border-radius: 8px;
-  padding: 1rem;
+  padding: 0.75rem 1rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid #e9ecef;
+  border: 1px solid rgba(0, 0, 0, 0.2);
 }
 
 .paper-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   border-color: #144272;
 }
 
+/* Paper Info */
 .paper-info {
   flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0.5rem;
+  background: #ffffff; /* White background for better contrast */
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
 }
 
-.paper-info h3 {
-  font-size: 1.1rem;
-  color: #0a2647;
-  margin-bottom: 0.3rem;
+.paper-info h4 {
+  font-size: 1.1rem; /* Slightly larger font size for better readability */
+  font-weight: 700; /* Increased font weight for emphasis */
+  color: #0a2647; /* Darker color for better contrast */
+  margin: 0;
 }
 
 .paper-info p {
-  font-size: 0.9rem;
-  color: #6c757d;
+  font-size: 0.9rem; /* Slightly smaller for better alignment */
+  font-weight: 600;
+  color: #333333; /* Changed to a neutral dark gray for a professional appearance */
   margin: 0;
+  margin-top: 0.5rem; /* Added margin for better spacing */
+}
+
+.paper-card:hover .paper-info {
+  background: #f0f4f8; /* Slightly darker hover background */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 .paper-actions {
@@ -115,7 +155,7 @@
   background: white;
   border-radius: 12px;
   padding: 1.5rem 2rem;
-  margin: 2rem auto;
+  margin: 0.5rem auto;
   width: calc(100% - 4rem);
   max-width: 1200px;
   display: flex;
@@ -213,8 +253,8 @@
 .course-details-card {
   background: white;
   border-radius: 12px;
-  padding: 1.5rem;
-  margin: -1rem auto 2rem;
+  padding: 0;
+  margin: -1rem auto 0;
   max-width: 1200px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   position: relative;
@@ -423,5 +463,26 @@
     flex-direction: column;
     text-align: center;
     padding: 1.5rem;
+  }
+}
+
+/* Media queries for responsive masonry layout of paper sections */
+@media (max-width: 992px) {
+  .papers-container {
+    column-count: 2; /* Keep 2 columns on smaller screens */
+  }
+}
+
+/* For very small screens, use single column */
+@media (max-width: 576px) {
+  .papers-container {
+    column-count: 1; /* Single column only on very small screens */
+  }
+}
+
+/* Pinterest-style masonry layout */
+@media (max-width: 1200px) {
+  .papers-container {
+    column-count: 2; /* Maintain 2 columns on medium screens */
   }
 }

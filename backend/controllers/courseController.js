@@ -114,35 +114,54 @@ const addCourse = async (request, response) => {
     body: { coursename, coursecode, credits, grading, difficulty },
   } = request;
 
+  // Validate input
+  if (!coursename || !coursecode || !credits || !grading || !difficulty) {
+    return response.status(400).json({ message: "All fields are required" });
+  }
+
   try {
+    // Check if the course already exists
     let res = await pool.query(
-      `Select * from Courses where coursecode ilike $1`,
+      `SELECT * FROM Courses WHERE coursecode ILIKE $1`,
       [coursecode]
     );
 
-    if (res.rowCount)
-      return response.status(400).send(`Course already added to database!`);
+    if (res.rowCount) {
+      return response.status(400).json({ message: "Course already exists in the database" });
+    }
 
     const client = await pool.connect();
 
-    await client.query("BEGIN");
+    try {
+      await client.query("BEGIN");
 
-    res = await client.query(
-      `Insert into Courses (coursecode) values ($1) returning courseid`,
-      [coursecode]
-    );
+      // Insert into Courses table
+      res = await client.query(
+        `INSERT INTO Courses (coursecode) VALUES ($1) RETURNING courseid`,
+        [coursecode]
+      );
 
-    res = await client.query(
-      `Insert into CourseInfo (courseid, coursename, credits, grading, difficulty)
-      values ($1, $2, $3, $4, $5)`,
-      [courseid, coursename, credits, grading, difficulty]
-    );
+      const courseid = res.rows[0].courseid;
 
-    await client.query("COMMIT");
+      // Insert into CourseInfo table
+      await client.query(
+        `INSERT INTO CourseInfo (courseid, coursename, credits, grading, difficulty)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [courseid, coursename, credits, grading, difficulty]
+      );
+
+      await client.query("COMMIT");
+      return response.status(201).json({ message: "Course added successfully" });
+    } catch (error) {
+      await client.query("ROLLBACK");
+      console.error("Error in addCourse transaction:", error);
+      return response.status(500).json({ message: "Internal Server Error" });
+    } finally {
+      client.release();
+    }
   } catch (error) {
-    console.error(error);
-    await client.query("ROLLBACK");
-    return response.sendStatus(500);
+    console.error("Error in addCourse:", error);
+    return response.status(500).json({ message: "Internal Server Error" });
   }
 };
 
@@ -150,7 +169,7 @@ const getPastPapers = async (req, res) => {
   const { courseId } = req.params;
   try {
       const result = await pool.query(
-          'SELECT paper_id, paper_type, paper_year, file_link, file_link_down FROM past_papers WHERE courseid = $1',
+          'SELECT paper_id, paper_type, paper_year, file_link, file_link_down, file_name FROM past_papers WHERE courseid = $1',
           [courseId]
       );
       if (result.rows.length === 0) {
