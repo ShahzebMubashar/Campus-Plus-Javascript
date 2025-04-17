@@ -213,12 +213,16 @@ function SignInPage() {
                 <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""} ${isAnimating ? "animating" : ""}`}>
                     <div className="left-section">
                         <div className="background-circle"></div>
-                        <h1 className="animated-text">{isSignUp ? "Already a Member?" : "Fresher Ho?"}</h1>
-                        <p className="animated-text">
+                        <h1 className={`animated-text ${isSignUp ? "member-text" : "fresher-text"}`}>
+                            {isSignUp ? "Already a Member?" : "Fresher Ho?"}
+                        </h1>
+
+                        <p className={`animated-text ${isSignUp ? "member-para" : "fresher-para"}`}>
                             {isSignUp
                                 ? "Sign in to access your account and continue your journey with us."
                                 : "Join us to explore amazing opportunities and resources. Don't have an accout?"}
                         </p>
+
                         <button className="toggle-button" onClick={toggleSignUp}>
                             <span className="button-text">{isSignUp ? "Sign In" : "Sign Up"}</span>
                             <span className="button-icon"></span>
