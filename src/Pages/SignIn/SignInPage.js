@@ -174,9 +174,10 @@ function SignInPage() {
 
     return (
         <div className="signincontainerfull">
+            <Navbar />
             <div className="signin-wrapper">
                 <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""} ${isAnimating ? "animating" : ""}`}>
-                    <Navbar />
+
                     <div className="left-section">
                         <div className="background-circle"></div>
                         <h1 className="animated-text">{isSignUp ? "Already a Member?" : "Fresher Ho?"}</h1>

@@ -5,9 +5,9 @@
 }*/
 
 .signin-wrapper {
-    width: 80%;
+    width: 60%;
     margin: 0 auto;
-    height: 70%;
+    height: 500px !important;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -55,9 +55,9 @@
 /* Left Section */
 .left-section {
     position: relative;
-    top: -183%;
-    right: 55%;
-    height: 70vh;
+    top: 0;
+    right: 8%;
+    height: 500px;
     width: 50%;
     color: white;
     display: flex;
