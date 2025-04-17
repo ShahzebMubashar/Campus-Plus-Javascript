@@ -165,10 +165,11 @@
 .dynamic-image {
     position: absolute;
     top: 40%;
-    left: 35%;
+    left: 27%;
     max-width: 75%;
     transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    z-index: 100;
+    z-index: 999;
+
 }
 
 .signin-container.animating .dynamic-image {
@@ -214,6 +215,7 @@
     top: 35%;
     right: 20%;
     height: 100%;
+    margin-left: 2%;
     width: 30%;
     padding-right: -5%;
     background: white;
@@ -243,7 +245,7 @@
     width: 100%;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     margin-top: -330px;
-    margin-left: -40px;
+    margin-left: 30%;
 }
 
 .signup-form {
