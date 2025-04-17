@@ -12,11 +12,11 @@
 /* New wrapper div that contains everything at 80% width */
 .auth-wrapper {
     width: 80%;
-    margin: 0 auto;
+    margin: 0 auto 2% auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 80vh;
     position: relative;
 }
 
