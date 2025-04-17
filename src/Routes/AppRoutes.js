@@ -21,6 +21,7 @@ import Calculator from '../Pages/Calculators/Calculator.js';
 import Chatroom from '../Pages/Chatroom/Chatrooms.js'
 import PastPapersDetails from '../Pages/Past Papers/PastPaperDetails.js';
 import Datesheet from '../Pages/Datesheet/Datesheet.js';
+import TestSignin from '../Pages/testsignin/page.js'
 
 function AppRoutes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -65,6 +66,7 @@ function AppRoutes() {
                 <Route path="/chatroom" element={<Chatroom />} />
                 <Route path="/past-papers/:courseId" element={<PastPapersDetails />} />
                 <Route path="/datesheet" element={<Datesheet />} />
+                <Route path="/testsignin" element={<TestSignin />} />
             </Routes>
         </>
     );

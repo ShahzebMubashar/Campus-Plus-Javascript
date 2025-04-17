@@ -1,20 +1,31 @@
 .signincontainerfull {
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
     overflow: hidden;
-    position: relative;
+    position: absolute;
 }
+
+.signin-wrapper {
+    width: 80%;
+    margin: 10% auto;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: black 2px solid;
+}
+
 
 .signin-container {
     position: relative;
-    width: 100vw;
-    height: 100vh;
+    width: 90%;
+    height: 20%;
     display: flex;
     justify-content: space-between;
     align-items: center;
     font-family: "Arial", sans-serif;
     transition: all 0.5s ease-in-out;
-    margin: 5% auto;
+    margin: 30% auto 0 auto;
 }
 
 /* Left Section */
@@ -39,8 +50,8 @@
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
+    width: 80%;
+    height: 50%;
     background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
     z-index: -1;
     transition: all 1s cubic-bezier(0.65, 0, 0.35, 1);
@@ -142,8 +153,7 @@
 
 .dynamic-image {
     position: absolute;
-    bottom: -4%;
-    left: 25%;
+
     max-width: 70%;
     transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }

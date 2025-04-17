@@ -174,165 +174,167 @@ function SignInPage() {
 
     return (
         <div className="signincontainerfull">
-            <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""} ${isAnimating ? "animating" : ""}`}>
-                <Navbar />
-                <div className="left-section">
-                    <div className="background-circle"></div>
-                    <h1 className="animated-text">{isSignUp ? "Already a Member?" : "Fresher Ho?"}</h1>
-                    <p className="animated-text">
-                        {isSignUp
-                            ? "Sign in to access your account and continue your journey with us."
-                            : "Join us to explore amazing opportunities and resources!"}
-                    </p>
-                    <button className="toggle-button" onClick={toggleSignUp}>
-                        <span className="button-text">{isSignUp ? "Sign In" : "Sign Up"}</span>
-                        <span className="button-icon"></span>
-                    </button>
-                    <img src={isSignUp ? humanImg : rocketImg} alt={isSignUp ? "Human" : "Rocket"} className="dynamic-image" />
-                </div>
+            <div className="signin-wrapper">
+                <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""} ${isAnimating ? "animating" : ""}`}>
+                    <Navbar />
+                    <div className="left-section">
+                        <div className="background-circle"></div>
+                        <h1 className="animated-text">{isSignUp ? "Already a Member?" : "Fresher Ho?"}</h1>
+                        <p className="animated-text">
+                            {isSignUp
+                                ? "Sign in to access your account and continue your journey with us."
+                                : "Join us to explore amazing opportunities and resources!"}
+                        </p>
+                        <button className="toggle-button" onClick={toggleSignUp}>
+                            <span className="button-text">{isSignUp ? "Sign In" : "Sign Up"}</span>
+                            <span className="button-icon"></span>
+                        </button>
+                        <img src={isSignUp ? humanImg : rocketImg} alt={isSignUp ? "Human" : "Rocket"} className="dynamic-image" />
+                    </div>
 
-                <div className="form-section">
-                    <div className={`form-container ${isAnimating ? "fade" : ""}`}>
-                        {/* Animated Character */}
-                        <div className={`animated-character ${isPasswordField ? "hiding-eyes" : ""}`} ref={characterRef}>
-                            <div className="graduation-cap">
-                                <div className="cap-top"></div>
-                                <div className="cap-tassel"></div>
-                            </div>
-                            <div className="character-head">
-                                <div className="character-face">
-                                    <div className="character-eyes">
-                                        <div className="eye left-eye" ref={leftEyeRef}>
-                                            <div
-                                                className="eyeball"
-                                                style={{
-                                                    transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
-                                                }}
-                                            ></div>
+                    <div className="form-section">
+                        <div className={`form-container ${isAnimating ? "fade" : ""}`}>
+                            {/* Animated Character */}
+                            <div className={`animated-character ${isPasswordField ? "hiding-eyes" : ""}`} ref={characterRef}>
+                                <div className="graduation-cap">
+                                    <div className="cap-top"></div>
+                                    <div className="cap-tassel"></div>
+                                </div>
+                                <div className="character-head">
+                                    <div className="character-face">
+                                        <div className="character-eyes">
+                                            <div className="eye left-eye" ref={leftEyeRef}>
+                                                <div
+                                                    className="eyeball"
+                                                    style={{
+                                                        transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
+                                                    }}
+                                                ></div>
+                                            </div>
+                                            <div className="eye right-eye" ref={rightEyeRef}>
+                                                <div
+                                                    className="eyeball"
+                                                    style={{
+                                                        transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
+                                                    }}
+                                                ></div>
+                                            </div>
                                         </div>
-                                        <div className="eye right-eye" ref={rightEyeRef}>
-                                            <div
-                                                className="eyeball"
-                                                style={{
-                                                    transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
-                                                }}
-                                            ></div>
-                                        </div>
+                                        <div className="eyebrows"></div>
+                                        <div className="character-nose"></div>
+                                        <div className="character-mouth"></div>
                                     </div>
-                                    <div className="eyebrows"></div>
-                                    <div className="character-nose"></div>
-                                    <div className="character-mouth"></div>
+                                </div>
+                                <div className="character-body">
+                                    <div className="character-tie"></div>
                                 </div>
                             </div>
-                            <div className="character-body">
-                                <div className="character-tie"></div>
+
+                            <div className={`signin-form ${isSignUp ? "hidden" : ""}`}>
+                                <h2 className="form-title">Sign In</h2>
+                                <form onSubmit={handleSignInSubmit}>
+                                    <div className="input-group">
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={signInData.email}
+                                            onChange={handleSignInChange}
+                                            onFocus={() => handleFocus("email")}
+                                            onBlur={handleBlur}
+                                            placeholder="Email"
+                                            className="form-input"
+                                            required
+                                        />
+                                        {/* <span className="input-highlight"></span> */}
+                                    </div>
+                                    <div className="input-group">
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            value={signInData.password}
+                                            onChange={handleSignInChange}
+                                            onFocus={() => handleFocus("password")}
+                                            onBlur={handleBlur}
+                                            placeholder="Password"
+                                            className="form-input"
+                                            required
+                                        />
+                                        {/* <span className="input-highlight"></span> */}
+                                    </div>
+                                    <button type="submit" className="form-button">
+                                        <span className="button-text">Login</span>
+                                        <span className="button-icon"></span>
+                                    </button>
+                                </form>
+                                <p className="message">{message}</p>
                             </div>
-                        </div>
 
-                        <div className={`signin-form ${isSignUp ? "hidden" : ""}`}>
-                            <h2 className="form-title">Sign In</h2>
-                            <form onSubmit={handleSignInSubmit}>
-                                <div className="input-group">
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={signInData.email}
-                                        onChange={handleSignInChange}
-                                        onFocus={() => handleFocus("email")}
-                                        onBlur={handleBlur}
-                                        placeholder="Email"
-                                        className="form-input"
-                                        required
-                                    />
-                                    {/* <span className="input-highlight"></span> */}
-                                </div>
-                                <div className="input-group">
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={signInData.password}
-                                        onChange={handleSignInChange}
-                                        onFocus={() => handleFocus("password")}
-                                        onBlur={handleBlur}
-                                        placeholder="Password"
-                                        className="form-input"
-                                        required
-                                    />
-                                    {/* <span className="input-highlight"></span> */}
-                                </div>
-                                <button type="submit" className="form-button">
-                                    <span className="button-text">Login</span>
-                                    <span className="button-icon"></span>
-                                </button>
-                            </form>
-                            <p className="message">{message}</p>
-                        </div>
-
-                        <div className={`signup-form ${isSignUp ? "" : "hidden"}`}>
-                            <h2 className="form-title">Sign Up</h2>
-                            <form onSubmit={handleSignUpSubmit}>
-                                <div className="input-group">
-                                    <input
-                                        type="text"
-                                        name="username"
-                                        value={signUpData.username}
-                                        onChange={handleSignUpChange}
-                                        onFocus={() => handleFocus("username")}
-                                        onBlur={handleBlur}
-                                        placeholder="Username"
-                                        className="form-input"
-                                        required
-                                    />
-                                    <span className="input-highlight"></span>
-                                </div>
-                                <div className="input-group">
-                                    <input
-                                        type="email"
-                                        name="email"
-                                        value={signUpData.email}
-                                        onChange={handleSignUpChange}
-                                        onFocus={() => handleFocus("email")}
-                                        onBlur={handleBlur}
-                                        placeholder="Email"
-                                        className="form-input"
-                                        required
-                                    />
-                                    <span className="input-highlight"></span>
-                                </div>
-                                <div className="input-group">
-                                    <input
-                                        type="text"
-                                        name="rollnumber"
-                                        value={signUpData.rollnumber || ""}
-                                        onChange={handleSignUpChange}
-                                        onFocus={() => handleFocus("rollnumber")}
-                                        onBlur={handleBlur}
-                                        placeholder="Roll Number"
-                                        className="form-input"
-                                        required
-                                    />
-                                    <span className="input-highlight"></span>
-                                </div>
-                                <div className="input-group">
-                                    <input
-                                        type="password"
-                                        name="password"
-                                        value={signUpData.password}
-                                        onChange={handleSignUpChange}
-                                        onFocus={() => handleFocus("password")}
-                                        onBlur={handleBlur}
-                                        placeholder="Password"
-                                        className="form-input"
-                                        required
-                                    />
-                                    <span className="input-highlight"></span>
-                                </div>
-                                <button type="submit" className="form-button">
-                                    <span className="button-text">Register</span>
-                                    <span className="button-icon"></span>
-                                </button>
-                            </form>
-                            <p className="message">{message}</p>
+                            <div className={`signup-form ${isSignUp ? "" : "hidden"}`}>
+                                <h2 className="form-title">Sign Up</h2>
+                                <form onSubmit={handleSignUpSubmit}>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            name="username"
+                                            value={signUpData.username}
+                                            onChange={handleSignUpChange}
+                                            onFocus={() => handleFocus("username")}
+                                            onBlur={handleBlur}
+                                            placeholder="Username"
+                                            className="form-input"
+                                            required
+                                        />
+                                        <span className="input-highlight"></span>
+                                    </div>
+                                    <div className="input-group">
+                                        <input
+                                            type="email"
+                                            name="email"
+                                            value={signUpData.email}
+                                            onChange={handleSignUpChange}
+                                            onFocus={() => handleFocus("email")}
+                                            onBlur={handleBlur}
+                                            placeholder="Email"
+                                            className="form-input"
+                                            required
+                                        />
+                                        <span className="input-highlight"></span>
+                                    </div>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            name="rollnumber"
+                                            value={signUpData.rollnumber || ""}
+                                            onChange={handleSignUpChange}
+                                            onFocus={() => handleFocus("rollnumber")}
+                                            onBlur={handleBlur}
+                                            placeholder="Roll Number"
+                                            className="form-input"
+                                            required
+                                        />
+                                        <span className="input-highlight"></span>
+                                    </div>
+                                    <div className="input-group">
+                                        <input
+                                            type="password"
+                                            name="password"
+                                            value={signUpData.password}
+                                            onChange={handleSignUpChange}
+                                            onFocus={() => handleFocus("password")}
+                                            onBlur={handleBlur}
+                                            placeholder="Password"
+                                            className="form-input"
+                                            required
+                                        />
+                                        <span className="input-highlight"></span>
+                                    </div>
+                                    <button type="submit" className="form-button">
+                                        <span className="button-text">Register</span>
+                                        <span className="button-icon"></span>
+                                    </button>
+                                </form>
+                                <p className="message">{message}</p>
+                            </div>
                         </div>
                     </div>
                 </div>
