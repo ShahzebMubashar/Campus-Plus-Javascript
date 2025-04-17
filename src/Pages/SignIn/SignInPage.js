@@ -174,10 +174,12 @@ function SignInPage() {
 
     return (
         <div className="signincontainerfull">
+            {/* Navbar stays outside the wrapper */}
             <Navbar />
-            <div className="signin-wrapper">
-                <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""} ${isAnimating ? "animating" : ""}`}>
 
+            {/* New wrapper div at 80% of screen size */}
+            <div className="auth-wrapper">
+                <div className={`signin-container ${isSignUp ? "sign-up-mode" : ""} ${isAnimating ? "animating" : ""}`}>
                     <div className="left-section">
                         <div className="background-circle"></div>
                         <h1 className="animated-text">{isSignUp ? "Already a Member?" : "Fresher Ho?"}</h1>
