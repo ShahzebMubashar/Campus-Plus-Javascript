@@ -236,7 +236,7 @@
 .signin-form {
     width: 100%;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    margin-top: -300px;
+    margin-top: -330px;
 }
 
 .signup-form {
@@ -254,7 +254,7 @@
 
 .form-title {
     font-size: 2rem;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     color: #333;
     position: relative;
     display: inline-block;
@@ -295,7 +295,7 @@
     outline: none;
     transition: all 0.3s ease;
     width: 100%;
-    margin-left: 0;
+    margin-left: -120px;
     /* Fixed the negative margin */
 }
 
