@@ -212,9 +212,10 @@
 .form-section {
     position: absolute;
     top: 35%;
-    right: 0;
+    right: 20%;
     height: 100%;
-    width: 40%;
+    width: 30%;
+    padding-right: -5%;
     background: white;
     display: flex;
     flex-direction: column;
@@ -226,7 +227,7 @@
 
 .form-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     position: relative;
     padding-top: 120px;
@@ -246,9 +247,10 @@
 }
 
 .signup-form {
-    width: 100%;
+    width: 105%;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    margin-top: 200px;
+    margin-top: 50%;
+    margin-left: -40%;
 }
 
 .hidden {
