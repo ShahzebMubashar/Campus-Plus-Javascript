@@ -184,6 +184,11 @@
     box-shadow: 0 5px 15px rgba(0, 123, 255, 0.4);
 }
 
+.sign-in-btn {
+    top: 41% !important;
+    left: 50% !important;
+}
+
 .toggle-button:active {
     transform: translateY(0);
 }
@@ -220,9 +225,9 @@
 }
 
 .human-img {
-    top: 42%;
-    left: 1% !important;
-    max-width: 65% !important;
+    top: 48%;
+    left: -2% !important;
+    max-width: 60% !important;
 }
 
 .signin-container.animating .dynamic-image {

@@ -223,7 +223,8 @@ function SignInPage() {
                                 : "Join us to explore amazing opportunities and resources. Don't have an accout?"}
                         </p>
 
-                        <button className="toggle-button" onClick={toggleSignUp}>
+                        <button className={`toggle-button ${isSignUp ? "sign-in-btn" : "sign-up-btn"}`}
+                            onClick={toggleSignUp}>
                             <span className="button-text">{isSignUp ? "Sign In" : "Sign Up"}</span>
                             <span className="button-icon"></span>
                         </button>
