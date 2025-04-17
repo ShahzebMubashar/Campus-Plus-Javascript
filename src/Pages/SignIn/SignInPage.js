@@ -324,7 +324,6 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-                                        <span className="input-highlight"></span>
                                     </div>
                                     <div className="input-group">
                                         <input
@@ -338,7 +337,7 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-                                        <span className="input-highlight"></span>
+
                                     </div>
                                     <div className="input-group">
                                         <input
@@ -352,7 +351,7 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-                                        <span className="input-highlight"></span>
+
                                     </div>
                                     <div className="input-group">
                                         <input
@@ -366,7 +365,7 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-                                        <span className="input-highlight"></span>
+
                                     </div>
                                     <button type="submit" className="form-button">
                                         <span className="button-text">Register</span>
