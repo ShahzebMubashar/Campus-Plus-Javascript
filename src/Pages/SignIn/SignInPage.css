@@ -278,7 +278,7 @@
 .form-section form {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 5px;
 }
 
 .input-group {
