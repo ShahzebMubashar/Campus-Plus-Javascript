@@ -91,7 +91,7 @@
     margin-bottom: 5%;
     position: absolute;
     top: 15%;
-    left: 10%;
+    left: 13%;
 }
 
 .left-section p {
@@ -100,7 +100,7 @@
     padding: 0 20px;
     position: absolute;
     top: 25%;
-    left: 7%;
+    left: 10%;
     margin-right: 10%;
     text-align: left;
 }
@@ -116,7 +116,7 @@
     transition: all 0.3s ease;
     z-index: 10;
     position: absolute;
-    left: 4%;
+    left: 6%;
     top: 43%;
     overflow: hidden;
 }
@@ -165,7 +165,7 @@
 .dynamic-image {
     position: absolute;
     top: 40%;
-    left: 27%;
+    left: 25%;
     max-width: 75%;
     transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     z-index: 999;
@@ -215,7 +215,6 @@
     top: 35%;
     right: 20%;
     height: 100%;
-    margin-left: 2%;
     width: 30%;
     padding-right: -5%;
     background: white;
