@@ -164,12 +164,23 @@
 
 .dynamic-image {
     position: absolute;
+    transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+    z-index: 999;
+    /* top: 40%;
+    left: 25%;
+    max-width: 75%; */
+}
+
+.rocket-img {
     top: 40%;
     left: 25%;
     max-width: 75%;
-    transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-    z-index: 999;
+}
 
+.human-img {
+    top: 42%;
+    left: 1% !important;
+    max-width: 65% !important;
 }
 
 .signin-container.animating .dynamic-image {

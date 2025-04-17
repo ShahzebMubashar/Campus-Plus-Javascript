@@ -223,7 +223,9 @@ function SignInPage() {
                             <span className="button-text">{isSignUp ? "Sign In" : "Sign Up"}</span>
                             <span className="button-icon"></span>
                         </button>
-                        <img src={isSignUp ? humanImg : rocketImg} alt={isSignUp ? "Human" : "Rocket"} className="dynamic-image" />
+                        <img src={isSignUp ? humanImg : rocketImg}
+                            alt={isSignUp ? "Human" : "Rocket"}
+                            className={`dynamic-image ${isSignUp ? "human-img" : "rocket-img"}`} />
                     </div>
 
                     <div className="form-section">
