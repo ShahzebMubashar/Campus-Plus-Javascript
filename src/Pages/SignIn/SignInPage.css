@@ -1,13 +1,12 @@
-.signincontainerfull {
+/* .signincontainerfull {
     height: 100%;
     width: 100%;
-    overflow: hidden;
-    position: absolute;
-}
+     overflow: hidden; 
+}*/
 
 .signin-wrapper {
     width: 80%;
-    margin: 10% auto;
+    margin: 0 auto;
     height: 70%;
     display: flex;
     align-items: center;
@@ -15,11 +14,36 @@
     border: black 2px solid;
 }
 
+/* Form Section */
+.form-section {
+    position: relative;
+    /* top: 18%; */
+    right: 0;
+    height: 50%;
+    width: 50%;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+}
+
+.form-container {
+    width: 100%;
+    max-width: 400px;
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    position: relative;
+    padding-top: 60px;
+    /* Make room for the character */
+}
+
 
 .signin-container {
     position: relative;
     width: 90%;
-    height: 20%;
+    height: 0%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -30,10 +54,10 @@
 
 /* Left Section */
 .left-section {
-    position: absolute;
-    top: -45px;
-    left: 0;
-    height: 100%;
+    position: relative;
+    top: -183%;
+    right: 55%;
+    height: 70vh;
     width: 50%;
     color: white;
     display: flex;
@@ -47,15 +71,15 @@
 
 /* Improved background circle with smoother transitions */
 .background-circle {
-    position: absolute;
+    position: relative;
     top: 0;
     left: 0;
-    width: 80%;
-    height: 50%;
+    width: 100%;
+    height: 100%;
     background-image: linear-gradient(-45deg, #4481eb 0%, #04befe 100%);
     z-index: -1;
     transition: all 1s cubic-bezier(0.65, 0, 0.35, 1);
-    border-radius: 0 100% 100% 0 / 50%;
+    /* border-radius: 0 100% 100% 0 / 50%; */
     transform-origin: left center;
 }
 
@@ -81,8 +105,8 @@
     font-size: 2.5rem;
     margin-bottom: 1rem;
     position: absolute;
-    top: 15%;
-    left: 25%;
+    top: 0%;
+    left: 0%;
 }
 
 .left-section p {
@@ -154,7 +178,7 @@
 .dynamic-image {
     position: absolute;
 
-    max-width: 70%;
+    max-width: 50%;
     transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
 }
 
@@ -195,30 +219,7 @@
     top: 28%;
 }
 
-/* Form Section */
-.form-section {
-    position: absolute;
-    top: 18%;
-    right: 0;
-    height: 100%;
-    width: 50%;
-    background: white;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    z-index: 100;
-    transition: all 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-}
 
-.form-container {
-    width: 100%;
-    max-width: 400px;
-    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
-    position: relative;
-    padding-top: 60px;
-    /* Make room for the character */
-}
 
 .form-container.fade {
     opacity: 0;
