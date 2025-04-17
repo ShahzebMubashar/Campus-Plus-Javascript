@@ -185,7 +185,7 @@
 }
 
 .sign-in-btn {
-    top: 41% !important;
+    top: 42% !important;
     left: 50% !important;
 }
 
@@ -309,7 +309,7 @@
     width: 105%;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     margin-top: 50%;
-    margin-left: -40%;
+    margin-left: -48%;
 }
 
 .hidden {
@@ -821,4 +821,12 @@
     .signin-form {
         margin-top: -250px;
     }
+}
+
+.sign-up-char {
+    top: 25% !important;
+    left: 10% !important;
+    transform: translateX(-50%) !important;
+    z-index: 200;
+
 }

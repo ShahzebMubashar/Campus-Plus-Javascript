@@ -236,13 +236,16 @@ function SignInPage() {
                     <div className="form-section">
                         <div className={`form-container ${isAnimating ? "fade" : ""}`}>
                             {/* Character Circle Container */}
-                            <div className="character-circle-container">
+                            <div className={`character-circle-container ${isSignUp ? "sign-up-char" : "sign-in-char"}`}>
                                 <div
                                     className={`character-circle ${isPasswordField ? "hiding-eyes" : ""}`}
                                     ref={characterCircleRef}
                                 >
                                     {/* Animated Character */}
-                                    <div className={`animated-character ${isPasswordField ? "hiding-eyes" : ""}`} ref={characterRef}>
+                                    <div
+                                        className={`animated-character ${isPasswordField ? "hiding-eyes" : ""} `}
+                                        ref={characterRef}
+                                    >
                                         <div className="graduation-cap">
                                             <div className="cap-top"></div>
                                             <div className="cap-tassel"></div>
@@ -276,6 +279,7 @@ function SignInPage() {
                                             <div className="character-tie"></div>
                                         </div>
                                     </div>
+
                                 </div>
                             </div>
 
