@@ -17,37 +17,67 @@ function SignInPage() {
     const [activeField, setActiveField] = useState(null)
     const [eyePosition, setEyePosition] = useState({ x: 50, y: 50 })
     const [isPasswordField, setIsPasswordField] = useState(false)
+    const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
 
     const leftEyeRef = useRef(null)
     const rightEyeRef = useRef(null)
     const characterRef = useRef(null)
+    const characterCircleRef = useRef(null)
 
     const navigate = useNavigate()
 
-    // Handle eye movement based on active input field
+    // Track mouse movement for eye tracking
+    useEffect(() => {
+        const handleMouseMove = (e) => {
+            setMousePosition({ x: e.clientX, y: e.clientY })
+        }
+
+        window.addEventListener('mousemove', handleMouseMove)
+
+        return () => {
+            window.removeEventListener('mousemove', handleMouseMove)
+        }
+    }, [])
+
+    // Update eye position based on mouse position
     useEffect(() => {
         if (isPasswordField) {
             // Hide eyes when typing password
             return
         }
 
-        if (!activeField) {
-            // Return eyes to center when no field is active
-            setEyePosition({ x: 50, y: 50 })
-            return
-        }
+        if (characterCircleRef.current && !activeField) {
+            const rect = characterCircleRef.current.getBoundingClientRect()
+            const centerX = rect.left + rect.width / 2
+            const centerY = rect.top + rect.height / 2
 
-        // Different positions based on which field is active
-        const positions = {
-            email: { x: 70, y: 40 },
-            username: { x: 30, y: 40 },
-            rollnumber: { x: 60, y: 60 },
-        }
+            // Calculate angle between mouse and character center
+            const deltaX = mousePosition.x - centerX
+            const deltaY = mousePosition.y - centerY
 
-        if (positions[activeField]) {
-            setEyePosition(positions[activeField])
+            // Limit eye movement range (0-100%)
+            const maxDistance = 30
+            const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance)
+            const angle = Math.atan2(deltaY, deltaX)
+
+            // Convert to percentage (0-100)
+            const moveX = 50 + (Math.cos(angle) * distance / maxDistance) * 30
+            const moveY = 50 + (Math.sin(angle) * distance / maxDistance) * 30
+
+            setEyePosition({ x: moveX, y: moveY })
+        } else if (activeField) {
+            // Different positions based on which field is active
+            const positions = {
+                email: { x: 70, y: 40 },
+                username: { x: 30, y: 40 },
+                rollnumber: { x: 60, y: 60 },
+            }
+
+            if (positions[activeField]) {
+                setEyePosition(positions[activeField])
+            }
         }
-    }, [activeField, isPasswordField])
+    }, [mousePosition, activeField, isPasswordField])
 
     // Smooth transition between sign-in and sign-up modes
     const toggleSignUp = () => {
@@ -197,39 +227,47 @@ function SignInPage() {
 
                     <div className="form-section">
                         <div className={`form-container ${isAnimating ? "fade" : ""}`}>
-                            {/* Animated Character */}
-                            <div className={`animated-character ${isPasswordField ? "hiding-eyes" : ""}`} ref={characterRef}>
-                                <div className="graduation-cap">
-                                    <div className="cap-top"></div>
-                                    <div className="cap-tassel"></div>
-                                </div>
-                                <div className="character-head">
-                                    <div className="character-face">
-                                        <div className="character-eyes">
-                                            <div className="eye left-eye" ref={leftEyeRef}>
-                                                <div
-                                                    className="eyeball"
-                                                    style={{
-                                                        transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
-                                                    }}
-                                                ></div>
-                                            </div>
-                                            <div className="eye right-eye" ref={rightEyeRef}>
-                                                <div
-                                                    className="eyeball"
-                                                    style={{
-                                                        transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
-                                                    }}
-                                                ></div>
+                            {/* Character Circle Container */}
+                            <div className="character-circle-container">
+                                <div
+                                    className={`character-circle ${isPasswordField ? "hiding-eyes" : ""}`}
+                                    ref={characterCircleRef}
+                                >
+                                    {/* Animated Character */}
+                                    <div className={`animated-character ${isPasswordField ? "hiding-eyes" : ""}`} ref={characterRef}>
+                                        <div className="graduation-cap">
+                                            <div className="cap-top"></div>
+                                            <div className="cap-tassel"></div>
+                                        </div>
+                                        <div className="character-head">
+                                            <div className="character-face">
+                                                <div className="character-eyes">
+                                                    <div className="eye left-eye" ref={leftEyeRef}>
+                                                        <div
+                                                            className="eyeball"
+                                                            style={{
+                                                                transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
+                                                            }}
+                                                        ></div>
+                                                    </div>
+                                                    <div className="eye right-eye" ref={rightEyeRef}>
+                                                        <div
+                                                            className="eyeball"
+                                                            style={{
+                                                                transform: `translate(${eyePosition.x - 50}%, ${eyePosition.y - 50}%)`,
+                                                            }}
+                                                        ></div>
+                                                    </div>
+                                                </div>
+                                                <div className="eyebrows"></div>
+                                                <div className="character-nose"></div>
+                                                <div className="character-mouth"></div>
                                             </div>
                                         </div>
-                                        <div className="eyebrows"></div>
-                                        <div className="character-nose"></div>
-                                        <div className="character-mouth"></div>
+                                        <div className="character-body">
+                                            <div className="character-tie"></div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="character-body">
-                                    <div className="character-tie"></div>
                                 </div>
                             </div>
 
@@ -248,7 +286,6 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-                                        {/* <span className="input-highlight"></span> */}
                                     </div>
                                     <div className="input-group">
                                         <input
@@ -262,7 +299,6 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-                                        {/* <span className="input-highlight"></span> */}
                                     </div>
                                     <button type="submit" className="form-button">
                                         <span className="button-text">Login</span>

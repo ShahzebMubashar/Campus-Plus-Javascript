@@ -224,8 +224,8 @@
     max-width: 400px;
     transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
     position: relative;
-    padding-top: 60px;
-    /* Make room for the character */
+    padding-top: 120px;
+    /* Increased to make room for the character circle */
 }
 
 .form-container.fade {
@@ -295,7 +295,7 @@
     outline: none;
     transition: all 0.3s ease;
     width: 100%;
-    margin-left: -30%;
+    margin-left: 0;
     /* Fixed the negative margin */
 }
 
@@ -409,29 +409,60 @@
     transition: all 0.3s ease;
 }
 
-/* Improved Animated Character Styles */
-.animated-character {
+/* Character Circle Container */
+.character-circle-container {
     position: absolute;
     top: -400px;
-    right: 140px;
-    width: 120px;
-    height: 150px;
-    transition: all 0.3s ease;
+    left: 50%;
+    transform: translateX(-50%);
     z-index: 200;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.character-circle {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    background-color: white;
+    border: 2px solid #e0e0e0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.character-circle:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+}
+
+/* Improved Animated Character Styles */
+.animated-character {
+    position: relative;
+    width: 100px;
+    height: 120px;
+    transition: all 0.3s ease;
+    transform: translateY(10px);
+    /* Adjust position inside circle */
 }
 
 /* Graduation Cap */
 .graduation-cap {
     position: absolute;
-    top: -25px;
+    top: -15px;
     left: 50%;
     transform: translateX(-50%);
     z-index: 10;
 }
 
 .cap-top {
-    width: 90px;
-    height: 25px;
+    width: 70px;
+    height: 20px;
     background-color: #333;
     border-radius: 5px 5px 0 0;
     position: relative;
@@ -443,8 +474,8 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 30px;
-    height: 10px;
+    width: 25px;
+    height: 8px;
     background-color: #555;
     border-radius: 50% 50% 0 0;
 }
@@ -453,8 +484,8 @@
     position: absolute;
     top: 5px;
     right: -5px;
-    width: 15px;
-    height: 30px;
+    width: 12px;
+    height: 25px;
     background-color: #f0c420;
     border-radius: 0 0 10px 10px;
     transform: rotate(10deg);
@@ -477,13 +508,13 @@
 /* Improved Character Head */
 .character-head {
     position: relative;
-    width: 80px;
-    height: 90px;
-    background-color: #e6c7a5;
-    /* More mature skin tone */
-    border-radius: 40px 40px 35px 35px;
+    width: 70px;
+    height: 80px;
+    background-color: #f8c9a7;
+    /* Lighter skin tone to match image */
+    border-radius: 35px 35px 30px 30px;
     margin: 0 auto;
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
     overflow: hidden;
 }
 
@@ -499,7 +530,7 @@
     top: 25px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
+    width: 50px;
     display: flex;
     justify-content: space-between;
 }
@@ -507,8 +538,8 @@
 .eyebrows:before,
 .eyebrows:after {
     content: "";
-    width: 20px;
-    height: 3px;
+    width: 16px;
+    height: 2px;
     background-color: #333;
     position: absolute;
     border-radius: 3px;
@@ -529,43 +560,44 @@
     top: 35px;
     left: 50%;
     transform: translateX(-50%);
-    width: 60px;
-    height: 20px;
+    width: 50px;
+    height: 16px;
     display: flex;
     justify-content: space-between;
 }
 
 .eye {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     background-color: white;
     border-radius: 50%;
     position: relative;
     overflow: hidden;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .eyeball {
     position: absolute;
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     background-color: #333;
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s ease;
 }
 
 /* Add nose for more mature look */
 .character-nose {
     position: absolute;
-    top: 55px;
+    top: 50px;
     left: 50%;
     transform: translateX(-50%);
-    width: 10px;
-    height: 10px;
-    background-color: #d4a98c;
+    width: 8px;
+    height: 8px;
+    background-color: #e5a193;
+    /* Rosy nose color */
     border-radius: 50%;
 }
 
@@ -574,16 +606,16 @@
     bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
-    width: 30px;
-    height: 8px;
+    width: 25px;
+    height: 6px;
     background-color: #c55;
     border-radius: 0 0 15px 15px;
 }
 
 /* Professional body with tie */
 .character-body {
-    width: 90px;
-    height: 50px;
+    width: 70px;
+    height: 40px;
     background-color: #2c3e50;
     /* Dark professional color */
     margin: 0 auto;
@@ -596,8 +628,8 @@
     top: 0;
     left: 50%;
     transform: translateX(-50%);
-    width: 15px;
-    height: 30px;
+    width: 12px;
+    height: 25px;
     background-color: #e74c3c;
     clip-path: polygon(0 0, 100% 0, 50% 100%);
 }
@@ -610,7 +642,7 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: #e6c7a5;
+    background-color: #f8c9a7;
     animation: blinkEyes 0.3s ease forwards;
 }
 
@@ -633,15 +665,15 @@
 
     0%,
     100% {
-        transform: translateX(0);
+        transform: translateX(0) translateY(10px);
     }
 
     25% {
-        transform: translateX(-2px) rotate(-1deg);
+        transform: translateX(-2px) rotate(-1deg) translateY(10px);
     }
 
     75% {
-        transform: translateX(2px) rotate(1deg);
+        transform: translateX(2px) rotate(1deg) translateY(10px);
     }
 }
 
@@ -651,7 +683,7 @@
 }
 
 /* Add some fun animations when form is submitted */
-.form-button.success~.animated-character {
+.form-button.success~.character-circle-container {
     animation: jump 0.5s ease;
 }
 
@@ -659,15 +691,15 @@
 
     0%,
     100% {
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
 
     50% {
-        transform: translateY(-20px);
+        transform: translateX(-50%) translateY(-20px);
     }
 }
 
-.form-button.error~.animated-character {
+.form-button.error~.character-circle-container {
     animation: scared 0.5s ease;
 }
 
@@ -675,11 +707,11 @@
 
     0%,
     100% {
-        transform: translateY(0) scale(1);
+        transform: translateX(-50%) translateY(0) scale(1);
     }
 
     50% {
-        transform: translateY(5px) scale(0.95);
+        transform: translateX(-50%) translateY(5px) scale(0.95);
     }
 }
 
@@ -715,11 +747,8 @@
         padding: 2rem 0;
     }
 
-    .animated-character {
-        top: -350px;
-        right: auto;
-        left: 50%;
-        transform: translateX(-50%);
+    .character-circle-container {
+        top: -60px;
     }
 
     .signin-form {
