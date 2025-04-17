@@ -217,7 +217,7 @@ function SignInPage() {
                         <p className="animated-text">
                             {isSignUp
                                 ? "Sign in to access your account and continue your journey with us."
-                                : "Join us to explore amazing opportunities and resources!"}
+                                : "Join us to explore amazing opportunities and resources. Don't have an accout?"}
                         </p>
                         <button className="toggle-button" onClick={toggleSignUp}>
                             <span className="button-text">{isSignUp ? "Sign In" : "Sign Up"}</span>
