@@ -116,8 +116,8 @@
     transition: all 0.3s ease;
     z-index: 10;
     position: absolute;
-    left: 33%;
-    top: 30%;
+    left: 5%;
+    top: 42%;
     overflow: hidden;
 }
 
