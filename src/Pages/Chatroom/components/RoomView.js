@@ -9,12 +9,20 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
   const [newRoomName, setNewRoomName] = useState("");
   const [newRoomDescription, setNewRoomDescription] = useState("");
+  const [isEditingRoom, setIsEditingRoom] = useState(false);
+  const [editedRoomName, setEditedRoomName] = useState(room.roomname);
+  const [editedRoomDescription, setEditedRoomDescription] = useState(
+    room.description
+  );
+  const [userRole, setUserRole] = useState("");
 
   useEffect(() => {
     fetchPosts();
   }, [room.roomid]);
 
   const fetchPosts = async () => {
+    console.log(`Fetching Posts...`);
+
     try {
       const response = await fetch(
         `http://localhost:4000/Chatrooms/messages/${room.roomid}`,
@@ -23,18 +31,33 @@ export default function RoomView({ room, onBack, onLeave }) {
         }
       );
 
+      console.log("Fetching posts..."); // Debug log
+
       if (response.ok) {
-        const data = await response.json();
-        if (data && data.messages && Array.isArray(data.messages)) {
+        const responseData = await response.json();
+        console.log("Full API response:", responseData); // Debug log
+
+        // Handle both possible response structures
+        const data = responseData.data || responseData;
+        const role = responseData.userRole || "";
+
+        console.log(`User Role: ${role}`); // Debug log
+
+        // Update state with the user role
+        setUserRole(role); // Make sure you have this state: const [userRole, setUserRole] = useState('');
+
+        if (data?.messages && Array.isArray(data.messages)) {
           setPosts(data.messages);
         } else if (Array.isArray(data)) {
           setPosts(data);
         } else {
           setPosts([]);
-          console.error("Unexpected post data format");
+          console.error("Unexpected post data format:", data);
         }
       } else {
-        console.error("Failed to fetch posts");
+        console.error("Failed to fetch posts. Status:", response.status);
+        const errorData = await response.json().catch(() => ({}));
+        console.error("Error details:", errorData);
       }
     } catch (error) {
       console.error("Error fetching posts:", error);
@@ -93,6 +116,36 @@ export default function RoomView({ room, onBack, onLeave }) {
       } catch (error) {
         console.error("Error creating room:", error);
       }
+    }
+  };
+
+  const handleUpdateRoom = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/Chatrooms/change-room-name/${room.roomid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            newName: editedRoomName,
+            description: editedRoomDescription,
+          }),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        room.roomname = editedRoomName;
+        room.description = editedRoomDescription;
+        setIsEditingRoom(false);
+        window.location.reload();
+      } else {
+        console.error("Failed to update room");
+      }
+    } catch (error) {
+      console.error("Error updating room:", error);
     }
   };
 
@@ -219,21 +272,24 @@ export default function RoomView({ room, onBack, onLeave }) {
         </button>
 
         <div>
-          <button
-            onClick={() => setShowCreateRoomForm(true)}
-            style={{
-              padding: "10px 15px",
-              backgroundColor: "#28a745",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              marginRight: "10px",
-              fontSize: "16px",
-            }}
-          >
-            ➕ Create Room
-          </button>
+          {/* Only show Create Room button for Admins/Moderators */}
+          {(userRole === "Admin" || userRole === "Moderator") && (
+            <button
+              onClick={() => setShowCreateRoomForm(true)}
+              style={{
+                padding: "10px 15px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                marginRight: "10px",
+                fontSize: "16px",
+              }}
+            >
+              ➕ Create Room
+            </button>
+          )}
 
           <button
             onClick={handleLeaveRoom}
@@ -360,23 +416,123 @@ export default function RoomView({ room, onBack, onLeave }) {
           borderRadius: "8px",
           boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
           marginBottom: "20px",
+          position: "relative",
         }}
       >
-        <h1 style={{ marginTop: 0, color: "#333" }}>{room.roomname}</h1>
-        <div style={{ color: "#666", marginBottom: "15px" }}>
-          Created {new Date(room.created_at).toLocaleDateString()}
-        </div>
-        <div
-          style={{
-            backgroundColor: "#f9f9f9",
-            padding: "15px",
-            borderRadius: "6px",
-            borderLeft: "4px solid #28a745",
-          }}
-        >
-          <h2 style={{ marginTop: 0, color: "#444" }}>About</h2>
-          <p style={{ color: "#555", lineHeight: "1.5" }}>{room.description}</p>
-        </div>
+        {(userRole === "Admin" || userRole === "Moderator") &&
+          !isEditingRoom && (
+            <button
+              onClick={() => setIsEditingRoom(true)}
+              style={{
+                position: "absolute",
+                top: "20px",
+                right: "20px",
+                padding: "8px 15px",
+                backgroundColor: "#007bff",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "14px",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              ✏️ Edit Room
+            </button>
+          )}
+
+        {isEditingRoom ? (
+          <div>
+            <input
+              type="text"
+              value={editedRoomName}
+              onChange={(e) => setEditedRoomName(e.target.value)}
+              style={{
+                width: "100%",
+                padding: "12px",
+                marginBottom: "15px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "20px",
+                fontWeight: "bold",
+              }}
+            />
+            <textarea
+              value={editedRoomDescription}
+              onChange={(e) => setEditedRoomDescription(e.target.value)}
+              style={{
+                width: "100%",
+                height: "120px",
+                padding: "12px",
+                marginBottom: "20px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                resize: "vertical",
+                fontSize: "16px",
+              }}
+            />
+            <div
+              style={{
+                display: "flex",
+                gap: "10px",
+                justifyContent: "flex-end",
+              }}
+            >
+              <button
+                onClick={() => {
+                  setIsEditingRoom(false);
+                  setEditedRoomName(room.roomname);
+                  setEditedRoomDescription(room.description);
+                }}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#6c757d",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleUpdateRoom}
+                style={{
+                  padding: "10px 20px",
+                  backgroundColor: "#28a745",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer",
+                }}
+              >
+                Save Changes
+              </button>
+            </div>
+          </div>
+        ) : (
+          <>
+            <h1 style={{ marginTop: 0, color: "#333" }}>{room.roomname}</h1>
+            <div style={{ color: "#666", marginBottom: "15px" }}>
+              Created {new Date(room.created_at).toLocaleDateString()}
+            </div>
+            <div
+              style={{
+                backgroundColor: "#f9f9f9",
+                padding: "15px",
+                borderRadius: "6px",
+                borderLeft: "4px solid #28a745",
+              }}
+            >
+              <h2 style={{ marginTop: 0, color: "#444" }}>About</h2>
+              <p style={{ color: "#555", lineHeight: "1.5" }}>
+                {room.description}
+              </p>
+            </div>
+          </>
+        )}
       </div>
 
       {/* Create Post Section */}

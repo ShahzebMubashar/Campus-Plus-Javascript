@@ -47,11 +47,11 @@ const getRooms = async (request, response) => {
     }
 
     // If no roomid provided → Fetch All Rooms
-    console.log("Fetching All Rooms from DB");
+    // console.log("Fetching All Rooms from DB");
 
     res = await pool.query("SELECT * FROM rooms");
 
-    console.log("Fetched All Rooms:", res.rows);
+    // console.log("Fetched All Rooms:", res.rows);
 
     if (!res.rowCount) {
       console.log("No rooms found in DB");
@@ -66,8 +66,10 @@ const getRooms = async (request, response) => {
 };
 
 const getRoomMessages = async (req, res) => {
-  const { roomid } = req.params;
-
+  const {
+    params: { roomid },
+  } = req;
+  
   try {
     const messagesResult = await pool.query(
       `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved'order by posted_at desc`,
@@ -107,7 +109,12 @@ const getRoomMessages = async (req, res) => {
       })),
     };
 
-    return res.status(200).json(structuredResponse);
+    const returnData = {
+      data: structuredResponse,
+      userRole: req.session?.user?.role ?? null,
+    };
+
+    return res.status(200).json(returnData);
   } catch (error) {
     console.error("Error fetching room messages:", error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -389,10 +396,15 @@ const LeaveRoom = async (request, response) => {
 };
 
 const changeRoomDetails = async (request, response) => {
+  console.log(`Request: [CHANGE ROOM INFO]`);
   const {
     params: { roomid },
     body: { newName, description },
   } = request;
+
+  console.log(
+    `Received: Params: ${roomid}, Body: ${(newName, description)}\n\n`
+  );
 
   if (!newName && !description)
     return response.status(400).json("Enter at least one of the fields");
