@@ -31,7 +31,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         }
       );
 
-      console.log("Fetching posts..."); // Debug log
+      // console.log("Fetching posts..."); // Debug log
 
       if (response.ok) {
         const responseData = await response.json();
@@ -55,6 +55,10 @@ export default function RoomView({ room, onBack, onLeave }) {
           console.error("Unexpected post data format:", data);
         }
       } else {
+        const responseData = await response.json();
+        const role = responseData.userRole;
+        setUserRole(role);
+
         console.error("Failed to fetch posts. Status:", response.status);
         const errorData = await response.json().catch(() => ({}));
         console.error("Error details:", errorData);

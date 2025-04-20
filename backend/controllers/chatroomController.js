@@ -69,7 +69,7 @@ const getRoomMessages = async (req, res) => {
   const {
     params: { roomid },
   } = req;
-  
+
   try {
     const messagesResult = await pool.query(
       `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved'order by posted_at desc`,
@@ -77,14 +77,16 @@ const getRoomMessages = async (req, res) => {
     );
 
     if (messagesResult.rowCount === 0) {
-      return res.status(404).json("No messages found for this room");
+      return res.status(404).json({
+        message: "No messages found for this room",
+        userRole: req.session.user.role ?? null,
+      });
     }
 
     const commentsResult = await pool.query(
       `SELECT * FROM MessageReplies1 WHERE roomid = $1 order by posted_at`,
       [roomid]
     );
-
     const structuredResponse = {
       roomid: messagesResult.rows[0].roomid,
       roomname: messagesResult.rows[0].roomname,
