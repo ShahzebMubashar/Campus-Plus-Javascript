@@ -6,9 +6,6 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [activePost, setActivePost] = useState(null);
   const [newComment, setNewComment] = useState("");
   const [newPost, setNewPost] = useState("");
-  const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
-  const [newRoomName, setNewRoomName] = useState("");
-  const [newRoomDescription, setNewRoomDescription] = useState("");
   const [isEditingRoom, setIsEditingRoom] = useState(false);
   const [editedRoomName, setEditedRoomName] = useState(room.roomname);
   const [editedRoomDescription, setEditedRoomDescription] = useState(
@@ -31,20 +28,15 @@ export default function RoomView({ room, onBack, onLeave }) {
         }
       );
 
-      console.log("Fetching posts..."); // Debug log
-
       if (response.ok) {
         const responseData = await response.json();
-        console.log("Full API response:", responseData); // Debug log
+        console.log("Full API response:", responseData);
 
-        // Handle both possible response structures
         const data = responseData.data || responseData;
         const role = responseData.userRole || "";
 
-        console.log(`User Role: ${role}`); // Debug log
-
-        // Update state with the user role
-        setUserRole(role); // Make sure you have this state: const [userRole, setUserRole] = useState('');
+        console.log(`User Role: ${role}`);
+        setUserRole(role);
 
         if (data?.messages && Array.isArray(data.messages)) {
           setPosts(data.messages);
@@ -55,6 +47,10 @@ export default function RoomView({ room, onBack, onLeave }) {
           console.error("Unexpected post data format:", data);
         }
       } else {
+        const responseData = await response.json();
+        const role = responseData.userRole;
+        setUserRole(role);
+
         console.error("Failed to fetch posts. Status:", response.status);
         const errorData = await response.json().catch(() => ({}));
         console.error("Error details:", errorData);
@@ -90,31 +86,28 @@ export default function RoomView({ room, onBack, onLeave }) {
     }
   };
 
-  const handleCreateRoom = async () => {
-    if (newRoomName.trim() && newRoomDescription.trim()) {
+  const handleDeleteRoom = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this room? This action cannot be undone."
+    );
+    if (confirmDelete) {
       try {
-        const response = await fetch(`http://localhost:4000/Chatrooms/create`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            roomName: newRoomName,
-            description: newRoomDescription,
-          }),
-          credentials: "include",
-        });
+        const response = await fetch(
+          `http://localhost:4000/Chatrooms/delete/${room.roomid}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          }
+        );
 
         if (response.ok) {
-          setNewRoomName("");
-          setNewRoomDescription("");
-          setShowCreateRoomForm(false);
+          console.log("Room deleted successfully");
           window.location.reload();
         } else {
-          console.error("Failed to create room");
+          console.error("Failed to delete room");
         }
       } catch (error) {
-        console.error("Error creating room:", error);
+        console.error("Error deleting room:", error);
       }
     }
   };
@@ -272,25 +265,6 @@ export default function RoomView({ room, onBack, onLeave }) {
         </button>
 
         <div>
-          {/* Only show Create Room button for Admins/Moderators */}
-          {(userRole === "Admin" || userRole === "Moderator") && (
-            <button
-              onClick={() => setShowCreateRoomForm(true)}
-              style={{
-                padding: "10px 15px",
-                backgroundColor: "#28a745",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                marginRight: "10px",
-                fontSize: "16px",
-              }}
-            >
-              ➕ Create Room
-            </button>
-          )}
-
           <button
             onClick={handleLeaveRoom}
             style={{
@@ -308,106 +282,6 @@ export default function RoomView({ room, onBack, onLeave }) {
         </div>
       </div>
 
-      {/* Create Room Modal */}
-      {showCreateRoomForm && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            backgroundColor: "rgba(0,0,0,0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            zIndex: 1000,
-          }}
-        >
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "25px",
-              borderRadius: "8px",
-              width: "450px",
-              maxWidth: "90%",
-              boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-            }}
-          >
-            <h2 style={{ marginTop: 0, marginBottom: "20px", color: "#333" }}>
-              Create New Room
-            </h2>
-            <input
-              type="text"
-              placeholder="Room Name"
-              value={newRoomName}
-              onChange={(e) => setNewRoomName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginBottom: "15px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                boxSizing: "border-box",
-                fontSize: "16px",
-              }}
-            />
-            <textarea
-              placeholder="Room Description"
-              value={newRoomDescription}
-              onChange={(e) => setNewRoomDescription(e.target.value)}
-              style={{
-                width: "100%",
-                height: "120px",
-                padding: "12px",
-                marginBottom: "20px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                boxSizing: "border-box",
-                resize: "vertical",
-                fontSize: "16px",
-              }}
-            />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "flex-end",
-                gap: "10px",
-              }}
-            >
-              <button
-                onClick={() => setShowCreateRoomForm(false)}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#6c757d",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  fontSize: "16px",
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleCreateRoom}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#28a745",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                  fontSize: "16px",
-                }}
-              >
-                Create Room
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
       {/* Room Info Section */}
       <div
         style={{
@@ -419,14 +293,19 @@ export default function RoomView({ room, onBack, onLeave }) {
           position: "relative",
         }}
       >
-        {(userRole === "Admin" || userRole === "Moderator") &&
-          !isEditingRoom && (
+        {userRole === "Admin" && !isEditingRoom && (
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+              display: "flex",
+              gap: "10px",
+            }}
+          >
             <button
               onClick={() => setIsEditingRoom(true)}
               style={{
-                position: "absolute",
-                top: "20px",
-                right: "20px",
                 padding: "8px 15px",
                 backgroundColor: "#007bff",
                 color: "white",
@@ -441,7 +320,25 @@ export default function RoomView({ room, onBack, onLeave }) {
             >
               ✏️ Edit Room
             </button>
-          )}
+            <button
+              onClick={handleDeleteRoom}
+              style={{
+                padding: "8px 15px",
+                backgroundColor: "#dc3545",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "14px",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              🗑️ Delete Room
+            </button>
+          </div>
+        )}
 
         {isEditingRoom ? (
           <div>
