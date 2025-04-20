@@ -1,9 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function RoomList({ rooms, onJoinRoom }) {
     const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
     const [newRoomName, setNewRoomName] = useState("");
     const [newRoomDescription, setNewRoomDescription] = useState("");
+    const [userRole, setUserRole] = useState("");
+
+    useEffect(() => {
+        // Fetch user role when component mounts
+        fetchUserRole();
+    }, []);
+
+    const fetchUserRole = async () => {
+        try {
+            const response = await fetch(`http://localhost:4000/auth/user-role`, {
+                credentials: "include",
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setUserRole(data.userRole);
+            } else {
+                console.error("Failed to fetch user role");
+            }
+        } catch (error) {
+            console.error("Error fetching user role:", error);
+        }
+    };
 
     const handleCreateRoom = async () => {
         if (newRoomName.trim() && newRoomDescription.trim()) {
@@ -41,22 +64,24 @@ export default function RoomList({ rooms, onJoinRoom }) {
             padding: "20px",
             fontFamily: "Arial, sans-serif"
         }}>
-            {/* Create Room Button */}
-            <button
-                onClick={() => setShowCreateRoomForm(true)}
-                style={{
-                    padding: "10px 15px",
-                    backgroundColor: "#28a745",
-                    color: "white",
-                    border: "none",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    marginBottom: "20px",
-                    fontSize: "16px"
-                }}
-            >
-                ➕ Create Room
-            </button>
+            {/* Create Room Button - Only visible to Admin */}
+            {userRole === "Admin" && (
+                <button
+                    onClick={() => setShowCreateRoomForm(true)}
+                    style={{
+                        padding: "10px 15px",
+                        backgroundColor: "#28a745",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        marginBottom: "20px",
+                        fontSize: "16px"
+                    }}
+                >
+                    ➕ Create Room
+                </button>
+            )}
 
             {/* Create Room Modal */}
             {showCreateRoomForm && (
