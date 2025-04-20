@@ -123,6 +123,32 @@ export default function RoomView({ room, onBack, onLeave }) {
     }
   };
 
+  const handleDeleteRoom = async () => {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this room? This action cannot be undone."
+    );
+    if (confirmDelete) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/Chatrooms/delete/${room.roomid}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          console.log("Room deleted successfully");
+          window.location.reload();
+        } else {
+          console.error("Failed to delete room");
+        }
+      } catch (error) {
+        console.error("Error deleting room:", error);
+      }
+    }
+  };
+
   const handleUpdateRoom = async () => {
     try {
       const response = await fetch(
@@ -277,7 +303,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
         <div>
           {/* Only show Create Room button for Admins/Moderators */}
-          {(userRole === "Admin" || userRole === "Moderator") && (
+          {userRole === "Admin" && (
             <button
               onClick={() => setShowCreateRoomForm(true)}
               style={{
@@ -423,14 +449,19 @@ export default function RoomView({ room, onBack, onLeave }) {
           position: "relative",
         }}
       >
-        {(userRole === "Admin" || userRole === "Moderator") &&
-          !isEditingRoom && (
+        {userRole === "Admin" && !isEditingRoom && (
+          <div
+            style={{
+              position: "absolute",
+              top: "20px",
+              right: "20px",
+              display: "flex",
+              gap: "10px",
+            }}
+          >
             <button
               onClick={() => setIsEditingRoom(true)}
               style={{
-                position: "absolute",
-                top: "20px",
-                right: "20px",
                 padding: "8px 15px",
                 backgroundColor: "#007bff",
                 color: "white",
@@ -445,7 +476,25 @@ export default function RoomView({ room, onBack, onLeave }) {
             >
               ✏️ Edit Room
             </button>
-          )}
+            <button
+              onClick={handleDeleteRoom}
+              style={{
+                padding: "8px 15px",
+                backgroundColor: "#dc3545",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "14px",
+                display: "flex",
+                alignItems: "center",
+                gap: "5px",
+              }}
+            >
+              🗑️ Delete Room
+            </button>
+          </div>
+        )}
 
         {isEditingRoom ? (
           <div>

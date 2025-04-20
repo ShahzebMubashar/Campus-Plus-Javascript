@@ -440,6 +440,32 @@ const changeRoomDetails = async (request, response) => {
   }
 };
 
+const deleteRoom = async (request, response) => {
+  const {
+    params: { roomid },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query(`BEGIN`);
+
+    let res = await client.query(`Delete from Rooms where roomid = $1`, [
+      roomid,
+    ]);
+
+    await client.query(`COMMIT`);
+
+    return response.status(200).json(`Room Deleted Successfully!`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -453,4 +479,5 @@ module.exports = {
   getRoomMessages,
   createPost,
   changeRoomDetails,
+  deleteRoom,
 };
