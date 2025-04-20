@@ -69,7 +69,7 @@ const getRoomMessages = async (req, res) => {
   const {
     params: { roomid },
   } = req;
-  
+
   try {
     const messagesResult = await pool.query(
       `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved'order by posted_at desc`,
@@ -77,14 +77,16 @@ const getRoomMessages = async (req, res) => {
     );
 
     if (messagesResult.rowCount === 0) {
-      return res.status(404).json("No messages found for this room");
+      return res.status(404).json({
+        message: "No messages found for this room",
+        userRole: req.session.user.role ?? null,
+      });
     }
 
     const commentsResult = await pool.query(
       `SELECT * FROM MessageReplies1 WHERE roomid = $1 order by posted_at`,
       [roomid]
     );
-
     const structuredResponse = {
       roomid: messagesResult.rows[0].roomid,
       roomname: messagesResult.rows[0].roomname,
@@ -438,6 +440,32 @@ const changeRoomDetails = async (request, response) => {
   }
 };
 
+const deleteRoom = async (request, response) => {
+  const {
+    params: { roomid },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query(`BEGIN`);
+
+    let res = await client.query(`Delete from Rooms where roomid = $1`, [
+      roomid,
+    ]);
+
+    await client.query(`COMMIT`);
+
+    return response.status(200).json(`Room Deleted Successfully!`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -451,4 +479,5 @@ module.exports = {
   getRoomMessages,
   createPost,
   changeRoomDetails,
+  deleteRoom,
 };
