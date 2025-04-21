@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Navigate } from "react-router-dom";
 
 export default function RoomView({ room, onBack, onLeave }) {
   const [posts, setPosts] = useState([]);
@@ -487,29 +486,43 @@ export default function RoomView({ room, onBack, onLeave }) {
                 marginBottom: "20px",
               }}
             >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  marginBottom: "10px",
-                }}
-              >
-                <span style={{ fontWeight: "bold", color: "#333" }}>
-                  {post.username}
-                </span>
-                <span style={{ color: "#666" }}>
-                  {new Date(post.posted_at).toLocaleString()}
-                </span>
-              </div>
+              <div style={{ marginBottom: "10px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <span style={{ fontWeight: "bold", color: "#333" }}>
+                    {post.username}
+                  </span>
+                  <span style={{ color: "#666" }}>
+                    {(() => {
+                      const postDate = new Date(post.posted_at);
+                      const today = new Date();
+                      const yesterday = new Date();
+                      yesterday.setDate(yesterday.getDate() - 1);
 
-              <div
-                style={{
-                  marginBottom: "15px",
-                  color: "#444",
-                  lineHeight: "1.5",
-                }}
-              >
-                {post.content}
+                      if (
+                        postDate.getDate() === today.getDate() &&
+                        postDate.getMonth() === today.getMonth() &&
+                        postDate.getFullYear() === today.getFullYear()
+                      ) {
+                        return `Today, ${postDate.toLocaleTimeString()}`;
+                      } else if (
+                        postDate.getDate() === yesterday.getDate() &&
+                        postDate.getMonth() === yesterday.getMonth() &&
+                        postDate.getFullYear() === yesterday.getFullYear()
+                      ) {
+                        return "Yesterday";
+                      }
+                      return postDate.toLocaleDateString();
+                    })()}
+                  </span>
+                </div>
+                <div style={{ marginTop: "5px", color: "#444" }}>
+                  {post.content}
+                </div>
               </div>
 
               <div
