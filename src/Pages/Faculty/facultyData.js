@@ -5,7 +5,7 @@ const facultyData = {
             position: "Professor & HOD",
             office: "F-Block, 1st floor (Adjacent Academic Office)",
             email: "kashif.zafar@nu.edu.pk",
-            image: "../assets/faculty images/CS Faculty/dr. kashif zafar.webp"
+            image: "../../Assets/faculty images/CS Faculty/dr. kasif zafar.webp"
         },
 
         {
