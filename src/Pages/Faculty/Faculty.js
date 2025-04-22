@@ -4,6 +4,7 @@ import Navbar from '../Index/components/Navbar';
 import facultyData from './facultyData';
 
 
+
 // Define the slowScrollTo function
 const slowScrollTo = (targetPosition, duration) => {
     const startPosition = window.pageYOffset;
