@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './faculty.css';
 import Navbar from '../Index/components/Navbar';
+import facultyData from './facultyData';
+
 
 // Define the slowScrollTo function
 const slowScrollTo = (targetPosition, duration) => {
@@ -32,6 +34,7 @@ const FacultySection = () => {
     const [menuActive, setMenuActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [filteredFaculty, setFilteredFaculty] = useState(facultyData);
+
 
     useEffect(() => {
         // Smooth scroll setup
@@ -239,113 +242,6 @@ const ScrollToTopButton = () => {
             ↑
         </button>
     );
-};
-
-const facultyData = {
-    CS: [
-        {
-            name: 'Dr. Kashif Zafar',
-            position: 'Professor & HOD',
-            office: 'F-Block, 1st floor (Adjacent Academic Office)',
-            email: 'kashif.zafar@nu.edu.pk',
-            image: '../assets/faculty images/CS Faculty/dr. kasif zafar.webp',
-        },
-        {
-            name: 'Dr. Aamir Wali',
-            position: 'Professor & HOD',
-            office: 'F-Block, 1st floor (Adjacent HOD\'s Office)',
-            email: 'aamir.wali@nu.edu.pk',
-            image: '../assets/faculty images/CS Faculty/dr. amir wali.webp',
-        },
-        {
-            name: 'Dr. Asif Mahmood Gillani',
-            position: 'Professor',
-            office: 'F-Block, 1st floor, Room 10 (NB-F-010)',
-            email: 'asif.gilani@nu.edu.pk',
-            image: '../assets/faculty images/CS Faculty/dr. asif mahmood gilani.webp',
-        },
-        {
-            name: 'Dr. Zareen Alamgir',
-            position: 'Professor',
-            office: 'F-Block, 1st floor, Room 12 (NB-F-012)',
-            email: 'zareen.alamgir@nu.edu.pk',
-            image: '../assets/faculty images/CS Faculty/dr. zareen alamgir.webp',
-        },
-        {
-            name: 'Dr. Arshad Ali',
-            position: 'Associate Professor',
-            office: 'A-Block, Ground floor, Room 140 (C-140)',
-            email: 'arshad.ali1@nu.edu.pk',
-            image: '../assets/faculty images/CS Faculty/dr. arshad ali.webp',
-        },
-        {
-            name: 'Dr. Asma Naseer',
-            position: 'Associate Professor',
-            office: 'F-Block, 1st floor, Room 11 (NB-F-011)',
-            email: 'asma.naseer@nu.edu.pk',
-            image: '../assets/faculty images/CS Faculty/dr. asma naseer.webp',
-        },
-    ],
-    EE: [
-        {
-            name: 'Dr. Saima Zafar',
-            position: 'Professor & HOD',
-            office: 'D-Block, 1st floor (Academic Office EE)',
-            email: 'saima.zafar@nu.edu.pk',
-            image: '../assets/faculty images/EE Faculty/dr. saima zafar.webp',
-        },
-        {
-            name: 'Dr. S.M. Sajid',
-            position: 'Professor',
-            office: 'E-Block, 1st floor, Room 01 (Library 1st Floor)',
-            email: 'sm.sajid@nu.edu.pk',
-            image: '../assets/faculty images/EE Faculty/dr. s m sajid.webp',
-        },
-        {
-            name: 'Dr. Syed Aun Abbas',
-            position: 'Professor',
-            office: 'E-Block, 1st floor, Room 01 (Library 1st Floor)',
-            email: 'aun.abbas@nu.edu.pk',
-            image: '../assets/faculty images/EE Faculty/dr. syed aun abbas.webp',
-        },
-        {
-            name: 'Dr. Omer Saleem',
-            position: 'Associate Professor',
-            office: 'A-Block, Ground floor, Room 140 (C-140)',
-            email: 'omer.saleem@nu.edu.pk',
-            image: '../assets/faculty images/EE Faculty/dr. omer saleem.webp',
-        },
-        {
-            name: 'Dr. Jabran Khan',
-            position: 'Assistant Professor',
-            office: 'A-Block, Ground floor, Room 140 (C-140)',
-            email: 'jabran.khan@nu.edu.pk',
-            image: '../assets/faculty images/EE Faculty/dr. jabran khan.webp',
-        },
-        {
-            name: 'Dr. Kashif Saeed',
-            position: 'Assistant Professor',
-            office: 'A-Block, Ground floor, Room 138 (C-138)',
-            email: 'kashif.saeed@nu.edu.pk',
-            image: '../assets/faculty images/EE Faculty/dr. kashif saeed.webp',
-        },
-    ],
-    CV: [
-        {
-            name: 'Dr. Tauqir Ahmed',
-            position: 'Associate Professor & HOD',
-            office: 'A-Block, 1st Floor (Academic Office CV)',
-            email: 'tauqir.ahmed@nu.edu.pk',
-            image: '../assets/faculty images/CV Faculty/dr. tauqir ahmed.webp',
-        },
-        {
-            name: 'Dr. Shahid Ali',
-            position: 'Professor',
-            office: 'A-Block, Ground floor, Room 132',
-            email: 'shahid.ali@nu.edu.pk',
-            image: '../assets/faculty images/CV Faculty/dr. shahid ali.webp',
-        },
-    ],
 };
 
 export default FacultySection;
