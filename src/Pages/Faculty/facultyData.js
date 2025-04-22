@@ -7,6 +7,7 @@ const facultyData = {
             email: "kashif.zafar@nu.edu.pk",
             image: "../assets/faculty images/CS Faculty/dr. kashif zafar.webp"
         },
+
         {
             name: "Dr. Aamir Wali",
             position: "Professor & HOD",
