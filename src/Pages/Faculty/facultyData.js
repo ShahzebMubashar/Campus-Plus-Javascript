@@ -893,6 +893,13 @@ const facultyData = {
             office: "-",
             email: "", // Email missing in provided content
             image: "../assets/faculty images/CV Faculty/muhammad bilal zahid.webp"
+        },
+        {
+            name: "Mr. Abdur Rehman Zahid",
+            position: "Lab Engineer",
+            office: "-",
+            email: "abdur.rehman@nu.edu.pk", // Email missing in provided content
+            image: "../assets/faculty images/CV Faculty/abdul rehman zahid.webp"
         }
     ],
     M: [],
