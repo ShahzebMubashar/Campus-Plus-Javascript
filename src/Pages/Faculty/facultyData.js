@@ -774,6 +774,125 @@ const facultyData = {
             office: "A-Block, Ground floor, Room 132",
             email: "shahid.ali@nu.edu.pk",
             image: "../assets/faculty images/CV Faculty/dr. shahid ali.webp"
+        },
+        {
+            name: "Dr. Syed Ali Rizwan Bukhari",
+            position: "Professor",
+            office: "A-Block, Ground floor, Room 131",
+            email: "syed.ali@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/dr. syed ali rizwan bukhari.webp"
+        },
+        {
+            name: "Dr. Javaid Ahmad",
+            position: "Associate Professor",
+            office: "-",
+            email: "Javaid.ahmad@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/dr. javaid ahmad.webp"
+        },
+        {
+            name: "Dr. Waseem Mirza",
+            position: "Associate Professor",
+            office: "-",
+            email: "waseem.mirza@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/dr. waseem mirza.webp"
+        },
+        {
+            name: "Dr. Muhammad Abdullah",
+            position: "Assistant Professor",
+            office: "-",
+            email: "abdullah.rana@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/dr. muhammad abdullah.webp"
+        },
+        {
+            name: "Dr. Muhammad Umar",
+            position: "Assistant Professor",
+            office: "D-Block, Basement , Room 517 (E-051)",
+            email: "m.umar@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/dr. muhammad umar.webp"
+        },
+        {
+            name: "Mr. Ali Raza Khalid",
+            position: "Assistant Professor",
+            office: "A-Block, 1st Floor, Room 03 (C1-03)",
+            email: "aliraza.khalid@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/ali raza khalid.webp"
+        },
+        {
+            name: "Ms. Sarah Asif",
+            position: "Assistant Professor",
+            office: "A-Block, 1st Floor, Room 06 (C1-06)",
+            email: "sarah.asif@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/sarah asif.webp"
+        },
+        {
+            name: "Mr. Umar Khan Niazi",
+            position: "Assistant Professor",
+            office: "A-Block, Ground floor, Room 229 (C1-21)",
+            email: "umar.niazi@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/umar khan niazi.webp"
+        },
+        {
+            name: "Mr. Asim Iqbal",
+            position: "Lecturer",
+            office: "-",
+            email: "asim.iqbal@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/asim iqbal.webp"
+        },
+        {
+            name: "Mr. Asim Sharif",
+            position: "Lecturer",
+            office: "A-Block, 1st floor, Room 210 (C1-02)",
+            email: "asim.sharif@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/asim sharif.webp"
+        },
+        {
+            name: "Mr. Fahad Haseeb",
+            position: "Lecturer",
+            office: "A-Block, Ground floor, Room 233 (C1-25)",
+            email: "fahad.haseeb@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/fahad haseeb.webp"
+        },
+        {
+            name: "Mr. Abu Huraira",
+            position: "Lab Engineer",
+            office: "Engineering Surveying Lab",
+            email: "abu.huraira@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/abu huraira.webp"
+        },
+        {
+            name: "Mr. Hamza Ali",
+            position: "Lab Engineer",
+            office: "-",
+            email: "hamza.ali@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/hamza ali.webp"
+        },
+        {
+            name: "Mr. M. Umer Amin Khan",
+            position: "Lab Engineer",
+            office: "-",
+            email: "umer.amin@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/m umer amin khan.webp"
+        },
+        {
+            name: "Ms. Maham Akram",
+            position: "Lab Engineer",
+            office: "A-Block, 1st floor, Room 16 (C-016)",
+            email: "maham.akram@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/maham akram.webp"
+        },
+        {
+            name: "Ms. Mahnoor Akram",
+            position: "Lecturer",
+            office: "A-Block, 1st Floor , Room 25 (C-025)",
+            email: "mahnoor.akram@nu.edu.pk",
+            image: "../assets/faculty images/CV Faculty/mahnoor akram.webp"
+        },
+        {
+            name: "Mr. Muhammad Bilal Zahid",
+            position: "Lecturer",
+            office: "-",
+            email: "", // Email missing in provided content
+            image: "../assets/faculty images/CV Faculty/muhammad bilal zahid.webp"
         }
     ],
     M: [],
