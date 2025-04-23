@@ -736,7 +736,36 @@ const facultyData = {
             office: "D-Block, Basement , Room 52 (E-052)",
             email: "maaz.ahmed@nu.edu.pk",
             image: "../assets/faculty images/EE Faculty/syed maaz ahmed rizvi.webp"
+        },
+        {
+            name: "Mr. Syed M. Ismail",
+            position: "Lecturer",
+            office: "D-Block, Basement, Room 51 (E-051)",
+            email: "muhammad.ismail@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/syed muhammad ismail.webp"
+        },
+        {
+            name: "Mr. Umer Altaf",
+            position: "Lecturer",
+            office: "D-Block, Basement, Room 51 (E-051)",
+            email: "umer.altaf@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/umer altaf.webp"
+        },
+        {
+            name: "Ms. Eisha Khan",
+            position: "Lab Engineer",
+            office: "-",
+            email: "eisha.khan@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/eisha khan.webp"
+        },
+        {
+            name: "Mr. Hafiz M. Muiz Malik",
+            position: "Lab Engineer",
+            office: "-",
+            email: "muiz.malik@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/hafiz muhammad muiz malik.webp"
         }
+
     ],
     CV: [
         {
