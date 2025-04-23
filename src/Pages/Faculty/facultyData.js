@@ -328,6 +328,111 @@ const facultyData = {
             office: "F-Block, 1st floor, Room 66 (NB-F-066)",
             email: "fraz.yousaf@nu.edu.pk",
             image: "../assets/faculty images/CS Faculty/fraz yousaf.webp"
+        },
+        {
+            name: "Mr. Usama Alvi",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 65 (NB-F-065)",
+            email: "usama.hassan@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/hafiz muhammad usama hassan alvi.webp"
+        },
+        {
+            name: "Ms. Hafsa Tariq Javed",
+            position: "Lecturer",
+            office: "-",
+            email: "hafsa.tariq@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/hafsa tariq javed.webp"
+        },
+        {
+            name: "Mr. Hamad Ul Qudous",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 32 (NB-F-056)",
+            email: "hamad.ulqudous@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/hamad ul qudous.webp"
+        },
+        {
+            name: "Ms. Hina Iqbal",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 73 (NB-F-073)",
+            email: "hina.iqbal@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/hina iqbal.webp"
+        },
+        {
+            name: "Ms. Hira Butt",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 74 (NB-F-074)",
+            email: "hira.butt@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/hira butt.webp"
+        },
+        {
+            name: "Ms. Hira Ilyas",
+            position: "Lecturer",
+            office: "-",
+            email: "hira.ilyas@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/hira ilyas.webp"
+        },
+        {
+            name: "Ms. Kiran Khurshid",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 48 (NB-F-048)",
+            email: "kiran.khurshid@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/kiran khurshid.webp"
+        },
+        {
+            name: "Mr. M. Saif Ul Islam",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 58 (NB-F-058)",
+            email: "muhammad.saif@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/Muhammad saif ul islam.webp"
+        },
+        {
+            name: "Ms. Maham Naeem",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 62 (NB-F-062)",
+            email: "maham.naeem@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/maham naeem.webp"
+        },
+        {
+            name: "Ms. Mamoona Majid",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 54 (NB-F-054)",
+            email: "mamoona.majid@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/mamoona majid.webp"
+        },
+        {
+            name: "Ms. Mehroze Khan",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 63 (NB-F-063)",
+            email: "mehroze.khan@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/mehroze khan.webp"
+        },
+        {
+            name: "Ms. Momna Zaneb",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 46 (NB-F-046)",
+            email: "momna.zaneb@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/momna zaneb.webp"
+        },
+        {
+            name: "Mr. Mubashar Hussain",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 57 (NB-F-057)",
+            email: "mubashar.hussain@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/mubashar hussain.webp"
+        },
+        {
+            name: "Mr. Muhammad Naveed",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 72 (NB-F-072)",
+            email: "muhammad.naveed@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/muhammad naveed.webp"
+        },
+        {
+            name: "Mr. M. Saifullah Tanvir",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 32 (NB-F-071)",
+            email: "saifullah.tanvir@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/muhammad saifullah taanvir.webp"
         }
     ],
     EE: [
