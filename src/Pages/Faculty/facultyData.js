@@ -624,6 +624,118 @@ const facultyData = {
             office: "E-Block, 1st floor, Room 01 (Library 1st Floor)",
             email: "sm.sajid@nu.edu.pk",
             image: "../assets/faculty images/EE Faculty/dr. s m sajid.webp"
+        },
+        {
+            name: "Dr. Syed Aun Abbas",
+            position: "Professor",
+            office: "E-Block, 1st floor, Room 01 (Library 1st Floor)",
+            email: "aun.abbas@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/dr. syed aun abbas.webp"
+        },
+        {
+            name: "Dr. Omer Saleem",
+            position: "Associate Professor",
+            office: "-",
+            email: "omer.saleem@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/dr. omer saleem.webp"
+        },
+        {
+            name: "Dr. Jabran Khan",
+            position: "Assistant Professor",
+            office: "-",
+            email: "jabran.khan@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/dr. jabran khan.webp"
+        },
+        {
+            name: "Dr. Kashif Saeed",
+            position: "Assistant Professor",
+            office: "A-Block, Ground floor, Room 138 (C-138)",
+            email: "kashif.saeed@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/dr. kashif saeed.webp"
+        },
+        {
+            name: "Mr. Abdul Majid",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 159 (E-159)",
+            email: "abdul.majid@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/abdul majid.webp"
+        },
+        {
+            name: "Ms. Beenish Fatima",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 156 (E-156)",
+            email: "beenish.fatima@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/beenish fatima.webp"
+        },
+        {
+            name: "Mr. Haris Mujtaba",
+            position: "Assistant Professor",
+            office: "C-Block, 1st floor, Room 102 (Adjacent Academic Office MM)",
+            email: "haris.kazmi@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/haris mujtaba.webp"
+        },
+        {
+            name: "Mr. Mohsin Yousaf",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 131 (E-131)",
+            email: "mohsin.yousuf@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/mohsin yousaf.webp"
+        },
+        {
+            name: "Ms. Shazia Haque",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 160 (E-160)",
+            email: "shazia.haque@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/shazia haque.webp"
+        },
+        {
+            name: "Ms. Tamania Javed",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 155 (E-155)",
+            email: "tamania.javaid@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/tamania javed.webp"
+        },
+        {
+            name: "Mr. Ahmad Hamza Nayyar",
+            position: "Lecturer",
+            office: "D-Block, Basement, Room 27 (E-027)",
+            email: "ahmad.hamza@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/ahmad hamza nayyar.webp"
+        },
+        {
+            name: "Ms. Akbare Yaqub",
+            position: "Lecturer",
+            office: "D-Block, 1st floor, Room 155 (E-155)",
+            email: "akbari.yaqoob@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/akbare yaqub.webp"
+        },
+        {
+            name: "Ms. Aroosa Umair",
+            position: "Lecturer",
+            office: "D-Block, Basement , Room 50 (E-050)",
+            email: "aroosa.umair@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/aroosa umair.webp"
+        },
+        {
+            name: "Mr. Hamza Yousaf",
+            position: "Lecturer",
+            office: "C-Block, 1st floor, Room 103 (N-103)",
+            email: "hamza.yousuf@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/hamza yousaf.webp"
+        },
+        {
+            name: "Ms. Sara Kiran",
+            position: "Lecturer",
+            office: "D-Block, 1st floor, Room 130 (E-130)",
+            email: "sara.kiran@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/sara kiran.webp"
+        },
+        {
+            name: "Mr. Syed Maaz Ahmed Rizvi",
+            position: "Lecturer",
+            office: "D-Block, Basement , Room 52 (E-052)",
+            email: "maaz.ahmed@nu.edu.pk",
+            image: "../assets/faculty images/EE Faculty/syed maaz ahmed rizvi.webp"
         }
     ],
     CV: [
