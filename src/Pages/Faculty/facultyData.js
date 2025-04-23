@@ -538,6 +538,76 @@ const facultyData = {
             office: "F-Block, 1st floor, Room 14 (NB-F-014)",
             email: "sohaib.ahmad@nu.edu.pk",
             image: "../assets/faculty images/CS Faculty/sohaib ahmad.webp"
+        },
+        {
+            name: "Ms. Sukhan Amir",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 25 (NB-F-025)",
+            email: "sukhan.amir@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/sukhan amir.webp"
+        },
+        {
+            name: "Ms. Syeda Zehra Batool",
+            position: "Instructor",
+            office: "-",
+            email: "zehra.batool@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/syeda zehra batool.webp"
+        },
+        {
+            name: "Ms. Zoha Waheed",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 24 (NB-F-024)",
+            email: "zoha.waheed@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/zoha waheed.webp"
+        },
+        {
+            name: "Ms. Mamoona Akbar Khan",
+            position: "Junior Instructor",
+            office: "F-Block, 1st floor, Room 50 (NB-F-050)",
+            email: "mamoona.akbar@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/mamoona akbar khan.webp"
+        },
+        {
+            name: "Ms. Marwa Khan",
+            position: "Junior Instructor",
+            office: "F-Block, 1st floor, Room 20 (NB-F-020)",
+            email: "marwa.khan@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/marwa khan.webp"
+        },
+        {
+            name: "Mr. Muhammad Amir Iqbal",
+            position: "Adj. Faculty",
+            office: "F-Block, 1st floor, Room 68 (NB-F-068)",
+            email: "amir.iqbal@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/muhammad amir iqbal.webp"
+        },
+        {
+            name: "Mr. Nauman Moazzam",
+            position: "Adj. Faculty",
+            office: "F-Block, 1st floor, Room 31 (NB-F-031)",
+            email: "nauman.moazzam@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/nauman moazzam hayat.webp"
+        },
+        {
+            name: "Ms. Saba Tariq",
+            position: "Junior Instructor",
+            office: "F-Block, 1st floor, Room 20 (NB-F-020)",
+            email: "saba.tariq@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/saba tariq.webp"
+        },
+        {
+            name: "Mr. Salman Shoaib",
+            position: "Junior Instructor",
+            office: "F-Block, 1st floor, Room 79 (NB-F-079)",
+            email: "salman.shoaib@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/salman shoaib.webp"
+        },
+        {
+            name: "Ms. Samman Ashraf",
+            position: "Junior Instructor",
+            office: "-",
+            email: "samman.ashraf@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/samman ashraf.webp"
         }
     ],
     EE: [
