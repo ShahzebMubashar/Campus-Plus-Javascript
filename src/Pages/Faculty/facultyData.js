@@ -118,6 +118,118 @@ const facultyData = {
             office: "-",
             email: "haroon.mahmood@nu.edu.pk",
             image: "../assets/faculty images/CS Faculty/dr. haroon mahmood.webp"
+        },
+        {
+            name: "Dr. Iqra Safder",
+            position: "Assistant Professor",
+            office: "-",
+            email: "iqra.safder@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. iqra safder.webp"
+        },
+        {
+            name: "Dr. Maryam Bashir",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 22 (NB-F-022)",
+            email: "maryam.bashir@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. maryam bashir.webp"
+        },
+        {
+            name: "Dr. Mirza Mubasher Baig",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 34 (NB-F-034)",
+            email: "mubasher.baig@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. mirza mubasher baig.webp"
+        },
+        {
+            name: "Dr. Muhammad Ahmad",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 37",
+            email: "muhammad.ahmadraza@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. muhammad ahmad raza.webp"
+        },
+        {
+            name: "Dr. Syed Mohammad Irteza",
+            position: "Assistant Professor",
+            office: "-",
+            email: "m.Irteza@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. syed muhammad irteza.webp"
+        },
+        {
+            name: "Dr. Tahir Ejaz",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 69 (NB-F-069)",
+            email: "tahir.ejaz@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. tahir ijaz.webp"
+        },
+        {
+            name: "Dr. Zeeshan Ali Rana",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 39 (NB-F-039)",
+            email: "zeeshan.rana@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. zeeshan ali rana.webp"
+        },
+        {
+            name: "Dr. Farooq Ahmed",
+            position: "Assistant Professor",
+            office: "-",
+            email: "farooq.ahmad@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. farooq ahmed.webp"
+        },
+        {
+            name: "Dr. Hammad Naveed",
+            position: "Adj. Professor",
+            office: "At a place better than FAST",
+            email: "hammad.naveed@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/dr. hammad naveed.webp"
+        },
+        {
+            name: "Mr. Aamir Raheem",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 77 (NB-F-077)",
+            email: "aamir.raheem@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/amir raheem.webp"
+        },
+        {
+            name: "Ms. Abeeda Akram",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 52 (NB-F-052)",
+            email: "abeeda.akram@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/abeeda karam.webp"
+        },
+        {
+            name: "Ms. Bushra Rashid",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 158 (E-158)",
+            email: "bushra.rashid@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/bushra rashid.webp"
+        },
+        {
+            name: "Mr. Ishaq Raza",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 17 (NB-F-017)",
+            email: "ishaq.raza@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/ishaq raza.webp"
+        },
+        {
+            name: "Ms. Lehmia Kiran",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 53 (NB-F-053)",
+            email: "lehmia.kiran@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/lehmia khan.webp"
+        },
+        {
+            name: "Ms. Maimoona Akram",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 158 (E-158)",
+            email: "maimoona.akram@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/maimoona akram.webp"
+        },
+        {
+            name: "Mr. Mirza Waqar Baig",
+            position: "Assistant Professor",
+            office: "-",
+            email: "-",
+            image: "../assets/faculty images/CS Faculty/mirza waqar baig.webp"
         }
     ],
     EE: [
