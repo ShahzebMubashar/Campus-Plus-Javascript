@@ -227,9 +227,107 @@ const facultyData = {
         {
             name: "Mr. Mirza Waqar Baig",
             position: "Assistant Professor",
-            office: "-",
-            email: "-",
+            office: "F-Block, 1st floor, Room 32 (NB-F-032)",
+            email: "waqar.baig@nu.edu.pk",
             image: "../assets/faculty images/CS Faculty/mirza waqar baig.webp"
+        },
+        {
+            name: "Ms. Noshaba Nasir",
+            position: "Assistant Professor",
+            office: "-",
+            email: "noshaba.nasir@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/noshaba nasir.webp"
+        },
+        {
+            name: "Mr. Omer Ali",
+            position: "Assistant Professor",
+            office: "-",
+            email: "ali.omer@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/omer ali.webp"
+        },
+        {
+            name: "Ms. Samin Iftikhar",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 78 (NB-F-078)",
+            email: "samin.iftikhar@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/samin iftikhar.webp"
+        },
+        {
+            name: "Ms. Sobia Tariq Javed",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 60 (NB-F-060)",
+            email: "sobia.tariq@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/sobia tariq javed.webp"
+        },
+        {
+            name: "Ms. Tahreem Yasir",
+            position: "Assistant Professor",
+            office: "-",
+            email: "tahreem.yasir@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/tahreem yasir.webp"
+        },
+        {
+            name: "Mr. Waqas Manzoor",
+            position: "Assistant Professor",
+            office: "F-Block, 1st floor, Room 28 (NB-F-028)",
+            email: "waqas.manzoor@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/waqas manzoor.webp"
+        },
+        {
+            name: "Ms. Aleena Ahmad",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 64 (NB-F-064)",
+            email: "aleena.ahmad@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/aleena ahmad.webp"
+        },
+        {
+            name: "Ms. Anosha Khan",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 42 (NB-F-042)",
+            email: "anosha.khan@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/anosha khan.webp"
+        },
+        {
+            name: "Ms. Ansa Liaqat",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 19 (NB-F-019)",
+            email: "ansa.liaqat@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/ansa liaqat.webp"
+        },
+        {
+            name: "Ms. Arooj Khalil",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 47 (NB-F-047)",
+            email: "arooj.khalil@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/arooj khalil.webp"
+        },
+        {
+            name: "Ms. Asbah Khalid",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 19 (NB-F-019)",
+            email: "asbah.khalid@lhr.nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/asbah khalid.webp"
+        },
+        {
+            name: "Mr. Danyal Farhat",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 32 (NB-F-055)",
+            email: "danyal.farhat@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/danyal farhat.webp"
+        },
+        {
+            name: "Ms. Eesha Tur Razia Babar",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 80 (NB-F-080)",
+            email: "esha.razia@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/eesha tur razia babar.webp"
+        },
+        {
+            name: "Mr. Fraz Yousaf",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 66 (NB-F-066)",
+            email: "fraz.yousaf@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/fraz yousaf.webp"
         }
     ],
     EE: [
