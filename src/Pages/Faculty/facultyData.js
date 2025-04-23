@@ -757,13 +757,6 @@ const facultyData = {
             office: "-",
             email: "eisha.khan@nu.edu.pk",
             image: "../assets/faculty images/EE Faculty/eisha khan.webp"
-        },
-        {
-            name: "Mr. Hafiz M. Muiz Malik",
-            position: "Lab Engineer",
-            office: "-",
-            email: "muiz.malik@nu.edu.pk",
-            image: "../assets/faculty images/EE Faculty/hafiz muhammad muiz malik.webp"
         }
 
     ],
