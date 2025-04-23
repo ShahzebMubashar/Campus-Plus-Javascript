@@ -433,6 +433,111 @@ const facultyData = {
             office: "F-Block, 1st floor, Room 32 (NB-F-071)",
             email: "saifullah.tanvir@nu.edu.pk",
             image: "../assets/faculty images/CS Faculty/muhammad saifullah taanvir.webp"
+        },
+        {
+            name: "Mr. M. Zeeshan Nazar",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 49 (NB-F-049)",
+            email: "zeeshan.nazar@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/muhammad zeeshan nazar.webp"
+        },
+        {
+            name: "Ms. Namra Absar",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 75 (NB-F-075)",
+            email: "namra.absar@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/namra absar.webp"
+        },
+        {
+            name: "Mr. Razi-uddin",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 67 (NB-F-067)",
+            email: "razi.uddin@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/razi-uddin.webp"
+        },
+        {
+            name: "Mr. Uzair Naqvi",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 70 (NB-F-070)",
+            email: "uzair.naqvi@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/syed uzair hussain naqvi.webp"
+        },
+        {
+            name: "Ms. Rubab Anam Janjua",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 32 (NB-F-051)",
+            email: "rubab.anam@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/rubab anam janjua.webp"
+        },
+        {
+            name: "Mr. Sajid Ali Kazmi",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 16 (NB-F-016)",
+            email: "sajid.kazmi@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/sajid ali kazmi.webp"
+        },
+        {
+            name: "Ms. Tazeem Haider",
+            position: "Lecturer",
+            office: "-",
+            email: "tazeem.haider@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/tazeem haider.webp"
+        },
+        {
+            name: "Ms. Umm E Ammarah",
+            position: "Lecturer",
+            office: "F-Block, 1st floor, Room 41 (NB-F-041)",
+            email: "umme.ammarah@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/umm e ammarah.webp"
+        },
+        {
+            name: "Mr. Aqib Zeeshan",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 18 (NB-F-018)",
+            email: "aqib.zeeshan@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/aqib zeeshan.webp"
+        },
+        {
+            name: "Mr. Junaid Hussain",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 14 (NB-F-014)",
+            email: "junaid.hussain@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/junaid hussain muzammal.webp"
+        },
+        {
+            name: "Mr. Muhammad Hasan",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 18 (NB-F-018)",
+            email: "m.hasan@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/muhammad hasan.webp"
+        },
+        {
+            name: "Mr. M. Hashir Mohsineen",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 23 (NB-F-023)",
+            email: "hashir.mhsineen@lhr.nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/muhammad hashir mohsineen.webp"
+        },
+        {
+            name: "Mr. M. Usman Anwer",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 32 (NB-F-023)",
+            email: "usman.anwer@lhr.nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/muhammaad usman anwer.webp"
+        },
+        {
+            name: "Ms. Seemab Ayub",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 25 (NB-F-025)",
+            email: "seemab.ayub@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/seemab ayub.webp"
+        },
+        {
+            name: "Mr. Sohaib Ahmad",
+            position: "Instructor",
+            office: "F-Block, 1st floor, Room 14 (NB-F-014)",
+            email: "sohaib.ahmad@nu.edu.pk",
+            image: "../assets/faculty images/CS Faculty/sohaib ahmad.webp"
         }
     ],
     EE: [
