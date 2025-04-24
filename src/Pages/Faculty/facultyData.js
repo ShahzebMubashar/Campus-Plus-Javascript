@@ -902,7 +902,127 @@ const facultyData = {
             image: "../assets/faculty images/CV Faculty/abdul rehman zahid.webp"
         }
     ],
-    M: [],
+    M: [
+        {
+            name: "Dr. Hamid Hassan",
+            position: "Professor & HOD",
+            office: "C-Block, 2nd floor",
+            email: "hamid.hassan@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. hamid hassan.webp"
+        },
+        {
+            name: "Dr. Akbar Azam",
+            position: "Associate Professor",
+            office: "A-Block, Ground floor, Room 150 (C-150)",
+            email: "akbar.azam@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. akbar azam.webp"
+        },
+        {
+            name: "Dr. Amna Farrukh",
+            position: "Assistant Professor",
+            office: "B-Block, 1st floor, Room 153\nBesides Accounts Dept",
+            email: "amna.farrukh@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. amna farrukh.webp"
+        },
+        {
+            name: "Dr. Brig Mujahid Hussain",
+            position: "Assistant Professor",
+            office: "C-Block, 2nd floor",
+            email: "mujahid.hussain@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. brig mujahid hussain.webp"
+        },
+        {
+            name: "Dr. Fatima Omer",
+            position: "Assistant Professor",
+            office: "D-Block, 1st floor, Room 203\n(E-203)",
+            email: "fatima.omer@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. fatima omer.webp"
+        },
+        {
+            name: "Dr. Komal Kamran",
+            position: "Assistant Professor",
+            office: "C-Block, 2nd floor",
+            email: "omal.kamran@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. komal kamran.webp"
+        },
+        {
+            name: "Dr. Mian Muhammad Atif",
+            position: "Assistant Professor",
+            office: "A-Block, Ground floor, Room 150 (C-150)",
+            email: "mian.atif@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. mian muhammad atif.webp"
+        },
+        {
+            name: "Dr. Munazza Saeed",
+            position: "Assistant Professor",
+            office: "C-Block, 2nd floor",
+            email: "munazza.saeed@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. munazza saeed.webp"
+        },
+        {
+            name: "Dr. Umer Iqbal",
+            position: "Assistant Professor",
+            office: "-",
+            email: "umer.iqbal@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. umer iqbal.webp"
+        },
+        {
+            name: "Dr. Zia Khan",
+            position: "Assistant Professor",
+            office: "A-Block, Ground floor, Room 152 (C-152)",
+            email: "zia.khan@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/dr. zia khan.webp"
+        },
+        {
+            name: "Mr. Aamer Allauddin",
+            position: "Assistant Professor",
+            office: "-",
+            email: "allauddin@gmail.com",
+            image: "../assets/faculty images/M Faculty/aamer allaudin.webp"
+        },
+        {
+            name: "Mr. Shakeel Ahmad",
+            position: "Assistant Professor",
+            office: "D-Block, 2nd floor, Room 202\n(E-202)",
+            email: "shakeel.ahmad@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/shakeel ahmad.webp"
+        },
+        {
+            name: "Ms. Aroosa Safdar",
+            position: "Lecturer",
+            office: "D-Block, 2nd floor, Room 228\n(E-228)",
+            email: "aroosa.safdar@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/aroosa safdar.webp"
+        },
+        {
+            name: "Ms. Ayesha Arshad",
+            position: "Lecturer",
+            office: "D-Block, 2nd floor, Room 228\n(E-228)",
+            email: "ayesha.arshad@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/ayesha arshad.webp"
+        },
+        {
+            name: "Ms. Beenish Arshad",
+            position: "Lecturer",
+            office: "C-Block, 2nd floor",
+            email: "beenish.arshad@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/beenish arshad.webp"
+        },
+        {
+            name: "Ms. Fatima Habib",
+            position: "Lecturer",
+            office: "-",
+            email: "fatima.habib@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/fatima habib.webp"
+        },
+        {
+            name: "Ms. Irma Tariq",
+            position: "Lecturer",
+            office: "D-Block, 2nd floor, Room 227\n(E-227)",
+            email: "irma.tariq@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/irma tariq.webp"
+        }
+    ],
     SH: []
 };
 
