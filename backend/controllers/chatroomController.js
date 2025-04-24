@@ -47,11 +47,11 @@ const getRooms = async (request, response) => {
     }
 
     // If no roomid provided → Fetch All Rooms
-    console.log("Fetching All Rooms from DB");
+    // console.log("Fetching All Rooms from DB");
 
     res = await pool.query("SELECT * FROM rooms");
 
-    console.log("Fetched All Rooms:", res.rows);
+    // console.log("Fetched All Rooms:", res.rows);
 
     if (!res.rowCount) {
       console.log("No rooms found in DB");
@@ -66,7 +66,9 @@ const getRooms = async (request, response) => {
 };
 
 const getRoomMessages = async (req, res) => {
-  const { roomid } = req.params;
+  const {
+    params: { roomid },
+  } = req;
 
   try {
     const messagesResult = await pool.query(
@@ -75,14 +77,16 @@ const getRoomMessages = async (req, res) => {
     );
 
     if (messagesResult.rowCount === 0) {
-      return res.status(404).json("No messages found for this room");
+      return res.status(404).json({
+        message: "No messages found for this room",
+        userRole: req.session.user.role ?? null,
+      });
     }
 
     const commentsResult = await pool.query(
       `SELECT * FROM MessageReplies1 WHERE roomid = $1 order by posted_at`,
       [roomid]
     );
-
     const structuredResponse = {
       roomid: messagesResult.rows[0].roomid,
       roomname: messagesResult.rows[0].roomname,
@@ -107,7 +111,12 @@ const getRoomMessages = async (req, res) => {
       })),
     };
 
-    return res.status(200).json(structuredResponse);
+    const returnData = {
+      data: structuredResponse,
+      userRole: req.session?.user?.role ?? null,
+    };
+
+    return res.status(200).json(returnData);
   } catch (error) {
     console.error("Error fetching room messages:", error);
     return res.status(500).json({ error: "Internal Server Error" });
@@ -389,10 +398,15 @@ const LeaveRoom = async (request, response) => {
 };
 
 const changeRoomDetails = async (request, response) => {
+  console.log(`Request: [CHANGE ROOM INFO]`);
   const {
     params: { roomid },
     body: { newName, description },
   } = request;
+
+  console.log(
+    `Received: Params: ${roomid}, Body: ${(newName, description)}\n\n`
+  );
 
   if (!newName && !description)
     return response.status(400).json("Enter at least one of the fields");
@@ -426,6 +440,32 @@ const changeRoomDetails = async (request, response) => {
   }
 };
 
+const deleteRoom = async (request, response) => {
+  const {
+    params: { roomid },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query(`BEGIN`);
+
+    let res = await client.query(`Delete from Rooms where roomid = $1`, [
+      roomid,
+    ]);
+
+    await client.query(`COMMIT`);
+
+    return response.status(200).json(`Room Deleted Successfully!`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -439,4 +479,5 @@ module.exports = {
   getRoomMessages,
   createPost,
   changeRoomDetails,
+  deleteRoom,
 };

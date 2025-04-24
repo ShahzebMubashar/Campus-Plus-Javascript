@@ -95,77 +95,77 @@ exports.register = async (request, response) => {
 };
 
 exports.login = async (request, response) => {
-    console.log('Login attempt received:', request.body);
-    const { email, password, username } = request.body;
+  console.log("Login attempt received:", request.body);
+  const { email, password, username } = request.body;
 
-    if (!email && !username) {
-        console.log('No email or username provided');
-        return response.status(400).send("Please provide Email or Username");
+  if (!email && !username) {
+    console.log("No email or username provided");
+    return response.status(400).send("Please provide Email or Username");
+  }
+  if (!password) {
+    console.log("No password provided");
+    return response.status(400).send("Please provide Password");
+  }
+
+  try {
+    console.log("Attempting to find user with:", email || username);
+    const result = await pool.query(
+      "SELECT * FROM Users WHERE email = $1 or username = $1",
+      [email || username]
+    );
+
+    if (!result.rowCount) {
+      console.log("No user found with provided credentials");
+      return response.status(404).json({ error: "Invalid credentials" });
     }
-    if (!password) {
-        console.log('No password provided');
-        return response.status(400).send("Please provide Password");
+
+    const user = result.rows[0];
+    console.log("User found, verifying password");
+    const isMatch = await bcrypt.compare(password, user.password);
+
+    if (!isMatch) {
+      console.log("Password mismatch");
+      return response.status(401).json({ error: "Invalid credentials" });
     }
 
-    try {
-        console.log('Attempting to find user with:', email || username);
-        const result = await pool.query(
-            "SELECT * FROM Users WHERE email = $1 or username = $1",
-            [email || username]
-        );
-
-        if (!result.rowCount) {
-            console.log('No user found with provided credentials');
-            return response.status(404).json({ error: "Invalid credentials" });
+    console.log("Password verified, setting session");
+    // Set session data
+    request.session.user = {
+      userid: user.userid,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+    };
+    console.log(`request.session.user.userid: ${request.session.user.userid}`);
+    // Save session explicitly and wait for it to complete
+    await new Promise((resolve, reject) => {
+      request.session.save((err) => {
+        if (err) {
+          console.error("Session save error:", err);
+          reject(err);
         }
+        resolve();
+      });
+    });
 
-        const user = result.rows[0];
-        console.log('User found, verifying password');
-        const isMatch = await bcrypt.compare(password, user.password);
+    console.log("Session saved, sending response");
+    // Set proper headers
+    response.header("Access-Control-Allow-Credentials", "true");
+    response.header("Access-Control-Allow-Origin", "http://localhost:3000");
 
-        if (!isMatch) {
-            console.log('Password mismatch');
-            return response.status(401).json({ error: "Invalid credentials" });
-        }
-
-        console.log('Password verified, setting session');
-        // Set session data
-        request.session.user = {
-            userid: user.userid,
-            email: user.email,
-            username: user.username,
-            role: user.role
-        };
-console.log(`request.session.user.userid: ${request.session.user.userid}`);
-        // Save session explicitly and wait for it to complete
-        await new Promise((resolve, reject) => {
-            request.session.save((err) => {
-                if (err) {
-                    console.error('Session save error:', err);
-                    reject(err);
-                }
-                resolve();
-            });
-        });
-
-        console.log('Session saved, sending response');
-        // Set proper headers
-        response.header('Access-Control-Allow-Credentials', 'true');
-        response.header('Access-Control-Allow-Origin', 'http://localhost:3000');
-
-        return response.status(200).json({
-            message: "Login successful",
-            user: {
-                userid: user.userid,
-                username: user.username,
-                email: user.email,
-                role: user.role
-            }
-        });
-    } catch (error) {
-        console.error('Login error:', error);
-        return response.status(500).json({ error: "Server error" });
-    }
+    return response.status(200).json({
+      message: "Login successful",
+      user: {
+        userid: user.userid,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.error("Login error:", error);
+    return response.status(500).json({ error: "Server error" });
+  }
 };
 
 exports.forgotPassword = async (request, response) => {
@@ -239,20 +239,20 @@ exports.resetPassword = async (request, response) => {
 };
 
 exports.logout = async (request, response) => {
-    try {
-        request.session.destroy((error) => {
-            if (error) {
-                console.error('Logout error:', error);
-                return response.status(500).send("Server Error");
-            }
-            
-            response.clearCookie('connect.sid');
-            return response.status(200).send("Logged Out Successfully");
-        });
-    } catch (error) {
-        console.error('Logout error:', error);
+  try {
+    request.session.destroy((error) => {
+      if (error) {
+        console.error("Logout error:", error);
         return response.status(500).send("Server Error");
-    }
+      }
+
+      response.clearCookie("connect.sid");
+      return response.status(200).send("Logged Out Successfully");
+    });
+  } catch (error) {
+    console.error("Logout error:", error);
+    return response.status(500).send("Server Error");
+  }
 };
 
 exports.testLogin = async (request, response) => {
@@ -285,5 +285,16 @@ exports.testLogin = async (request, response) => {
   } catch (error) {
     console.error("Login error:", error);
     return response.status(500).json({ error: "Server error" });
+  }
+};
+
+exports.userRole = async (request, response) => {
+  try {
+    return response
+      .status(200)
+      .json({ userRole: request.session.user.role ?? null });
+  } catch (error) {
+    console.log(error.message);
+    return response.sendStatus(500);
   }
 };
