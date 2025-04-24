@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
-import Navbar from '../Index/components/Navbar'
+import Navbar from '../Index/components/Navbar';
 
 function AcademicDashboard() {
-    // State for GPA calculator
     const [courses, setCourses] = useState([
         { name: 'Course 1', credits: 3, grade: 'A' },
         { name: 'Course 2', credits: 4, grade: 'B+' },
@@ -11,7 +10,6 @@ function AcademicDashboard() {
     ]);
     const [newCourse, setNewCourse] = useState({ name: '', credits: 3, grade: 'A' });
 
-    // Grade point values
     const gradePoints = {
         'A+': 4.0, 'A': 4.0, 'A-': 3.7,
         'B+': 3.3, 'B': 3.0, 'B-': 2.7,
@@ -20,10 +18,8 @@ function AcademicDashboard() {
         'F': 0.0
     };
 
-    // Calculate GPA
     const calculateGPA = () => {
         if (courses.length === 0) return 0;
-
         let totalPoints = 0;
         let totalCredits = 0;
 
@@ -35,7 +31,6 @@ function AcademicDashboard() {
         return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : 0;
     };
 
-    // Add new course
     const addCourse = () => {
         if (newCourse.name.trim()) {
             setCourses([...courses, { ...newCourse }]);
@@ -43,14 +38,12 @@ function AcademicDashboard() {
         }
     };
 
-    // Remove course
     const removeCourse = (index) => {
         const updatedCourses = [...courses];
         updatedCourses.splice(index, 1);
         setCourses(updatedCourses);
     };
 
-    // Handle input changes
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewCourse({ ...newCourse, [name]: name === 'credits' ? parseInt(value) || 0 : value });
@@ -60,76 +53,48 @@ function AcademicDashboard() {
         <div className="academic-dashboard">
             <Navbar />
             <div className="container">
+                {/* Top Header */}
                 <header className="header">
-                    <h1>My Dashboard</h1>
+                    <h1>Welcome back 👋</h1>
                     <div className="search-container">
                         <input type="text" placeholder="Search..." className="search-input" />
-                        <button className="search-button"></button>
+                        <button className="search-button" aria-label="search" />
                     </div>
                 </header>
 
                 <div className="divider"></div>
 
+                {/* My Courses */}
                 <section className="courses-section">
                     <div className="section-header">
-                        <h2>My courses</h2>
+                        <h2>📘 My Courses</h2>
                         <a href="#" className="view-all">View all</a>
                     </div>
 
                     <div className="courses-grid">
-                        <div className="course-card">
-                            <div className="course-content">
-                                <h3>Cinema 4D</h3>
-                                <p>Elements design for web sites and mobile apps</p>
-                                <div className="progress-container">
-                                    <div className="progress-text">08/12</div>
-                                    <div className="progress-bar">
-                                        <div className="progress-fill" style={{ width: '66%' }}></div>
+                        {[
+                            { title: 'Cinema 4D', desc: 'Elements design for websites and apps', progress: '08/12', percent: 66 },
+                            { title: 'UI/UX Design', desc: 'From concept to prototype', progress: '04/15', percent: 27 },
+                            { title: 'Graphic Design', desc: 'Digital computer graphics', progress: '01/10', percent: 10 }
+                        ].map((course, i) => (
+                            <div className="course-card" key={i}>
+                                <div className="course-content">
+                                    <h3>{course.title}</h3>
+                                    <p>{course.desc}</p>
+                                    <div className="progress-container">
+                                        <div className="progress-text">{course.progress}</div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{ width: `${course.percent}%` }}></div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div className="course-arrow">
-                                <svg viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div className="course-card">
-                            <div className="course-content">
-                                <h3>UI/UX Design</h3>
-                                <p>From concept to prototype</p>
-                                <div className="progress-container">
-                                    <div className="progress-text">04/15</div>
-                                    <div className="progress-bar">
-                                        <div className="progress-fill" style={{ width: '27%' }}></div>
-                                    </div>
+                                <div className="course-arrow">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                                    </svg>
                                 </div>
                             </div>
-                            <div className="course-arrow">
-                                <svg viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div className="course-card">
-                            <div className="course-content">
-                                <h3>Graphic design</h3>
-                                <p>Digital computer graphics</p>
-                                <div className="progress-container">
-                                    <div className="progress-text">01/10</div>
-                                    <div className="progress-bar">
-                                        <div className="progress-fill" style={{ width: '10%' }}></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="course-arrow">
-                                <svg viewBox="0 0 24 24" width="24" height="24">
-                                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                                </svg>
-                            </div>
-                        </div>
+                        ))}
 
                         <div className="course-card add-card">
                             <div className="add-content">
@@ -139,10 +104,13 @@ function AcademicDashboard() {
                         </div>
                     </div>
                 </section>
+
+                {/* Bottom Sections */}
                 <div className="bottom-sections">
+                    {/* GPA Section */}
                     <div className="gpa-calculator-section">
                         <div className="section-header">
-                            <h2>GPA Calculator</h2>
+                            <h2>🎓 GPA Calculator</h2>
                         </div>
 
                         <div className="gpa-card">
@@ -164,12 +132,7 @@ function AcademicDashboard() {
                                                     <span className="course-grade">{course.grade}</span>
                                                 </div>
                                             </div>
-                                            <button
-                                                className="remove-course"
-                                                onClick={() => removeCourse(index)}
-                                            >
-                                                ×
-                                            </button>
+                                            <button className="remove-course" onClick={() => removeCourse(index)}>×</button>
                                         </div>
                                     ))}
                                 </div>
@@ -211,51 +174,32 @@ function AcademicDashboard() {
                         </div>
                     </div>
 
+                    {/* Chatrooms Section */}
                     <div className="chatrooms-section">
                         <div className="section-header">
-                            <h2>Chatrooms Joined</h2>
+                            <h2>💬 Chatrooms Joined</h2>
                             <a href="#" className="view-all">View all</a>
                         </div>
 
                         <div className="chatrooms-list">
-                            <div className="chatroom-card">
-                                <div className="chatroom-icon">
-                                    <svg viewBox="0 0 24 24" width="24" height="24">
-                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
-                                    </svg>
+                            {[
+                                { title: "UI/UX Design Group", members: 32, online: 5, active: true },
+                                { title: "Cinema 4D Beginners", members: 18, online: 2, active: false },
+                                { title: "Graphic Design Portfolio", members: 45, online: 8, active: true }
+                            ].map((room, i) => (
+                                <div className="chatroom-card" key={i}>
+                                    <div className="chatroom-icon">
+                                        <svg viewBox="0 0 24 24">
+                                            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
+                                        </svg>
+                                    </div>
+                                    <div className="chatroom-info">
+                                        <h3>{room.title}</h3>
+                                        <p>{room.members} members • {room.online} online</p>
+                                    </div>
+                                    <div className={`chatroom-status ${room.active ? 'active' : ''}`}></div>
                                 </div>
-                                <div className="chatroom-info">
-                                    <h3>UI/UX Design Group</h3>
-                                    <p>32 members • 5 online</p>
-                                </div>
-                                <div className="chatroom-status active"></div>
-                            </div>
-
-                            <div className="chatroom-card">
-                                <div className="chatroom-icon">
-                                    <svg viewBox="0 0 24 24" width="24" height="24">
-                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
-                                    </svg>
-                                </div>
-                                <div className="chatroom-info">
-                                    <h3>Cinema 4D Beginners</h3>
-                                    <p>18 members • 2 online</p>
-                                </div>
-                                <div className="chatroom-status"></div>
-                            </div>
-
-                            <div className="chatroom-card">
-                                <div className="chatroom-icon">
-                                    <svg viewBox="0 0 24 24" width="24" height="24">
-                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
-                                    </svg>
-                                </div>
-                                <div className="chatroom-info">
-                                    <h3>Graphic Design Portfolio</h3>
-                                    <p>45 members • 8 online</p>
-                                </div>
-                                <div className="chatroom-status active"></div>
-                            </div>
+                            ))}
 
                             <div className="chatroom-card add-chatroom">
                                 <div className="add-icon">+</div>
