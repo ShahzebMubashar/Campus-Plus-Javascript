@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
+import Navbar from '../Index/components/Navbar'
 
 function AcademicDashboard() {
     // State for GPA calculator
@@ -57,6 +58,7 @@ function AcademicDashboard() {
 
     return (
         <div className="academic-dashboard">
+            <Navbar />
             <div className="container">
                 <header className="header">
                     <h1>My Dashboard</h1>
