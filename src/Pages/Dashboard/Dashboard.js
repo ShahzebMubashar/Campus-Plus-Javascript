@@ -9,7 +9,6 @@ function AcademicDashboard() {
         { name: 'Course 3', credits: 3, grade: 'A-' }
     ]);
     const [newCourse, setNewCourse] = useState({ name: '', credits: 3, grade: 'A' });
-    const [courseName, setCourseName] = useState('');
 
     // Grade point values
     const gradePoints = {
@@ -37,13 +36,9 @@ function AcademicDashboard() {
 
     // Add new course
     const addCourse = () => {
-        if (courseName.trim()) {
-            setCourses([...courses, {
-                name: courseName,
-                credits: newCourse.credits,
-                grade: newCourse.grade
-            }]);
-            setCourseName('');
+        if (newCourse.name.trim()) {
+            setCourses([...courses, { ...newCourse }]);
+            setNewCourse({ name: '', credits: 3, grade: 'A' });
         }
     };
 
@@ -52,6 +47,12 @@ function AcademicDashboard() {
         const updatedCourses = [...courses];
         updatedCourses.splice(index, 1);
         setCourses(updatedCourses);
+    };
+
+    // Handle input changes
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewCourse({ ...newCourse, [name]: name === 'credits' ? parseInt(value) || 0 : value });
     };
 
     return (
@@ -136,9 +137,8 @@ function AcademicDashboard() {
                         </div>
                     </div>
                 </section>
-
                 <div className="bottom-sections">
-                    <section className="gpa-calculator-section">
+                    <div className="gpa-calculator-section">
                         <div className="section-header">
                             <h2>GPA Calculator</h2>
                         </div>
@@ -152,67 +152,64 @@ function AcademicDashboard() {
                             </div>
 
                             <div className="gpa-courses">
-                                {courses.map((course, index) => (
-                                    <div key={index} className="course-item">
-                                        <div className="course-name-container">
-                                            <span className="bullet"></span>
-                                            <span className="course-name">{course.name}</span>
+                                <div className="course-list">
+                                    {courses.map((course, index) => (
+                                        <div key={index} className="course-item">
+                                            <div className="course-details">
+                                                <span className="course-name">{course.name}</span>
+                                                <div className="course-meta">
+                                                    <span>{course.credits} credits</span>
+                                                    <span className="course-grade">{course.grade}</span>
+                                                </div>
+                                            </div>
+                                            <button
+                                                className="remove-course"
+                                                onClick={() => removeCourse(index)}
+                                            >
+                                                ×
+                                            </button>
                                         </div>
-                                        <div className="course-details">
-                                            <span className="course-credits">
-                                                <span className="credits-value">{course.credits}</span>
-                                                <span className="credits-label">credits</span>
-                                            </span>
-                                            <span className="course-grade">{course.grade}</span>
-                                        </div>
-                                        <button
-                                            className="remove-course"
-                                            onClick={() => removeCourse(index)}
-                                        >
-                                            ×
-                                        </button>
-                                    </div>
-                                ))}
+                                    ))}
+                                </div>
 
                                 <div className="add-course-form">
                                     <input
                                         type="text"
+                                        name="name"
                                         placeholder="Course name"
-                                        value={courseName}
-                                        onChange={(e) => setCourseName(e.target.value)}
+                                        value={newCourse.name}
+                                        onChange={handleInputChange}
                                         className="course-input"
                                     />
-                                    <div className="course-form-controls">
-                                        <div className="select-container">
-                                            <select
-                                                value={newCourse.credits}
-                                                onChange={(e) => setNewCourse({ ...newCourse, credits: parseInt(e.target.value) })}
-                                                className="credits-select"
-                                            >
-                                                {[1, 2, 3, 4, 5].map(credit => (
-                                                    <option key={credit} value={credit}>{credit} credits</option>
-                                                ))}
-                                            </select>
-                                        </div>
-                                        <div className="select-container">
-                                            <select
-                                                value={newCourse.grade}
-                                                onChange={(e) => setNewCourse({ ...newCourse, grade: e.target.value })}
-                                                className="grade-select"
-                                            >
-                                                {Object.keys(gradePoints).map(grade => (
-                                                    <option key={grade} value={grade}>{grade}</option>
-                                                ))}
-                                            </select>
-                                        </div>
+                                    <div className="course-form-row">
+                                        <select
+                                            name="credits"
+                                            value={newCourse.credits}
+                                            onChange={handleInputChange}
+                                            className="credits-select"
+                                        >
+                                            {[1, 2, 3, 4, 5].map(credit => (
+                                                <option key={credit} value={credit}>{credit} credits</option>
+                                            ))}
+                                        </select>
+                                        <select
+                                            name="grade"
+                                            value={newCourse.grade}
+                                            onChange={handleInputChange}
+                                            className="grade-select"
+                                        >
+                                            {Object.keys(gradePoints).map(grade => (
+                                                <option key={grade} value={grade}>{grade}</option>
+                                            ))}
+                                        </select>
                                         <button className="add-course-btn" onClick={addCourse}>Add</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                    </div>
 
-                    <section className="chatrooms-section">
+                    <div className="chatrooms-section">
                         <div className="section-header">
                             <h2>Chatrooms Joined</h2>
                             <a href="#" className="view-all">View all</a>
@@ -221,8 +218,8 @@ function AcademicDashboard() {
                         <div className="chatrooms-list">
                             <div className="chatroom-card">
                                 <div className="chatroom-icon">
-                                    <svg viewBox="0 0 24 24" width="20" height="20">
-                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
                                     </svg>
                                 </div>
                                 <div className="chatroom-info">
@@ -234,8 +231,8 @@ function AcademicDashboard() {
 
                             <div className="chatroom-card">
                                 <div className="chatroom-icon">
-                                    <svg viewBox="0 0 24 24" width="20" height="20">
-                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
                                     </svg>
                                 </div>
                                 <div className="chatroom-info">
@@ -247,8 +244,8 @@ function AcademicDashboard() {
 
                             <div className="chatroom-card">
                                 <div className="chatroom-icon">
-                                    <svg viewBox="0 0 24 24" width="20" height="20">
-                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+                                    <svg viewBox="0 0 24 24" width="24" height="24">
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
                                     </svg>
                                 </div>
                                 <div className="chatroom-info">
@@ -258,14 +255,12 @@ function AcademicDashboard() {
                                 <div className="chatroom-status active"></div>
                             </div>
 
-                            <div className="chatroom-card join-card">
-                                <div className="join-content">
-                                    <div className="join-icon">+</div>
-                                    <span>Join new chatroom</span>
-                                </div>
+                            <div className="chatroom-card add-chatroom">
+                                <div className="add-icon">+</div>
+                                <span>Join new chatroom</span>
                             </div>
                         </div>
-                    </section>
+                    </div>
                 </div>
             </div>
         </div>
