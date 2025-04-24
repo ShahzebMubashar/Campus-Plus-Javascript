@@ -1,7 +1,11 @@
 import React, { useState } from "react";
-
+import templateData from '../emails.json'
 const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
-   
+    let emailTypes=[]
+  for(let key in templateData.templates) 
+  {
+    emailTypes.push(key)
+  }
     const [showEmailForm, setShowEmailForm] = useState(true);
 
     const handleChange = (field, value) => {
@@ -124,9 +128,10 @@ const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
                         value={formData.emailType}
                         onChange={(e) => handleChange("emailType", e.target.value)}
                     >
-                        <option value="select">Select Email Type</option>
+                    {emailTypes.map(type=>(<option>{type}</option>))}
+                        {/* <option value="select">Select Email Type</option>
                         <option value="assignment">Assignment Email</option>
-                        <option value="project">Project Email</option>
+                        <option value="project">Project Email</option> */}
                     </select>
                 </div>
                 <button type="submit" className="btn btn-primary">
