@@ -1211,7 +1211,120 @@ const facultyData = {
         office: "B-Block, 1st floor, Room 154 Besides Accounts Dept",
         email: "abdul.sattar@nu.edu.pk",
         image: "../assets/faculty images/S&H Faculty/abdul sattar.webp"
-    }]
+    },
+    {
+        name: "Ms. Aisha Bano",
+        position: "Lecturer",
+        office: "-",
+        email: "aisha.bano@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/aisha bano.webp"
+    },
+    {
+        name: "Ms. Aqsa Naz",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 002",
+        email: "aqsa.naz@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/aqsa naz.webp"
+    },
+    {
+        name: "Ms. Ayesha Saeed",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 004",
+        email: "ayesha.saeed@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/ayesha saeed.webp"
+    },
+    {
+        name: "Mr. Hafiz Hamza Janjua",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 006",
+        email: "hamza.janjua@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/hafiz hamza janjua.webp"
+    },
+    {
+        name: "Mr. Hafiz Umair Gulzar",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 007",
+        email: "umair.gulzar@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/hafiz umair gulzar.webp"
+    },
+    {
+        name: "Ms. Iqra Rafiq",
+        position: "Lecturer",
+        office: "-",
+        email: "iqra.rafiq@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/iqra rafiq.webp"
+    },
+    {
+        name: "Ms. Kanwal Saleem",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 005",
+        email: "kanwal.saleem@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/kanwal saleem.webp"
+    },
+    {
+        name: "Mr. Muhammad Yaseen",
+        position: "Lecturer",
+        office: "-",
+        email: "m.yaseen@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/muhammad yaseen.webp"
+    },
+    {
+        name: "Ms. Namra Fazal",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 001",
+        email: "namra.fazal@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/namra fazal.webp"
+    },
+    {
+        name: "Ms. Nokhaiz Zahra",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 001",
+        email: "nokhaiz.zahra@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/nokhaiz zahra.webp"
+    },
+    {
+        name: "Mr. Razm-ul-Zafar",
+        position: "Lecturer",
+        office: "-",
+        email: "razm.zafar@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/razm-ul-zafar.webp"
+    },
+    {
+        name: "Ms. Rubab Arshad",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 002",
+        email: "rubab.arshad@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/rubab arshad.webp"
+    },
+    {
+        name: "Ms. Sarah Ahmad",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 005",
+        email: "Sarah.ahmad@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/sarah ahmad.webp"
+    },
+    {
+        name: "Mr. Tasaduque Hussain",
+        position: "Lecturer",
+        office: "C-Block, Ground floor(RightSide) MFO - 006",
+        email: "tasduque.hussain@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/tasaduque hussain shah.webp"
+    },
+    {
+        name: "Ms. Mahnoor Chaudhry",
+        position: "Instructor",
+        office: "C-Block, Ground floor(RightSide) MFO - 002",
+        email: "mahnoor.chaudhary@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/mahnoor chaudhry.webp"
+    },
+    {
+        name: "Ms. Rida Ahmed",
+        position: "Instructor",
+        office: "-",
+        email: "rida.ahmed@nu.edu.pk",
+        image: "../assets/faculty images/S&H Faculty/rida ahmed.webp"
+    }
+    ]
 };
 
 export default facultyData;
