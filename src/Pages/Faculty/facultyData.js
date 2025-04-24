@@ -1021,6 +1021,83 @@ const facultyData = {
             office: "D-Block, 2nd floor, Room 227\n(E-227)",
             email: "irma.tariq@nu.edu.pk",
             image: "../assets/faculty images/M Faculty/irma tariq.webp"
+        },
+        {
+            name: "Ms. Khadija Aslam",
+            position: "Lecturer",
+            office: "D-Block, 2nd floor, Room 227 (E-227)",
+            email: "khadija.aslam@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/khadija aslam.webp"
+        },
+        {
+            name: "Mr. Muhammad Mobeen Ajmal",
+            position: "Lecturer",
+            office: "-",
+            email: "mobeen.ajmal@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/muhammad mobeen ajmal.webp"
+        },
+        {
+            name: "Ms. Noor Zahid",
+            position: "Lecturer",
+            office: "D-Block, 2nd floor, Room 227 (E-227 )",
+            email: "noor.zahid@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/noor zahid.webp"
+        },
+        {
+            name: "Mr. Salmaan Khalil",
+            position: "Adjunct Lecturer",
+            office: "-",
+            email: "salmaan.rahman@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/salmaan khalil rahman.webp"
+        },
+        {
+            name: "Ms. Sidra Salman",
+            position: "Lecturer",
+            office: "D-Block, 2nd floor, Room 230 (E-230)",
+            email: "sidra.salman@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/sidra salman.webp"
+        },
+        {
+            name: "Ms. Sundas Munir",
+            position: "Lecturer",
+            office: "D-Block, 2nd floor, Room 230 (E-230)",
+            email: "sundas.munir@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/sundas munir.webp"
+        },
+        {
+            name: "Ms. Fatima Zeb",
+            position: "Instructor",
+            office: "D-Block, 2nd floor, Room 204 (E-204)",
+            email: "fatima.zeb@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/fatima zeb.webp"
+        },
+        {
+            name: "Ms. Ghulam Fatima",
+            position: "Instructor",
+            office: "D-Block, 2nd floor, Room 204 (E-204)",
+            email: "ghulam.fatima@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/ghulam fatima.webp"
+        },
+        {
+            name: "Ms. Iman Ilyas",
+            position: "Instructor",
+            office: "D-Block, 2nd floor, Room 232 (E-232)",
+            email: "iman.ilyas@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/iman ilyas.webp"
+        },
+        {
+            name: "Ms. Syeda Fatima Naqvi",
+            position: "Instructor",
+            office: "D-Block, 2nd floor, Room 229 (E-229)",
+            email: "fatima.naqvi@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/syeda fatima naqvi.webp"
+        },
+        {
+            name: "Ms. Aiza Aftab",
+            position: "Junior Lecturer",
+            office: "D-Block, 2nd floor, Room 229 (E-229)",
+            email: "aiza.aftab@nu.edu.pk",
+            image: "../assets/faculty images/M Faculty/aiza aftab.webp"
         }
     ],
     SH: []
