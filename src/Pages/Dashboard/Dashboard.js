@@ -55,11 +55,34 @@ function AcademicDashboard() {
             <div className="container">
                 {/* Top Header */}
                 <header className="header">
-                    <h1>Welcome back 👋</h1>
-                    <div className="search-container">
-                        <input type="text" placeholder="Search..." className="search-input" />
-                        <button className="search-button" aria-label="search" />
+                    <section className="header live-broadcasts-header">
+                        <h2>Live broadcasts</h2>
+                        <div className="live-broadcasts">
+                            {['p1', 'p2', 'p3', 'p4', 'p5', 'p6'].map((person, i) => (
+                                <div key={i} className="avatar-wrapper">
+                                    <img
+                                        src={`https://randomuser.me/api/portraits/${i % 2 === 0 ? 'women' : 'men'}/${i + 10}.jpg`}
+                                        alt="live"
+                                        className="avatar-image"
+                                    />
+                                </div>
+                            ))}
+                            <button className="more-button">More</button>
+                        </div>
+                    </section>
+
+                    <div className="search-wrapper">
+                        <div className="search-input-wrapper">
+                            <span className="search-icon">🔍</span>
+                            <input
+                                type="text"
+                                className="pretty-search-input"
+                                placeholder="What do you want to learn?"
+                            />
+                        </div>
+                        <button className="pretty-search-button">Search</button>
                     </div>
+
                 </header>
 
                 <div className="divider"></div>
