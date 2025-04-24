@@ -1,111 +1,65 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './Dashboard.css';
 
 function AcademicDashboard() {
+    // State for GPA calculator
+    const [courses, setCourses] = useState([
+        { name: 'Course 1', credits: 3, grade: 'A' },
+        { name: 'Course 2', credits: 4, grade: 'B+' },
+        { name: 'Course 3', credits: 3, grade: 'A-' }
+    ]);
+    const [newCourse, setNewCourse] = useState({ name: '', credits: 3, grade: 'A' });
+
+    // Grade point values
+    const gradePoints = {
+        'A+': 4.0, 'A': 4.0, 'A-': 3.7,
+        'B+': 3.3, 'B': 3.0, 'B-': 2.7,
+        'C+': 2.3, 'C': 2.0, 'C-': 1.7,
+        'D+': 1.3, 'D': 1.0, 'D-': 0.7,
+        'F': 0.0
+    };
+
+    // Calculate GPA
+    const calculateGPA = () => {
+        if (courses.length === 0) return 0;
+
+        let totalPoints = 0;
+        let totalCredits = 0;
+
+        courses.forEach(course => {
+            totalPoints += course.credits * gradePoints[course.grade];
+            totalCredits += course.credits;
+        });
+
+        return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : 0;
+    };
+
+    // Add new course
+    const addCourse = () => {
+        if (newCourse.name.trim()) {
+            setCourses([...courses, { ...newCourse }]);
+            setNewCourse({ name: '', credits: 3, grade: 'A' });
+        }
+    };
+
+    // Remove course
+    const removeCourse = (index) => {
+        const updatedCourses = [...courses];
+        updatedCourses.splice(index, 1);
+        setCourses(updatedCourses);
+    };
+
+    // Handle input changes
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewCourse({ ...newCourse, [name]: name === 'credits' ? parseInt(value) || 0 : value });
+    };
+
     return (
-        <div className="academic-container">
-            <div className="sidebar">
-                <div className="logo">
-                    <div className="logo-circle">
-                        <span className="logo-letter">a</span>
-                    </div>
-                    <span className="logo-text">cademic</span>
-                </div>
-
-                <nav className="nav-menu">
-                    <div className="nav-item">
-                        <div className="nav-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M4 13h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1zm0 8h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1zm10-8h6a1 1 0 0 0 1-1V4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1zm0 8h6a1 1 0 0 0 1-1v-4a1 1 0 0 0-1-1h-6a1 1 0 0 0-1 1v4a1 1 0 0 0 1 1z" />
-                            </svg>
-                        </div>
-                        <span>Dashboard</span>
-                    </div>
-
-                    <div className="nav-item">
-                        <div className="nav-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z" />
-                            </svg>
-                        </div>
-                        <span>Schedule</span>
-                    </div>
-
-                    <div className="nav-item active">
-                        <div className="nav-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z" />
-                            </svg>
-                        </div>
-                        <span>My courses</span>
-                    </div>
-
-                    <div className="nav-item">
-                        <div className="nav-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z" />
-                            </svg>
-                        </div>
-                        <span>Reports</span>
-                    </div>
-
-                    <div className="nav-item">
-                        <div className="nav-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M12 12.75c1.63 0 3.07.39 4.24.9 1.08.48 1.76 1.56 1.76 2.73V18H6v-1.61c0-1.18.68-2.26 1.76-2.73 1.17-.52 2.61-.91 4.24-.91zM4 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm1.13 1.1c-.37-.06-.74-.1-1.13-.1-.99 0-1.93.21-2.78.58C.48 14.9 0 15.62 0 16.43V18h4.5v-1.61c0-.83.23-1.61.63-2.29zM20 13c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm4 3.43c0-.81-.48-1.53-1.22-1.85-.85-.37-1.79-.58-2.78-.58-.39 0-.76.04-1.13.1.4.68.63 1.46.63 2.29V18H24v-1.57zM12 6c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3z" />
-                            </svg>
-                        </div>
-                        <span>Teams</span>
-                    </div>
-
-                    <div className="nav-item">
-                        <div className="nav-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-1 9H9V9h10v2zm-4 4H9v-2h6v2zm4-8H9V5h10v2z" />
-                            </svg>
-                        </div>
-                        <span>Library</span>
-                    </div>
-
-                    <div className="nav-item">
-                        <div className="nav-icon">
-                            <svg viewBox="0 0 24 24" width="24" height="24">
-                                <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z" />
-                            </svg>
-                        </div>
-                        <span>Settings</span>
-                    </div>
-                </nav>
-            </div>
-
+        <div className="academic-dashboard">
             <div className="main-content">
-                <div className="content-section">
-                    <h2>Live broadcasts</h2>
-                    <div className="avatars-container">
-                        <div className="avatar-item">
-                            <img src="/placeholder.svg?height=50&width=50" alt="User" className="avatar" />
-                        </div>
-                        <div className="avatar-item">
-                            <img src="/placeholder.svg?height=50&width=50" alt="User" className="avatar" />
-                        </div>
-                        <div className="avatar-item">
-                            <img src="/placeholder.svg?height=50&width=50" alt="User" className="avatar" />
-                        </div>
-                        <div className="avatar-item">
-                            <img src="/placeholder.svg?height=50&width=50" alt="User" className="avatar" />
-                        </div>
-                        <div className="avatar-item">
-                            <img src="/placeholder.svg?height=50&width=50" alt="User" className="avatar" />
-                        </div>
-                        <div className="avatar-item">
-                            <img src="/placeholder.svg?height=50&width=50" alt="User" className="avatar" />
-                        </div>
-                        <button className="more-button">More</button>
-                    </div>
-                </div>
-
-                <div className="search-section">
-                    <h2>Search course</h2>
+                <div className="header">
+                    <h1>My Dashboard</h1>
                     <div className="search-container">
                         <div className="search-input-container">
                             <svg className="search-icon" viewBox="0 0 24 24" width="20" height="20">
@@ -186,136 +140,126 @@ function AcademicDashboard() {
                 </div>
 
                 <div className="bottom-sections">
-                    <div className="progress-section">
+                    <div className="gpa-calculator-section">
                         <div className="section-header">
-                            <h2>My progress</h2>
+                            <h2>GPA Calculator</h2>
                         </div>
 
-                        <div className="progress-card">
-                            <div className="hours-section">
-                                <h3>Total hours spended</h3>
-                                <div className="dropdown">
-                                    <span>June 2020</span>
-                                    <svg viewBox="0 0 24 24" width="24" height="24">
-                                        <path d="M7 10l5 5 5-5z" />
-                                    </svg>
-                                </div>
-
-                                <div className="circular-progress">
-                                    <svg viewBox="0 0 100 100" width="150" height="150">
-                                        <circle cx="50" cy="50" r="45" fill="none" stroke="#e6e6fa" strokeWidth="10" />
-                                        <circle
-                                            cx="50"
-                                            cy="50"
-                                            r="45"
-                                            fill="none"
-                                            stroke="#4169e1"
-                                            strokeWidth="10"
-                                            strokeDasharray="283"
-                                            strokeDashoffset="100"
-                                            transform="rotate(-90 50 50)"
-                                        />
-                                        <text x="50" y="55" textAnchor="middle" fontSize="24" fontWeight="bold" fill="#4169e1">134</text>
-                                    </svg>
-                                </div>
-
-                                <div className="user-info">
-                                    <img src="/placeholder.svg?height=40&width=40" alt="User" className="user-avatar" />
-                                    <div className="user-details">
-                                        <div className="user-name">Bessie</div>
-                                        <div className="user-role">Designer</div>
-                                    </div>
+                        <div className="gpa-card">
+                            <div className="gpa-display">
+                                <div className="gpa-circle">
+                                    <span className="gpa-value">{calculateGPA()}</span>
+                                    <span className="gpa-label">GPA</span>
                                 </div>
                             </div>
 
-                            <div className="stats-section">
-                                <div className="stat-item">
-                                    <div className="stat-bar"></div>
-                                    <div className="stat-info">
-                                        <div className="stat-numbers">
-                                            <span className="stat-value">75</span>
-                                            <span className="stat-total">/115</span>
+                            <div className="gpa-courses">
+                                <div className="course-list">
+                                    {courses.map((course, index) => (
+                                        <div key={index} className="course-item">
+                                            <div className="course-details">
+                                                <span className="course-name">{course.name}</span>
+                                                <div className="course-meta">
+                                                    <span>{course.credits} credits</span>
+                                                    <span className="course-grade">{course.grade}</span>
+                                                </div>
+                                            </div>
+                                            <button
+                                                className="remove-course"
+                                                onClick={() => removeCourse(index)}
+                                            >
+                                                ×
+                                            </button>
                                         </div>
-                                        <div className="stat-label">Visited lectures</div>
-                                    </div>
+                                    ))}
                                 </div>
 
-                                <div className="stat-item">
-                                    <div className="stat-bar"></div>
-                                    <div className="stat-info">
-                                        <div className="stat-numbers">
-                                            <span className="stat-value">32</span>
-                                            <span className="stat-total">/94</span>
-                                        </div>
-                                        <div className="stat-label">Completed tasks</div>
+                                <div className="add-course-form">
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        placeholder="Course name"
+                                        value={newCourse.name}
+                                        onChange={handleInputChange}
+                                        className="course-input"
+                                    />
+                                    <div className="course-form-row">
+                                        <select
+                                            name="credits"
+                                            value={newCourse.credits}
+                                            onChange={handleInputChange}
+                                            className="credits-select"
+                                        >
+                                            {[1, 2, 3, 4, 5].map(credit => (
+                                                <option key={credit} value={credit}>{credit} credits</option>
+                                            ))}
+                                        </select>
+                                        <select
+                                            name="grade"
+                                            value={newCourse.grade}
+                                            onChange={handleInputChange}
+                                            className="grade-select"
+                                        >
+                                            {Object.keys(gradePoints).map(grade => (
+                                                <option key={grade} value={grade}>{grade}</option>
+                                            ))}
+                                        </select>
+                                        <button className="add-course-btn" onClick={addCourse}>Add</button>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div className="lectures-section">
+                    <div className="chatrooms-section">
                         <div className="section-header">
-                            <h2>Popular lections</h2>
+                            <h2>Chatrooms Joined</h2>
                             <a href="#" className="view-all">View all</a>
                         </div>
 
-                        <div className="lectures-list">
-                            <div className="lecture-card">
-                                <img src="/placeholder.svg?height=60&width=60" alt="Instructor" className="lecture-avatar" />
-                                <div className="lecture-info">
-                                    <h3>Human centered design</h3>
-                                    <div className="lecture-duration">
-                                        <svg viewBox="0 0 24 24" width="16" height="16">
-                                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
-                                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                                        </svg>
-                                        <span>1h 30 min</span>
-                                    </div>
-                                </div>
-                                <button className="play-button">
+                        <div className="chatrooms-list">
+                            <div className="chatroom-card">
+                                <div className="chatroom-icon">
                                     <svg viewBox="0 0 24 24" width="24" height="24">
-                                        <path d="M8 5v14l11-7z" />
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
                                     </svg>
-                                </button>
+                                </div>
+                                <div className="chatroom-info">
+                                    <h3>UI/UX Design Group</h3>
+                                    <p>32 members • 5 online</p>
+                                </div>
+                                <div className="chatroom-status active"></div>
                             </div>
 
-                            <div className="lecture-card">
-                                <img src="/placeholder.svg?height=60&width=60" alt="Instructor" className="lecture-avatar" />
-                                <div className="lecture-info">
-                                    <h3>E-learning & digital cultures</h3>
-                                    <div className="lecture-duration">
-                                        <svg viewBox="0 0 24 24" width="16" height="16">
-                                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
-                                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                                        </svg>
-                                        <span>45 min</span>
-                                    </div>
-                                </div>
-                                <button className="play-button">
+                            <div className="chatroom-card">
+                                <div className="chatroom-icon">
                                     <svg viewBox="0 0 24 24" width="24" height="24">
-                                        <path d="M8 5v14l11-7z" />
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
                                     </svg>
-                                </button>
+                                </div>
+                                <div className="chatroom-info">
+                                    <h3>Cinema 4D Beginners</h3>
+                                    <p>18 members • 2 online</p>
+                                </div>
+                                <div className="chatroom-status"></div>
                             </div>
 
-                            <div className="lecture-card">
-                                <img src="/placeholder.svg?height=60&width=60" alt="Instructor" className="lecture-avatar" />
-                                <div className="lecture-info">
-                                    <h3>SQL: nothing superfluous</h3>
-                                    <div className="lecture-duration">
-                                        <svg viewBox="0 0 24 24" width="16" height="16">
-                                            <path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z" />
-                                            <path d="M12.5 7H11v6l5.25 3.15.75-1.23-4.5-2.67z" />
-                                        </svg>
-                                        <span>1h 15 min</span>
-                                    </div>
-                                </div>
-                                <button className="play-button">
+                            <div className="chatroom-card">
+                                <div className="chatroom-icon">
                                     <svg viewBox="0 0 24 24" width="24" height="24">
-                                        <path d="M8 5v14l11-7z" />
+                                        <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
                                     </svg>
-                                </button>
+                                </div>
+                                <div className="chatroom-info">
+                                    <h3>Graphic Design Portfolio</h3>
+                                    <p>45 members • 8 online</p>
+                                </div>
+                                <div className="chatroom-status active"></div>
+                            </div>
+
+                            <div className="chatroom-card add-chatroom">
+                                <div className="add-icon">+</div>
+                                <span>Join new chatroom</span>
                             </div>
                         </div>
                     </div>
