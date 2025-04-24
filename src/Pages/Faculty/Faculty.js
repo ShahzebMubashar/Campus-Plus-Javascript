@@ -123,7 +123,7 @@ const IntroSection = () => (
 
 const SchoolsContainer = () => (
     <div className="schools-container">
-        {['Electrial Engineering', 'Civil Engineering', 'Computer Science', 'Management', 'Science & Humanities'].map((school, index) => (
+        {['EE', 'CV', 'CS', 'M', 'SH'].map((school, index) => (
             <a href={`#${school}`} key={index}>
                 <div className="school-box">{`FAST School of ${school}`}</div>
             </a>
