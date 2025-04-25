@@ -91,7 +91,7 @@ function Navbar() {
                                     <h4>Accessibility</h4>
                                     <p><Link to="/timetable">Time Table Generator</Link></p>
                                     <p><Link to="/faculty">Faculty Information</Link></p>
-                                    <p>To Do List</p>
+                                    <p><Link to="/todo">To Do List</Link></p>
                                 </div>
                                 <div className="navbar-dropdown-section">
                                     <AiOutlineLaptop className="navbar-dropdown-icon" />
