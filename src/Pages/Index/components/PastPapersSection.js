@@ -1,37 +1,44 @@
 import React from 'react';
 import './PastPapersSection.css';
 import { AiFillStar } from 'react-icons/ai'; // Import star icons
+import { IoDocumentTextOutline } from 'react-icons/io5';
 
 const categories = [
     {
         title: 'Object Oriented Programming',
         link: '/html/Papers/ObjectOrientedProgramming.html',
         rating: 4.5, // Example rating
+        icon: <IoDocumentTextOutline />
     },
     {
         title: 'Discrete Structures',
         link: '/html/Papers/DiscreteStructures.html',
         rating: 4.2,
+        icon: <IoDocumentTextOutline />
     },
     {
         title: 'Data Structures',
         link: '/html/Papers/DataStructures.html',
         rating: 4.8,
+        icon: <IoDocumentTextOutline />
     },
     {
         title: 'Numerical Computing',
         link: '/html/Papers/NumericalComputing.html',
         rating: 4.0,
+        icon: <IoDocumentTextOutline />
     },
     {
         title: 'Islamic Studies/Ethics',
         link: '/html/Papers/IslamicStudies.html',
         rating: 4.3,
+        icon: <IoDocumentTextOutline />
     },
     {
         title: 'Applied Physics',
         link: '/html/Papers/AppliedPhysics.html',
         rating: 4.6,
+        icon: <IoDocumentTextOutline />
     },
 ];
 
@@ -56,6 +63,9 @@ const PastPapersSection = () => (
                     {categories.map((category, index) => (
                         <li key={index}>
                             <div className="card category-card">
+                                <div className="icon-wrapper">
+                                    {category.icon}
+                                </div>
                                 <div className="features-content">
                                     <h3 className="title-lg">{category.title}</h3>
                                     <div className="view-papers-row">

@@ -30,8 +30,8 @@
 }
 
 .category .pp-grid-list li {
-    flex: 1 1 calc(33.333% - 20px);
-    max-width: calc(33.333% - 20px);
+    flex: 1 1 calc(50% - 20px);
+    max-width: calc(50% - 20px);
     overflow: hidden;
 }
 
@@ -48,6 +48,75 @@
     transition: all 0.3s ease;
     position: relative;
     overflow: hidden;
+}
+
+.icon-wrapper {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2.5rem;
+    color: #0362c7;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.category-card:hover .icon-wrapper {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.features-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.features-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.4em;
+    color: #0a1c2e;
+    text-align: left;
+    padding-right: 50px;
+}
+
+.view-papers-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.features-content .title-sm1 {
+    font-size: 1rem;
+    color: #555;
+    margin: 0;
+    text-align: right;
+}
+
+.stars {
+    display: flex;
+    gap: 3px;
+}
+
+.star-filled {
+    color: #ffd700;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.star-empty {
+    color: #e5e7eb;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .star-filled {
+    transform: scale(1.1);
 }
 
 .category-card::before {
@@ -293,74 +362,5 @@
     .category .btn {
         padding: 6px 12px;
         font-size: 0.75rem;
-    }
-}
-
-/* Stars Styling */
-.stars {
-    display: flex;
-    gap: 3px;
-}
-
-.star-filled {
-    color: #ffd700;
-    font-size: 18px;
-    transition: transform 0.3s ease;
-}
-
-.star-empty {
-    color: #e5e7eb;
-    font-size: 18px;
-    transition: transform 0.3s ease;
-}
-
-.category-card:hover .star-filled {
-    transform: scale(1.1);
-}
-
-/* Align "View Papers" and stars in one row */
-.view-papers-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%;
-    margin-top: auto;
-    padding-top: 15px;
-    border-top: 1px solid #f0f0f0;
-}
-
-.features-content h3 {
-    margin: 0 0 5px 0;
-    font-size: 1.4em;
-    color: #0a1c2e;
-    text-align: left;
-}
-
-.features-content .title-sm1 {
-    font-size: 1rem;
-    /* Adjust font size of "View Papers" */
-    color: #555;
-    margin: 0;
-
-    /* Remove unwanted margins */
-    text-align: left;
-    /* Align text to the left */
-}
-
-/* Category Card */
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .category-card {
-        height: 140px;
-        padding: 15px;
-    }
-
-    .category-card .title-lg {
-        font-size: 1.2em;
-    }
-
-    .category-card .title-sm {
-        font-size: 1rem;
     }
 }
