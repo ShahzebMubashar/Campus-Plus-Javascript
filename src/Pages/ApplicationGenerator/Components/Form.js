@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-
+import templateData from '../check.json'
 export default function Form({ formData,setFormData,setShowForm, formTitle,handleAppGen}) {
  
 function onGenerateApplication(data){
-    console.log(data)
+ console.log(data)
 handleAppGen();
     return true;
 }
@@ -40,7 +40,11 @@ handleAppGen();
       onGenerateApplication(formData);
     }
   };
-
+  let appTypes=[]
+  for(let key in templateData.templates) 
+  {
+    appTypes.push(key)
+  }
   return (
     <div className="application-form">
       <button className="close-icon" onClick={handleCloseForm}>
@@ -135,10 +139,13 @@ handleAppGen();
             value={formData.applicationType}
             onChange={handleChange}
           >
-            <option value="">Select</option>
+          {appTypes.map((type)=>(<option>{type} </option>)
+
+          )}
+            {/* <option value="">Select</option>
             <option value="Leave Application">Leave Application</option>
             <option value="Event Request">Event Request</option>
-            <option value="Resource Request">Resource Request</option>
+            <option value="Resource Request">Resource Request</option> */}
           </select>
           {errors.applicationType && <span className="error">{errors.applicationType}</span>}
         </div>

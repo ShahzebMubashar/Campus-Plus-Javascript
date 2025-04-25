@@ -175,10 +175,12 @@ function Navbar() {
 
                         </li>
                         {isLoggedIn ? (
-                            // Show "Logout" if the user is logged in
-                            <li onClick={handleLogout} style={{ cursor: "pointer" }}>
-                                Logout
-                            </li>
+                            <>
+                                <li><Link to="/dashboard">Dashboard</Link></li>
+                                <li onClick={handleLogout} style={{ cursor: "pointer" }}>
+                                    Logout
+                                </li>
+                            </>
                         ) : (
                             // Show "Sign In" if the user is not logged in
                             <li><Link to="/sign-in">Sign In</Link></li>

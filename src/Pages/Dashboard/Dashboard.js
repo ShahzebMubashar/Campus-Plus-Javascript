@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 import Navbar from '../Index/components/Navbar';
+import Shahzebpic from '../../Assets/images/Shahzeb Mubashar (lesser size).webp';
 
 function AcademicDashboard() {
     const [courses, setCourses] = useState([
@@ -52,40 +53,56 @@ function AcademicDashboard() {
     return (
         <div className="academic-dashboard">
             <Navbar />
-            <div className="container">
-                {/* Top Header */}
-                <header className="header">
-                    <section className="header live-broadcasts-header">
-                        <h2>Live broadcasts</h2>
-                        <div className="live-broadcasts">
-                            {['p1', 'p2', 'p3', 'p4', 'p5', 'p6'].map((person, i) => (
-                                <div key={i} className="avatar-wrapper">
-                                    <img
-                                        src={`https://randomuser.me/api/portraits/${i % 2 === 0 ? 'women' : 'men'}/${i + 10}.jpg`}
-                                        alt="live"
-                                        className="avatar-image"
-                                    />
-                                </div>
-                            ))}
-                            <button className="more-button">More</button>
+            <div className="dashboardcontainer">
+                {/* User Profile Section */}
+                <section className="user-profile-section">
+                    <img
+                        src={Shahzebpic}
+                        alt="Profile"
+                        className="profile-picture"
+                    />
+                    <div className="user-info">
+                        <h1 className="user-name">Shahzeb Mubashar</h1>
+                        <div className="user-details">
+                            <div className="user-detail-item">
+                                <span className="user-detail-icon">📧</span>
+                                <span>l226734@lhr.nu.edu.pk</span>
+                            </div>
+                            <div className="user-detail-item">
+                                <span className="user-detail-icon">🎓</span>
+                                <span>Roll No: 22L-6734</span>
+                            </div>
                         </div>
-                    </section>
-
-                    <div className="search-wrapper">
-                        <div className="search-input-wrapper">
-                            <span className="search-icon">🔍</span>
-                            <input
-                                type="text"
-                                className="pretty-search-input"
-                                placeholder="What do you want to learn?"
-                            />
+                        <div className="academic-info">
+                            <div className="degree-badge">
+                                <span>🎓</span>
+                                <span>B.Sc Computer Science</span>
+                            </div>
+                            <div className="cgpa-badge">
+                                <span>📊</span>
+                                <span>CGPA: 3.85</span>
+                            </div>
+                            <div className="semester-badge">
+                                <span>📅</span>
+                                <span>Semester 6</span>
+                            </div>
+                            <div className="profile-actions">
+                                <button className="profile-action-btn edit-profile">
+                                    <span className="action-icon">✏️</span>
+                                    Edit Profile
+                                </button>
+                                <button className="profile-action-btn change-password">
+                                    <span className="action-icon">🔒</span>
+                                    Change Password
+                                </button>
+                                <button className="profile-action-btn settings">
+                                    <span className="action-icon">⚙️</span>
+                                    Settings
+                                </button>
+                            </div>
                         </div>
-                        <button className="pretty-search-button">Search</button>
                     </div>
-
-                </header>
-
-                <div className="divider"></div>
+                </section>
 
                 {/* My Courses */}
                 <section className="courses-section">
@@ -93,7 +110,6 @@ function AcademicDashboard() {
                         <h2>📘 My Courses</h2>
                         <a href="#" className="view-all">View all</a>
                     </div>
-
                     <div className="courses-grid">
                         {[
                             { title: 'Cinema 4D', desc: 'Elements design for websites and apps', progress: '08/12', percent: 66 },
@@ -128,6 +144,44 @@ function AcademicDashboard() {
                     </div>
                 </section>
 
+                {/* Upcoming Deadlines */}
+                <section className="deadlines-section">
+                    <div className="section-header">
+                        <h2>⏰ Upcoming Deadlines</h2>
+                        <a href="#" className="view-all">View all</a>
+                    </div>
+                    <div className="deadlines-list">
+                        {[
+                            {
+                                title: 'Database Systems Assignment',
+                                dueDate: '2024-03-15',
+                                course: 'CS-301',
+                                priority: 'high'
+                            },
+                            {
+                                title: 'Software Engineering Project',
+                                dueDate: '2024-03-20',
+                                course: 'CS-401',
+                                priority: 'medium'
+                            }
+                        ].map((deadline, index) => (
+                            <div key={index} className="deadline-card" onClick={() => window.location.href = '/assignment-details'}>
+                                <div className="deadline-content">
+                                    <h3>{deadline.title}</h3>
+                                    <div className="deadline-meta">
+                                        <span className="course-code">{deadline.course}</span>
+                                        <span className="due-date">
+                                            <span className="icon">📅</span>
+                                            {new Date(deadline.dueDate).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={`priority-indicator ${deadline.priority}`}></div>
+                            </div>
+                        ))}
+                    </div>
+                </section>
+
                 {/* Bottom Sections */}
                 <div className="bottom-sections">
                     {/* GPA Section */}
@@ -146,8 +200,8 @@ function AcademicDashboard() {
 
                             <div className="gpa-courses">
                                 <div className="course-list">
-                                    {courses.map((course, index) => (
-                                        <div key={index} className="course-item">
+                                    {courses.slice(0, 2).map((course, index) => (
+                                        <div key={index} className="course-item" onClick={() => window.location.href = '/course-details'}>
                                             <div className="course-details">
                                                 <span className="course-name">{course.name}</span>
                                                 <div className="course-meta">
@@ -155,7 +209,10 @@ function AcademicDashboard() {
                                                     <span className="course-grade">{course.grade}</span>
                                                 </div>
                                             </div>
-                                            <button className="remove-course" onClick={() => removeCourse(index)}>×</button>
+                                            <button className="remove-course" onClick={(e) => {
+                                                e.stopPropagation();
+                                                removeCourse(index);
+                                            }}>×</button>
                                         </div>
                                     ))}
                                 </div>
