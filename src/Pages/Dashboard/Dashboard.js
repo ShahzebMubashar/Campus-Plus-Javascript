@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './Dashboard.css';
 import Navbar from '../Index/components/Navbar';
+import Shahzebpic from '../../Assets/images/Shahzeb Mubashar (lesser size).webp';
 
 function AcademicDashboard() {
     const [courses, setCourses] = useState([
@@ -56,7 +57,7 @@ function AcademicDashboard() {
                 {/* User Profile Section */}
                 <section className="user-profile-section">
                     <img
-                        src="https://randomuser.me/api/portraits/men/32.jpg"
+                        src={Shahzebpic}
                         alt="Profile"
                         className="profile-picture"
                     />
