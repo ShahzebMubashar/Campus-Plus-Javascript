@@ -2,7 +2,6 @@
     width: 100%;
     min-height: 100vh;
     background-color: #ffffff;
-    color: #333;
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -12,19 +11,19 @@
 .dashboardcontainer {
     max-width: 100%;
     margin: 0 auto;
-    padding: 30px;
+    padding: 0;
 }
 
 /* Header */
-.headermain {
+.headermaindashboard {
     padding: 0;
     margin: 0 auto;
     display: flex;
     justify-content: flex-end;
     align-items: center;
     width: 100% !important;
-    gap: 100px;
-
+    gap: 10px;
+    background-color: transparent;
 }
 
 h1 {

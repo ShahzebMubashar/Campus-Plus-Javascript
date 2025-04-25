@@ -54,7 +54,7 @@ function AcademicDashboard() {
             <Navbar />
             <div className="dashboardcontainer">
                 {/* Top Header */}
-                <header className="headermain">
+                <header className="headermaindashboard">
                     <section className="header live-broadcasts-header">
                         <h2>Live broadcasts</h2>
                         <div className="live-broadcasts">
