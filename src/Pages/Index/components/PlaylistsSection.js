@@ -52,7 +52,6 @@ const PlaylistsSection = () => (
                             <div className="card-content">
                                 <h3>{playlist.name}</h3>
                                 <p className="creator">{playlist.watchtime}</p>
-                                <p className="rating">{'⭐'.repeat(Math.round(playlist.rating))}</p>
                                 <div className="horizontal-info">
                                     <p>⏱️ {playlist.duration}</p>
                                     <p>👥 {playlist.views}</p>

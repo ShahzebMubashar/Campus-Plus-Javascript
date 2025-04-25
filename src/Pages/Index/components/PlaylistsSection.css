@@ -77,6 +77,7 @@
     flex: 1;
     background: white;
     min-height: 200px;
+    position: relative;
 }
 
 .card-content h3 {
@@ -104,11 +105,15 @@
 .horizontal-info {
     display: flex;
     justify-content: space-between;
-    margin-top: auto;
     color: #666;
     font-size: 14px;
     padding-top: 10px;
     border-top: 1px solid #eee;
+    position: absolute;
+    bottom: 0;
+    left: 20px;
+    right: 20px;
+    padding-bottom: 20px;
 }
 
 /* Button Styling */
