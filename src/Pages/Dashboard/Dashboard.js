@@ -52,9 +52,9 @@ function AcademicDashboard() {
     return (
         <div className="academic-dashboard">
             <Navbar />
-            <div className="container">
+            <div className="dashboardcontainer">
                 {/* Top Header */}
-                <header className="header">
+                <header className="headermain">
                     <section className="header live-broadcasts-header">
                         <h2>Live broadcasts</h2>
                         <div className="live-broadcasts">
