@@ -42,16 +42,16 @@ const PlaylistsSection = () => (
                     <div key={index} className="course-card">
                         <a href={playlist.link} target="_blank" rel="noopener noreferrer">
                             <div className="card-banner">
-                                <img
-                                    src={`https://i.ytimg.com/vi/${playlist.videoId}/hqdefault.jpg`}
-                                    alt={playlist.title}
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                                    onError={(e) => {
-                                        console.error('Error loading thumbnail for video:', playlist.videoId);
-                                        e.target.onerror = null;
-                                        e.target.src = 'https://via.placeholder.com/400x225?text=Thumbnail+Not+Available';
-                                    }}
-                                />
+                                <iframe
+                                    width="100%"
+                                    height="100%"
+                                    src={`https://www.youtube.com/embed/${playlist.videoId}?controls=0&showinfo=0&rel=0&autoplay=0&mute=1`}
+                                    title={playlist.title}
+                                    frameBorder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}
+                                ></iframe>
                                 <div className="abs-badge">
                                     <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
                                     <span className="span">{playlist.videos} Videos</span>
