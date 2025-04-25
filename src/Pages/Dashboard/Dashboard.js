@@ -53,6 +53,42 @@ function AcademicDashboard() {
         <div className="academic-dashboard">
             <Navbar />
             <div className="dashboardcontainer">
+                {/* User Profile Section */}
+                <section className="user-profile-section">
+                    <img
+                        src="https://randomuser.me/api/portraits/men/32.jpg"
+                        alt="Profile"
+                        className="profile-picture"
+                    />
+                    <div className="user-info">
+                        <h1 className="user-name">John Doe</h1>
+                        <div className="user-details">
+                            <div className="user-detail-item">
+                                <span className="user-detail-icon">📧</span>
+                                <span>john.doe@university.edu</span>
+                            </div>
+                            <div className="user-detail-item">
+                                <span className="user-detail-icon">🎓</span>
+                                <span>Roll No: 2023001</span>
+                            </div>
+                        </div>
+                        <div className="academic-info">
+                            <div className="degree-badge">
+                                <span>🎓</span>
+                                <span>B.Sc Computer Science</span>
+                            </div>
+                            <div className="cgpa-badge">
+                                <span>📊</span>
+                                <span>CGPA: 3.85</span>
+                            </div>
+                            <div className="semester-badge">
+                                <span>📅</span>
+                                <span>Semester 6</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Top Header */}
                 <header className="headermaindashboard">
                     <section className="live-broadcasts-header">
