@@ -6,12 +6,16 @@ const viewUserInfo = async (request, response) => {
       user: { userid },
     },
   } = request;
+  console.log(`[ENDPOINT HIT] GET Userinfo\n\n`);
 
   try {
     const result = await pool.query(
-      "SELECT * FROM ViewUserInfo WHERE userid = $1",
+      "SELECT * FROM ViewUserInfo1 WHERE userid = $1",
       [userid]
     );
+
+    console.log(result.rows);
+
     if (!result.rowCount) return response.status(404).send("User Not Found");
 
     return response.status(200).json(result.rows[0]);
@@ -23,28 +27,44 @@ const viewUserInfo = async (request, response) => {
 
 const editUserInfo = async (request, response) => {
   const {
-    body: { batch, degree },
+    body: { batch, degree, name },
     session: {
       user: { userid },
     },
   } = request;
 
+  if (!batch || !degree || !name)
+    return response.status(400).json(`Please Enter all the fields`);
+
   try {
     const client = await pool.connect();
     await client.query("BEGIN");
 
-    await client.query(
-      "UPDATE UserInfo SET degree = COALESCE($1, degree), batch = COALESCE($2, batch) WHERE userid = $3",
-      [degree, batch, userid]
-    );
+    let res = await client.query(`Select * from UserInfo where userid = $1`, [
+      userid,
+    ]);
+
+    console.log(`Query Returned: ${res.rows[0]}\nRow Count: ${res.rowCount}`);
+
+    if (!res.rowCount)
+      await client.query(
+        `Insert into UserInfo (userid, name, degree, batch) values ($1, $2, $3, $4)`,
+        [userid, name, degree, batch]
+      );
+    else
+      await client.query(
+        "UPDATE UserInfo SET degree = COALESCE($1, degree), batch = COALESCE($2, batch), name = COALESCE($3, name) WHERE userid = $4",
+        [degree, batch, name, userid]
+      );
 
     await client.query(
       "UPDATE Users SET lasteditted = current_timestamp WHERE userid = $1",
       [userid]
     );
+
     await client.query("COMMIT");
 
-    return response.status(200).send("Information Updated Successfully");
+    return response.status(200).json("Information Updated Successfully");
   } catch (error) {
     console.error(error.message);
     await pool.query("ROLLBACK");
