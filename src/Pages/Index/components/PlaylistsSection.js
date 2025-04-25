@@ -3,32 +3,35 @@ import './PlaylistsSection.css';
 
 const playlists = [
     {
-        title: 'Theory of Automata',
-        link: 'https://youtube.com/playlist?list=PLmXKhU9FNesSdCsn6YQqu9DmXRMsYdZ2T&feature=shared',
-        videoId: '9kuynHcM3UA',
-        videos: 112,
-        rating: '5/5',
-        duration: '112 Videos',
-        students: '20K Views',
+        name: 'Programming Fundamentals (PF)',
+        shortForm: 'PF',
+        watchtime: 'Apna College',
+        rating: 4.8,
+        students: '20 Students',
+        playlistLink: 'https://youtube.com/playlist?list=PLfqMhTWNBTe0b2nM6JHVCnAkhQRGiZMSJ&feature=shared',
+        duration: '226 Videos',
+        VideoId: 'z9bZufPHFLU',
     },
     {
-        title: 'Object Oriented Programming',
-        link: 'https://youtube.com/playlist?list=PLISTUNloqsz0z9JJJke7g7PxRLvy6How9&feature=shared',
-        videoId: 'nGJTWaaFdjc',
-        videos: 37,
-        rating: '4.8/5',
-        duration: '37 Videos',
-        students: '35K Views',
+        name: 'Applied Physics (AP)',
+        shortForm: 'AP',
+        watchtime: 'JE CLASSES Meerut',
+        rating: 4.8,
+        students: '20 Students',
+        playlistLink: 'https://youtube.com/playlist?list=PLY8pCdWSlXrT0w1Yu3jU_lTUCkfFKVOm_&feature=shared',
+        duration: '86 Videos',
+        VideoId: 'AquETg8G0es',
     },
     {
-        title: 'Digital Logic Design',
-        link: 'https://youtube.com/playlist?list=PLBlnK6fEyqRjMH3mWf6kwqiTbT798eAOm&feature=shared',
-        videoId: 'M0mx8S05v60',
-        videos: 202,
-        rating: '4.9/5',
-        duration: '202 Videos',
-        students: '18K Views',
-    },
+        name: 'Calculus and Analytical Geometry (CAL)',
+        shortForm: 'CAL',
+        watchtime: 'The Organic Chemistry Tutor',
+        rating: 4.8,
+        students: '20 Students',
+        playlistLink: 'https://youtube.com/playlist?list=PL0o_zxa4K1BWYThyV4T2Allw6zY0jEumv&feature=shared',
+        duration: '332 Videos',
+        VideoId: 'GiCojsAWRj0',
+    }
 ];
 
 const PlaylistsSection = () => (
@@ -39,41 +42,21 @@ const PlaylistsSection = () => (
             </h2>
             <div className="grid-list">
                 {playlists.map((playlist, index) => (
-                    <div key={index} className="course-card">
-                        <a href={playlist.link} target="_blank" rel="noopener noreferrer">
-                            <div className="card-banner">
-                                <img
-                                    src={`https://i.ytimg.com/vi/${playlist.videoId}/hqdefault.jpg`}
-                                    alt={playlist.title}
-                                    className="playlist-thumbnail"
-                                />
-                                <div className="abs-badge">
-                                    <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-                                    <span className="span">{playlist.videos} Videos</span>
-                                </div>
-                            </div>
+                    <div key={index} className="playlist-card stylish-card">
+                        <a href={playlist.playlistLink} target="_blank" rel="noopener noreferrer">
+                            <img
+                                src={`https://i.ytimg.com/vi/${playlist.VideoId}/hqdefault.jpg`}
+                                alt={`Thumbnail for ${playlist.name}`}
+                                className="playlist-thumbnail"
+                            />
                             <div className="card-content">
-                                <h3 className="h3 card-title">{playlist.title}</h3>
-                                <div className="wrapper">
-                                    <div className="rating-wrapper">
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                        <ion-icon name="star"></ion-icon>
-                                    </div>
-                                    <p className="rating-text">({playlist.rating} Rating)</p>
+                                <h3>{playlist.name}</h3>
+                                <p className="creator">{playlist.watchtime}</p>
+                                <p className="rating">{'⭐'.repeat(Math.round(playlist.rating))}</p>
+                                <div className="horizontal-info">
+                                    <p>🎥 {playlist.duration}</p>
+                                    <p>👥 {playlist.students}</p>
                                 </div>
-                                <ul className="card-meta-list">
-                                    <li className="card-meta-item">
-                                        <ion-icon name="library-outline" aria-hidden="true"></ion-icon>
-                                        <span className="span">{playlist.duration}</span>
-                                    </li>
-                                    <li className="card-meta-item">
-                                        <ion-icon name="people-outline" aria-hidden="true"></ion-icon>
-                                        <span className="span">{playlist.students}</span>
-                                    </li>
-                                </ul>
                             </div>
                         </a>
                     </div>
