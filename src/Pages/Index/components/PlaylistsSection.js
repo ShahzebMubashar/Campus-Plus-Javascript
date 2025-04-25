@@ -81,7 +81,7 @@ const PlaylistsSection = () => (
                     </li>
                 ))}
             </ul>
-            <a href="/html/playlist.html" className="btn btn-primary1">
+            <a href="/html/playlist.html" className="btn btn-primary">
                 <span className="span">Browse More Playlists</span>
             </a>
         </div>
