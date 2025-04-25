@@ -148,8 +148,8 @@ function AcademicDashboard() {
 
                             <div className="gpa-courses">
                                 <div className="course-list">
-                                    {courses.map((course, index) => (
-                                        <div key={index} className="course-item">
+                                    {courses.slice(0, 2).map((course, index) => (
+                                        <div key={index} className="course-item" onClick={() => window.location.href = '/course-details'}>
                                             <div className="course-details">
                                                 <span className="course-name">{course.name}</span>
                                                 <div className="course-meta">
@@ -157,7 +157,10 @@ function AcademicDashboard() {
                                                     <span className="course-grade">{course.grade}</span>
                                                 </div>
                                             </div>
-                                            <button className="remove-course" onClick={() => removeCourse(index)}>×</button>
+                                            <button className="remove-course" onClick={(e) => {
+                                                e.stopPropagation();
+                                                removeCourse(index);
+                                            }}>×</button>
                                         </div>
                                     ))}
                                 </div>

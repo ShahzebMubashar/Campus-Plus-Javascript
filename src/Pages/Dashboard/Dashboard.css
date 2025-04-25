@@ -218,8 +218,9 @@
 
 .course-list {
     flex: 1;
-    overflow-y: auto;
-    max-height: 200px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
     margin-bottom: 15px;
 }
 
@@ -229,6 +230,13 @@
     align-items: center;
     padding: 12px 0;
     border-bottom: 1px solid rgba(30, 61, 89, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.course-item:hover {
+    background-color: rgba(3, 98, 199, 0.05);
+    transform: translateX(5px);
 }
 
 .course-details {
