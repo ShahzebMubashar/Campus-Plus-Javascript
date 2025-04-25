@@ -86,6 +86,54 @@ function AcademicDashboard() {
                                 <span>Semester 6</span>
                             </div>
                         </div>
+                        <div className="profile-actions">
+                            <button className="profile-action-btn edit-profile">
+                                <span className="action-icon">✏️</span>
+                                Edit Profile
+                            </button>
+                            <button className="profile-action-btn change-password">
+                                <span className="action-icon">🔒</span>
+                                Change Password
+                            </button>
+                        </div>
+                    </div>
+                </section>
+
+                {/* Upcoming Deadlines */}
+                <section className="deadlines-section">
+                    <div className="section-header">
+                        <h2>⏰ Upcoming Deadlines</h2>
+                        <a href="#" className="view-all">View all</a>
+                    </div>
+                    <div className="deadlines-list">
+                        {[
+                            {
+                                title: 'Database Systems Assignment',
+                                dueDate: '2024-03-15',
+                                course: 'CS-301',
+                                priority: 'high'
+                            },
+                            {
+                                title: 'Software Engineering Project',
+                                dueDate: '2024-03-20',
+                                course: 'CS-401',
+                                priority: 'medium'
+                            }
+                        ].map((deadline, index) => (
+                            <div key={index} className="deadline-card" onClick={() => window.location.href = '/assignment-details'}>
+                                <div className="deadline-content">
+                                    <h3>{deadline.title}</h3>
+                                    <div className="deadline-meta">
+                                        <span className="course-code">{deadline.course}</span>
+                                        <span className="due-date">
+                                            <span className="icon">📅</span>
+                                            {new Date(deadline.dueDate).toLocaleDateString()}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className={`priority-indicator ${deadline.priority}`}></div>
+                            </div>
+                        ))}
                     </div>
                 </section>
 

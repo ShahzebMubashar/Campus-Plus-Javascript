@@ -599,3 +599,119 @@
     transform: translateY(-2px);
     box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);
 }
+
+.profile-actions {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.profile-action-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #f5f7ff 0%, #ffffff 100%);
+    color: #1e3d59;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.profile-action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.action-icon {
+    font-size: 16px;
+}
+
+/* Deadlines Section */
+.deadlines-section {
+    padding: 20px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.deadlines-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.deadline-card {
+    background: #ffffff;
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deadline-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.deadline-content {
+    flex: 1;
+}
+
+.deadline-content h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e3d59;
+    margin-bottom: 8px;
+}
+
+.deadline-meta {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.course-code {
+    background: rgba(3, 98, 199, 0.1);
+    color: #0362c7;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+.due-date {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.priority-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 15px;
+}
+
+.priority-indicator.high {
+    background-color: #ff6b6b;
+    box-shadow: 0 0 8px rgba(255, 107, 107, 0.4);
+}
+
+.priority-indicator.medium {
+    background-color: #ffd166;
+    box-shadow: 0 0 8px rgba(255, 209, 102, 0.4);
+}
+
+.priority-indicator.low {
+    background-color: #06d6a0;
+    box-shadow: 0 0 8px rgba(6, 214, 160, 0.4);
+}
