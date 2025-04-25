@@ -67,7 +67,7 @@ const BlogSection = () => {
                     </div>
                 </div>
 
-                <a href="https://thebrainbytes.blogspot.com/" className="btn btn-primary1">
+                <a href="https://thebrainbytes.blogspot.com/" className="btn btn-primary">
                     <span className="span">View More Blogs</span>
                 </a>
             </div>
