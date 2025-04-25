@@ -24,7 +24,7 @@
 /* Grid List Styling */
 .course .grid-list {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     list-style: none;
     padding: 0;
@@ -40,7 +40,7 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
-    height: 400px;
+    height: 450px;
     margin-bottom: 20px;
 }
 
@@ -49,29 +49,30 @@
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
 }
 
-/* Image Banner as Background */
+.course-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+}
+
+/* Image Banner */
 .card-banner {
     position: relative;
     width: 100%;
-    height: 220px;
-    /* Thumbnail height */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 10px;
+    height: 250px;
     overflow: hidden;
+}
+
+.card-banner img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
     transition: transform 0.3s ease-in-out;
 }
 
-.card-banner:hover {
+.card-banner:hover img {
     transform: scale(1.05);
-}
-
-.card-banner a {
-    display: block;
-    width: 100%;
-    height: 100%;
-    text-decoration: none;
 }
 
 .abs-badge {
@@ -90,18 +91,16 @@
 /* Card Content */
 .card-content {
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - 250px);
 }
 
 .card-title {
     font-size: 18px;
     font-weight: bold;
     color: #333;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.card-title:hover {
-    color: #3b82f6;
+    margin-bottom: 10px;
 }
 
 /* Meta Info */
@@ -110,12 +109,14 @@
     padding: 0;
     display: flex;
     justify-content: space-between;
-    margin-top: 10px;
+    margin-top: auto;
 }
 
 .card-meta-item {
     font-size: 14px;
     color: #666;
+    display: flex;
+    align-items: center;
 }
 
 .card-meta-item ion-icon {
@@ -152,146 +153,25 @@
     will-change: transform, box-shadow;
 }
 
-.btn-primary::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    transition: opacity 0.2s ease;
-    opacity: 0;
-}
-
 .btn-primary:hover {
     transform: translateY(-3px) !important;
     box-shadow: 0 6px 20px rgba(3, 98, 199, 0.3) !important;
 }
 
-.btn-primary:hover::before {
-    opacity: 1;
-}
-
-.btn-primary:active {
-    transform: translateY(-1px) !important;
-    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2) !important;
+@media (max-width: 992px) {
+    .course .grid-list {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
 @media (max-width: 768px) {
+    .course .grid-list {
+        grid-template-columns: 1fr;
+    }
+
     .btn-primary {
         width: 100%;
         padding: 12px 24px;
         font-size: 0.95rem;
     }
-}
-
-.course .grid-list {
-    display: flex;
-    /* Flexbox for horizontal layout */
-    flex-wrap: nowrap;
-    /* Prevent wrapping */
-    gap: 30px;
-    /* Space between cards */
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    overflow-x: auto;
-    /* Enable horizontal scrolling */
-}
-
-/* Add scrollbar styling (optional) */
-.course .grid-list::-webkit-scrollbar {
-    height: 8px;
-    /* Horizontal scrollbar height */
-}
-
-.course .grid-list::-webkit-scrollbar-thumb {
-    background-color: #ccc;
-    /* Scrollbar thumb color */
-    border-radius: 4px;
-}
-
-.course .grid-list::-webkit-scrollbar-track {
-    background-color: #f0f0f0;
-    /* Scrollbar track color */
-}
-
-/* Course Card Styling */
-.course-card {
-    flex: 0 0 auto;
-    /* Prevent cards from stretching */
-    width: 300px;
-    /* Fixed width for each card */
-    position: relative;
-    background-color: hsl(0, 0%, 100%);
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    transition: transform 0.3s, box-shadow 0.3s;
-    cursor: pointer;
-}
-
-/* Hover Effects */
-.course-card:hover {
-    transform: translateY(-10px);
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
-}
-
-/* Thumbnail Styling */
-.card-thumbnail {
-    width: 100%;
-    height: 180px;
-    /* Set a fixed height */
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    border-radius: 10px 10px 0 0;
-}
-
-/* Content Styling */
-.card-content {
-    padding: 15px;
-    text-align: left;
-    /* Align text to the left */
-}
-
-.card-title {
-    font-size: 18px;
-    font-weight: bold;
-    color: #333;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.card-title:hover {
-    color: #3b82f6;
-}
-
-/* Meta Info */
-.card-meta-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    justify-content: space-between;
-    margin-top: 10px;
-}
-
-.card-meta-item {
-    font-size: 14px;
-    color: #666;
-}
-
-.card-meta-item ion-icon {
-    margin-right: 5px;
-}
-
-/* Rating Styling */
-.rating-wrapper ion-icon {
-    color: #ffbf00;
-}
-
-.rating-text {
-    font-size: 14px;
-    color: #555;
 }
