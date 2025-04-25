@@ -547,6 +547,8 @@
     display: flex;
     gap: 20px;
     margin-top: 20px;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .degree-badge {
@@ -609,7 +611,7 @@
 .profile-actions {
     display: flex;
     gap: 10px;
-    margin: 0;
+    margin-left: auto;
 }
 
 .profile-action-btn {

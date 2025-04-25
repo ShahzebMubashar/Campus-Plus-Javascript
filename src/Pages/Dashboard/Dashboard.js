@@ -63,30 +63,14 @@ function AcademicDashboard() {
                     />
                     <div className="user-info">
                         <h1 className="user-name">Shahzeb Mubashar</h1>
-                        <div className="user-details-container">
-                            <div className="user-details">
-                                <div className="user-detail-item">
-                                    <span className="user-detail-icon">📧</span>
-                                    <span>l226734@lhr.nu.edu.pk</span>
-                                </div>
-                                <div className="user-detail-item">
-                                    <span className="user-detail-icon">🎓</span>
-                                    <span>Roll No: 22L-6734</span>
-                                </div>
+                        <div className="user-details">
+                            <div className="user-detail-item">
+                                <span className="user-detail-icon">📧</span>
+                                <span>l226734@lhr.nu.edu.pk</span>
                             </div>
-                            <div className="profile-actions">
-                                <button className="profile-action-btn edit-profile">
-                                    <span className="action-icon">✏️</span>
-                                    Edit Profile
-                                </button>
-                                <button className="profile-action-btn change-password">
-                                    <span className="action-icon">🔒</span>
-                                    Change Password
-                                </button>
-                                <button className="profile-action-btn settings">
-                                    <span className="action-icon">⚙️</span>
-                                    Settings
-                                </button>
+                            <div className="user-detail-item">
+                                <span className="user-detail-icon">🎓</span>
+                                <span>Roll No: 22L-6734</span>
                             </div>
                         </div>
                         <div className="academic-info">
@@ -101,6 +85,20 @@ function AcademicDashboard() {
                             <div className="semester-badge">
                                 <span>📅</span>
                                 <span>Semester 6</span>
+                            </div>
+                            <div className="profile-actions">
+                                <button className="profile-action-btn edit-profile">
+                                    <span className="action-icon">✏️</span>
+                                    Edit Profile
+                                </button>
+                                <button className="profile-action-btn change-password">
+                                    <span className="action-icon">🔒</span>
+                                    Change Password
+                                </button>
+                                <button className="profile-action-btn settings">
+                                    <span className="action-icon">⚙️</span>
+                                    Settings
+                                </button>
                             </div>
                         </div>
                     </div>
