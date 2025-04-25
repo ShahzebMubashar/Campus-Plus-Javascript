@@ -7,9 +7,9 @@ const playlists = [
         shortForm: 'PF',
         watchtime: 'Apna College',
         rating: 4.8,
-        students: '20 Students',
+        views: '1.2M views',
         playlistLink: 'https://youtube.com/playlist?list=PLfqMhTWNBTe0b2nM6JHVCnAkhQRGiZMSJ&feature=shared',
-        duration: '226 Videos',
+        duration: '45 hours',
         VideoId: 'z9bZufPHFLU',
     },
     {
@@ -17,9 +17,9 @@ const playlists = [
         shortForm: 'AP',
         watchtime: 'JE CLASSES Meerut',
         rating: 4.8,
-        students: '20 Students',
+        views: '850K views',
         playlistLink: 'https://youtube.com/playlist?list=PLY8pCdWSlXrT0w1Yu3jU_lTUCkfFKVOm_&feature=shared',
-        duration: '86 Videos',
+        duration: '32 hours',
         VideoId: 'AquETg8G0es',
     },
     {
@@ -27,9 +27,9 @@ const playlists = [
         shortForm: 'CAL',
         watchtime: 'The Organic Chemistry Tutor',
         rating: 4.8,
-        students: '20 Students',
+        views: '2.1M views',
         playlistLink: 'https://youtube.com/playlist?list=PL0o_zxa4K1BWYThyV4T2Allw6zY0jEumv&feature=shared',
-        duration: '332 Videos',
+        duration: '68 hours',
         VideoId: 'GiCojsAWRj0',
     }
 ];
@@ -54,8 +54,8 @@ const PlaylistsSection = () => (
                                 <p className="creator">{playlist.watchtime}</p>
                                 <p className="rating">{'⭐'.repeat(Math.round(playlist.rating))}</p>
                                 <div className="horizontal-info">
-                                    <p>🎥 {playlist.duration}</p>
-                                    <p>👥 {playlist.students}</p>
+                                    <p>⏱️ {playlist.duration}</p>
+                                    <p>👥 {playlist.views}</p>
                                 </div>
                             </div>
                         </a>
