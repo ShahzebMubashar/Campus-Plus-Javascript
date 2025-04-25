@@ -96,6 +96,10 @@ function AcademicDashboard() {
                                 <span className="action-icon">🔒</span>
                                 Change Password
                             </button>
+                            <button className="profile-action-btn settings">
+                                <span className="action-icon">⚙️</span>
+                                Settings
+                            </button>
                         </div>
                     </div>
                 </section>
