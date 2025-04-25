@@ -634,25 +634,26 @@
 }
 
 .eye {
-    width: 16px;
-    height: 16px;
-    background-color: white;
-    border-radius: 50%;
     position: relative;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 50%;
+    display: inline-block;
+    margin: 0 5px;
     overflow: hidden;
-    box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .eyeball {
     position: absolute;
-    width: 8px;
-    height: 8px;
-    background-color: #333;
+    width: 10px;
+    height: 10px;
+    background: #333;
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    transition: transform 0.2s ease;
+    transition: transform 0.1s ease-out;
 }
 
 /* Add nose for more mature look */
@@ -749,6 +750,60 @@
     transition: transform 0.2s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* Character reactions for password validation */
+.animated-character.success {
+    animation: happyJump 0.5s ease;
+}
+
+.animated-character.error {
+    animation: scaredShake 0.5s ease;
+}
+
+@keyframes happyJump {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+@keyframes scaredShake {
+
+    0%,
+    100% {
+        transform: translateX(0) translateY(10px);
+    }
+
+    25% {
+        transform: translateX(-5px) rotate(-5deg) translateY(10px);
+    }
+
+    75% {
+        transform: translateX(5px) rotate(5deg) translateY(10px);
+    }
+}
+
+/* Add blinking animation */
+@keyframes blink {
+
+    0%,
+    100% {
+        transform: scaleY(1);
+    }
+
+    50% {
+        transform: scaleY(0.1);
+    }
+}
+
+.animated-character.blinking .eye {
+    animation: blink 0.3s ease;
+}
+
 /* Add some fun animations when form is submitted */
 .form-button.success~.character-circle-container {
     animation: jump 0.5s ease;
@@ -779,6 +834,66 @@
 
     50% {
         transform: translateX(-50%) translateY(5px) scale(0.95);
+    }
+}
+
+/* Success animation */
+.animated-character.success {
+    animation: happyJump 0.5s ease;
+}
+
+@keyframes happyJump {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-20px);
+    }
+}
+
+.animated-character.success .character-mouth {
+    animation: happyMouth 0.5s ease;
+}
+
+@keyframes happyMouth {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+/* Hide eyes when typing password */
+.hiding-eyes .eye {
+    transform: scaleY(0.1);
+    transition: transform 0.3s ease;
+}
+
+/* Character reactions */
+.animated-character {
+    transition: all 0.3s ease;
+}
+
+.animated-character.success .character-eyes {
+    animation: happyEyes 0.5s ease;
+}
+
+@keyframes happyEyes {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
     }
 }
 

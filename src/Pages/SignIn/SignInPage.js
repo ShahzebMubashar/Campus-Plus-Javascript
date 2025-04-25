@@ -134,6 +134,13 @@ function SignInPage() {
             if (response.ok) {
                 setMessage("Sign in successful!")
                 localStorage.setItem("user", JSON.stringify(data.user))
+                // Animate character on success
+                if (characterRef.current) {
+                    characterRef.current.classList.add("success")
+                    setTimeout(() => {
+                        characterRef.current.classList.remove("success")
+                    }, 1000)
+                }
                 // Animate button before redirect
                 const button = e.target.querySelector(".form-button")
                 button.classList.add("success")
@@ -202,6 +209,58 @@ function SignInPage() {
         }
     }
 
+    // Add this to your existing JavaScript code
+    document.addEventListener('DOMContentLoaded', () => {
+        const character = document.querySelector('.animated-character');
+        const eyes = document.querySelectorAll('.eyeball');
+        const form = document.querySelector('.signin-form');
+        const passwordInput = document.querySelector('input[type="password"]');
+
+        // Eye tracking
+        document.addEventListener('mousemove', (e) => {
+            const rect = character.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+
+            eyes.forEach(eye => {
+                const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
+                const distance = Math.min(3, Math.sqrt(
+                    Math.pow(e.clientX - centerX, 2) +
+                    Math.pow(e.clientY - centerY, 2)
+                ) / 100);
+
+                const x = Math.cos(angle) * distance;
+                const y = Math.sin(angle) * distance;
+
+                eye.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+            });
+        });
+
+        // Blinking animation
+        setInterval(() => {
+            character.classList.add('blinking');
+            setTimeout(() => {
+                character.classList.remove('blinking');
+            }, 300);
+        }, 3000);
+
+        // Password validation animations
+        passwordInput.addEventListener('input', (e) => {
+            if (e.target.value.length > 0) {
+                if (e.target.value.length < 6) {
+                    character.classList.add('error');
+                    setTimeout(() => {
+                        character.classList.remove('error');
+                    }, 500);
+                } else {
+                    character.classList.add('success');
+                    setTimeout(() => {
+                        character.classList.remove('success');
+                    }, 500);
+                }
+            }
+        });
+    });
 
     return (
         <div className="signincontainerfull">
