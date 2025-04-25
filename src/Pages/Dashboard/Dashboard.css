@@ -635,12 +635,15 @@
 .deadlines-section {
     padding: 20px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .deadlines-list {
     display: flex;
     flex-direction: column;
     gap: 15px;
+    width: 100%;
 }
 
 .deadline-card {
@@ -654,6 +657,8 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .deadline-card:hover {
@@ -663,6 +668,7 @@
 
 .deadline-content {
     flex: 1;
+    width: 100%;
 }
 
 .deadline-content h3 {

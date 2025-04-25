@@ -99,6 +99,46 @@ function AcademicDashboard() {
                     </div>
                 </section>
 
+                {/* My Courses */}
+                <section className="courses-section">
+                    <div className="section-header">
+                        <h2>📘 My Courses</h2>
+                        <a href="#" className="view-all">View all</a>
+                    </div>
+                    <div className="courses-grid">
+                        {[
+                            { title: 'Cinema 4D', desc: 'Elements design for websites and apps', progress: '08/12', percent: 66 },
+                            { title: 'UI/UX Design', desc: 'From concept to prototype', progress: '04/15', percent: 27 },
+                            { title: 'Graphic Design', desc: 'Digital computer graphics', progress: '01/10', percent: 10 }
+                        ].map((course, i) => (
+                            <div className="course-card" key={i}>
+                                <div className="course-content">
+                                    <h3>{course.title}</h3>
+                                    <p>{course.desc}</p>
+                                    <div className="progress-container">
+                                        <div className="progress-text">{course.progress}</div>
+                                        <div className="progress-bar">
+                                            <div className="progress-fill" style={{ width: `${course.percent}%` }}></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="course-arrow">
+                                    <svg viewBox="0 0 24 24">
+                                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        ))}
+
+                        <div className="course-card add-card">
+                            <div className="add-content">
+                                <div className="add-icon">+</div>
+                                <div>Add</div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
                 {/* Upcoming Deadlines */}
                 <section className="deadlines-section">
                     <div className="section-header">
@@ -134,47 +174,6 @@ function AcademicDashboard() {
                                 <div className={`priority-indicator ${deadline.priority}`}></div>
                             </div>
                         ))}
-                    </div>
-                </section>
-
-                {/* My Courses */}
-                <section className="courses-section">
-                    <div className="section-header">
-                        <h2>📘 My Courses</h2>
-                        <a href="#" className="view-all">View all</a>
-                    </div>
-
-                    <div className="courses-grid">
-                        {[
-                            { title: 'Cinema 4D', desc: 'Elements design for websites and apps', progress: '08/12', percent: 66 },
-                            { title: 'UI/UX Design', desc: 'From concept to prototype', progress: '04/15', percent: 27 },
-                            { title: 'Graphic Design', desc: 'Digital computer graphics', progress: '01/10', percent: 10 }
-                        ].map((course, i) => (
-                            <div className="course-card" key={i}>
-                                <div className="course-content">
-                                    <h3>{course.title}</h3>
-                                    <p>{course.desc}</p>
-                                    <div className="progress-container">
-                                        <div className="progress-text">{course.progress}</div>
-                                        <div className="progress-bar">
-                                            <div className="progress-fill" style={{ width: `${course.percent}%` }}></div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="course-arrow">
-                                    <svg viewBox="0 0 24 24">
-                                        <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                                    </svg>
-                                </div>
-                            </div>
-                        ))}
-
-                        <div className="course-card add-card">
-                            <div className="add-content">
-                                <div className="add-icon">+</div>
-                                <div>Add</div>
-                            </div>
-                        </div>
                     </div>
                 </section>
 
