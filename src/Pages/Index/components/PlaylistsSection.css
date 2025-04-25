@@ -40,8 +40,10 @@
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: transform 0.3s, box-shadow 0.3s;
     cursor: pointer;
-    height: 450px;
+    height: 500px;
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
 }
 
 .course-card:hover {
@@ -52,7 +54,8 @@
 .course-card a {
     text-decoration: none;
     color: inherit;
-    display: block;
+    display: flex;
+    flex-direction: column;
     height: 100%;
 }
 
@@ -60,8 +63,9 @@
 .card-banner {
     position: relative;
     width: 100%;
-    height: 250px;
+    height: 280px;
     overflow: hidden;
+    border-radius: 10px 10px 0 0;
 }
 
 .card-banner img {
@@ -86,6 +90,7 @@
     font-size: 12px;
     display: flex;
     align-items: center;
+    z-index: 1;
 }
 
 /* Card Content */
@@ -93,7 +98,9 @@
     padding: 20px;
     display: flex;
     flex-direction: column;
-    height: calc(100% - 250px);
+    flex: 1;
+    background: white;
+    border-radius: 0 0 10px 10px;
 }
 
 .card-title {
@@ -110,6 +117,8 @@
     display: flex;
     justify-content: space-between;
     margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
 }
 
 .card-meta-item {

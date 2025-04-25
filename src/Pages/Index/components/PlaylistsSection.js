@@ -5,7 +5,7 @@ const playlists = [
     {
         title: 'Theory of Automata',
         link: 'https://youtube.com/playlist?list=PLmXKhU9FNesSdCsn6YQqu9DmXRMsYdZ2T&feature=shared',
-        thumbnail: `https://img.youtube.com/vi/9kuynHcM3UA/maxresdefault.jpg`,
+        videoId: '9kuynHcM3UA',
         videos: 112,
         rating: '5/5',
         duration: '112 Videos',
@@ -14,7 +14,7 @@ const playlists = [
     {
         title: 'Object Oriented Programming',
         link: 'https://youtube.com/playlist?list=PLISTUNloqsz0z9JJJke7g7PxRLvy6How9&feature=shared',
-        thumbnail: `https://img.youtube.com/vi/nGJTWaaFdjc/maxresdefault.jpg`,
+        videoId: 'nGJTWaaFdjc',
         videos: 37,
         rating: '4.8/5',
         duration: '37 Videos',
@@ -23,7 +23,7 @@ const playlists = [
     {
         title: 'Digital Logic Design',
         link: 'https://youtube.com/playlist?list=PLBlnK6fEyqRjMH3mWf6kwqiTbT798eAOm&feature=shared',
-        thumbnail: `https://img.youtube.com/vi/M0mx8S05v60/maxresdefault.jpg`,
+        videoId: 'M0mx8S05v60',
         videos: 202,
         rating: '4.9/5',
         duration: '202 Videos',
@@ -41,12 +41,21 @@ const PlaylistsSection = () => (
                 {playlists.map((playlist, index) => (
                     <div key={index} className="course-card">
                         <a href={playlist.link} target="_blank" rel="noopener noreferrer">
-                            <figure className="card-banner">
-                                <img src={playlist.thumbnail} alt={playlist.title} />
-                            </figure>
-                            <div className="abs-badge">
-                                <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
-                                <span className="span">{playlist.videos} Videos</span>
+                            <div className="card-banner">
+                                <img
+                                    src={`https://i.ytimg.com/vi/${playlist.videoId}/hqdefault.jpg`}
+                                    alt={playlist.title}
+                                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                                    onError={(e) => {
+                                        console.error('Error loading thumbnail for video:', playlist.videoId);
+                                        e.target.onerror = null;
+                                        e.target.src = 'https://via.placeholder.com/400x225?text=Thumbnail+Not+Available';
+                                    }}
+                                />
+                                <div className="abs-badge">
+                                    <ion-icon name="time-outline" aria-hidden="true"></ion-icon>
+                                    <span className="span">{playlist.videos} Videos</span>
+                                </div>
                             </div>
                             <div className="card-content">
                                 <h3 className="h3 card-title">{playlist.title}</h3>
