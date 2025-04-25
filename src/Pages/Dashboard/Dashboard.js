@@ -61,15 +61,15 @@ function AcademicDashboard() {
                         className="profile-picture"
                     />
                     <div className="user-info">
-                        <h1 className="user-name">John Doe</h1>
+                        <h1 className="user-name">Shahzeb Mubashar</h1>
                         <div className="user-details">
                             <div className="user-detail-item">
                                 <span className="user-detail-icon">📧</span>
-                                <span>john.doe@university.edu</span>
+                                <span>l226734@lhr.nu.edu.pk</span>
                             </div>
                             <div className="user-detail-item">
                                 <span className="user-detail-icon">🎓</span>
-                                <span>Roll No: 2023001</span>
+                                <span>Roll No: 22L-6734</span>
                             </div>
                         </div>
                         <div className="academic-info">
