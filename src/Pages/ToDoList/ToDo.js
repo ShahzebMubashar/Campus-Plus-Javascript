@@ -6,11 +6,16 @@ import Navbar from '../Index/components/Navbar';
 
 function ToDo() {
     const [todos, setTodos] = useState([
-        { id: 1, text: 'Complete Database Assignment', completed: false, priority: 'high', dueDate: '2024-03-15' },
-        { id: 2, text: 'Study for Algorithms Quiz', completed: false, priority: 'medium', dueDate: '2024-03-18' },
-        { id: 3, text: 'Submit Software Engineering Project', completed: true, priority: 'high', dueDate: '2024-03-20' }
+        { id: 1, text: 'Complete Database Assignment', completed: false, priority: 'high', dueDate: '2024-03-15', dueTime: '14:00' },
+        { id: 2, text: 'Study for Algorithms Quiz', completed: false, priority: 'medium', dueDate: '2024-03-18', dueTime: '10:00' },
+        { id: 3, text: 'Submit Software Engineering Project', completed: true, priority: 'high', dueDate: '2024-03-20', dueTime: '23:59' }
     ]);
     const [newTodo, setNewTodo] = useState('');
+    const [dueDate, setDueDate] = useState('');
+    const [dueTime, setDueTime] = useState('');
+    const [priority, setPriority] = useState('medium');
+    const [filter, setFilter] = useState('all');
+    const [sortBy, setSortBy] = useState('date');
 
     const addTodo = (e) => {
         e.preventDefault();
@@ -19,10 +24,14 @@ function ToDo() {
                 id: Date.now(),
                 text: newTodo,
                 completed: false,
-                priority: 'medium',
-                dueDate: new Date().toISOString().split('T')[0]
+                priority: priority,
+                dueDate: dueDate || new Date().toISOString().split('T')[0],
+                dueTime: dueTime || '23:59'
             }]);
             setNewTodo('');
+            setDueDate('');
+            setDueTime('');
+            setPriority('medium');
         }
     };
 
@@ -41,6 +50,29 @@ function ToDo() {
             todo.id === id ? { ...todo, priority } : todo
         ));
     };
+
+    const filteredTodos = todos.filter(todo => {
+        if (filter === 'all') return true;
+        if (filter === 'completed') return todo.completed;
+        if (filter === 'pending') return !todo.completed;
+        if (filter === 'high') return todo.priority === 'high';
+        if (filter === 'medium') return todo.priority === 'medium';
+        if (filter === 'low') return todo.priority === 'low';
+        return true;
+    });
+
+    const sortedTodos = [...filteredTodos].sort((a, b) => {
+        if (sortBy === 'date') {
+            const dateA = new Date(`${a.dueDate}T${a.dueTime}`);
+            const dateB = new Date(`${b.dueDate}T${b.dueTime}`);
+            return dateA - dateB;
+        }
+        if (sortBy === 'priority') {
+            const priorityOrder = { high: 0, medium: 1, low: 2 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        }
+        return 0;
+    });
 
     return (
         <div className="todo-app">
@@ -64,6 +96,27 @@ function ToDo() {
                     </div>
                 </div>
 
+                <div className="filters-section">
+                    <div className="filter-group">
+                        <label>Filter:</label>
+                        <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                            <option value="all">All Tasks</option>
+                            <option value="completed">Completed</option>
+                            <option value="pending">Pending</option>
+                            <option value="high">High Priority</option>
+                            <option value="medium">Medium Priority</option>
+                            <option value="low">Low Priority</option>
+                        </select>
+                    </div>
+                    <div className="filter-group">
+                        <label>Sort By:</label>
+                        <select value={sortBy} onChange={(e) => setSortBy(e.target.value)}>
+                            <option value="date">Due Date</option>
+                            <option value="priority">Priority</option>
+                        </select>
+                    </div>
+                </div>
+
                 <form onSubmit={addTodo} className="todo-form">
                     <div className="input-group">
                         <input
@@ -73,6 +126,27 @@ function ToDo() {
                             placeholder="Add a new task..."
                             className="todo-input"
                         />
+                        <input
+                            type="date"
+                            value={dueDate}
+                            onChange={(e) => setDueDate(e.target.value)}
+                            className="date-input"
+                        />
+                        <input
+                            type="time"
+                            value={dueTime}
+                            onChange={(e) => setDueTime(e.target.value)}
+                            className="time-input"
+                        />
+                        <select
+                            value={priority}
+                            onChange={(e) => setPriority(e.target.value)}
+                            className="priority-select"
+                        >
+                            <option value="low">Low</option>
+                            <option value="medium">Medium</option>
+                            <option value="high">High</option>
+                        </select>
                         <button type="submit" className="add-button">
                             <span className="add-icon">+</span>
                             Add Task
@@ -81,7 +155,7 @@ function ToDo() {
                 </form>
 
                 <div className="todo-list">
-                    {todos.map(todo => (
+                    {sortedTodos.map(todo => (
                         <div key={todo.id} className={`todo-item ${todo.completed ? 'completed' : ''}`}>
                             <div className="todo-content">
                                 <div className="todo-checkbox" onClick={() => toggleTodo(todo.id)}>
@@ -92,7 +166,7 @@ function ToDo() {
                                     <div className="todo-meta">
                                         <span className="due-date">
                                             <span className="icon">📅</span>
-                                            {new Date(todo.dueDate).toLocaleDateString()}
+                                            {new Date(`${todo.dueDate}T${todo.dueTime}`).toLocaleString()}
                                         </span>
                                         <div className="priority-selector">
                                             <button
