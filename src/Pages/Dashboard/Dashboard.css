@@ -10,18 +10,21 @@
 }
 
 .dashboardcontainer {
-    max-width: 1200px;
+    max-width: 100%;
     margin: 0 auto;
     padding: 30px;
 }
 
 /* Header */
 .headermain {
+    padding: 0;
+    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    margin-bottom: 20px;
-    /* width: 100%; */
+    width: 100% !important;
+    gap: 100px;
+
 }
 
 h1 {
