@@ -85,7 +85,7 @@ function AcademicDashboard() {
 
                 </header>
 
-                <div className="divider"></div>
+                {/* <div className="divider"></div> */}
 
                 {/* My Courses */}
                 <section className="courses-section">
