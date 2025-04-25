@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
-
+//  Yelo
 function AcademicDashboard() {
   const [courses, setCourses] = useState([
     { name: "Course 1", credits: 3, grade: "A" },
