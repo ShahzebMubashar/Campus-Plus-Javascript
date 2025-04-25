@@ -95,20 +95,44 @@
 .category .btn {
     display: block;
     margin: 40px auto 0 auto;
-    padding: 12px 24px;
-    background-color: blue;
-    color: hsl(0, 0%, 100%);
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #0362c7 0%, #004494 100%);
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     text-align: center;
-    transition: background-color 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2);
+    position: relative;
     overflow: hidden;
 }
 
+.category .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    transition: opacity 0.3s ease;
+}
+
 .category .btn:hover {
-    background-color: darkblue;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(3, 98, 199, 0.3);
+}
+
+.category .btn:hover::before {
+    opacity: 0;
+}
+
+.category .btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2);
 }
 
 .section-title {
@@ -190,8 +214,9 @@
     }
 
     .category .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
+        width: 100%;
+        padding: 12px 24px;
+        font-size: 0.95rem;
     }
 }
 
