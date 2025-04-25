@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Dashboard.css';
 import Navbar from '../Index/components/Navbar';
 import Shahzebpic from '../../Assets/images/Shahzeb Mubashar (lesser size).webp';
+
 
 function AcademicDashboard() {
     const [courses, setCourses] = useState([
@@ -10,6 +11,7 @@ function AcademicDashboard() {
         { name: 'Course 3', credits: 3, grade: 'A-' }
     ]);
     const [newCourse, setNewCourse] = useState({ name: '', credits: 3, grade: 'A' });
+    const [User, setUser] = useState(null);
 
     const gradePoints = {
         'A+': 4.0, 'A': 4.0, 'A-': 3.7,
@@ -45,6 +47,42 @@ function AcademicDashboard() {
         setCourses(updatedCourses);
     };
 
+    const fetchUserInfo = async () => {
+        try {
+            const res = await fetch(`http://localhost:4000/User/profile`, {
+                credentials: 'include',
+                method: "GET",
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+    
+            // First check if the request was successful
+            if (!res.ok) {
+                console.log(`Error`);
+                throw new Error(`HTTP error! status: ${res.status}`);
+            }
+    
+            // Parse the JSON response
+            const data = await res.json();
+    
+            console.log('GOT FROM BACKEND:', data); // Better logging
+    
+            // Check if data exists and has rows
+            if (data)
+                setUser(data);
+            else
+                setUser(null);
+        } catch (error) {
+            console.error('Error Fetching User Info:', error.message);
+            // You might want to set some error state here
+        }
+    };
+    
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewCourse({ ...newCourse, [name]: name === 'credits' ? parseInt(value) || 0 : value });
@@ -62,15 +100,16 @@ function AcademicDashboard() {
                         className="profile-picture"
                     />
                     <div className="user-info">
-                        <h1 className="user-name">Shahzeb Mubashar</h1>
+                        <h1 className="user-name">{User?.name || 'Loading...'}</h1>
+                        <h5 className="user-name-username">@{User?.username||"Loading..."}</h5>
                         <div className="user-details">
                             <div className="user-detail-item">
                                 <span className="user-detail-icon">📧</span>
-                                <span>l226734@lhr.nu.edu.pk</span>
+                                <span>{User?.email||"Loading..."}</span>
                             </div>
                             <div className="user-detail-item">
                                 <span className="user-detail-icon">🎓</span>
-                                <span>Roll No: 22L-6734</span>
+                                <span>Roll No: {User?.rollnumber||'Loading...'}</span>
                             </div>
                         </div>
                         <div className="academic-info">

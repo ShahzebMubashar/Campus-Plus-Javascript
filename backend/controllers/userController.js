@@ -6,12 +6,16 @@ const viewUserInfo = async (request, response) => {
       user: { userid },
     },
   } = request;
+  console.log(`[ENDPOINT HIT] GET Userinfo\n\n`);
 
   try {
     const result = await pool.query(
-      "SELECT * FROM ViewUserInfo WHERE userid = $1",
+      "SELECT * FROM ViewUserInfo1 WHERE userid = $1",
       [userid]
     );
+
+    console.log(result.rows);
+
     if (!result.rowCount) return response.status(404).send("User Not Found");
 
     return response.status(200).json(result.rows[0]);
