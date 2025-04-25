@@ -14,29 +14,25 @@
     padding: 0;
 }
 
+
 /* Header */
 .headermaindashboard {
-    padding: 0;
-    margin: 0 auto;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     width: 100% !important;
-    gap: 10px;
     background-color: transparent;
-}
-
-h1 {
-    font-size: 24px;
-    font-weight: 600;
-    color: #1e3d59;
+    padding: 0;
+    margin: 0 auto;
+    box-shadow: none;
 }
 
 .search-wrapper {
     display: flex;
     align-items: center;
     gap: 10px;
-    margin-top: 10px;
+    margin-left: 20%;
+    width: 50%;
 }
 
 .search-input-wrapper {
@@ -85,9 +81,19 @@ h1 {
 
 /* Live Broadcasts Header */
 .live-broadcasts-header {
+    display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 16px;
+    width: auto;
+    margin-right: auto;
+}
+
+/* Add a spacer div to maintain proper spacing */
+.headermaindashboard::after {
+    content: '';
+    width: 0;
+    flex: 1;
 }
 
 .live-broadcasts {
