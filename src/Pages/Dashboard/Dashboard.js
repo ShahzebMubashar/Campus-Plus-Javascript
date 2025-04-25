@@ -55,7 +55,7 @@ function AcademicDashboard() {
             <div className="dashboardcontainer">
                 {/* Top Header */}
                 <header className="headermaindashboard">
-                    <section className="header live-broadcasts-header">
+                    <section className="live-broadcasts-header">
                         <h2>Live broadcasts</h2>
                         <div className="live-broadcasts">
                             {['p1', 'p2', 'p3', 'p4', 'p5', 'p6'].map((person, i) => (
