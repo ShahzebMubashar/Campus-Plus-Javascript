@@ -132,20 +132,58 @@
 }
 
 /* Button Styling */
-.btn-primary1 {
-    background-color: #3b82f6;
-    padding: 10px 20px;
-    border-radius: 5px;
+.btn-primary {
+    background: linear-gradient(135deg, #0362c7 0%, #004494 100%);
+    padding: 15px 30px;
+    border-radius: 12px;
     color: white;
     text-decoration: none;
     font-size: 16px;
+    font-weight: 500;
     margin-top: 40px;
     display: inline-block;
-    transition: background-color 0.3s;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2) !important;
+    position: relative;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+    will-change: transform, box-shadow;
 }
 
-.btn-primary1:hover {
-    background-color: #2563eb;
+.btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    transition: opacity 0.2s ease;
+    opacity: 0;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px) !important;
+    box-shadow: 0 6px 20px rgba(3, 98, 199, 0.3) !important;
+}
+
+.btn-primary:hover::before {
+    opacity: 1;
+}
+
+.btn-primary:active {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2) !important;
+}
+
+@media (max-width: 768px) {
+    .btn-primary {
+        width: 100%;
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
 }
 
 .course .grid-list {

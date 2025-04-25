@@ -23,6 +23,7 @@ import PastPapersDetails from '../Pages/Past Papers/PastPaperDetails.js';
 import Datesheet from '../Pages/Datesheet/Datesheet.js';
 import TestSignin from '../Pages/testsignin/page.js'
 import Dashboard from '../Pages/Dashboard/Dashboard.js'
+import ToDo from '../Pages/ToDoList/ToDo.js'
 
 function AppRoutes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -69,6 +70,7 @@ function AppRoutes() {
                 <Route path="/datesheet" element={<Datesheet />} />
                 <Route path="/testsignin" element={<TestSignin />} />
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/todo" element={<ToDo />} />
             </Routes>
         </>
     );

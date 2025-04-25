@@ -38,55 +38,170 @@
 .category-card {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    height: 120px;
-    padding: 10px;
-    border: 1px solid #ddd;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+    align-items: flex-start;
+    height: 160px;
+    padding: 20px;
+    border: 1px solid #e5e7eb;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
+.icon-wrapper {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 2.5rem;
+    color: #0362c7;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
 
-.category-card:is(:hover, :focus-within) {
-    border-color: blue;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+.category-card:hover .icon-wrapper {
+    transform: scale(1.1);
+    opacity: 1;
+}
+
+.features-content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.features-content h3 {
+    margin: 0 0 5px 0;
+    font-size: 1.4em;
+    color: #0a1c2e;
+    text-align: left;
+    padding-right: 50px;
+}
+
+.view-papers-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: auto;
+    padding-top: 15px;
+    border-top: 1px solid #f0f0f0;
+}
+
+.features-content .title-sm1 {
+    font-size: 1rem;
+    color: #555;
+    margin: 0;
+    text-align: right;
+}
+
+.stars {
+    display: flex;
+    gap: 3px;
+}
+
+.star-filled {
+    color: #ffd700;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.star-empty {
+    color: #e5e7eb;
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .star-filled {
+    transform: scale(1.1);
+}
+
+.category-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(3, 98, 199, 0.02) 0%, rgba(0, 68, 148, 0.02) 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.category-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    border-color: #0362c7;
+}
+
+.category-card:hover::before {
+    opacity: 1;
 }
 
 .category-card .title-lg {
-    font-size: 1.3em;
+    font-size: 1.4em;
+    font-weight: 600;
+    color: #1e3d59;
+    margin-bottom: 15px;
+    line-height: 1.4;
 }
 
 .category-card .title-sm {
-
     font-size: 1.1rem;
-    /* Adjust the font size of "View Papers" */
-    color: #555;
+    color: #0362c7;
     margin: 0;
-    /* Remove default margins */
-    text-align: left;
-    /* Align text to the left */
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
 
+.category-card:hover .title-sm {
+    color: #004494;
 }
 
 .category .btn {
     display: block;
     margin: 40px auto 0 auto;
-    padding: 12px 24px;
-    background-color: blue;
-    color: hsl(0, 0%, 100%);
+    padding: 15px 30px;
+    background: linear-gradient(135deg, #0362c7 0%, #004494 100%);
+    color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 12px;
     font-size: 1rem;
+    font-weight: 500;
     cursor: pointer;
     text-align: center;
-    transition: background-color 0.3s;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2);
+    position: relative;
     overflow: hidden;
 }
 
+.category .btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    transition: opacity 0.3s ease;
+}
+
 .category .btn:hover {
-    background-color: darkblue;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(3, 98, 199, 0.3);
+}
+
+.category .btn:hover::before {
+    opacity: 0;
+}
+
+.category .btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2);
 }
 
 .section-title {
@@ -168,8 +283,9 @@
     }
 
     .category .btn {
-        padding: 10px 20px;
-        font-size: 0.9rem;
+        width: 100%;
+        padding: 12px 24px;
+        font-size: 0.95rem;
     }
 }
 
@@ -246,78 +362,5 @@
     .category .btn {
         padding: 6px 12px;
         font-size: 0.75rem;
-    }
-}
-
-/* Stars Styling */
-.stars {
-    display: flex;
-    /* Ensure stars are inline */
-    gap: 2px;
-    /* Spacing between stars */
-    font-size: 1rem;
-    /* Adjust star size */
-    color: #ffc107;
-    /* Yellow color for filled stars */
-}
-
-.star-filled {
-    color: #ffc107;
-    /* Yellow for filled stars */
-}
-
-.star-empty {
-    color: #ddd;
-    /* Light gray for empty stars */
-}
-
-/* Align "View Papers" and stars in one row */
-.view-papers-row {
-    display: flex;
-    /* Use flexbox for horizontal alignment */
-    align-items: center;
-    /* Align stars and text vertically */
-    justify-content: flex-start;
-    /* Align items to the left */
-    gap: 150px;
-    /* Add spacing between stars and "View Papers" */
-    margin-top: auto;
-    /* Push this row to the bottom of the card */
-    text-align: left;
-    /* Align text to the left */
-    padding-top: 10px;
-    /* Optional: Add space above the row */
-}
-
-.features-content h3 {
-    margin: 0 0 5px 0;
-    font-size: 1.4em;
-    color: #0a1c2e;
-    text-align: left;
-}
-
-.features-content .title-sm1 {
-    font-size: 1rem;
-    /* Adjust font size of "View Papers" */
-    color: #555;
-    margin: 0;
-
-    /* Remove unwanted margins */
-    text-align: left;
-    /* Align text to the left */
-}
-
-/* Category Card */
-
-/* Responsive Adjustments */
-@media (max-width: 768px) {
-    .stars {
-        font-size: 0.9rem;
-        /* Adjust size for smaller screens */
-    }
-
-    .view-papers-row {
-        flex-wrap: wrap;
-        /* Allow wrapping on smaller screens */
     }
 }
