@@ -9,9 +9,11 @@
 }
 
 .dashboardcontainer {
-    max-width: 100%;
-    margin: 0 auto;
+    width: 95%;
+    margin: 2% auto;
     padding: 0;
+    border-radius: 10px;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1);
 }
 
 
@@ -23,7 +25,7 @@
     width: 100% !important;
     background-color: transparent;
     padding: 0;
-    margin: 0 auto;
+    margin: -20px auto 0;
     box-shadow: none;
 }
 
@@ -33,6 +35,7 @@
     gap: 10px;
     margin-left: 20%;
     width: 50%;
+    margin-top: -10px;
 }
 
 .search-input-wrapper {
@@ -87,6 +90,7 @@
     gap: 16px;
     width: auto;
     margin-right: auto;
+    margin-top: -10px;
 }
 
 /* Add a spacer div to maintain proper spacing */
