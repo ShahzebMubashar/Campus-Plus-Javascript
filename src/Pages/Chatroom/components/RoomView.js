@@ -462,7 +462,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         const response = await fetch(
           `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
           {
-            method: "PATCH",
+            method: "POST",
             headers: {
               "Content-Type": "application/json",
             },

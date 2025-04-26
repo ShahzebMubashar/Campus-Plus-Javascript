@@ -89,7 +89,7 @@ router.get(
 );
 
 // Post editing routes
-router.patch("/:roomid/posts/:messageid/edit", checkAuthorisation, editPost);
+router.post("/:roomid/posts/:messageid/edit", checkAuthorisation, editPost);
 router.get("/posts/:messageid/edit-history", checkAuthorisation, getPostEditHistory);
 
 // Post pinning routes
