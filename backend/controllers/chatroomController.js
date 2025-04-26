@@ -854,17 +854,22 @@ const searchPosts = async (request, response) => {
     let query = `
       SELECT m.*, u.username, u.rollnumber,
              CASE WHEN pp.pinid IS NOT NULL THEN true ELSE false END as is_pinned,
-             COUNT(DISTINCT pv.userid) as view_count,
-             ts_rank(to_tsvector('english', m.content), plainto_tsquery('english', $1)) as rank
+             COUNT(DISTINCT pv.userid) as view_count
       FROM messages m
       JOIN users u ON m.userid = u.userid
       LEFT JOIN pinned_posts pp ON m.messageid = pp.messageid AND m.roomid = pp.roomid
       LEFT JOIN post_views pv ON m.messageid = pv.messageid
-      WHERE m.roomid = $2
+      WHERE m.roomid = $1
     `;
 
-    const queryParams = [keyword || '', roomid];
-    let paramCount = 2;
+    const queryParams = [roomid];
+    let paramCount = 1;
+
+    if (keyword) {
+      paramCount++;
+      query += ` AND (m.content ILIKE $${paramCount} OR u.username ILIKE $${paramCount})`;
+      queryParams.push(`%${keyword}%`);
+    }
 
     if (username) {
       paramCount++;
@@ -890,8 +895,13 @@ const searchPosts = async (request, response) => {
 
     query += `
       GROUP BY m.messageid, u.username, u.rollnumber, pp.pinid
-      ORDER BY rank DESC, m.posted_at DESC
+      ORDER BY 
+        CASE WHEN pp.pinid IS NOT NULL THEN 0 ELSE 1 END,
+        m.posted_at DESC
     `;
+
+    console.log('Search query:', query);
+    console.log('Query params:', queryParams);
 
     const result = await pool.query(query, queryParams);
 
@@ -907,7 +917,6 @@ const searchPosts = async (request, response) => {
         status: msg.status || "Approved",
         is_pinned: msg.is_pinned,
         view_count: msg.view_count || 0,
-        rank: msg.rank,
       })),
     };
 
