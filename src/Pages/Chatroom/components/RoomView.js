@@ -383,6 +383,35 @@ export default function RoomView({ room, onBack, onLeave }) {
     }
   };
 
+  const handleSharePost = (post) => {
+    const shareUrl = `${window.location.origin}/chatroom/${room.roomid}/messages/${post.messageid}`;
+
+    if (navigator.share) {
+      // Use Web Share API if available
+      navigator.share({
+        title: `Post by ${post.username}`,
+        text: post.content,
+        url: shareUrl,
+      }).catch((error) => {
+        console.error('Error sharing:', error);
+        // Fallback to copying to clipboard
+        copyToClipboard(shareUrl);
+      });
+    } else {
+      // Fallback to copying to clipboard
+      copyToClipboard(shareUrl);
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Link copied to clipboard!');
+    }).catch((error) => {
+      console.error('Error copying to clipboard:', error);
+      alert('Failed to copy link. Please try again.');
+    });
+  };
+
   return (
     <div
       style={{
@@ -788,6 +817,28 @@ export default function RoomView({ room, onBack, onLeave }) {
                 >
                   💬 {post.comments?.length || 0}
                 </button>
+                {post.status === "Approved" && (
+                  <button
+                    onClick={() => handleSharePost(post)}
+                    style={{
+                      padding: "8px 15px",
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                      <polyline points="16 6 12 2 8 6"></polyline>
+                      <line x1="12" y1="2" x2="12" y2="15"></line>
+                    </svg>
+                    Share
+                  </button>
+                )}
               </div>
 
               {activePost === post.messageid && (

@@ -505,6 +505,46 @@ const deletePost = async (request, response) => {
   }
 };
 
+const getPost = async (request, response) => {
+  const {
+    params: { roomid, messageid },
+  } = request;
+
+  try {
+    const postResult = await pool.query(
+      `SELECT m.*, u.username, u.rollnumber, r.name as roomname, r.description
+       FROM messages m
+       JOIN users u ON m.userid = u.userid
+       JOIN rooms r ON m.roomid = r.roomid
+       WHERE m.messageid = $1 AND m.roomid = $2`,
+      [messageid, roomid]
+    );
+
+    if (!postResult.rowCount) {
+      return response.status(404).json("Post not found");
+    }
+
+    const repliesResult = await pool.query(
+      `SELECT r.*, u.username, u.rollnumber
+       FROM replies r
+       JOIN users u ON r.userid = u.userid
+       WHERE r.messageid = $1
+       ORDER BY r.posted_at ASC`,
+      [messageid]
+    );
+
+    const post = {
+      ...postResult.rows[0],
+      replies: repliesResult.rows,
+    };
+
+    return response.status(200).json(post);
+  } catch (error) {
+    console.error("Get post error:", error.message);
+    return response.status(500).json("Server Error");
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -520,4 +560,5 @@ module.exports = {
   changeRoomDetails,
   deleteRoom,
   deletePost,
+  getPost,
 };
