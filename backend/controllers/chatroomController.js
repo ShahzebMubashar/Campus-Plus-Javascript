@@ -645,7 +645,7 @@ const pinPost = async (request, response) => {
   const {
     params: { roomid, messageid },
     session: {
-      user: { role },
+      user: { role, userid },
     },
   } = request;
 
@@ -676,9 +676,9 @@ const pinPost = async (request, response) => {
 
     // Pin the post
     await client.query(
-      `INSERT INTO pinned_posts (messageid, roomid, pinned_by)
+      `INSERT INTO pinned_posts (messageid, roomid, userid)
        VALUES ($1, $2, $3)`,
-      [messageid, roomid, request.session.user.userid]
+      [messageid, roomid, userid]
     );
 
     await client.query("COMMIT");
@@ -841,6 +841,83 @@ const trackPostView = async (request, response) => {
   }
 };
 
+const searchPosts = async (request, response) => {
+  const {
+    params: { roomid },
+    query: { keyword, username, startDate, endDate },
+    session: {
+      user: { role },
+    },
+  } = request;
+
+  try {
+    let query = `
+      SELECT m.*, u.username, u.rollnumber,
+             CASE WHEN pp.pinid IS NOT NULL THEN true ELSE false END as is_pinned,
+             COUNT(DISTINCT pv.userid) as view_count,
+             ts_rank(to_tsvector('english', m.content), plainto_tsquery('english', $1)) as rank
+      FROM messages m
+      JOIN users u ON m.userid = u.userid
+      LEFT JOIN pinned_posts pp ON m.messageid = pp.messageid AND m.roomid = pp.roomid
+      LEFT JOIN post_views pv ON m.messageid = pv.messageid
+      WHERE m.roomid = $2
+    `;
+
+    const queryParams = [keyword || '', roomid];
+    let paramCount = 2;
+
+    if (username) {
+      paramCount++;
+      query += ` AND u.username ILIKE $${paramCount}`;
+      queryParams.push(`%${username}%`);
+    }
+
+    if (startDate) {
+      paramCount++;
+      query += ` AND m.posted_at >= $${paramCount}`;
+      queryParams.push(startDate);
+    }
+
+    if (endDate) {
+      paramCount++;
+      query += ` AND m.posted_at <= $${paramCount}`;
+      queryParams.push(endDate);
+    }
+
+    if (role !== "Admin" && role !== "Moderator") {
+      query += ` AND m.status = 'Approved'`;
+    }
+
+    query += `
+      GROUP BY m.messageid, u.username, u.rollnumber, pp.pinid
+      ORDER BY rank DESC, m.posted_at DESC
+    `;
+
+    const result = await pool.query(query, queryParams);
+
+    const structuredResponse = {
+      roomid,
+      messages: result.rows.map((msg) => ({
+        messageid: msg.messageid,
+        userid: msg.userid,
+        username: msg.username,
+        rollnumber: msg.rollnumber,
+        content: msg.content,
+        posted_at: msg.posted_at,
+        status: msg.status || "Approved",
+        is_pinned: msg.is_pinned,
+        view_count: msg.view_count || 0,
+        rank: msg.rank,
+      })),
+    };
+
+    return response.status(200).json(structuredResponse);
+  } catch (error) {
+    console.error("Search posts error:", error.message);
+    return response.status(500).json("Server Error");
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -864,4 +941,5 @@ module.exports = {
   createPoll,
   votePoll,
   trackPostView,
+  searchPosts,
 };
