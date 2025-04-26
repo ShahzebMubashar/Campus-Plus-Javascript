@@ -91,7 +91,7 @@ const getRoomMessages = async (req, res) => {
         rollnumber: msg.rollnumber,
         content: msg.content,
         posted_at: msg.posted_at,
-        status: msg.status || 'Approved',
+        status: msg.status || "Approved",
         comments: commentsResult.rows
           .filter((comment) => comment.messageid === msg.messageid)
           .map((comment) => ({
@@ -270,10 +270,16 @@ const processPost = async (request, response) => {
 
     await client.query("BEGIN");
 
-    res = await client.query(
-      `Update Messages set status = $1 where messageid = $2 and roomid = $3`,
-      [status, messageid, roomid]
-    );
+    if (status == "Rejected")
+      res = await client.query(
+        `Delete from Messages where messageid = $1 and roomid = $2`,
+        [messageid, roomid]
+      );
+    else
+      res = await client.query(
+        `Update Messages set status = $1 where messageid = $2 and roomid = $3`,
+        [status, messageid, roomid]
+      );
 
     await client.query("COMMIT");
 
