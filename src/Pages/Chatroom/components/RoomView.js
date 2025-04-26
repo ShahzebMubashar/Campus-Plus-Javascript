@@ -587,408 +587,456 @@ export default function RoomView({ room, onBack, onLeave }) {
   }, [activePost]);
 
   return (
-    <div
-      style={{
-        maxWidth: "1200px",
-        margin: "0 auto",
+    <div style={{
+      display: "flex",
+      minHeight: "100vh",
+      backgroundColor: "#f0f2f5",
+      position: "relative",
+      paddingLeft: "280px"
+    }}>
+      {/* Sidebar */}
+      <div style={{
+        width: "280px",
+        backgroundColor: "#1a2236",
+        color: "white",
         padding: "20px",
-        fontFamily: "Arial, sans-serif",
-      }}
-    >
-      {/* Header with buttons */}
-      <div
-        style={{
+        position: "fixed",
+        height: "100vh",
+        overflowY: "auto",
+        left: 0,
+        top: 0,
+        zIndex: 1000,
+        boxShadow: "2px 0 5px rgba(0,0,0,0.1)"
+      }}>
+        {/* Profile Section */}
+        <div style={{
+          marginBottom: "30px",
           display: "flex",
-          justifyContent: "space-between",
           alignItems: "center",
-          padding: "10px",
-          backgroundColor: "#f5f5f5",
-          borderBottom: "1px solid #ddd",
-          marginBottom: "20px",
-          borderRadius: "8px",
-        }}
-      >
-        <button
-          onClick={onBack}
-          style={{
-            padding: "10px 15px",
-            backgroundColor: "#6c757d",
-            color: "white",
-            border: "none",
-            borderRadius: "4px",
-            cursor: "pointer",
-            fontSize: "16px",
-          }}
-        >
-          ← Back to Rooms
-        </button>
-
-        <div>
-          <button
-            onClick={handleLeaveRoom}
-            style={{
-              padding: "10px 15px",
-              backgroundColor: "#dc3545",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
-          >
-            🚪 Leave Room
-          </button>
-        </div>
-      </div>
-
-      {/* Room Info Section */}
-      <div
-        style={{
-          backgroundColor: "white",
-          padding: "20px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          marginBottom: "20px",
-          position: "relative",
-        }}
-      >
-        {userRole === "Admin" && !isEditingRoom && (
-          <div
-            style={{
-              position: "absolute",
-              top: "20px",
-              right: "20px",
-              display: "flex",
-              gap: "10px",
-            }}
-          >
-            <button
-              onClick={() => setIsEditingRoom(true)}
-              style={{
-                padding: "8px 15px",
-                backgroundColor: "#007bff",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "14px",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-              }}
-            >
-              ✏️ Edit Room
-            </button>
-            <button
-              onClick={handleDeleteRoom}
-              style={{
-                padding: "8px 15px",
-                backgroundColor: "#dc3545",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "14px",
-                display: "flex",
-                alignItems: "center",
-                gap: "5px",
-              }}
-            >
-              🗑️ Delete Room
-            </button>
+          gap: "15px"
+        }}>
+          <div style={{
+            width: "50px",
+            height: "50px",
+            borderRadius: "50%",
+            overflow: "hidden"
+          }}>
+            <img
+              src={`https://ui-avatars.com/api/?name=User&background=random`}
+              alt="User Avatar"
+              style={{ width: "100%", height: "100%", objectFit: "cover" }}
+            />
           </div>
-        )}
-
-        {isEditingRoom ? (
           <div>
-            <input
-              type="text"
-              value={editedRoomName}
-              onChange={(e) => setEditedRoomName(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "12px",
-                marginBottom: "15px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "20px",
-                fontWeight: "bold",
-              }}
-            />
-            <textarea
-              value={editedRoomDescription}
-              onChange={(e) => setEditedRoomDescription(e.target.value)}
-              style={{
-                width: "100%",
-                height: "120px",
-                padding: "12px",
-                marginBottom: "20px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                resize: "vertical",
-                fontSize: "16px",
-              }}
-            />
-            <div
-              style={{
-                display: "flex",
-                gap: "10px",
-                justifyContent: "flex-end",
-              }}
-            >
-              <button
-                onClick={() => {
-                  setIsEditingRoom(false);
-                  setEditedRoomName(room.roomname);
-                  setEditedRoomDescription(room.description);
-                }}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#6c757d",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleUpdateRoom}
-                style={{
-                  padding: "10px 20px",
-                  backgroundColor: "#28a745",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "4px",
-                  cursor: "pointer",
-                }}
-              >
-                Save Changes
-              </button>
-            </div>
+            <h3 style={{
+              margin: "0",
+              fontSize: "1rem",
+              color: "#fff"
+            }}>Welcome</h3>
+            <p style={{
+              margin: "5px 0 0 0",
+              fontSize: "0.8rem",
+              color: "rgba(255,255,255,0.7)"
+            }}>Campus+ Member</p>
           </div>
-        ) : (
-          <>
-            <h1 style={{ marginTop: 0, color: "#333" }}>{room.roomname}</h1>
-            <div style={{ color: "#666", marginBottom: "15px" }}>
-              Created {new Date(room.created_at).toLocaleDateString()}
-            </div>
-            <div
+        </div>
+
+        {/* Navigation Links */}
+        <div style={{
+          marginBottom: "30px",
+          display: "flex",
+          flexDirection: "column",
+          gap: "10px"
+        }}>
+          <a href="/profile" style={{
+            padding: "12px 15px",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            fontSize: "0.9rem"
+          }}>
+            👤 Profile
+          </a>
+          <a href="/settings" style={{
+            padding: "12px 15px",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            fontSize: "0.9rem"
+          }}>
+            ⚙️ Settings
+          </a>
+          <a href="/notifications" style={{
+            padding: "12px 15px",
+            backgroundColor: "rgba(255,255,255,0.1)",
+            color: "white",
+            textDecoration: "none",
+            borderRadius: "8px",
+            display: "flex",
+            alignItems: "center",
+            gap: "10px",
+            fontSize: "0.9rem"
+          }}>
+            🔔 Notifications
+          </a>
+        </div>
+
+        {/* Groups Navigation */}
+        <div style={{ marginBottom: "30px" }}>
+          <h3 style={{
+            fontSize: "0.9rem",
+            color: "rgba(255,255,255,0.9)",
+            marginBottom: "15px",
+            textTransform: "uppercase",
+            letterSpacing: "1px"
+          }}>Groups</h3>
+          <div style={{
+            display: "flex",
+            gap: "10px",
+            marginBottom: "15px"
+          }}>
+            <button
+              onClick={() => window.location.href = '/chatroom'}
               style={{
-                backgroundColor: "#f9f9f9",
-                padding: "15px",
-                borderRadius: "6px",
-                borderLeft: "4px solid #28a745",
+                flex: 1,
+                padding: "10px",
+                backgroundColor: "rgba(255,255,255,0.1)",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "14px"
               }}
             >
-              <h2 style={{ marginTop: 0, color: "#444" }}>About</h2>
-              <p style={{ color: "#555", lineHeight: "1.5" }}>
-                {room.description}
+              All Groups
+            </button>
+            <button
+              onClick={() => window.location.href = '/chatroom/my-groups'}
+              style={{
+                flex: 1,
+                padding: "10px",
+                backgroundColor: "rgba(255,255,255,0.2)",
+                color: "white",
+                border: "none",
+                borderRadius: "8px",
+                cursor: "pointer",
+                fontSize: "14px"
+              }}
+            >
+              My Groups
+            </button>
+          </div>
+        </div>
+
+        {/* Room Info (only show when in a room) */}
+        {room && (
+          <>
+            <div style={{ marginBottom: "20px" }}>
+              <div style={{
+                width: "80px",
+                height: "80px",
+                borderRadius: "50%",
+                overflow: "hidden",
+                margin: "0 auto 15px"
+              }}>
+                <img
+                  src={`https://ui-avatars.com/api/?name=${room.roomname}&background=random`}
+                  alt="Room Avatar"
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+              <h2 style={{
+                textAlign: "center",
+                fontSize: "1.2rem",
+                margin: "0 0 5px 0",
+                color: "#fff"
+              }}>{room.roomname}</h2>
+              <p style={{
+                textAlign: "center",
+                fontSize: "0.9rem",
+                color: "rgba(255,255,255,0.7)",
+                margin: "0 0 15px 0"
+              }}>
+                Created {new Date(room.created_at).toLocaleDateString()}
               </p>
+            </div>
+
+            <div style={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px"
+            }}>
+              <button
+                onClick={onBack}
+                style={{
+                  padding: "10px 15px",
+                  backgroundColor: "rgba(255,255,255,0.1)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}
+              >
+                ← Back to Rooms
+              </button>
+
+              <button
+                onClick={handleLeaveRoom}
+                style={{
+                  padding: "10px 15px",
+                  backgroundColor: "rgba(220,53,69,0.8)",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "8px",
+                  cursor: "pointer",
+                  fontSize: "14px",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px"
+                }}
+              >
+                🚪 Leave Room
+              </button>
             </div>
           </>
         )}
       </div>
 
-      {/* Search Section */}
-      <div className="search-section" style={{
-        backgroundColor: "white",
+      {/* Main Content */}
+      <div style={{
+        flex: 1,
         padding: "20px",
-        borderRadius: "8px",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-        marginBottom: "20px"
+        maxWidth: "1200px",
+        margin: "0 auto",
+        width: "100%"
       }}>
-        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-          <input
-            type="text"
-            placeholder="Search posts..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            style={{
-              flex: 2,
-              padding: "12px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              fontSize: "16px"
-            }}
-          />
-          <input
-            type="text"
-            placeholder="Filter by username..."
-            value={searchUsername}
-            onChange={(e) => setSearchUsername(e.target.value)}
-            style={{
-              flex: 1,
-              padding: "12px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              fontSize: "16px"
-            }}
-          />
-          <input
-            type="date"
-            value={searchDate}
-            onChange={(e) => setSearchDate(e.target.value)}
-            style={{
-              padding: "12px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              fontSize: "16px"
-            }}
-          />
-          <button
-            onClick={handleSearch}
-            disabled={isSearching}
-            style={{
-              padding: "12px 20px",
-              backgroundColor: "#28a745",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "16px",
-              opacity: isSearching ? 0.7 : 1
-            }}
-          >
-            {isSearching ? "Searching..." : "Search"}
-          </button>
-          <button
-            onClick={() => {
-              setSearchQuery("");
-              setSearchUsername("");
-              setSearchDate("");
-              fetchPosts();
-            }}
-            style={{
-              padding: "12px 20px",
-              backgroundColor: "#6c757d",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "16px"
-            }}
-          >
-            Clear
-          </button>
-        </div>
-      </div>
-
-      {/* Create Post Section */}
-      <div
-        style={{
+        {/* Search Section */}
+        <div className="search-section" style={{
           backgroundColor: "white",
           padding: "20px",
           borderRadius: "8px",
           boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          marginBottom: "20px",
-        }}
-      >
-        <div style={{ display: "flex", gap: "10px" }}>
-          <input
-            type="text"
-            placeholder="What's on your mind?"
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-            style={{
-              flex: 1,
-              padding: "12px",
-              border: "1px solid #ddd",
-              borderRadius: "4px",
-              fontSize: "16px",
-            }}
-          />
-          <button
-            onClick={handleCreatePost}
-            style={{
-              padding: "12px 20px",
-              backgroundColor: "#28a745",
-              color: "white",
-              border: "none",
-              borderRadius: "4px",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}
-          >
-            Post
-          </button>
-        </div>
-      </div>
-
-      {/* Posts Section */}
-      <div>
-        {posts.length > 0 ? (
-          posts.map((post) => (
-            <div
-              key={post.messageid}
+          marginBottom: "20px"
+        }}>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+            <input
+              type="text"
+              placeholder="Search posts..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
               style={{
-                backgroundColor: post.status === "Pending" ? "#f5f5f5" : "white",
-                padding: "20px",
-                borderRadius: "8px",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                marginBottom: "20px",
-                borderLeft: post.status === "Pending" ? "4px solid #6c757d" : "none",
-                position: "relative"
+                flex: 2,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Filter by username..."
+              value={searchUsername}
+              onChange={(e) => setSearchUsername(e.target.value)}
+              style={{
+                flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
+              }}
+            />
+            <input
+              type="date"
+              value={searchDate}
+              onChange={(e) => setSearchDate(e.target.value)}
+              style={{
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
+              }}
+            />
+            <button
+              onClick={handleSearch}
+              disabled={isSearching}
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
+                opacity: isSearching ? 0.7 : 1
               }}
             >
-              <div style={{ marginBottom: "10px" }}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                    <span style={{ fontWeight: "bold", color: "#333" }}>
-                      {post.username}
-                    </span>
-                    {post.is_pinned && (
-                      <span style={{
-                        backgroundColor: "#f8f9fa",
-                        border: "1px solid #ddd",
-                        color: "#666",
-                        padding: "2px 8px",
-                        borderRadius: "12px",
-                        fontSize: "12px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "4px"
-                      }}>
-                        📌 Pinned
+              {isSearching ? "Searching..." : "Search"}
+            </button>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setSearchUsername("");
+                setSearchDate("");
+                fetchPosts();
+              }}
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#6c757d",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px"
+              }}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+
+        {/* Create Post Section */}
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            marginBottom: "20px",
+          }}
+        >
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="text"
+              placeholder="What's on your mind?"
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              style={{
+                flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px",
+              }}
+            />
+            <button
+              onClick={handleCreatePost}
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Post
+            </button>
+          </div>
+        </div>
+
+        {/* Posts Section */}
+        <div>
+          {posts.length > 0 ? (
+            posts.map((post) => (
+              <div
+                key={post.messageid}
+                style={{
+                  backgroundColor: post.status === "Pending" ? "#f5f5f5" : "white",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  marginBottom: "20px",
+                  borderLeft: post.status === "Pending" ? "4px solid #6c757d" : "none",
+                  position: "relative"
+                }}
+              >
+                <div style={{ marginBottom: "10px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                    }}
+                  >
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <span style={{ fontWeight: "bold", color: "#333" }}>
+                        {post.username}
                       </span>
-                    )}
-                    {post.status === "Pending" && (
-                      <span style={{
-                        backgroundColor: "#6c757d",
-                        color: "white",
-                        padding: "2px 8px",
-                        borderRadius: "12px",
-                        fontSize: "12px",
-                      }}>
-                        Pending
-                      </span>
-                    )}
-                  </div>
-                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
-                    {post.status === "Pending" && (userRole === "Admin" || userRole === "Moderator") && (
-                      <div style={{ display: "flex", gap: "5px" }}>
+                      {post.is_pinned && (
+                        <span style={{
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          color: "#666",
+                          padding: "2px 8px",
+                          borderRadius: "12px",
+                          fontSize: "12px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "4px"
+                        }}>
+                          📌 Pinned
+                        </span>
+                      )}
+                      {post.status === "Pending" && (
+                        <span style={{
+                          backgroundColor: "#6c757d",
+                          color: "white",
+                          padding: "2px 8px",
+                          borderRadius: "12px",
+                          fontSize: "12px",
+                        }}>
+                          Pending
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                      {post.status === "Pending" && (userRole === "Admin" || userRole === "Moderator") && (
+                        <div style={{ display: "flex", gap: "5px" }}>
+                          <button
+                            onClick={() => handleProcessPost(post.messageid, "Approved")}
+                            style={{
+                              padding: "5px 10px",
+                              backgroundColor: "#28a745",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "12px",
+                            }}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => handleProcessPost(post.messageid, "Rejected")}
+                            style={{
+                              padding: "5px 10px",
+                              backgroundColor: "#dc3545",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "12px",
+                            }}
+                          >
+                            Reject
+                          </button>
+                        </div>
+                      )}
+                      {post.status === "Approved" && userRole === "Admin" && (
                         <button
-                          onClick={() => handleProcessPost(post.messageid, "Approved")}
-                          style={{
-                            padding: "5px 10px",
-                            backgroundColor: "#28a745",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                            fontSize: "12px",
-                          }}
-                        >
-                          Approve
-                        </button>
-                        <button
-                          onClick={() => handleProcessPost(post.messageid, "Rejected")}
+                          onClick={() => handleDeletePost(post.messageid)}
                           style={{
                             padding: "5px 10px",
                             backgroundColor: "#dc3545",
@@ -999,101 +1047,49 @@ export default function RoomView({ room, onBack, onLeave }) {
                             fontSize: "12px",
                           }}
                         >
-                          Reject
+                          Delete
                         </button>
-                      </div>
-                    )}
-                    {post.status === "Approved" && userRole === "Admin" && (
-                      <button
-                        onClick={() => handleDeletePost(post.messageid)}
-                        style={{
-                          padding: "5px 10px",
-                          backgroundColor: "#dc3545",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontSize: "12px",
-                        }}
-                      >
-                        Delete
-                      </button>
-                    )}
-                    <span style={{ color: "#666" }}>
-                      {(() => {
-                        const postDate = new Date(post.posted_at);
-                        const today = new Date();
-                        const yesterday = new Date();
-                        yesterday.setDate(yesterday.getDate() - 1);
+                      )}
+                      <span style={{ color: "#666" }}>
+                        {(() => {
+                          const postDate = new Date(post.posted_at);
+                          const today = new Date();
+                          const yesterday = new Date();
+                          yesterday.setDate(yesterday.getDate() - 1);
 
-                        if (
-                          postDate.getDate() === today.getDate() &&
-                          postDate.getMonth() === today.getMonth() &&
-                          postDate.getFullYear() === today.getFullYear()
-                        ) {
-                          return `Today, ${postDate.toLocaleTimeString()}`;
-                        } else if (
-                          postDate.getDate() === yesterday.getDate() &&
-                          postDate.getMonth() === yesterday.getMonth() &&
-                          postDate.getFullYear() === yesterday.getFullYear()
-                        ) {
-                          return "Yesterday";
-                        }
-                        return postDate.toLocaleDateString();
-                      })()}
-                    </span>
+                          if (
+                            postDate.getDate() === today.getDate() &&
+                            postDate.getMonth() === today.getMonth() &&
+                            postDate.getFullYear() === today.getFullYear()
+                          ) {
+                            return `Today, ${postDate.toLocaleTimeString()}`;
+                          } else if (
+                            postDate.getDate() === yesterday.getDate() &&
+                            postDate.getMonth() === yesterday.getMonth() &&
+                            postDate.getFullYear() === yesterday.getFullYear()
+                          ) {
+                            return "Yesterday";
+                          }
+                          return postDate.toLocaleDateString();
+                        })()}
+                      </span>
+                    </div>
+                  </div>
+                  <div style={{ marginTop: "5px", color: "#444" }}>
+                    {highlightText(post.content, searchQuery)}
                   </div>
                 </div>
-                <div style={{ marginTop: "5px", color: "#444" }}>
-                  {highlightText(post.content, searchQuery)}
-                </div>
-              </div>
 
-              <div
-                style={{
-                  display: "flex",
-                  gap: "10px",
-                  borderTop: "1px solid #eee",
-                  paddingTop: "15px",
-                }}
-              >
-                <button
-                  onClick={() => handleLike(post.messageid)}
+                <div
                   style={{
-                    padding: "8px 15px",
-                    backgroundColor: "#f8f9fa",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    cursor: "pointer",
                     display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
+                    gap: "10px",
+                    borderTop: "1px solid #eee",
+                    paddingTop: "15px",
                   }}
                 >
-                  👍 {post.likeCount || 0}
-                </button>
-                <button
-                  onClick={() =>
-                    setActivePost(
-                      activePost === post.messageid ? null : post.messageid
-                    )
-                  }
-                  style={{
-                    padding: "8px 15px",
-                    backgroundColor: "#f8f9fa",
-                    border: "1px solid #ddd",
-                    borderRadius: "4px",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "5px",
-                  }}
-                >
-                  💬 {post.comments?.length || 0}
-                </button>
-                {post.status === "Approved" && (
                   <button
-                    onClick={() => handleSharePost(post)}
+                    onClick={() => handleLike(post.messageid)}
                     style={{
                       padding: "8px 15px",
                       backgroundColor: "#f8f9fa",
@@ -1105,133 +1101,169 @@ export default function RoomView({ room, onBack, onLeave }) {
                       gap: "5px",
                     }}
                   >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
-                      <polyline points="16 6 12 2 8 6"></polyline>
-                      <line x1="12" y1="2" x2="12" y2="15"></line>
-                    </svg>
-                    Share
+                    👍 {post.likeCount || 0}
                   </button>
-                )}
-              </div>
-
-              {activePost === post.messageid && (
-                <div
-                  style={{
-                    marginTop: "15px",
-                    borderTop: "1px solid #eee",
-                    paddingTop: "15px",
-                  }}
-                >
-                  {post.comments?.length > 0 ? (
-                    post.comments.map((comment) => (
-                      <Comment
-                        key={comment.commentid}
-                        comment={comment}
-                        room={room}
-                        fetchPosts={fetchPosts}
-                      />
-                    ))
-                  ) : (
-                    <p style={{ color: "#666", textAlign: "center" }}>
-                      No comments yet
-                    </p>
-                  )}
-                  <div
-                    style={{ display: "flex", gap: "10px", marginTop: "15px" }}
-                  >
-                    <input
-                      type="text"
-                      placeholder="Write a comment..."
-                      value={newComment}
-                      onChange={(e) => setNewComment(e.target.value)}
-                      style={{
-                        flex: 1,
-                        padding: "10px",
-                        border: "1px solid #ddd",
-                        borderRadius: "4px",
-                      }}
-                    />
-                    <button
-                      onClick={() => handleComment(post.messageid)}
-                      style={{
-                        padding: "10px 15px",
-                        backgroundColor: "#28a745",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      Add Comment
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {post.status === "Approved" && (
-                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-                  {(userRole === "Admin" || post.userid === userid) && (
-                    <button
-                      onClick={() => handleEditPost(post.messageid, post.content)}
-                      style={{
-                        padding: "5px 10px",
-                        backgroundColor: "#f8f9fa",
-                        border: "1px solid #ddd",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontSize: "12px",
-                      }}
-                    >
-                      ✏️ Edit
-                    </button>
-                  )}
-                  {(userRole === "Admin" || userRole === "Moderator") && (
-                    <button
-                      onClick={() => handlePinPost(post.messageid)}
-                      style={{
-                        padding: "5px 10px",
-                        backgroundColor: "#f8f9fa",
-                        border: "1px solid #ddd",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        fontSize: "12px",
-                      }}
-                    >
-                      📌 {post.is_pinned ? "Unpin" : "Pin"}
-                    </button>
-                  )}
                   <button
-                    onClick={() => handleReportPost(post.messageid)}
+                    onClick={() =>
+                      setActivePost(
+                        activePost === post.messageid ? null : post.messageid
+                      )
+                    }
                     style={{
-                      padding: "5px 10px",
+                      padding: "8px 15px",
                       backgroundColor: "#f8f9fa",
                       border: "1px solid #ddd",
                       borderRadius: "4px",
                       cursor: "pointer",
-                      fontSize: "12px",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
                   >
-                    ⚠️ Report
+                    💬 {post.comments?.length || 0}
                   </button>
+                  {post.status === "Approved" && (
+                    <button
+                      onClick={() => handleSharePost(post)}
+                      style={{
+                        padding: "8px 15px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
+                      }}
+                    >
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                        <polyline points="16 6 12 2 8 6"></polyline>
+                        <line x1="12" y1="2" x2="12" y2="15"></line>
+                      </svg>
+                      Share
+                    </button>
+                  )}
                 </div>
-              )}
+
+                {activePost === post.messageid && (
+                  <div
+                    style={{
+                      marginTop: "15px",
+                      borderTop: "1px solid #eee",
+                      paddingTop: "15px",
+                    }}
+                  >
+                    {post.comments?.length > 0 ? (
+                      post.comments.map((comment) => (
+                        <Comment
+                          key={comment.commentid}
+                          comment={comment}
+                          room={room}
+                          fetchPosts={fetchPosts}
+                        />
+                      ))
+                    ) : (
+                      <p style={{ color: "#666", textAlign: "center" }}>
+                        No comments yet
+                      </p>
+                    )}
+                    <div
+                      style={{ display: "flex", gap: "10px", marginTop: "15px" }}
+                    >
+                      <input
+                        type="text"
+                        placeholder="Write a comment..."
+                        value={newComment}
+                        onChange={(e) => setNewComment(e.target.value)}
+                        style={{
+                          flex: 1,
+                          padding: "10px",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                        }}
+                      />
+                      <button
+                        onClick={() => handleComment(post.messageid)}
+                        style={{
+                          padding: "10px 15px",
+                          backgroundColor: "#28a745",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                        }}
+                      >
+                        Add Comment
+                      </button>
+                    </div>
+                  </div>
+                )}
+
+                {post.status === "Approved" && (
+                  <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                    {(userRole === "Admin" || post.userid === userid) && (
+                      <button
+                        onClick={() => handleEditPost(post.messageid, post.content)}
+                        style={{
+                          padding: "5px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                        }}
+                      >
+                        ✏️ Edit
+                      </button>
+                    )}
+                    {(userRole === "Admin" || userRole === "Moderator") && (
+                      <button
+                        onClick={() => handlePinPost(post.messageid)}
+                        style={{
+                          padding: "5px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                        }}
+                      >
+                        📌 {post.is_pinned ? "Unpin" : "Pin"}
+                      </button>
+                    )}
+                    <button
+                      onClick={() => handleReportPost(post.messageid)}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                      }}
+                    >
+                      ⚠️ Report
+                    </button>
+                  </div>
+                )}
+              </div>
+            ))
+          ) : (
+            <div
+              style={{
+                backgroundColor: "white",
+                padding: "40px 20px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                textAlign: "center",
+                color: "#666",
+              }}
+            >
+              {isSearching ? "No matching posts found" : "No posts yet. Be the first to post something!"}
             </div>
-          ))
-        ) : (
-          <div
-            style={{
-              backgroundColor: "white",
-              padding: "40px 20px",
-              borderRadius: "8px",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-              textAlign: "center",
-              color: "#666",
-            }}
-          >
-            {isSearching ? "No matching posts found" : "No posts yet. Be the first to post something!"}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   );
