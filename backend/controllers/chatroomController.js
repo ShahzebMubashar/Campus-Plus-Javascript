@@ -91,6 +91,7 @@ const getRoomMessages = async (req, res) => {
         rollnumber: msg.rollnumber,
         content: msg.content,
         posted_at: msg.posted_at,
+        status: msg.status || 'Approved',
         comments: commentsResult.rows
           .filter((comment) => comment.messageid === msg.messageid)
           .map((comment) => ({
