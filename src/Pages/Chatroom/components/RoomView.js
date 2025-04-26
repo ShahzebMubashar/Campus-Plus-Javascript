@@ -500,8 +500,6 @@ export default function RoomView({ room, onBack, onLeave }) {
       );
 
       if (response.ok) {
-        const data = await response.json();
-        alert(data);
         fetchPosts();
       } else {
         const errorData = await response.json();
