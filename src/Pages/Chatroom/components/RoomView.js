@@ -121,6 +121,11 @@ export default function RoomView({ room, onBack, onLeave }) {
   );
   const [userRole, setUserRole] = useState("");
   const [userid, setUserid] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchUsername, setSearchUsername] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     fetchUserInfo();
@@ -497,12 +502,12 @@ export default function RoomView({ room, onBack, onLeave }) {
       if (response.ok) {
         fetchPosts();
       } else {
-        const data = await response.json();
-        alert(data.error || "Failed to pin/unpin post");
+        const errorData = await response.json();
+        alert(errorData.error || "Failed to pin/unpin post");
       }
     } catch (error) {
       console.error("Error pinning post:", error);
-      alert("Error pinning post");
+      alert("Error pinning post. Please try again.");
     }
   };
 
@@ -533,6 +538,48 @@ export default function RoomView({ room, onBack, onLeave }) {
         alert("Error reporting post");
       }
     }
+  };
+
+  const handleSearch = async () => {
+    if (!searchQuery && !searchUsername && !startDate && !endDate) {
+      fetchPosts();
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const params = new URLSearchParams();
+      if (searchQuery) params.append('keyword', searchQuery);
+      if (searchUsername) params.append('username', searchUsername);
+      if (startDate) params.append('startDate', startDate);
+      if (endDate) params.append('endDate', endDate);
+
+      const response = await fetch(
+        `http://localhost:4000/Chatrooms/search/${room.roomid}?${params.toString()}`,
+        {
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        const data = await response.json();
+        setPosts(data.messages);
+      } else {
+        console.error("Search failed");
+      }
+    } catch (error) {
+      console.error("Error searching posts:", error);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const highlightText = (text, query) => {
+    if (!query) return text;
+    const regex = new RegExp(`(${query})`, 'gi');
+    return text.split(regex).map((part, i) =>
+      regex.test(part) ? <mark key={i}>{part}</mark> : part
+    );
   };
 
   useEffect(() => {
@@ -746,6 +793,108 @@ export default function RoomView({ room, onBack, onLeave }) {
         )}
       </div>
 
+      {/* Search Section */}
+      <div
+        style={{
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          marginBottom: "20px",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="text"
+              placeholder="Search posts..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              style={{
+                flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px",
+              }}
+            />
+            <input
+              type="text"
+              placeholder="Filter by username..."
+              value={searchUsername}
+              onChange={(e) => setSearchUsername(e.target.value)}
+              style={{
+                flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px",
+              }}
+            />
+          </div>
+          <div style={{ display: "flex", gap: "10px" }}>
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              style={{
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px",
+              }}
+            />
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              style={{
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px",
+              }}
+            />
+            <button
+              onClick={handleSearch}
+              disabled={isSearching}
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
+                opacity: isSearching ? 0.7 : 1,
+              }}
+            >
+              {isSearching ? "Searching..." : "Search"}
+            </button>
+            <button
+              onClick={() => {
+                setSearchQuery("");
+                setSearchUsername("");
+                setStartDate("");
+                setEndDate("");
+                fetchPosts();
+              }}
+              style={{
+                padding: "12px 20px",
+                backgroundColor: "#6c757d",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
+              }}
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Create Post Section */}
       <div
         style={{
@@ -900,7 +1049,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                   </div>
                 </div>
                 <div style={{ marginTop: "5px", color: "#444" }}>
-                  {post.content}
+                  {highlightText(post.content, searchQuery)}
                 </div>
               </div>
 
@@ -1084,7 +1233,7 @@ export default function RoomView({ room, onBack, onLeave }) {
               color: "#666",
             }}
           >
-            No posts yet. Be the first to post something!
+            {isSearching ? "No matching posts found" : "No posts yet. Be the first to post something!"}
           </div>
         )}
       </div>
