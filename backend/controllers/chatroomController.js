@@ -60,12 +60,28 @@ const getRoomMessages = async (req, res) => {
 
     if (role == "Admin" || role == "Moderator")
       messagesResult = await pool.query(
-        `Select * from RoomMessages where roomid = $1`,
+        `SELECT m.*, u.username, u.rollnumber, 
+                CASE WHEN pp.pinid IS NOT NULL THEN true ELSE false END as is_pinned
+         FROM messages m
+         JOIN users u ON m.userid = u.userid
+         LEFT JOIN pinned_posts pp ON m.messageid = pp.messageid AND m.roomid = pp.roomid
+         WHERE m.roomid = $1
+         ORDER BY 
+           CASE WHEN pp.pinid IS NOT NULL THEN 0 ELSE 1 END,
+           m.posted_at DESC`,
         [roomid]
       );
     else
       messagesResult = await pool.query(
-        `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved' order by posted_at desc`,
+        `SELECT m.*, u.username, u.rollnumber,
+                CASE WHEN pp.pinid IS NOT NULL THEN true ELSE false END as is_pinned
+         FROM messages m
+         JOIN users u ON m.userid = u.userid
+         LEFT JOIN pinned_posts pp ON m.messageid = pp.messageid AND m.roomid = pp.roomid
+         WHERE m.roomid = $1 AND m.status = 'Approved'
+         ORDER BY 
+           CASE WHEN pp.pinid IS NOT NULL THEN 0 ELSE 1 END,
+           m.posted_at DESC`,
         [roomid]
       );
 
@@ -80,6 +96,7 @@ const getRoomMessages = async (req, res) => {
       `SELECT * FROM MessageReplies1 WHERE roomid = $1 order by posted_at`,
       [roomid]
     );
+
     const structuredResponse = {
       roomid: messagesResult.rows[0].roomid,
       roomname: messagesResult.rows[0].roomname,
@@ -92,6 +109,7 @@ const getRoomMessages = async (req, res) => {
         content: msg.content,
         posted_at: msg.posted_at,
         status: msg.status || "Approved",
+        is_pinned: msg.is_pinned,
         comments: commentsResult.rows
           .filter((comment) => comment.messageid === msg.messageid)
           .map((comment) => ({
@@ -505,6 +523,321 @@ const deletePost = async (request, response) => {
   }
 };
 
+const getPost = async (request, response) => {
+  const {
+    params: { roomid, messageid },
+  } = request;
+
+  try {
+    const postResult = await pool.query(
+      `SELECT m.*, u.username, u.rollnumber, r.name as roomname, r.description
+       FROM messages m
+       JOIN users u ON m.userid = u.userid
+       JOIN rooms r ON m.roomid = r.roomid
+       WHERE m.messageid = $1 AND m.roomid = $2`,
+      [messageid, roomid]
+    );
+
+    if (!postResult.rowCount) {
+      return response.status(404).json("Post not found");
+    }
+
+    const repliesResult = await pool.query(
+      `SELECT r.*, u.username, u.rollnumber
+       FROM replies r
+       JOIN users u ON r.userid = u.userid
+       WHERE r.messageid = $1
+       ORDER BY r.posted_at ASC`,
+      [messageid]
+    );
+
+    const post = {
+      ...postResult.rows[0],
+      replies: repliesResult.rows,
+    };
+
+    return response.status(200).json(post);
+  } catch (error) {
+    console.error("Get post error:", error.message);
+    return response.status(500).json("Server Error");
+  }
+};
+
+const editPost = async (request, response) => {
+  const {
+    params: { roomid, messageid },
+    body: { content },
+    session: {
+      user: { role },
+    },
+  } = request;
+
+  if (role !== "Admin" && role !== "Moderator") {
+    return response.status(403).json("Only admins and moderators can edit posts");
+  }
+
+  const client = await pool.connect();
+
+  try {
+    // Check if the post exists
+    let res = await client.query(
+      `SELECT * FROM messages WHERE messageid = $1 AND roomid = $2`,
+      [messageid, roomid]
+    );
+
+    if (!res.rowCount) {
+      return response.status(404).json("Post not found");
+    }
+
+    await client.query("BEGIN");
+
+    // Save the old content to edit history
+    await client.query(
+      `INSERT INTO message_edits (messageid, userid, old_content)
+       VALUES ($1, $2, $3)`,
+      [messageid, request.session.user.userid, res.rows[0].content]
+    );
+
+    // Update the post content
+    res = await client.query(
+      `UPDATE messages SET content = $1 WHERE messageid = $2 AND roomid = $3`,
+      [content, messageid, roomid]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).json("Post updated successfully");
+  } catch (error) {
+    console.error("Edit post error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
+const getPostEditHistory = async (request, response) => {
+  const {
+    params: { messageid },
+  } = request;
+
+  try {
+    const res = await pool.query(
+      `SELECT me.*, u.username
+       FROM message_edits me
+       JOIN users u ON me.userid = u.userid
+       WHERE me.messageid = $1
+       ORDER BY me.edited_at DESC`,
+      [messageid]
+    );
+
+    return response.status(200).json(res.rows);
+  } catch (error) {
+    console.error("Get post edit history error:", error.message);
+    return response.status(500).json("Server Error");
+  }
+};
+
+const pinPost = async (request, response) => {
+  const {
+    params: { roomid, messageid },
+    session: {
+      user: { role },
+    },
+  } = request;
+
+  if (role !== "Admin" && role !== "Moderator") {
+    return response.status(403).json("Only admins and moderators can pin posts");
+  }
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // Check if the post is already pinned
+    let res = await client.query(
+      `SELECT * FROM pinned_posts WHERE messageid = $1 AND roomid = $2`,
+      [messageid, roomid]
+    );
+
+    if (res.rowCount) {
+      // Unpin the post
+      await client.query(
+        `DELETE FROM pinned_posts WHERE messageid = $1 AND roomid = $2`,
+        [messageid, roomid]
+      );
+      await client.query("COMMIT");
+      return response.status(200).json("Post unpinned successfully");
+    }
+
+    // Pin the post
+    await client.query(
+      `INSERT INTO pinned_posts (messageid, roomid, pinned_by)
+       VALUES ($1, $2, $3)`,
+      [messageid, roomid, request.session.user.userid]
+    );
+
+    await client.query("COMMIT");
+    return response.status(200).json("Post pinned successfully");
+  } catch (error) {
+    console.error("Pin post error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
+const reportPost = async (request, response) => {
+  const {
+    params: { messageid },
+    body: { reason },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  try {
+    const res = await pool.query(
+      `INSERT INTO post_reports (messageid, reporterid, reason)
+       VALUES ($1, $2, $3)
+       RETURNING reportid`,
+      [messageid, userid, reason]
+    );
+
+    return response.status(201).json({
+      message: "Post reported successfully",
+      reportid: res.rows[0].reportid,
+    });
+  } catch (error) {
+    console.error("Report post error:", error.message);
+    return response.status(500).json("Server Error");
+  }
+};
+
+const createPoll = async (request, response) => {
+  const {
+    params: { roomid },
+    body: { question, options, isMultipleChoice, endTime },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // Create the post first
+    const postRes = await client.query(
+      `INSERT INTO messages (roomid, userid, content, posted_at)
+       VALUES ($1, $2, $3, current_timestamp)
+       RETURNING messageid`,
+      [roomid, userid, question]
+    );
+
+    const messageid = postRes.rows[0].messageid;
+
+    // Create the poll
+    await client.query(
+      `INSERT INTO post_polls (messageid, question, options, is_multiple_choice, end_time)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [messageid, question, JSON.stringify(options), isMultipleChoice, endTime]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(201).json({
+      message: "Poll created successfully",
+      messageid,
+    });
+  } catch (error) {
+    console.error("Create poll error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
+const votePoll = async (request, response) => {
+  const {
+    params: { pollid },
+    body: { selectedOptions },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // Check if the poll is still active
+    const pollRes = await client.query(
+      `SELECT * FROM post_polls WHERE pollid = $1 AND (end_time IS NULL OR end_time > CURRENT_TIMESTAMP)`,
+      [pollid]
+    );
+
+    if (!pollRes.rowCount) {
+      return response.status(400).json("Poll is closed or not found");
+    }
+
+    // Check if user has already voted
+    const voteRes = await client.query(
+      `SELECT * FROM poll_votes WHERE pollid = $1 AND userid = $2`,
+      [pollid, userid]
+    );
+
+    if (voteRes.rowCount) {
+      return response.status(400).json("You have already voted in this poll");
+    }
+
+    // Record the vote
+    await client.query(
+      `INSERT INTO poll_votes (pollid, userid, selected_options)
+       VALUES ($1, $2, $3)`,
+      [pollid, userid, JSON.stringify(selectedOptions)]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).json("Vote recorded successfully");
+  } catch (error) {
+    console.error("Vote poll error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
+const trackPostView = async (request, response) => {
+  const {
+    params: { messageid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  try {
+    await pool.query(
+      `INSERT INTO post_views (messageid, userid)
+       VALUES ($1, $2)
+       ON CONFLICT (messageid, userid) DO NOTHING`,
+      [messageid, userid]
+    );
+
+    return response.status(200).json("View tracked successfully");
+  } catch (error) {
+    console.error("Track view error:", error.message);
+    return response.status(500).json("Server Error");
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -520,4 +853,12 @@ module.exports = {
   changeRoomDetails,
   deleteRoom,
   deletePost,
+  getPost,
+  editPost,
+  getPostEditHistory,
+  pinPost,
+  reportPost,
+  createPoll,
+  votePoll,
+  trackPostView,
 };

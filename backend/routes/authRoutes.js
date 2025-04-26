@@ -16,4 +16,12 @@ router.post("/test-login", testLogin);
 
 router.get("/user-role", checkAuthorisation, userRole);
 
+router.get("/user-info", checkAuthorisation, (req, res) => {
+  res.json({
+    userid: req.session.user.userid,
+    role: req.session.user.role,
+    username: req.session.user.username
+  });
+});
+
 module.exports = router;

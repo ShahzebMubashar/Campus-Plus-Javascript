@@ -120,10 +120,41 @@ export default function RoomView({ room, onBack, onLeave }) {
     room.description
   );
   const [userRole, setUserRole] = useState("");
+  const [userid, setUserid] = useState(null);
 
   useEffect(() => {
+    fetchUserInfo();
     fetchPosts();
   }, [room.roomid]);
+
+  const fetchUserInfo = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/auth/user-info", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setUserid(data.userid);
+        setUserRole(data.role);
+      }
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+    }
+  };
+
+  const trackPostView = async (messageid) => {
+    try {
+      await fetch(
+        `http://localhost:4000/Chatrooms/posts/${messageid}/view`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+    } catch (error) {
+      console.error("Error tracking post view:", error);
+    }
+  };
 
   const fetchPosts = async () => {
     console.log(`Fetching Posts...`);
@@ -147,9 +178,21 @@ export default function RoomView({ room, onBack, onLeave }) {
         setUserRole(role);
 
         if (data?.messages && Array.isArray(data.messages)) {
-          setPosts(data.messages);
+          // Sort posts: pinned posts first, then by posted_at
+          const sortedPosts = data.messages.sort((a, b) => {
+            if (a.is_pinned && !b.is_pinned) return -1;
+            if (!a.is_pinned && b.is_pinned) return 1;
+            return new Date(b.posted_at) - new Date(a.posted_at);
+          });
+          setPosts(sortedPosts);
         } else if (Array.isArray(data)) {
-          setPosts(data);
+          // Sort posts: pinned posts first, then by posted_at
+          const sortedPosts = data.sort((a, b) => {
+            if (a.is_pinned && !b.is_pinned) return -1;
+            if (!a.is_pinned && b.is_pinned) return 1;
+            return new Date(b.posted_at) - new Date(a.posted_at);
+          });
+          setPosts(sortedPosts);
         } else {
           setPosts([]);
           console.error("Unexpected post data format:", data);
@@ -382,6 +425,121 @@ export default function RoomView({ room, onBack, onLeave }) {
       }
     }
   };
+
+  const handleSharePost = (post) => {
+    const shareUrl = `${window.location.origin}/chatroom/${room.roomid}/messages/${post.messageid}`;
+
+    if (navigator.share) {
+      // Use Web Share API if available
+      navigator.share({
+        title: `Post by ${post.username}`,
+        text: post.content,
+        url: shareUrl,
+      }).catch((error) => {
+        console.error('Error sharing:', error);
+        // Fallback to copying to clipboard
+        copyToClipboard(shareUrl);
+      });
+    } else {
+      // Fallback to copying to clipboard
+      copyToClipboard(shareUrl);
+    }
+  };
+
+  const copyToClipboard = (text) => {
+    navigator.clipboard.writeText(text).then(() => {
+      alert('Link copied to clipboard!');
+    }).catch((error) => {
+      console.error('Error copying to clipboard:', error);
+      alert('Failed to copy link. Please try again.');
+    });
+  };
+
+  const handleEditPost = async (messageid, currentContent) => {
+    const newContent = prompt("Edit your post:", currentContent);
+    if (newContent && newContent !== currentContent) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ content: newContent }),
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          fetchPosts();
+        } else {
+          const data = await response.json();
+          alert(data.error || "Failed to edit post");
+        }
+      } catch (error) {
+        console.error("Error editing post:", error);
+        alert("Error editing post");
+      }
+    }
+  };
+
+  const handlePinPost = async (messageid) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/pin`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        fetchPosts();
+      } else {
+        const data = await response.json();
+        alert(data.error || "Failed to pin/unpin post");
+      }
+    } catch (error) {
+      console.error("Error pinning post:", error);
+      alert("Error pinning post");
+    }
+  };
+
+  const handleReportPost = async (messageid) => {
+    const reason = prompt("Please enter the reason for reporting this post:");
+    if (reason) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/Chatrooms/posts/${messageid}/report`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ reason }),
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          alert("Post reported successfully");
+        } else {
+          const data = await response.json();
+          alert(data.error || "Failed to report post");
+        }
+      } catch (error) {
+        console.error("Error reporting post:", error);
+        alert("Error reporting post");
+      }
+    }
+  };
+
+  useEffect(() => {
+    if (activePost) {
+      trackPostView(activePost);
+    }
+  }, [activePost]);
 
   return (
     <div
@@ -788,6 +946,28 @@ export default function RoomView({ room, onBack, onLeave }) {
                 >
                   💬 {post.comments?.length || 0}
                 </button>
+                {post.status === "Approved" && (
+                  <button
+                    onClick={() => handleSharePost(post)}
+                    style={{
+                      padding: "8px 15px",
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
+                    }}
+                  >
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                      <polyline points="16 6 12 2 8 6"></polyline>
+                      <line x1="12" y1="2" x2="12" y2="15"></line>
+                    </svg>
+                    Share
+                  </button>
+                )}
               </div>
 
               {activePost === post.messageid && (
@@ -841,6 +1021,54 @@ export default function RoomView({ room, onBack, onLeave }) {
                       Add Comment
                     </button>
                   </div>
+                </div>
+              )}
+
+              {post.status === "Approved" && (
+                <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                  {(userRole === "Admin" || userRole === "Moderator") && (
+                    <>
+                      <button
+                        onClick={() => handleEditPost(post.messageid, post.content)}
+                        style={{
+                          padding: "5px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                        }}
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        onClick={() => handlePinPost(post.messageid)}
+                        style={{
+                          padding: "5px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                        }}
+                      >
+                        📌 {post.is_pinned ? "Unpin" : "Pin"}
+                      </button>
+                    </>
+                  )}
+                  <button
+                    onClick={() => handleReportPost(post.messageid)}
+                    style={{
+                      padding: "5px 10px",
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      fontSize: "12px",
+                    }}
+                  >
+                    ⚠️ Report
+                  </button>
                 </div>
               )}
             </div>

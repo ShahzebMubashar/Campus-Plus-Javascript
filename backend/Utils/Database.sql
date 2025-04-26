@@ -181,6 +181,87 @@ CREATE TABLE IF NOT EXISTS public.usertask
     CONSTRAINT usertask_pkey PRIMARY KEY (taskid)
 );
 
+CREATE TABLE IF NOT EXISTS public.message_edits
+(
+    editid serial NOT NULL,
+    messageid integer,
+    userid integer,
+    old_content text COLLATE pg_catalog."default",
+    edited_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT message_edits_pkey PRIMARY KEY (editid),
+    CONSTRAINT message_edits_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT message_edits_userid_fkey FOREIGN KEY (userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.pinned_posts
+(
+    pinid serial NOT NULL,
+    messageid integer,
+    roomid integer,
+    pinned_by integer,
+    pinned_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pinned_posts_pkey PRIMARY KEY (pinid),
+    CONSTRAINT pinned_posts_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT pinned_posts_roomid_fkey FOREIGN KEY (roomid)
+        REFERENCES public.rooms (roomid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT pinned_posts_pinned_by_fkey FOREIGN KEY (pinned_by)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+        
+);
+ALTER TABLE pinned_posts RENAME COLUMN pinned_by TO userid;
+
+
+
+CREATE TABLE IF NOT EXISTS public.post_reports
+(
+    reportid serial NOT NULL,
+    messageid integer,
+    reporterid integer,
+    reason text COLLATE pg_catalog."default" NOT NULL,
+    status character varying(20) COLLATE pg_catalog."default" DEFAULT 'Pending'::character varying,
+    reported_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_reports_pkey PRIMARY KEY (reportid),
+    CONSTRAINT post_reports_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT post_reports_reporterid_fkey FOREIGN KEY (reporterid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.post_views
+(
+    viewid serial NOT NULL,
+    messageid integer,
+    userid integer,
+    viewed_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_views_pkey PRIMARY KEY (viewid),
+    CONSTRAINT post_views_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT post_views_userid_fkey FOREIGN KEY (userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+
 ALTER TABLE IF EXISTS public.courseinfo
     ADD CONSTRAINT courseinfo_courseid_fkey FOREIGN KEY (courseid)
     REFERENCES public.courses (courseid) MATCH SIMPLE

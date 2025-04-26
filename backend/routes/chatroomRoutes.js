@@ -11,6 +11,14 @@ const {
   changeRoomDetails,
   deleteRoom,
   deletePost,
+  getPost,
+  editPost,
+  getPostEditHistory,
+  pinPost,
+  reportPost,
+  createPoll,
+  votePoll,
+  trackPostView,
 } = require("../controllers/chatroomController");
 
 const {
@@ -75,5 +83,22 @@ router.delete(
   checkRoomMember,
   deletePost
 );
+router.get(
+  "/:roomid/messages/:messageid",
+  getPost
+);
+
+// Post editing routes
+router.patch("/:roomid/posts/:messageid/edit", checkAuthorisation, editPost);
+router.get("/posts/:messageid/edit-history", checkAuthorisation, getPostEditHistory);
+
+// Post pinning routes
+router.post("/:roomid/posts/:messageid/pin", checkAuthorisation, pinPost);
+
+// Post reporting routes
+router.post("/posts/:messageid/report", checkAuthorisation, reportPost);
+
+// Post view tracking route
+router.post("/posts/:messageid/view", checkAuthorisation, trackPostView);
 
 module.exports = router;
