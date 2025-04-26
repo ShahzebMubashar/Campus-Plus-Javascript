@@ -461,6 +461,50 @@ const deleteRoom = async (request, response) => {
   }
 };
 
+const deletePost = async (request, response) => {
+  const {
+    params: { roomid, messageid },
+    session: {
+      user: { role },
+    },
+  } = request;
+
+  if (role !== "Admin") {
+    return response.status(403).json("Only admins can delete posts");
+  }
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    // First delete all replies to this message
+    await client.query(
+      `DELETE FROM replies WHERE messageid = $1`,
+      [messageid]
+    );
+
+    // Then delete the message
+    const res = await client.query(
+      `DELETE FROM messages WHERE messageid = $1 AND roomid = $2`,
+      [messageid, roomid]
+    );
+
+    if (!res.rowCount) {
+      return response.status(404).json("Message not found");
+    }
+
+    await client.query("COMMIT");
+    return response.status(200).json("Message deleted successfully");
+  } catch (error) {
+    console.error("Delete post error:", error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -475,4 +519,5 @@ module.exports = {
   createPost,
   changeRoomDetails,
   deleteRoom,
+  deletePost,
 };

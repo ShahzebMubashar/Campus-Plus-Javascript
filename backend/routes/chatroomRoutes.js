@@ -10,6 +10,7 @@ const {
   LeaveRoom,
   changeRoomDetails,
   deleteRoom,
+  deletePost,
 } = require("../controllers/chatroomController");
 
 const {
@@ -67,6 +68,12 @@ router.delete(
   checkAdmin,
   validateRoom,
   deleteRoom
+);
+router.delete(
+  "/:roomid/messages/:messageid",
+  checkAuthorisation,
+  checkRoomMember,
+  deletePost
 );
 
 module.exports = router;
