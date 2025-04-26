@@ -226,6 +226,30 @@ export default function RoomView({ room, onBack, onLeave }) {
     }
   };
 
+  const handleProcessPost = async (messageid, status) => {
+    try {
+      const response = await fetch(
+        `http://localhost:4000/Chatrooms/process/${room.roomid}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ messageid, status }),
+          credentials: "include",
+        }
+      );
+
+      if (response.ok) {
+        fetchPosts();
+      } else {
+        console.error("Failed to process post");
+      }
+    } catch (error) {
+      console.error("Error processing post:", error);
+    }
+  };
+
   return (
     <div
       style={{
@@ -479,11 +503,12 @@ export default function RoomView({ room, onBack, onLeave }) {
             <div
               key={post.messageid}
               style={{
-                backgroundColor: "white",
+                backgroundColor: post.status === "Pending" ? "#f5f5f5" : "white",
                 padding: "20px",
                 borderRadius: "8px",
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 marginBottom: "20px",
+                borderLeft: post.status === "Pending" ? "4px solid #6c757d" : "none",
               }}
             >
               <div style={{ marginBottom: "10px" }}>
@@ -493,32 +518,79 @@ export default function RoomView({ room, onBack, onLeave }) {
                     justifyContent: "space-between",
                   }}
                 >
-                  <span style={{ fontWeight: "bold", color: "#333" }}>
-                    {post.username}
-                  </span>
-                  <span style={{ color: "#666" }}>
-                    {(() => {
-                      const postDate = new Date(post.posted_at);
-                      const today = new Date();
-                      const yesterday = new Date();
-                      yesterday.setDate(yesterday.getDate() - 1);
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <span style={{ fontWeight: "bold", color: "#333" }}>
+                      {post.username}
+                    </span>
+                    {post.status === "Pending" && (
+                      <span style={{
+                        backgroundColor: "#6c757d",
+                        color: "white",
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        fontSize: "12px",
+                      }}>
+                        Pending
+                      </span>
+                    )}
+                  </div>
+                  <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+                    {post.status === "Pending" && (userRole === "Admin" || userRole === "Moderator") && (
+                      <div style={{ display: "flex", gap: "5px" }}>
+                        <button
+                          onClick={() => handleProcessPost(post.messageid, "Approved")}
+                          style={{
+                            padding: "5px 10px",
+                            backgroundColor: "#28a745",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontSize: "12px",
+                          }}
+                        >
+                          Approve
+                        </button>
+                        <button
+                          onClick={() => handleProcessPost(post.messageid, "Rejected")}
+                          style={{
+                            padding: "5px 10px",
+                            backgroundColor: "#dc3545",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontSize: "12px",
+                          }}
+                        >
+                          Reject
+                        </button>
+                      </div>
+                    )}
+                    <span style={{ color: "#666" }}>
+                      {(() => {
+                        const postDate = new Date(post.posted_at);
+                        const today = new Date();
+                        const yesterday = new Date();
+                        yesterday.setDate(yesterday.getDate() - 1);
 
-                      if (
-                        postDate.getDate() === today.getDate() &&
-                        postDate.getMonth() === today.getMonth() &&
-                        postDate.getFullYear() === today.getFullYear()
-                      ) {
-                        return `Today, ${postDate.toLocaleTimeString()}`;
-                      } else if (
-                        postDate.getDate() === yesterday.getDate() &&
-                        postDate.getMonth() === yesterday.getMonth() &&
-                        postDate.getFullYear() === yesterday.getFullYear()
-                      ) {
-                        return "Yesterday";
-                      }
-                      return postDate.toLocaleDateString();
-                    })()}
-                  </span>
+                        if (
+                          postDate.getDate() === today.getDate() &&
+                          postDate.getMonth() === today.getMonth() &&
+                          postDate.getFullYear() === today.getFullYear()
+                        ) {
+                          return `Today, ${postDate.toLocaleTimeString()}`;
+                        } else if (
+                          postDate.getDate() === yesterday.getDate() &&
+                          postDate.getMonth() === yesterday.getMonth() &&
+                          postDate.getFullYear() === yesterday.getFullYear()
+                        ) {
+                          return "Yesterday";
+                        }
+                        return postDate.toLocaleDateString();
+                      })()}
+                    </span>
+                  </div>
                 </div>
                 <div style={{ marginTop: "5px", color: "#444" }}>
                   {post.content}
