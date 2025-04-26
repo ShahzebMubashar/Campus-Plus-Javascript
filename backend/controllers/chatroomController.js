@@ -927,6 +927,44 @@ const searchPosts = async (request, response) => {
   }
 };
 
+const getUserJoinedGroups = async (request, response) => {
+  const {
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  try {
+    const result = await pool.query(
+      `SELECT r.*, 
+              COUNT(DISTINCT rm.userid) as member_count,
+              COUNT(DISTINCT m.messageid) as post_count
+       FROM rooms r
+       JOIN roommembers rm ON r.roomid = rm.roomid
+       LEFT JOIN messages m ON r.roomid = m.roomid
+       WHERE rm.userid = $1
+       GROUP BY r.roomid, r.name, r.description, r.created_at, r.created_by
+       ORDER BY r.name ASC`,
+      [userid]
+    );
+
+    // Transform the response to match the expected format
+    const transformedGroups = result.rows.map(group => ({
+      roomid: group.roomid,
+      roomname: group.name, // Map 'name' to 'roomname'
+      description: group.description,
+      created_at: group.created_at,
+      member_count: group.member_count,
+      post_count: group.post_count
+    }));
+
+    return response.status(200).json(transformedGroups);
+  } catch (error) {
+    console.error("Get user joined groups error:", error.message);
+    return response.status(500).json("Server Error");
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -951,4 +989,5 @@ module.exports = {
   votePoll,
   trackPostView,
   searchPosts,
+  getUserJoinedGroups,
 };
