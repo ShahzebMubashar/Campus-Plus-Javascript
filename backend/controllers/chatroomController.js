@@ -568,18 +568,14 @@ const editPost = async (request, response) => {
     params: { roomid, messageid },
     body: { content },
     session: {
-      user: { role },
+      user: { role, userid },
     },
   } = request;
-
-  if (role !== "Admin" && role !== "Moderator") {
-    return response.status(403).json("Only admins and moderators can edit posts");
-  }
 
   const client = await pool.connect();
 
   try {
-    // Check if the post exists
+    // Check if the post exists and get its details
     let res = await client.query(
       `SELECT * FROM messages WHERE messageid = $1 AND roomid = $2`,
       [messageid, roomid]
@@ -589,13 +585,20 @@ const editPost = async (request, response) => {
       return response.status(404).json("Post not found");
     }
 
+    const post = res.rows[0];
+
+    // Check if user is authorized to edit
+    if (role !== "Admin" && post.userid !== userid) {
+      return response.status(403).json("You can only edit your own posts");
+    }
+
     await client.query("BEGIN");
 
     // Save the old content to edit history
     await client.query(
       `INSERT INTO message_edits (messageid, userid, old_content)
        VALUES ($1, $2, $3)`,
-      [messageid, request.session.user.userid, res.rows[0].content]
+      [messageid, userid, post.content]
     );
 
     // Update the post content

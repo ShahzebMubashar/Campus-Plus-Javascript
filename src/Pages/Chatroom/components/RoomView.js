@@ -1026,35 +1026,35 @@ export default function RoomView({ room, onBack, onLeave }) {
 
               {post.status === "Approved" && (
                 <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
+                  {(userRole === "Admin" || post.userid === userid) && (
+                    <button
+                      onClick={() => handleEditPost(post.messageid, post.content)}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                      }}
+                    >
+                      ✏️ Edit
+                    </button>
+                  )}
                   {(userRole === "Admin" || userRole === "Moderator") && (
-                    <>
-                      <button
-                        onClick={() => handleEditPost(post.messageid, post.content)}
-                        style={{
-                          padding: "5px 10px",
-                          backgroundColor: "#f8f9fa",
-                          border: "1px solid #ddd",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontSize: "12px",
-                        }}
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        onClick={() => handlePinPost(post.messageid)}
-                        style={{
-                          padding: "5px 10px",
-                          backgroundColor: "#f8f9fa",
-                          border: "1px solid #ddd",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                          fontSize: "12px",
-                        }}
-                      >
-                        📌 {post.is_pinned ? "Unpin" : "Pin"}
-                      </button>
-                    </>
+                    <button
+                      onClick={() => handlePinPost(post.messageid)}
+                      style={{
+                        padding: "5px 10px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "12px",
+                      }}
+                    >
+                      📌 {post.is_pinned ? "Unpin" : "Pin"}
+                    </button>
                   )}
                   <button
                     onClick={() => handleReportPost(post.messageid)}
