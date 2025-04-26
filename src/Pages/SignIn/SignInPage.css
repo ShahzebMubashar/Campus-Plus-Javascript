@@ -785,6 +785,7 @@
     75% {
         transform: translateX(5px) rotate(5deg) translateY(10px);
     }
+
 }
 
 /* Add blinking animation */
