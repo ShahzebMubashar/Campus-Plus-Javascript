@@ -359,6 +359,30 @@ export default function RoomView({ room, onBack, onLeave }) {
     }
   };
 
+  const handleDeletePost = async (messageid) => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/Chatrooms/${room.roomid}/messages/${messageid}`,
+          {
+            method: "DELETE",
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          fetchPosts();
+        } else {
+          const data = await response.json();
+          alert(data.error || "Failed to delete post");
+        }
+      } catch (error) {
+        console.error("Error deleting post:", error);
+        alert("Error deleting post");
+      }
+    }
+  };
+
   return (
     <div
       style={{
@@ -675,6 +699,22 @@ export default function RoomView({ room, onBack, onLeave }) {
                           Reject
                         </button>
                       </div>
+                    )}
+                    {post.status === "Approved" && userRole === "Admin" && (
+                      <button
+                        onClick={() => handleDeletePost(post.messageid)}
+                        style={{
+                          padding: "5px 10px",
+                          backgroundColor: "#dc3545",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
+                        }}
+                      >
+                        Delete
+                      </button>
                     )}
                     <span style={{ color: "#666" }}>
                       {(() => {
