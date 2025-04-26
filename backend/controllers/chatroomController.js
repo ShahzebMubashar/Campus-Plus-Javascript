@@ -844,7 +844,7 @@ const trackPostView = async (request, response) => {
 const searchPosts = async (request, response) => {
   const {
     params: { roomid },
-    query: { keyword, username, startDate, endDate },
+    query: { keyword, username, date },
     session: {
       user: { role },
     },
@@ -877,16 +877,10 @@ const searchPosts = async (request, response) => {
       queryParams.push(`%${username}%`);
     }
 
-    if (startDate) {
+    if (date) {
       paramCount++;
-      query += ` AND m.posted_at >= $${paramCount}`;
-      queryParams.push(startDate);
-    }
-
-    if (endDate) {
-      paramCount++;
-      query += ` AND m.posted_at <= $${paramCount}`;
-      queryParams.push(endDate);
+      query += ` AND DATE(m.posted_at) = $${paramCount}`;
+      queryParams.push(date);
     }
 
     if (role !== "Admin" && role !== "Moderator") {

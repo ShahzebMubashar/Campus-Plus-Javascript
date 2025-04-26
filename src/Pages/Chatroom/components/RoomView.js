@@ -123,8 +123,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [userid, setUserid] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchUsername, setSearchUsername] = useState("");
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [searchDate, setSearchDate] = useState("");
   const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
@@ -541,7 +540,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   };
 
   const handleSearch = async () => {
-    if (!searchQuery && !searchUsername && !startDate && !endDate) {
+    if (!searchQuery && !searchUsername && !searchDate) {
       fetchPosts();
       return;
     }
@@ -551,8 +550,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       const params = new URLSearchParams();
       if (searchQuery) params.append('keyword', searchQuery);
       if (searchUsername) params.append('username', searchUsername);
-      if (startDate) params.append('startDate', startDate);
-      if (endDate) params.append('endDate', endDate);
+      if (searchDate) params.append('date', searchDate);
 
       const response = await fetch(
         `http://localhost:4000/Chatrooms/search/${room.roomid}?${params.toString()}`,
@@ -794,104 +792,86 @@ export default function RoomView({ room, onBack, onLeave }) {
       </div>
 
       {/* Search Section */}
-      <div
-        style={{
-          backgroundColor: "white",
-          padding: "20px",
-          borderRadius: "8px",
-          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-          marginBottom: "20px",
-        }}
-      >
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <input
-              type="text"
-              placeholder="Search posts..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              style={{
-                flex: 1,
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "16px",
-              }}
-            />
-            <input
-              type="text"
-              placeholder="Filter by username..."
-              value={searchUsername}
-              onChange={(e) => setSearchUsername(e.target.value)}
-              style={{
-                flex: 1,
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "16px",
-              }}
-            />
-          </div>
-          <div style={{ display: "flex", gap: "10px" }}>
-            <input
-              type="date"
-              value={startDate}
-              onChange={(e) => setStartDate(e.target.value)}
-              style={{
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "16px",
-              }}
-            />
-            <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
-              style={{
-                padding: "12px",
-                border: "1px solid #ddd",
-                borderRadius: "4px",
-                fontSize: "16px",
-              }}
-            />
-            <button
-              onClick={handleSearch}
-              disabled={isSearching}
-              style={{
-                padding: "12px 20px",
-                backgroundColor: "#28a745",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "16px",
-                opacity: isSearching ? 0.7 : 1,
-              }}
-            >
-              {isSearching ? "Searching..." : "Search"}
-            </button>
-            <button
-              onClick={() => {
-                setSearchQuery("");
-                setSearchUsername("");
-                setStartDate("");
-                setEndDate("");
-                fetchPosts();
-              }}
-              style={{
-                padding: "12px 20px",
-                backgroundColor: "#6c757d",
-                color: "white",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-                fontSize: "16px",
-              }}
-            >
-              Clear
-            </button>
-          </div>
+      <div className="search-section" style={{
+        backgroundColor: "white",
+        padding: "20px",
+        borderRadius: "8px",
+        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+        marginBottom: "20px"
+      }}>
+        <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
+          <input
+            type="text"
+            placeholder="Search posts..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{
+              flex: 2,
+              padding: "12px",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              fontSize: "16px"
+            }}
+          />
+          <input
+            type="text"
+            placeholder="Filter by username..."
+            value={searchUsername}
+            onChange={(e) => setSearchUsername(e.target.value)}
+            style={{
+              flex: 1,
+              padding: "12px",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              fontSize: "16px"
+            }}
+          />
+          <input
+            type="date"
+            value={searchDate}
+            onChange={(e) => setSearchDate(e.target.value)}
+            style={{
+              padding: "12px",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              fontSize: "16px"
+            }}
+          />
+          <button
+            onClick={handleSearch}
+            disabled={isSearching}
+            style={{
+              padding: "12px 20px",
+              backgroundColor: "#28a745",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "16px",
+              opacity: isSearching ? 0.7 : 1
+            }}
+          >
+            {isSearching ? "Searching..." : "Search"}
+          </button>
+          <button
+            onClick={() => {
+              setSearchQuery("");
+              setSearchUsername("");
+              setSearchDate("");
+              fetchPosts();
+            }}
+            style={{
+              padding: "12px 20px",
+              backgroundColor: "#6c757d",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "16px"
+            }}
+          >
+            Clear
+          </button>
         </div>
       </div>
 
@@ -949,6 +929,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 marginBottom: "20px",
                 borderLeft: post.status === "Pending" ? "4px solid #6c757d" : "none",
+                position: "relative"
               }}
             >
               <div style={{ marginBottom: "10px" }}>
@@ -962,6 +943,21 @@ export default function RoomView({ room, onBack, onLeave }) {
                     <span style={{ fontWeight: "bold", color: "#333" }}>
                       {post.username}
                     </span>
+                    {post.is_pinned && (
+                      <span style={{
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        color: "#666",
+                        padding: "2px 8px",
+                        borderRadius: "12px",
+                        fontSize: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px"
+                      }}>
+                        📌 Pinned
+                      </span>
+                    )}
                     {post.status === "Pending" && (
                       <span style={{
                         backgroundColor: "#6c757d",
