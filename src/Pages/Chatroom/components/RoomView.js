@@ -1,5 +1,114 @@
 import React, { useState, useEffect } from "react";
 
+const Comment = ({ comment, level = 0, room, fetchPosts }) => {
+  const [showReplyBox, setShowReplyBox] = useState(false);
+  const [replyText, setReplyText] = useState("");
+
+  const handleReply = async () => {
+    if (replyText.trim()) {
+      try {
+        const response = await fetch(
+          `http://localhost:4000/Chatrooms/reply/${room.roomid}/${comment.messageid || comment.commentid}`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ message: replyText }),
+            credentials: "include",
+          }
+        );
+
+        if (response.ok) {
+          setReplyText("");
+          setShowReplyBox(false);
+          fetchPosts();
+        } else {
+          console.error("Failed to add reply");
+        }
+      } catch (error) {
+        console.error("Error adding reply:", error);
+      }
+    }
+  };
+
+  return (
+    <div
+      style={{
+        padding: "10px",
+        marginBottom: "10px",
+        backgroundColor: "#f9f9f9",
+        borderRadius: "6px",
+        marginLeft: `${level * 20}px`,
+        borderLeft: "3px solid #e0e0e0",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <strong style={{ color: "#333" }}>{comment.username}</strong>
+        <span style={{ color: "#666", fontSize: "12px" }}>
+          {new Date(comment.posted_at).toLocaleString()}
+        </span>
+      </div>
+      <p style={{ margin: "5px 0 0", color: "#555" }}>{comment.content}</p>
+      <div style={{ marginTop: "5px" }}>
+        <button
+          onClick={() => setShowReplyBox(!showReplyBox)}
+          style={{
+            padding: "2px 8px",
+            backgroundColor: "#f0f0f0",
+            border: "1px solid #ddd",
+            borderRadius: "4px",
+            cursor: "pointer",
+            fontSize: "12px",
+          }}
+        >
+          Reply
+        </button>
+      </div>
+      {showReplyBox && (
+        <div style={{ marginTop: "10px" }}>
+          <input
+            type="text"
+            placeholder="Write a reply..."
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+            style={{
+              width: "100%",
+              padding: "8px",
+              border: "1px solid #ddd",
+              borderRadius: "4px",
+              marginBottom: "5px",
+            }}
+          />
+          <button
+            onClick={handleReply}
+            style={{
+              padding: "5px 10px",
+              backgroundColor: "#28a745",
+              color: "white",
+              border: "none",
+              borderRadius: "4px",
+              cursor: "pointer",
+              fontSize: "12px",
+            }}
+          >
+            Post Reply
+          </button>
+        </div>
+      )}
+      {comment.replies?.map((reply) => (
+        <Comment
+          key={reply.commentid}
+          comment={reply}
+          level={level + 1}
+          room={room}
+          fetchPosts={fetchPosts}
+        />
+      ))}
+    </div>
+  );
+};
+
 export default function RoomView({ room, onBack, onLeave }) {
   const [posts, setPosts] = useState([]);
   const [activePost, setActivePost] = useState(null);
@@ -651,22 +760,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                 >
                   {post.comments?.length > 0 ? (
                     post.comments.map((comment) => (
-                      <div
+                      <Comment
                         key={comment.commentid}
-                        style={{
-                          padding: "10px",
-                          marginBottom: "10px",
-                          backgroundColor: "#f9f9f9",
-                          borderRadius: "6px",
-                        }}
-                      >
-                        <strong style={{ color: "#333" }}>
-                          {comment.username}
-                        </strong>
-                        <p style={{ margin: "5px 0 0", color: "#555" }}>
-                          {comment.content}
-                        </p>
-                      </div>
+                        comment={comment}
+                        room={room}
+                        fetchPosts={fetchPosts}
+                      />
                     ))
                   ) : (
                     <p style={{ color: "#666", textAlign: "center" }}>

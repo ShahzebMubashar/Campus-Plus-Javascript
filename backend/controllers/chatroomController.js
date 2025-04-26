@@ -222,7 +222,7 @@ const sendReply = async (request, response) => {
 
   try {
     let res = await client.query(
-      `Select * from Messages where messageid = $1 and roomid = $2 and status = 'Approved'`,
+      `Select * from Messages where messageid = $1 and roomid = $2`,
       [parentMessage, roomid]
     );
 
@@ -233,13 +233,17 @@ const sendReply = async (request, response) => {
 
     res = await client.query(
       `Insert into Replies (messageid, roomid, userid, content, posted_at)
-      values ($1, $2, $3, $4, current_timestamp)`,
+      values ($1, $2, $3, $4, current_timestamp)
+      RETURNING replyid`,
       [parentMessage, roomid, userid, message]
     );
 
     await client.query("COMMIT");
 
-    return response.status(200).json("Reply sent successfully");
+    return response.status(200).json({
+      message: "Reply sent successfully",
+      replyid: res.rows[0].replyid
+    });
   } catch (error) {
     console.error("Send reply error:", error.message);
     await client.query("ROLLBACK");
