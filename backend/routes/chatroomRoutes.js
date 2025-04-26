@@ -21,6 +21,7 @@ const {
   trackPostView,
   getRoomMessages,
   searchPosts,
+  getUserJoinedGroups,
 } = require("../controllers/chatroomController");
 
 const {
@@ -105,5 +106,7 @@ router.post("/posts/:messageid/view", checkAuthorisation, trackPostView);
 
 router.get("/messages/:roomid", getRoomMessages);
 router.get("/search/:roomid", searchPosts);
+
+router.get("/user/groups", getUserJoinedGroups);
 
 module.exports = router;

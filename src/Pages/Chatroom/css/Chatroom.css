@@ -32,6 +32,7 @@
     padding: 20px;
     background-color: var(--background-color);
     overflow-y: auto;
+    margin-left: 10%;
 }
 
 .chatroom-header {
@@ -51,7 +52,7 @@
 
 /* Update Sidebar styles */
 .sidebar {
-    width: 250px;
+    width: 280px;
     background-color: var(--sidebar-bg);
     border-right: 1px solid #e5e7eb;
     padding: 20px;
