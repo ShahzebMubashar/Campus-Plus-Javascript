@@ -9,23 +9,15 @@ const getRooms = async (request, response) => {
     let res;
 
     if (roomid) {
-      console.log("Middleware Request received for roomid:", roomid);
-
       res = await pool.query(
         `SELECT * FROM viewroommessages1 WHERE roomid = $1`,
         [roomid]
       );
 
-      console.log("Raw DB Response:", res);
-
-      if (!res.rowCount) {
-        console.log("No messages found for this room:", roomid);
+      if (!res.rowCount)
         return response.status(404).json("No messages found for this room");
-      }
 
       const roomMessages = res.rows;
-
-      console.log("Fetched Room Messages:", roomMessages);
 
       const structuredResponse = {
         roomid: roomMessages[0].roomid,
@@ -41,22 +33,12 @@ const getRooms = async (request, response) => {
         })),
       };
 
-      console.log("Structured Response sent to frontend:", structuredResponse);
-
       return response.status(200).json(structuredResponse);
     }
 
-    // If no roomid provided → Fetch All Rooms
-    // console.log("Fetching All Rooms from DB");
-
     res = await pool.query("SELECT * FROM rooms");
 
-    // console.log("Fetched All Rooms:", res.rows);
-
-    if (!res.rowCount) {
-      console.log("No rooms found in DB");
-      return response.status(404).json("No rooms found");
-    }
+    if (!res.rowCount) return response.status(404).json("No rooms found");
 
     return response.status(200).json(res.rows);
   } catch (error) {
@@ -68,13 +50,24 @@ const getRooms = async (request, response) => {
 const getRoomMessages = async (req, res) => {
   const {
     params: { roomid },
+    session: {
+      user: { role },
+    },
   } = req;
 
   try {
-    const messagesResult = await pool.query(
-      `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved'order by posted_at desc`,
-      [roomid]
-    );
+    let messagesResult;
+
+    if (role == "Admin" || role == "Moderator")
+      messagesResult = await pool.query(
+        `Select * from RoomMessages where roomid = $1`,
+        [roomid]
+      );
+    else
+      messagesResult = await pool.query(
+        `SELECT * from RoomMessages WHERE roomid = $1 and status = 'Approved' order by posted_at desc`,
+        [roomid]
+      );
 
     if (messagesResult.rowCount === 0) {
       return res.status(404).json({
@@ -130,8 +123,6 @@ const createRoom = async (request, response) => {
       user: { userid },
     },
   } = request;
-
-  console.log(`[CREATE ROOM] Request received for room: ${roomName}`);
 
   if (!roomName || !description)
     return response.status(400).json("Please provide all required fields");
@@ -370,23 +361,21 @@ const LeaveRoom = async (request, response) => {
       user: { userid },
     },
   } = request;
-  console.log(`[LEAVE ROOM] Request received for room: ${roomid}`);
-  console.log(`[LEAVE ROOM] User ID: ${userid}`);
+
   if (!roomid) return response.status(400).json("Room ID is required");
 
   const client = await pool.connect();
 
   try {
-    console.log("Leaving room:", roomid, "for user:", userid);
     client.query(`BEGIN`);
-    console.log("Deleting from RoomMembers table");
+
     let res = await client.query(
       `Delete from RoomMembers where roomid = $1 and userid = $2`,
       [roomid, userid]
     );
-    console.log("Deleted from RoomMembers table:", res.rowCount);
+
     client.query(`COMMIT`);
-    console.log("Left room successfully:", roomid, "for user:", userid);
+
     return response.status(200).json("Left Room Successfully!");
   } catch (error) {
     console.error("Leave room error:", error.message);
@@ -398,15 +387,10 @@ const LeaveRoom = async (request, response) => {
 };
 
 const changeRoomDetails = async (request, response) => {
-  console.log(`Request: [CHANGE ROOM INFO]`);
   const {
     params: { roomid },
     body: { newName, description },
   } = request;
-
-  console.log(
-    `Received: Params: ${roomid}, Body: ${(newName, description)}\n\n`
-  );
 
   if (!newName && !description)
     return response.status(400).json("Enter at least one of the fields");
