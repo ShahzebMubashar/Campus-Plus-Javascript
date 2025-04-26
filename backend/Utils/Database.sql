@@ -181,6 +181,181 @@ CREATE TABLE IF NOT EXISTS public.usertask
     CONSTRAINT usertask_pkey PRIMARY KEY (taskid)
 );
 
+CREATE TABLE IF NOT EXISTS public.message_edits
+(
+    editid serial NOT NULL,
+    messageid integer,
+    userid integer,
+    old_content text COLLATE pg_catalog."default",
+    edited_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT message_edits_pkey PRIMARY KEY (editid),
+    CONSTRAINT message_edits_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT message_edits_userid_fkey FOREIGN KEY (userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.message_attachments
+(
+    attachmentid serial NOT NULL,
+    messageid integer,
+    filename text COLLATE pg_catalog."default" NOT NULL,
+    filetype character varying(50) COLLATE pg_catalog."default" NOT NULL,
+    filesize integer NOT NULL,
+    filepath text COLLATE pg_catalog."default" NOT NULL,
+    uploaded_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT message_attachments_pkey PRIMARY KEY (attachmentid),
+    CONSTRAINT message_attachments_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.message_mentions
+(
+    mentionid serial NOT NULL,
+    messageid integer,
+    mentioned_userid integer,
+    mentioned_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT message_mentions_pkey PRIMARY KEY (mentionid),
+    CONSTRAINT message_mentions_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT message_mentions_mentioned_userid_fkey FOREIGN KEY (mentioned_userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.pinned_posts
+(
+    pinid serial NOT NULL,
+    messageid integer,
+    roomid integer,
+    pinned_by integer,
+    pinned_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT pinned_posts_pkey PRIMARY KEY (pinid),
+    CONSTRAINT pinned_posts_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT pinned_posts_roomid_fkey FOREIGN KEY (roomid)
+        REFERENCES public.rooms (roomid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT pinned_posts_pinned_by_fkey FOREIGN KEY (pinned_by)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.post_polls
+(
+    pollid serial NOT NULL,
+    messageid integer,
+    question text COLLATE pg_catalog."default" NOT NULL,
+    options jsonb NOT NULL,
+    is_multiple_choice boolean DEFAULT false,
+    end_time timestamp without time zone,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_polls_pkey PRIMARY KEY (pollid),
+    CONSTRAINT post_polls_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.poll_votes
+(
+    voteid serial NOT NULL,
+    pollid integer,
+    userid integer,
+    selected_options jsonb NOT NULL,
+    voted_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT poll_votes_pkey PRIMARY KEY (voteid),
+    CONSTRAINT poll_votes_pollid_fkey FOREIGN KEY (pollid)
+        REFERENCES public.post_polls (pollid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT poll_votes_userid_fkey FOREIGN KEY (userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.post_reports
+(
+    reportid serial NOT NULL,
+    messageid integer,
+    reporterid integer,
+    reason text COLLATE pg_catalog."default" NOT NULL,
+    status character varying(20) COLLATE pg_catalog."default" DEFAULT 'Pending'::character varying,
+    reported_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_reports_pkey PRIMARY KEY (reportid),
+    CONSTRAINT post_reports_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT post_reports_reporterid_fkey FOREIGN KEY (reporterid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.post_views
+(
+    viewid serial NOT NULL,
+    messageid integer,
+    userid integer,
+    viewed_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_views_pkey PRIMARY KEY (viewid),
+    CONSTRAINT post_views_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT post_views_userid_fkey FOREIGN KEY (userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.post_templates
+(
+    templateid serial NOT NULL,
+    userid integer,
+    name character varying(255) COLLATE pg_catalog."default" NOT NULL,
+    content text COLLATE pg_catalog."default" NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_templates_pkey PRIMARY KEY (templateid),
+    CONSTRAINT post_templates_userid_fkey FOREIGN KEY (userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS public.post_collaborators
+(
+    collaborationid serial NOT NULL,
+    messageid integer,
+    userid integer,
+    role character varying(20) COLLATE pg_catalog."default" NOT NULL,
+    joined_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    CONSTRAINT post_collaborators_pkey PRIMARY KEY (collaborationid),
+    CONSTRAINT post_collaborators_messageid_fkey FOREIGN KEY (messageid)
+        REFERENCES public.messages (messageid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE,
+    CONSTRAINT post_collaborators_userid_fkey FOREIGN KEY (userid)
+        REFERENCES public.users (userid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE CASCADE
+);
+
 ALTER TABLE IF EXISTS public.courseinfo
     ADD CONSTRAINT courseinfo_courseid_fkey FOREIGN KEY (courseid)
     REFERENCES public.courses (courseid) MATCH SIMPLE
