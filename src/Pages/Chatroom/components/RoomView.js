@@ -631,7 +631,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             </div>
           </div>
           {room.name && (
-            <h1 style={{ margin: "-40px 0 0", color: "#000" }}>{room.name}</h1>
+            <h1 style={{ margin: "-20px 0 0", color: "#000" }}>{room.name}</h1>
           )}
           {room.description && (
             <p style={{ margin: "10px 0 0", color: "#666" }}>{room.description}</p>
