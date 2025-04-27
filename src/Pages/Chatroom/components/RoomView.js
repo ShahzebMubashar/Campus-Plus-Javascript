@@ -569,12 +569,6 @@ export default function RoomView({ room, onBack, onLeave }) {
     );
   };
 
-  useEffect(() => {
-    if (activePost) {
-      trackPostView(activePost);
-    }
-  }, [activePost]);
-
   return (
     <div style={{
       display: "flex",
