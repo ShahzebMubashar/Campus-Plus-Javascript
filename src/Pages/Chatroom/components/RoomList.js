@@ -5,6 +5,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
     const [newRoomName, setNewRoomName] = useState("");
     const [newRoomDescription, setNewRoomDescription] = useState("");
     const [userRole, setUserRole] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         // Fetch user role when component mounts
@@ -57,6 +58,11 @@ export default function RoomList({ rooms, onJoinRoom }) {
         }
     };
 
+    const filteredRooms = rooms.filter(room =>
+        room.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        room.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
         <div style={{
             maxWidth: "1200px",
@@ -64,24 +70,88 @@ export default function RoomList({ rooms, onJoinRoom }) {
             padding: "20px",
             fontFamily: "Arial, sans-serif"
         }}>
-            {/* Create Room Button - Only visible to Admin */}
-            {userRole === "Admin" && (
-                <button
-                    onClick={() => setShowCreateRoomForm(true)}
-                    style={{
-                        padding: "10px 15px",
-                        backgroundColor: "#28a745",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        marginBottom: "20px",
-                        fontSize: "16px"
-                    }}
-                >
-                    ➕ Create Room
-                </button>
-            )}
+            {/* Header Section */}
+            <div style={{
+                backgroundColor: "white",
+                padding: "25px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                marginBottom: "30px"
+            }}>
+                <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    marginBottom: "20px"
+                }}>
+                    <div>
+                        <h1 style={{
+                            margin: 0,
+                            fontSize: "28px",
+                            color: "#333",
+                            fontWeight: "600"
+                        }}>
+                            Chat Rooms
+                        </h1>
+                        <p style={{
+                            margin: "8px 0 0",
+                            color: "#666",
+                            fontSize: "16px"
+                        }}>
+                            Join existing rooms or create your own to start chatting
+                        </p>
+                    </div>
+                    {userRole === "Admin" && (
+                        <button
+                            onClick={() => setShowCreateRoomForm(true)}
+                            style={{
+                                padding: "12px 20px",
+                                backgroundColor: "#28a745",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "6px",
+                                cursor: "pointer",
+                                fontSize: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                gap: "8px"
+                            }}
+                        >
+                            <span>➕</span> Create Room
+                        </button>
+                    )}
+                </div>
+                <div style={{
+                    position: "relative",
+                    maxWidth: "500px"
+                }}>
+                    <input
+                        type="text"
+                        placeholder="Search rooms..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        style={{
+                            width: "100%",
+                            padding: "12px 15px",
+                            paddingLeft: "40px",
+                            border: "1px solid #ddd",
+                            borderRadius: "6px",
+                            fontSize: "16px",
+                            boxSizing: "border-box"
+                        }}
+                    />
+                    <span style={{
+                        position: "absolute",
+                        left: "12px",
+                        top: "50%",
+                        transform: "translateY(-50%)",
+                        color: "#666",
+                        fontSize: "18px"
+                    }}>
+                        🔍
+                    </span>
+                </div>
+            </div>
 
             {/* Create Room Modal */}
             {showCreateRoomForm && (
@@ -183,7 +253,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
                 gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
                 gap: "20px"
             }}>
-                {rooms.map((room) => (
+                {filteredRooms.map((room) => (
                     <div key={room.roomid} style={{
                         backgroundColor: "white",
                         padding: "20px",
