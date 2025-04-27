@@ -72,7 +72,7 @@ export default function Chatrooms() {
                         )}
                     </div>
                 </div>
-                <Footer />
+
             </div>
         </div>
     );

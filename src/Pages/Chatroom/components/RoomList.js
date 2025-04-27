@@ -187,15 +187,16 @@ export default function RoomList({ rooms, onJoinRoom }) {
                             >
                                 <div style={{
                                     display: "flex",
-                                    alignItems: "center",
+                                    alignItems: "flex-start",
                                     gap: "15px",
-                                    marginBottom: "15px"
+                                    marginBottom: "20px"
                                 }}>
                                     <div style={{
-                                        width: "50px",
-                                        height: "50px",
-                                        borderRadius: "12px",
+                                        width: "60px",
+                                        height: "60px",
+                                        borderRadius: "16px",
                                         overflow: "hidden",
+                                        flexShrink: 0,
                                         boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
                                     }}>
                                         <img
@@ -204,26 +205,27 @@ export default function RoomList({ rooms, onJoinRoom }) {
                                             style={{ width: "100%", height: "100%", objectFit: "cover" }}
                                         />
                                     </div>
-                                    <div>
+                                    <div style={{ flex: 1 }}>
                                         <h3 style={{
-                                            margin: "0",
-                                            fontSize: "1.2rem",
+                                            margin: "0 0 8px 0",
+                                            fontSize: "1.25rem",
                                             fontWeight: "600",
-                                            color: "#1a237e"
+                                            color: "#1a237e",
+                                            lineHeight: "1.3"
                                         }}>{room.roomname}</h3>
                                         <p style={{
-                                            margin: "5px 0 0 0",
-                                            fontSize: "0.9rem",
-                                            color: "#666"
-                                        }}>Created on {new Date(room.created_at).toLocaleDateString()}</p>
+                                            margin: "0",
+                                            fontSize: "0.95rem",
+                                            color: "#64748b",
+                                            lineHeight: "1.5",
+                                            display: "-webkit-box",
+                                            WebkitLineClamp: "2",
+                                            WebkitBoxOrient: "vertical",
+                                            overflow: "hidden",
+                                            textOverflow: "ellipsis"
+                                        }}>{room.description}</p>
                                     </div>
                                 </div>
-                                <p style={{
-                                    margin: "0 0 20px 0",
-                                    fontSize: "0.95rem",
-                                    color: "#444",
-                                    lineHeight: "1.5"
-                                }}>{room.description}</p>
                                 <button
                                     onClick={() => onJoinRoom(room.roomid)}
                                     style={{
@@ -236,6 +238,10 @@ export default function RoomList({ rooms, onJoinRoom }) {
                                         cursor: "pointer",
                                         fontSize: "0.95rem",
                                         fontWeight: "500",
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        gap: "8px",
                                         transition: "all 0.2s ease",
                                         ':hover': {
                                             background: "#1976d2",
@@ -243,6 +249,11 @@ export default function RoomList({ rooms, onJoinRoom }) {
                                         }
                                     }}
                                 >
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                                        <polyline points="10 17 15 12 10 7" />
+                                        <line x1="15" y1="12" x2="3" y2="12" />
+                                    </svg>
                                     Join Room
                                 </button>
                             </div>

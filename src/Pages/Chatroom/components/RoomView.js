@@ -607,6 +607,206 @@ export default function RoomView({ room, onBack, onLeave }) {
         margin: "0 auto",
         width: "100%"
       }}>
+        {/* Room Header */}
+        <div style={{
+          background: "white",
+          padding: "25px",
+          borderRadius: "20px",
+          boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+          marginBottom: "25px"
+        }}>
+          <div style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "flex-start",
+            marginBottom: "20px"
+          }}>
+            <div style={{
+              flex: 1,
+              display: "flex",
+              alignItems: "flex-start",
+              gap: "20px"
+            }}>
+              <div style={{
+                width: "70px",
+                height: "70px",
+                borderRadius: "18px",
+                overflow: "hidden",
+                flexShrink: 0,
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
+              }}>
+                <img
+                  src={`https://ui-avatars.com/api/?name=${encodeURIComponent(room.roomname)}&background=2196f3&color=fff`}
+                  alt={room.roomname}
+                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                />
+              </div>
+              {isEditingRoom ? (
+                <div style={{ flex: 1 }}>
+                  <input
+                    type="text"
+                    value={editedRoomName}
+                    onChange={(e) => setEditedRoomName(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      fontSize: "1.5rem",
+                      fontWeight: "600",
+                      border: "1px solid #e3e8f8",
+                      borderRadius: "12px",
+                      marginBottom: "10px",
+                      color: "#1a237e"
+                    }}
+                  />
+                  <textarea
+                    value={editedRoomDescription}
+                    onChange={(e) => setEditedRoomDescription(e.target.value)}
+                    style={{
+                      width: "100%",
+                      padding: "12px 16px",
+                      fontSize: "1rem",
+                      border: "1px solid #e3e8f8",
+                      borderRadius: "12px",
+                      minHeight: "80px",
+                      resize: "vertical",
+                      color: "#64748b",
+                      lineHeight: "1.5"
+                    }}
+                  />
+                </div>
+              ) : (
+                <div style={{ flex: 1 }}>
+                  <h1 style={{
+                    margin: "0 0 10px 0",
+                    color: "#1a237e",
+                    fontSize: "1.8rem",
+                    fontWeight: "600",
+                    lineHeight: "1.3"
+                  }}>{room.roomname}</h1>
+                  <p style={{
+                    margin: "0",
+                    color: "#64748b",
+                    fontSize: "1rem",
+                    lineHeight: "1.5"
+                  }}>{room.description}</p>
+                </div>
+              )}
+            </div>
+            <div style={{
+              display: "flex",
+              gap: "10px",
+              marginLeft: "20px"
+            }}>
+              <button
+                onClick={onBack}
+                style={{
+                  padding: "10px 20px",
+                  background: "#f8faff",
+                  border: "1px solid #e3e8f8",
+                  borderRadius: "12px",
+                  color: "#1a237e",
+                  cursor: "pointer",
+                  fontSize: "0.95rem",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "8px",
+                  transition: "all 0.2s ease"
+                }}
+              >
+                ← Back to Rooms
+              </button>
+              {userRole === "Admin" && (
+                <>
+                  {isEditingRoom ? (
+                    <>
+                      <button
+                        onClick={handleUpdateRoom}
+                        style={{
+                          padding: "10px 20px",
+                          background: "#2196f3",
+                          border: "none",
+                          borderRadius: "12px",
+                          color: "white",
+                          cursor: "pointer",
+                          fontSize: "0.95rem",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px"
+                        }}
+                      >
+                        💾 Save Changes
+                      </button>
+                      <button
+                        onClick={() => setIsEditingRoom(false)}
+                        style={{
+                          padding: "10px 20px",
+                          background: "#f8faff",
+                          border: "1px solid #e3e8f8",
+                          borderRadius: "12px",
+                          color: "#666",
+                          cursor: "pointer",
+                          fontSize: "0.95rem"
+                        }}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <button
+                        onClick={() => setIsEditingRoom(true)}
+                        style={{
+                          padding: "10px 20px",
+                          background: "#f8faff",
+                          border: "1px solid #e3e8f8",
+                          borderRadius: "12px",
+                          color: "#1a237e",
+                          cursor: "pointer",
+                          fontSize: "0.95rem",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px"
+                        }}
+                      >
+                        ✏️ Edit Room
+                      </button>
+                      <button
+                        onClick={handleDeleteRoom}
+                        style={{
+                          padding: "10px 20px",
+                          background: "#fff2f2",
+                          border: "1px solid #ffcdd2",
+                          borderRadius: "12px",
+                          color: "#d32f2f",
+                          cursor: "pointer",
+                          fontSize: "0.95rem",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "8px"
+                        }}
+                      >
+                        🗑️ Delete Room
+                      </button>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "15px",
+            color: "#64748b",
+            fontSize: "0.9rem",
+            borderTop: "1px solid #e3e8f8",
+            paddingTop: "15px",
+            marginTop: "5px"
+          }}>
+            <span>{room.member_count || 0} members</span>
+          </div>
+        </div>
+
         {/* Search Section */}
         <div className="search-section" style={{
           background: "white",
