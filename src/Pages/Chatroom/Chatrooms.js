@@ -98,10 +98,6 @@ export default function Chatrooms() {
                         onLeaveRoom={() => setActiveRoom(null)}
                     />
                     <div className="main-content">
-                        <header className="chatroom-header">
-                            <h1>{activeRoom ? activeRoom.roomname : "Chatrooms"}</h1>
-                        </header>
-
                         {activeRoom ? (
                             <RoomView
                                 room={activeRoom}
