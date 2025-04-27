@@ -4,7 +4,7 @@ import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from '../Index/components/Navbar.js';
 import Footer from '../Footer/Footer.js';
-import "./css/Chatroom.css";
+import "../Chatroom/css/Chatroom.css";
 
 export default function Chatrooms() {
     const [rooms, setRooms] = useState([]);

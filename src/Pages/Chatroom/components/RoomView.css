@@ -278,3 +278,61 @@
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     color: #64748b;
 }
+
+
+
+/* RoomView.css */
+
+.room-view-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f4ff;
+    /* Light blue background */
+    padding: 20px;
+}
+
+.room-view-content {
+    flex: 1;
+    padding: 20px;
+    background-color: #ffffff;
+    /* White background for content */
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-left: 20px;
+    /* Space between sidebar and content */
+}
+
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.room-title {
+    font-size: 28px;
+    color: #007bff;
+    /* Blue color for title */
+    margin: 0;
+}
+
+.leave-room-button {
+    padding: 10px 15px;
+    background-color: #dc3545;
+    /* Red color for leave button */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.leave-room-button:hover {
+    background-color: #c82333;
+    /* Darker red on hover */
+}
+
+.room-description {
+    font-size: 16px;
+    color: #666;
+}
