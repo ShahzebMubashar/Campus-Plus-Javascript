@@ -603,7 +603,8 @@ export default function RoomView({ room, onBack, onLeave }) {
         flex: 1,
         padding: "20px",
         backgroundColor: "#f0f2f5",
-        position: "relative"
+        position: "relative",
+        marginLeft: "-220px"
       }}>
         {/* Room Header */}
         <div style={{
