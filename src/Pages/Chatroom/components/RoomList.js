@@ -65,312 +65,352 @@ export default function RoomList({ rooms, onJoinRoom }) {
 
     return (
         <div style={{
-            minHeight: "100vh",
+            display: "flex",
+            minHeight: "calc(100vh - 64px)",
             backgroundColor: "#f5f8ff",
-            padding: "30px",
-            fontFamily: "Arial, sans-serif"
+            position: "relative",
+            paddingLeft: "300px",
+            marginTop: "64px"
         }}>
-            {/* Header Section */}
+            {/* Sidebar */}
             <div style={{
-                maxWidth: "1200px",
-                margin: "0 auto 30px",
-                textAlign: "center"
+                width: "300px",
+                background: "linear-gradient(180deg, #1a237e 0%, #0d47a1 100%)",
+                color: "white",
+                padding: "30px 20px",
+                position: "fixed",
+                height: "calc(100vh - 64px)",
+                overflowY: "auto",
+                left: 0,
+                top: "64px",
+                zIndex: 1000,
+                boxShadow: "4px 0 24px rgba(0,0,0,0.1)"
             }}>
-                <h1 style={{
-                    color: "#1a237e",
-                    fontSize: "2.5rem",
-                    marginBottom: "15px",
-                    fontWeight: "600"
-                }}>Campus+ Chatrooms</h1>
-                <p style={{
-                    color: "#666",
-                    fontSize: "1.1rem",
-                    maxWidth: "600px",
-                    margin: "0 auto"
-                }}>Join discussions, share knowledge, and connect with your peers</p>
-            </div>
-
-            {/* Search and Create Section */}
-            <div style={{
-                maxWidth: "1200px",
-                margin: "0 auto 30px",
-                display: "flex",
-                gap: "15px",
-                alignItems: "center",
-                justifyContent: "space-between",
-                background: "white",
-                padding: "20px",
-                borderRadius: "20px",
-                boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
-            }}>
-                <input
-                    type="text"
-                    placeholder="Search rooms..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    style={{
-                        flex: 1,
-                        padding: "15px 20px",
-                        border: "1px solid #e3e8f8",
-                        borderRadius: "12px",
-                        fontSize: "0.95rem",
-                        backgroundColor: "#f8faff",
-                        transition: "all 0.2s ease",
-                        ':focus': {
-                            borderColor: "#2196f3",
-                            boxShadow: "0 0 0 3px rgba(33,150,243,0.1)"
-                        }
-                    }}
-                />
-                {userRole === "Admin" && (
-                    <button
-                        onClick={() => setShowCreateRoomForm(true)}
-                        style={{
-                            padding: "15px 30px",
-                            background: "#2196f3",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "12px",
-                            cursor: "pointer",
-                            fontSize: "0.95rem",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "8px",
-                            transition: "all 0.2s ease",
-                            ':hover': {
-                                background: "#1976d2"
-                            }
-                        }}
-                    >
-                        <span style={{ fontSize: "1.2rem" }}>➕</span> Create Room
-                    </button>
-                )}
-            </div>
-
-            {/* Create Room Modal */}
-            {showCreateRoomForm && (
+                {/* Profile Section */}
                 <div style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 1000,
-                    backdropFilter: "blur(5px)"
+                    marginBottom: "25px",
+                    background: "rgba(255,255,255,0.1)",
+                    padding: "20px",
+                    borderRadius: "16px",
+                    backdropFilter: "blur(10px)"
                 }}>
                     <div style={{
-                        background: "white",
-                        padding: "30px",
-                        borderRadius: "20px",
-                        width: "500px",
-                        maxWidth: "90%",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.1)"
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "15px"
                     }}>
-                        <h2 style={{
-                            margin: "0 0 25px 0",
-                            color: "#1a237e",
-                            fontSize: "1.5rem",
-                            fontWeight: "600"
-                        }}>
-                            Create New Room
-                        </h2>
-                        <input
-                            type="text"
-                            placeholder="Room Name"
-                            value={newRoomName}
-                            onChange={(e) => setNewRoomName(e.target.value)}
-                            style={{
-                                width: "100%",
-                                padding: "15px 20px",
-                                marginBottom: "15px",
-                                border: "1px solid #e3e8f8",
-                                borderRadius: "12px",
-                                boxSizing: "border-box",
-                                fontSize: "0.95rem",
-                                backgroundColor: "#f8faff",
-                                transition: "all 0.2s ease",
-                                ':focus': {
-                                    borderColor: "#2196f3",
-                                    boxShadow: "0 0 0 3px rgba(33,150,243,0.1)"
-                                }
-                            }}
-                        />
-                        <textarea
-                            placeholder="Room Description"
-                            value={newRoomDescription}
-                            onChange={(e) => setNewRoomDescription(e.target.value)}
-                            style={{
-                                width: "100%",
-                                height: "120px",
-                                padding: "15px 20px",
-                                marginBottom: "25px",
-                                border: "1px solid #e3e8f8",
-                                borderRadius: "12px",
-                                boxSizing: "border-box",
-                                resize: "vertical",
-                                fontSize: "0.95rem",
-                                backgroundColor: "#f8faff",
-                                transition: "all 0.2s ease",
-                                ':focus': {
-                                    borderColor: "#2196f3",
-                                    boxShadow: "0 0 0 3px rgba(33,150,243,0.1)"
-                                }
-                            }}
-                        />
                         <div style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "12px"
+                            width: "50px",
+                            height: "50px",
+                            borderRadius: "12px",
+                            overflow: "hidden",
+                            boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
                         }}>
-                            <button
-                                onClick={() => setShowCreateRoomForm(false)}
-                                style={{
-                                    padding: "12px 25px",
-                                    background: "#e3e8f8",
-                                    color: "#1a237e",
-                                    border: "none",
-                                    borderRadius: "12px",
-                                    cursor: "pointer",
-                                    fontSize: "0.95rem",
-                                    transition: "all 0.2s ease",
-                                    ':hover': {
-                                        background: "#d1d8f0"
-                                    }
-                                }}
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                onClick={handleCreateRoom}
-                                style={{
-                                    padding: "12px 25px",
-                                    background: "#2196f3",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "12px",
-                                    cursor: "pointer",
-                                    fontSize: "0.95rem",
-                                    transition: "all 0.2s ease",
-                                    ':hover': {
-                                        background: "#1976d2"
-                                    }
-                                }}
-                            >
-                                Create Room
-                            </button>
+                            <img
+                                src={`https://ui-avatars.com/api/?name=User&background=2196f3&color=fff`}
+                                alt="User Avatar"
+                                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                            />
+                        </div>
+                        <div>
+                            <h3 style={{
+                                margin: "0",
+                                fontSize: "1.1rem",
+                                fontWeight: "600",
+                                color: "#fff"
+                            }}>Welcome Back</h3>
+                            <p style={{
+                                margin: "5px 0 0 0",
+                                fontSize: "0.9rem",
+                                color: "rgba(255,255,255,0.8)"
+                            }}>Campus+ Member</p>
                         </div>
                     </div>
                 </div>
-            )}
 
-            {/* Rooms Grid */}
-            <div style={{
-                maxWidth: "1200px",
-                margin: "0 auto",
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(350px, 1fr))",
-                gap: "25px"
-            }}>
-                {filteredRooms.length > 0 ? (
-                    filteredRooms.map((room) => (
-                        <div key={room.roomid} style={{
-                            background: "white",
-                            padding: "25px",
-                            borderRadius: "20px",
-                            boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-                            display: "flex",
-                            flexDirection: "column",
-                            gap: "15px",
-                            transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                            ':hover': {
-                                transform: "translateY(-5px)",
-                                boxShadow: "0 6px 25px rgba(0,0,0,0.1)"
-                            }
-                        }}>
-                            <div style={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: "15px"
-                            }}>
-                                <div style={{
-                                    width: "60px",
-                                    height: "60px",
-                                    borderRadius: "16px",
-                                    overflow: "hidden",
-                                    flexShrink: 0
-                                }}>
-                                    <img
-                                        src={`https://ui-avatars.com/api/?name=${room.name}&background=2196f3&color=fff`}
-                                        alt="Room Avatar"
-                                        style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                                    />
-                                </div>
-                                <div style={{ flex: 1 }}>
-                                    <h3 style={{
-                                        margin: "0 0 5px 0",
-                                        color: "#1a237e",
-                                        fontSize: "1.2rem",
-                                        fontWeight: "600"
-                                    }}>{room.name}</h3>
-                                    <p style={{
-                                        margin: 0,
-                                        color: "#666",
-                                        fontSize: "0.9rem"
-                                    }}>Created {new Date(room.created_at).toLocaleDateString()}</p>
-                                </div>
-                            </div>
-                            <p style={{
-                                margin: 0,
-                                color: "#444",
+                {/* Navigation Links */}
+                <div style={{
+                    marginBottom: "25px",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "10px"
+                }}>
+                    <a href="/profile" style={{
+                        padding: "12px 20px",
+                        background: "rgba(255,255,255,0.1)",
+                        color: "white",
+                        textDecoration: "none",
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        fontSize: "0.95rem",
+                        transition: "all 0.2s ease",
+                        ':hover': {
+                            background: "rgba(255,255,255,0.2)",
+                            transform: "translateX(5px)"
+                        }
+                    }}>
+                        👤 Profile
+                    </a>
+                    <a href="/settings" style={{
+                        padding: "12px 20px",
+                        background: "rgba(255,255,255,0.1)",
+                        color: "white",
+                        textDecoration: "none",
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        fontSize: "0.95rem",
+                        transition: "all 0.2s ease",
+                        ':hover': {
+                            background: "rgba(255,255,255,0.2)",
+                            transform: "translateX(5px)"
+                        }
+                    }}>
+                        ⚙️ Settings
+                    </a>
+                    <a href="/notifications" style={{
+                        padding: "12px 20px",
+                        background: "rgba(255,255,255,0.1)",
+                        color: "white",
+                        textDecoration: "none",
+                        borderRadius: "12px",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        fontSize: "0.95rem",
+                        transition: "all 0.2s ease",
+                        ':hover': {
+                            background: "rgba(255,255,255,0.2)",
+                            transform: "translateX(5px)"
+                        }
+                    }}>
+                        🔔 Notifications
+                    </a>
+                </div>
+
+                {/* Groups Navigation */}
+                <div style={{ marginBottom: "25px" }}>
+                    <h3 style={{
+                        fontSize: "0.85rem",
+                        color: "rgba(255,255,255,0.6)",
+                        marginBottom: "15px",
+                        textTransform: "uppercase",
+                        letterSpacing: "1.5px",
+                        paddingLeft: "10px"
+                    }}>Groups</h3>
+                    <div style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: "10px"
+                    }}>
+                        <button
+                            onClick={() => window.location.href = '/chatroom'}
+                            style={{
+                                padding: "12px 20px",
+                                background: "rgba(33, 150, 243, 0.3)",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "12px",
+                                cursor: "pointer",
                                 fontSize: "0.95rem",
-                                lineHeight: "1.5"
-                            }}>{room.description}</p>
-                            <div style={{
+                                textAlign: "left",
+                                transition: "all 0.2s ease",
+                                ':hover': {
+                                    background: "rgba(33, 150, 243, 0.4)",
+                                    transform: "translateX(5px)"
+                                }
+                            }}
+                        >
+                            🌐 All Groups
+                        </button>
+                        <button
+                            onClick={() => window.location.href = '/chatroom/my-groups'}
+                            style={{
+                                padding: "12px 20px",
+                                background: "rgba(33, 150, 243, 0.3)",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "12px",
+                                cursor: "pointer",
+                                fontSize: "0.95rem",
+                                textAlign: "left",
+                                transition: "all 0.2s ease",
+                                ':hover': {
+                                    background: "rgba(33, 150, 243, 0.4)",
+                                    transform: "translateX(5px)"
+                                }
+                            }}
+                        >
+                            👥 My Groups
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {/* Main Content */}
+            <div style={{
+                flex: 1,
+                padding: "30px",
+                width: "100%"
+            }}>
+                {/* Header Section */}
+                <div style={{
+                    maxWidth: "1200px",
+                    margin: "0 auto 30px",
+                    textAlign: "center"
+                }}>
+                    <h1 style={{
+                        color: "#1a237e",
+                        fontSize: "2.5rem",
+                        marginBottom: "15px",
+                        fontWeight: "600"
+                    }}>Campus+ Chatrooms</h1>
+                    <p style={{
+                        color: "#666",
+                        fontSize: "1.1rem",
+                        maxWidth: "600px",
+                        margin: "0 auto"
+                    }}>Join discussions, share knowledge, and connect with your peers</p>
+                </div>
+
+                {/* Search and Create Section */}
+                <div style={{
+                    maxWidth: "1200px",
+                    margin: "0 auto 30px",
+                    display: "flex",
+                    gap: "15px",
+                    alignItems: "center",
+                    justifyContent: "space-between",
+                    background: "white",
+                    padding: "20px",
+                    borderRadius: "20px",
+                    boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
+                }}>
+                    <input
+                        type="text"
+                        placeholder="Search rooms..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        style={{
+                            flex: 1,
+                            padding: "12px 20px",
+                            border: "1px solid #e0e0e0",
+                            borderRadius: "12px",
+                            fontSize: "0.95rem",
+                            outline: "none",
+                            transition: "all 0.2s ease",
+                            ':focus': {
+                                borderColor: "#2196f3",
+                                boxShadow: "0 0 0 3px rgba(33,150,243,0.1)"
+                            }
+                        }}
+                    />
+                    {userRole === "Admin" && (
+                        <button
+                            onClick={() => setShowCreateRoomForm(true)}
+                            style={{
+                                padding: "12px 25px",
+                                background: "#2196f3",
+                                color: "white",
+                                border: "none",
+                                borderRadius: "12px",
+                                cursor: "pointer",
+                                fontSize: "0.95rem",
+                                fontWeight: "500",
                                 display: "flex",
-                                justifyContent: "space-between",
                                 alignItems: "center",
-                                marginTop: "10px"
-                            }}>
+                                gap: "8px",
+                                transition: "all 0.2s ease",
+                                ':hover': {
+                                    background: "#1976d2",
+                                    transform: "translateY(-2px)"
+                                }
+                            }}
+                        >
+                            ➕ Create Room
+                        </button>
+                    )}
+                </div>
+
+                {/* Room Grid */}
+                <div style={{
+                    maxWidth: "1200px",
+                    margin: "0 auto",
+                    display: "grid",
+                    gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                    gap: "20px",
+                    padding: "20px 0"
+                }}>
+                    {filteredRooms.length > 0 ? (
+                        filteredRooms.map((room) => (
+                            <div
+                                key={room.roomid}
+                                style={{
+                                    background: "white",
+                                    borderRadius: "20px",
+                                    padding: "25px",
+                                    boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+                                    transition: "all 0.2s ease",
+                                    ':hover': {
+                                        transform: "translateY(-5px)",
+                                        boxShadow: "0 8px 30px rgba(0,0,0,0.1)"
+                                    }
+                                }}
+                            >
                                 <div style={{
                                     display: "flex",
-                                    gap: "15px"
+                                    alignItems: "center",
+                                    gap: "15px",
+                                    marginBottom: "15px"
                                 }}>
-                                    <span style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                        color: "#666",
-                                        fontSize: "0.9rem"
+                                    <div style={{
+                                        width: "50px",
+                                        height: "50px",
+                                        borderRadius: "12px",
+                                        overflow: "hidden",
+                                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
                                     }}>
-                                        👥 {room.member_count || 0} members
-                                    </span>
-                                    <span style={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "5px",
-                                        color: "#666",
-                                        fontSize: "0.9rem"
-                                    }}>
-                                        💬 {room.message_count || 0} messages
-                                    </span>
+                                        <img
+                                            src={`https://ui-avatars.com/api/?name=${encodeURIComponent(room.roomname)}&background=2196f3&color=fff`}
+                                            alt={room.roomname}
+                                            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                                        />
+                                    </div>
+                                    <div>
+                                        <h3 style={{
+                                            margin: "0",
+                                            fontSize: "1.2rem",
+                                            fontWeight: "600",
+                                            color: "#1a237e"
+                                        }}>{room.roomname}</h3>
+                                        <p style={{
+                                            margin: "5px 0 0 0",
+                                            fontSize: "0.9rem",
+                                            color: "#666"
+                                        }}>Created on {new Date(room.created_at).toLocaleDateString()}</p>
+                                    </div>
                                 </div>
+                                <p style={{
+                                    margin: "0 0 20px 0",
+                                    fontSize: "0.95rem",
+                                    color: "#444",
+                                    lineHeight: "1.5"
+                                }}>{room.description}</p>
                                 <button
                                     onClick={() => onJoinRoom(room.roomid)}
                                     style={{
-                                        padding: "12px 25px",
+                                        width: "100%",
+                                        padding: "12px",
                                         background: "#2196f3",
                                         color: "white",
                                         border: "none",
                                         borderRadius: "12px",
                                         cursor: "pointer",
                                         fontSize: "0.95rem",
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: "8px",
+                                        fontWeight: "500",
                                         transition: "all 0.2s ease",
                                         ':hover': {
                                             background: "#1976d2",
@@ -381,38 +421,164 @@ export default function RoomList({ rooms, onJoinRoom }) {
                                     Join Room
                                 </button>
                             </div>
+                        ))
+                    ) : (
+                        <div style={{
+                            gridColumn: "1 / -1",
+                            textAlign: "center",
+                            padding: "50px 20px",
+                            background: "white",
+                            borderRadius: "20px",
+                            boxShadow: "0 4px 20px rgba(0,0,0,0.05)"
+                        }}>
+                            <h3 style={{
+                                margin: "0 0 10px 0",
+                                color: "#1a237e",
+                                fontSize: "1.2rem"
+                            }}>No Rooms Found</h3>
+                            <p style={{
+                                margin: "0",
+                                color: "#666",
+                                fontSize: "0.95rem"
+                            }}>Try adjusting your search or create a new room</p>
                         </div>
-                    ))
-                ) : (
+                    )}
+                </div>
+
+                {/* Create Room Modal */}
+                {showCreateRoomForm && (
                     <div style={{
-                        gridColumn: "1 / -1",
-                        background: "white",
-                        padding: "40px",
-                        borderRadius: "20px",
-                        boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-                        textAlign: "center"
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        background: "rgba(0,0,0,0.5)",
+                        backdropFilter: "blur(5px)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        zIndex: 1100
                     }}>
                         <div style={{
-                            width: "80px",
-                            height: "80px",
-                            margin: "0 auto 20px",
-                            opacity: 0.5
+                            background: "white",
+                            borderRadius: "20px",
+                            padding: "30px",
+                            width: "90%",
+                            maxWidth: "500px",
+                            boxShadow: "0 10px 40px rgba(0,0,0,0.2)"
                         }}>
-                            🔍
+                            <h2 style={{
+                                margin: "0 0 20px 0",
+                                color: "#1a237e",
+                                fontSize: "1.5rem",
+                                textAlign: "center"
+                            }}>Create New Room</h2>
+                            <div style={{
+                                marginBottom: "20px"
+                            }}>
+                                <label style={{
+                                    display: "block",
+                                    marginBottom: "8px",
+                                    color: "#444",
+                                    fontSize: "0.95rem",
+                                    fontWeight: "500"
+                                }}>Room Name</label>
+                                <input
+                                    type="text"
+                                    value={newRoomName}
+                                    onChange={(e) => setNewRoomName(e.target.value)}
+                                    style={{
+                                        width: "100%",
+                                        padding: "12px",
+                                        border: "1px solid #e0e0e0",
+                                        borderRadius: "12px",
+                                        fontSize: "0.95rem",
+                                        outline: "none",
+                                        transition: "all 0.2s ease",
+                                        ':focus': {
+                                            borderColor: "#2196f3",
+                                            boxShadow: "0 0 0 3px rgba(33,150,243,0.1)"
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div style={{
+                                marginBottom: "25px"
+                            }}>
+                                <label style={{
+                                    display: "block",
+                                    marginBottom: "8px",
+                                    color: "#444",
+                                    fontSize: "0.95rem",
+                                    fontWeight: "500"
+                                }}>Description</label>
+                                <textarea
+                                    value={newRoomDescription}
+                                    onChange={(e) => setNewRoomDescription(e.target.value)}
+                                    style={{
+                                        width: "100%",
+                                        padding: "12px",
+                                        border: "1px solid #e0e0e0",
+                                        borderRadius: "12px",
+                                        fontSize: "0.95rem",
+                                        minHeight: "100px",
+                                        resize: "vertical",
+                                        outline: "none",
+                                        transition: "all 0.2s ease",
+                                        ':focus': {
+                                            borderColor: "#2196f3",
+                                            boxShadow: "0 0 0 3px rgba(33,150,243,0.1)"
+                                        }
+                                    }}
+                                />
+                            </div>
+                            <div style={{
+                                display: "flex",
+                                gap: "15px"
+                            }}>
+                                <button
+                                    onClick={() => setShowCreateRoomForm(false)}
+                                    style={{
+                                        flex: 1,
+                                        padding: "12px",
+                                        background: "#f5f5f5",
+                                        color: "#444",
+                                        border: "none",
+                                        borderRadius: "12px",
+                                        cursor: "pointer",
+                                        fontSize: "0.95rem",
+                                        fontWeight: "500",
+                                        transition: "all 0.2s ease",
+                                        ':hover': {
+                                            background: "#e0e0e0"
+                                        }
+                                    }}
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    onClick={handleCreateRoom}
+                                    style={{
+                                        flex: 1,
+                                        padding: "12px",
+                                        background: "#2196f3",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "12px",
+                                        cursor: "pointer",
+                                        fontSize: "0.95rem",
+                                        fontWeight: "500",
+                                        transition: "all 0.2s ease",
+                                        ':hover': {
+                                            background: "#1976d2"
+                                        }
+                                    }}
+                                >
+                                    Create Room
+                                </button>
+                            </div>
                         </div>
-                        <h3 style={{
-                            color: "#1a237e",
-                            fontSize: "1.2rem",
-                            marginBottom: "10px"
-                        }}>
-                            No rooms found
-                        </h3>
-                        <p style={{
-                            color: "#666",
-                            fontSize: "0.95rem"
-                        }}>
-                            Try adjusting your search criteria
-                        </p>
                     </div>
                 )}
             </div>

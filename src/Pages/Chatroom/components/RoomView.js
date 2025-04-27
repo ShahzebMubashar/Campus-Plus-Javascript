@@ -589,10 +589,11 @@ export default function RoomView({ room, onBack, onLeave }) {
   return (
     <div style={{
       display: "flex",
-      minHeight: "100vh",
+      minHeight: "calc(100vh - 64px)",
       backgroundColor: "#f5f8ff",
       position: "relative",
-      paddingLeft: "300px"
+      paddingLeft: "300px",
+      marginTop: "64px"
     }}>
       {/* Sidebar */}
       <div style={{
@@ -601,16 +602,16 @@ export default function RoomView({ room, onBack, onLeave }) {
         color: "white",
         padding: "30px 20px",
         position: "fixed",
-        height: "100vh",
+        height: "calc(100vh - 64px)",
         overflowY: "auto",
         left: 0,
-        top: 0,
+        top: "64px",
         zIndex: 1000,
         boxShadow: "4px 0 24px rgba(0,0,0,0.1)"
       }}>
         {/* Profile Section */}
         <div style={{
-          marginBottom: "35px",
+          marginBottom: "25px",
           background: "rgba(255,255,255,0.1)",
           padding: "20px",
           borderRadius: "16px",
@@ -622,9 +623,9 @@ export default function RoomView({ room, onBack, onLeave }) {
             gap: "15px"
           }}>
             <div style={{
-              width: "60px",
-              height: "60px",
-              borderRadius: "16px",
+              width: "50px",
+              height: "50px",
+              borderRadius: "12px",
               overflow: "hidden",
               boxShadow: "0 4px 12px rgba(0,0,0,0.1)"
             }}>
@@ -652,13 +653,13 @@ export default function RoomView({ room, onBack, onLeave }) {
 
         {/* Navigation Links */}
         <div style={{
-          marginBottom: "35px",
+          marginBottom: "25px",
           display: "flex",
           flexDirection: "column",
-          gap: "12px"
+          gap: "10px"
         }}>
           <a href="/profile" style={{
-            padding: "14px 20px",
+            padding: "12px 20px",
             background: "rgba(255,255,255,0.1)",
             color: "white",
             textDecoration: "none",
@@ -676,7 +677,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             👤 Profile
           </a>
           <a href="/settings" style={{
-            padding: "14px 20px",
+            padding: "12px 20px",
             background: "rgba(255,255,255,0.1)",
             color: "white",
             textDecoration: "none",
@@ -694,7 +695,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             ⚙️ Settings
           </a>
           <a href="/notifications" style={{
-            padding: "14px 20px",
+            padding: "12px 20px",
             background: "rgba(255,255,255,0.1)",
             color: "white",
             textDecoration: "none",
@@ -714,7 +715,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         </div>
 
         {/* Groups Navigation */}
-        <div style={{ marginBottom: "35px" }}>
+        <div style={{ marginBottom: "25px" }}>
           <h3 style={{
             fontSize: "0.85rem",
             color: "rgba(255,255,255,0.6)",
@@ -731,7 +732,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             <button
               onClick={() => window.location.href = '/chatroom'}
               style={{
-                padding: "14px 20px",
+                padding: "12px 20px",
                 background: "rgba(33, 150, 243, 0.3)",
                 color: "white",
                 border: "none",
@@ -751,7 +752,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             <button
               onClick={() => window.location.href = '/chatroom/my-groups'}
               style={{
-                padding: "14px 20px",
+                padding: "12px 20px",
                 background: "rgba(33, 150, 243, 0.3)",
                 color: "white",
                 border: "none",
@@ -771,20 +772,20 @@ export default function RoomView({ room, onBack, onLeave }) {
           </div>
         </div>
 
-        {/* Room Info */}
+        {/* Room Info (if in a room) */}
         {room && (
           <div style={{
             background: "rgba(255,255,255,0.1)",
-            padding: "25px",
+            padding: "20px",
             borderRadius: "16px",
             backdropFilter: "blur(10px)"
           }}>
             <div style={{
-              width: "100px",
-              height: "100px",
-              borderRadius: "20px",
+              width: "80px",
+              height: "80px",
+              borderRadius: "16px",
               overflow: "hidden",
-              margin: "0 auto 20px",
+              margin: "0 auto 15px",
               boxShadow: "0 4px 20px rgba(0,0,0,0.15)"
             }}>
               <img
@@ -795,7 +796,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             </div>
             <h2 style={{
               textAlign: "center",
-              fontSize: "1.3rem",
+              fontSize: "1.2rem",
               margin: "0 0 10px 0",
               color: "#fff",
               fontWeight: "600"
@@ -804,14 +805,14 @@ export default function RoomView({ room, onBack, onLeave }) {
               textAlign: "center",
               fontSize: "0.9rem",
               color: "rgba(255,255,255,0.7)",
-              margin: "0 0 25px 0"
+              margin: "0 0 15px 0"
             }}>
               Created {new Date(room.created_at).toLocaleDateString()}
             </p>
             <div style={{
               display: "flex",
               flexDirection: "column",
-              gap: "12px"
+              gap: "10px"
             }}>
               <button
                 onClick={onBack}

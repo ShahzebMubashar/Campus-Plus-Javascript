@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Sidebar from "./components/Sidebar.js";
+
 import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from '../Index/components/Navbar.js';
@@ -61,16 +61,9 @@ export default function Chatrooms() {
             <div className="chatroom-app">
                 <Navbar />
                 <div className="content-wrapper">
-                    <Sidebar
-                        username={''}
-                        onNavigate={(page) => {
-                            console.log("Navigate to:", page);
-                        }}
-                    />
+
                     <div className="main-content">
-                        <header className="chatroom-header">
-                            <h1>{activeRoom ? activeRoom.name : "Chatrooms"}</h1>
-                        </header>
+
 
                         {activeRoom ? (
                             <RoomView room={activeRoom} onBack={handleBackToRooms} />
