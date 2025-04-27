@@ -1,57 +1,89 @@
-import React, { useState } from 'react';
-import "../css/Sidebar.css";
-import Picture from '../../../Assets/images/Shahzeb Mubashar (lesser size).webp';
-import { User, Settings, Users, Bell } from "lucide-react";
-import MyGroups from './MyGroups';
-import AllGroups from './AllGroups';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import './Sidebar.css';
 
-export default function Sidebar({ username, onNavigate }) {
-    const [activeTab, setActiveTab] = useState('all');
+const Sidebar = ({ room, onBack, onLeave }) => {
+    const navigate = useNavigate();
+
+    const handleLeaveRoom = () => {
+        if (onLeave) {
+            onLeave();
+        }
+    };
 
     return (
         <div className="sidebar">
-            <div className="profile">
-                <div className="profile-image">
-                    <img src={Picture || "/placeholder.svg"} alt="User Profile" />
+            {/* Profile Section */}
+            <div className="profile-section">
+                <div className="profile-content">
+                    <div className="avatar">
+                        <img
+                            src={`https://ui-avatars.com/api/?name=User&background=2196f3&color=fff`}
+                            alt="User Avatar"
+                        />
+                    </div>
+                    <div className="profile-info">
+                        <h3>Welcome Back</h3>
+                        <p>Campus+ Member</p>
+                    </div>
                 </div>
-                <h2>{username}</h2>
             </div>
 
+            {/* Navigation Links */}
+            <div className="sidebar-nav-links">
+                <a href="/profile" className="sidebar-nav-link">
+                    👤 Profile
+                </a>
+                <a href="/settings" className="sidebar-nav-link">
+                    ⚙️ Settings
+                </a>
+                <a href="/notifications" className="sidebar-nav-link">
+                    🔔 Notifications
+                </a>
+            </div>
+
+            {/* Groups Navigation */}
             <div className="groups-section">
-                <div className="tabs">
+                <h3>Groups</h3>
+                <div className="groups-buttons">
                     <button
-                        onClick={() => setActiveTab('all')}
-                        className={`tab ${activeTab === 'all' ? 'active' : ''}`}
+                        onClick={() => navigate('/chatroom')}
+                        className="group-button"
                     >
-                        All Groups
+                        🌐 All Groups
                     </button>
                     <button
-                        onClick={() => setActiveTab('my')}
-                        className={`tab ${activeTab === 'my' ? 'active' : ''}`}
+                        onClick={() => navigate('/chatroom/my-groups')}
+                        className="group-button"
                     >
-                        My Groups
+                        👥 My Groups
                     </button>
-                </div>
-
-                <div className="groups-content">
-                    {activeTab === 'all' ? <AllGroups /> : <MyGroups />}
                 </div>
             </div>
 
-            <ul className="chatroom-nav-items">
-                <li className="chatroom-nav-item" onClick={() => onNavigate("profile")}>
-                    <User size={18} />
-                    <span>Profile</span>
-                </li>
-                <li className="chatroom-nav-item" onClick={() => onNavigate("settings")}>
-                    <Settings size={18} />
-                    <span>Settings</span>
-                </li>
-                <li className="chatroom-nav-item" onClick={() => onNavigate("notifications")}>
-                    <Bell size={18} />
-                    <span>Notifications</span>
-                </li>
-            </ul>
+            {/* Room Info */}
+            {room && (
+                <div className="room-info">
+                    <div className="room-avatar">
+                        <img
+                            src={`https://ui-avatars.com/api/?name=${room.roomname}&background=2196f3&color=fff`}
+                            alt="Room Avatar"
+                        />
+                    </div>
+                    <h2>{room.roomname}</h2>
+                    <p>Created {new Date(room.created_at).toLocaleDateString()}</p>
+                    <div className="room-buttons">
+                        <button onClick={onBack} className="back-button">
+                            ← Back to Rooms
+                        </button>
+                        <button onClick={handleLeaveRoom} className="leave-button">
+                            🚪 Leave Room
+                        </button>
+                    </div>
+                </div>
+            )}
         </div>
     );
-}
+};
+
+export default Sidebar; 
