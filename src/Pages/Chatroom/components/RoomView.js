@@ -591,13 +591,13 @@ export default function RoomView({ room, onBack, onLeave }) {
   return (
     <div style={{
       display: "flex",
-      minHeight: "calc(100vh - 64px)",
-      backgroundColor: "#fff",
+      minHeight: "calc(100vh - 90px)",
+      backgroundColor: "#f8fafc",
       position: "relative",
-      paddingLeft: "300px",
-      marginTop: "64px"
+      paddingLeft: "280px",
+      marginTop: "90px"
     }}>
-      <Sidebar />
+      <Sidebar room={room} onBack={onBack} onLeave={onLeave} />
 
       {/* Main Content */}
       <div style={{
