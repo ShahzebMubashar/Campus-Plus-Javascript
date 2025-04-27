@@ -5,6 +5,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
     const [newRoomName, setNewRoomName] = useState("");
     const [newRoomDescription, setNewRoomDescription] = useState("");
     const [userRole, setUserRole] = useState("");
+    const [searchQuery, setSearchQuery] = useState("");
 
     useEffect(() => {
         // Fetch user role when component mounts
@@ -57,118 +58,70 @@ export default function RoomList({ rooms, onJoinRoom }) {
         }
     };
 
+    const filteredRooms = rooms.filter(room =>
+        room.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        room.description.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
     return (
-        <div style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            padding: "20px",
-            fontFamily: "Arial, sans-serif"
-        }}>
-            {/* Create Room Button - Only visible to Admin */}
-            {userRole === "Admin" && (
-                <button
-                    onClick={() => setShowCreateRoomForm(true)}
-                    style={{
-                        padding: "10px 15px",
-                        backgroundColor: "#28a745",
-                        color: "white",
-                        border: "none",
-                        borderRadius: "4px",
-                        cursor: "pointer",
-                        marginBottom: "20px",
-                        fontSize: "16px"
-                    }}
-                >
-                    ➕ Create Room
-                </button>
-            )}
+        <div className="room-list-container">
+            {/* Header Section */}
+            <div className="room-list-header">
+                <div className="room-list-header-content">
+                    <div>
+                        <h1 className="room-list-title">Chat Rooms</h1>
+                        <p className="room-list-subtitle">
+                            Join existing rooms or create your own to start chatting
+                        </p>
+                    </div>
+                    {userRole === "Admin" && (
+                        <button
+                            className="create-room-button"
+                            onClick={() => setShowCreateRoomForm(true)}
+                        >
+                            <span>➕</span> Create Room
+                        </button>
+                    )}
+                </div>
+                <div className="room-list-search">
+                    <input
+                        type="text"
+                        placeholder="Search rooms..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    <span className="room-list-search-icon">🔍</span>
+                </div>
+            </div>
 
             {/* Create Room Modal */}
             {showCreateRoomForm && (
-                <div style={{
-                    position: "fixed",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(0,0,0,0.5)",
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    zIndex: 1000
-                }}>
-                    <div style={{
-                        backgroundColor: "white",
-                        padding: "25px",
-                        borderRadius: "8px",
-                        width: "450px",
-                        maxWidth: "90%",
-                        boxShadow: "0 4px 8px rgba(0,0,0,0.1)"
-                    }}>
-                        <h2 style={{ marginTop: 0, marginBottom: "20px", color: "#333" }}>
-                            Create New Room
-                        </h2>
+                <div className="create-room-modal">
+                    <div className="create-room-modal-content">
+                        <h2 className="create-room-modal-title">Create New Room</h2>
                         <input
+                            className="create-room-input"
                             type="text"
                             placeholder="Room Name"
                             value={newRoomName}
                             onChange={(e) => setNewRoomName(e.target.value)}
-                            style={{
-                                width: "100%",
-                                padding: "12px",
-                                marginBottom: "15px",
-                                border: "1px solid #ddd",
-                                borderRadius: "4px",
-                                boxSizing: "border-box",
-                                fontSize: "16px"
-                            }}
                         />
                         <textarea
+                            className="create-room-textarea"
                             placeholder="Room Description"
                             value={newRoomDescription}
                             onChange={(e) => setNewRoomDescription(e.target.value)}
-                            style={{
-                                width: "100%",
-                                height: "120px",
-                                padding: "12px",
-                                marginBottom: "20px",
-                                border: "1px solid #ddd",
-                                borderRadius: "4px",
-                                boxSizing: "border-box",
-                                resize: "vertical",
-                                fontSize: "16px"
-                            }}
                         />
-                        <div style={{
-                            display: "flex",
-                            justifyContent: "flex-end",
-                            gap: "10px"
-                        }}>
+                        <div className="modal-buttons">
                             <button
+                                className="modal-button modal-button-cancel"
                                 onClick={() => setShowCreateRoomForm(false)}
-                                style={{
-                                    padding: "10px 20px",
-                                    backgroundColor: "#6c757d",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                    fontSize: "16px"
-                                }}
                             >
                                 Cancel
                             </button>
                             <button
+                                className="modal-button modal-button-create"
                                 onClick={handleCreateRoom}
-                                style={{
-                                    padding: "10px 20px",
-                                    backgroundColor: "#28a745",
-                                    color: "white",
-                                    border: "none",
-                                    borderRadius: "4px",
-                                    cursor: "pointer",
-                                    fontSize: "16px"
-                                }}
                             >
                                 Create Room
                             </button>
@@ -178,35 +131,16 @@ export default function RoomList({ rooms, onJoinRoom }) {
             )}
 
             {/* Rooms List */}
-            <div style={{
-                display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
-                gap: "20px"
-            }}>
-                {rooms.map((room) => (
-                    <div key={room.roomid} style={{
-                        backgroundColor: "white",
-                        padding: "20px",
-                        borderRadius: "8px",
-                        boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                        display: "flex",
-                        flexDirection: "column"
-                    }}>
-                        <div style={{ flex: 1 }}>
-                            <h3 style={{ marginTop: 0, color: "#333" }}>{room.name}</h3>
-                            <p style={{ color: "#666", marginBottom: "15px" }}>{room.description}</p>
+            <div className="room-grid">
+                {filteredRooms.map((room) => (
+                    <div key={room.roomid} className="room-card">
+                        <div className="room-card-content">
+                            <h3 className="room-card-title">{room.name}</h3>
+                            <p className="room-card-description">{room.description}</p>
                         </div>
                         <button
+                            className="join-room-button"
                             onClick={() => onJoinRoom(room.roomid)}
-                            style={{
-                                padding: "10px 15px",
-                                backgroundColor: "#007bff",
-                                color: "white",
-                                border: "none",
-                                borderRadius: "4px",
-                                cursor: "pointer",
-                                alignSelf: "flex-end"
-                            }}
                         >
                             Join
                         </button>

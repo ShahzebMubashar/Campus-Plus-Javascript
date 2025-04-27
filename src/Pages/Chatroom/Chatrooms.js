@@ -9,11 +9,27 @@ import "./css/Chatroom.css";
 export default function Chatrooms() {
     const [rooms, setRooms] = useState([]);
     const [activeRoom, setActiveRoom] = useState(null);
+    const [userInfo, setUserInfo] = useState(null);
 
-    // Fetch rooms on initial render
+    // Fetch user info and rooms on initial render
     useEffect(() => {
+        fetchUserInfo();
         fetchRooms();
     }, []);
+
+    const fetchUserInfo = async () => {
+        try {
+            const response = await fetch("http://localhost:4000/auth/user-info", {
+                credentials: "include",
+            });
+            if (response.ok) {
+                const data = await response.json();
+                setUserInfo(data);
+            }
+        } catch (error) {
+            console.error("Error fetching user info:", error);
+        }
+    };
 
     const fetchRooms = async () => {
         try {
@@ -56,24 +72,38 @@ export default function Chatrooms() {
         setActiveRoom(null);
     };
 
+    const handleNavigation = (page) => {
+        // Handle navigation to different pages
+        switch (page) {
+            case 'all-groups':
+                setActiveRoom(null);
+                break;
+            case 'my-groups':
+                setActiveRoom(null);
+                break;
+            default:
+                break;
+        }
+    };
+
     return (
         <div className="chatroom-main-top">
             <div className="chatroom-app">
                 <Navbar />
                 <div className="content-wrapper">
                     <Sidebar
-                        username={''}
-                        onNavigate={(page) => {
-                            console.log("Navigate to:", page);
-                        }}
+                        username={userInfo?.username || ''}
+                        onNavigate={handleNavigation}
+                        activeRoom={activeRoom}
+                        onLeaveRoom={() => setActiveRoom(null)}
                     />
                     <div className="main-content">
-                        <header className="chatroom-header">
-                            <h1>{activeRoom ? activeRoom.name : "Chatrooms"}</h1>
-                        </header>
-
                         {activeRoom ? (
-                            <RoomView room={activeRoom} onBack={handleBackToRooms} />
+                            <RoomView
+                                room={activeRoom}
+                                onBack={handleBackToRooms}
+                                onLeave={() => setActiveRoom(null)}
+                            />
                         ) : (
                             <RoomList rooms={rooms} onJoinRoom={handleJoinRoom} />
                         )}

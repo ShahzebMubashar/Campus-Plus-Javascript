@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import "./RoomView.css";
+import Sidebar from "./Sidebar";
 
 const Comment = ({ comment, level = 0, room, fetchPosts }) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
@@ -115,7 +118,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [newComment, setNewComment] = useState("");
   const [newPost, setNewPost] = useState("");
   const [isEditingRoom, setIsEditingRoom] = useState(false);
-  const [editedRoomName, setEditedRoomName] = useState(room.roomname);
+  const [editedRoomName, setEditedRoomName] = useState(room.name);
   const [editedRoomDescription, setEditedRoomDescription] = useState(
     room.description
   );
@@ -143,20 +146,6 @@ export default function RoomView({ room, onBack, onLeave }) {
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
-    }
-  };
-
-  const trackPostView = async (messageid) => {
-    try {
-      await fetch(
-        `http://localhost:4000/Chatrooms/posts/${messageid}/view`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
-    } catch (error) {
-      console.error("Error tracking post view:", error);
     }
   };
 
@@ -594,234 +583,61 @@ export default function RoomView({ room, onBack, onLeave }) {
       position: "relative",
       paddingLeft: "280px"
     }}>
-      {/* Sidebar */}
-      <div style={{
-        width: "280px",
-        backgroundColor: "#1a2236",
-        color: "white",
-        padding: "20px",
-        position: "fixed",
-        height: "100vh",
-        overflowY: "auto",
-        left: 0,
-        top: 0,
-        zIndex: 1000,
-        boxShadow: "2px 0 5px rgba(0,0,0,0.1)"
-      }}>
-        {/* Profile Section */}
-        <div style={{
-          marginBottom: "30px",
-          display: "flex",
-          alignItems: "center",
-          gap: "15px"
-        }}>
-          <div style={{
-            width: "50px",
-            height: "50px",
-            borderRadius: "50%",
-            overflow: "hidden"
-          }}>
-            <img
-              src={`https://ui-avatars.com/api/?name=User&background=random`}
-              alt="User Avatar"
-              style={{ width: "100%", height: "100%", objectFit: "cover" }}
-            />
-          </div>
-          <div>
-            <h3 style={{
-              margin: "0",
-              fontSize: "1rem",
-              color: "#fff"
-            }}>Welcome</h3>
-            <p style={{
-              margin: "5px 0 0 0",
-              fontSize: "0.8rem",
-              color: "rgba(255,255,255,0.7)"
-            }}>Campus+ Member</p>
-          </div>
-        </div>
-
-        {/* Navigation Links */}
-        <div style={{
-          marginBottom: "30px",
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px"
-        }}>
-          <a href="/profile" style={{
-            padding: "12px 15px",
-            backgroundColor: "rgba(255,255,255,0.1)",
-            color: "white",
-            textDecoration: "none",
-            borderRadius: "8px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            fontSize: "0.9rem"
-          }}>
-            👤 Profile
-          </a>
-          <a href="/settings" style={{
-            padding: "12px 15px",
-            backgroundColor: "rgba(255,255,255,0.1)",
-            color: "white",
-            textDecoration: "none",
-            borderRadius: "8px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            fontSize: "0.9rem"
-          }}>
-            ⚙️ Settings
-          </a>
-          <a href="/notifications" style={{
-            padding: "12px 15px",
-            backgroundColor: "rgba(255,255,255,0.1)",
-            color: "white",
-            textDecoration: "none",
-            borderRadius: "8px",
-            display: "flex",
-            alignItems: "center",
-            gap: "10px",
-            fontSize: "0.9rem"
-          }}>
-            🔔 Notifications
-          </a>
-        </div>
-
-        {/* Groups Navigation */}
-        <div style={{ marginBottom: "30px" }}>
-          <h3 style={{
-            fontSize: "0.9rem",
-            color: "rgba(255,255,255,0.9)",
-            marginBottom: "15px",
-            textTransform: "uppercase",
-            letterSpacing: "1px"
-          }}>Groups</h3>
-          <div style={{
-            display: "flex",
-            gap: "10px",
-            marginBottom: "15px"
-          }}>
-            <button
-              onClick={() => window.location.href = '/chatroom'}
-              style={{
-                flex: 1,
-                padding: "10px",
-                backgroundColor: "rgba(255,255,255,0.1)",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                fontSize: "14px"
-              }}
-            >
-              All Groups
-            </button>
-            <button
-              onClick={() => window.location.href = '/chatroom/my-groups'}
-              style={{
-                flex: 1,
-                padding: "10px",
-                backgroundColor: "rgba(255,255,255,0.2)",
-                color: "white",
-                border: "none",
-                borderRadius: "8px",
-                cursor: "pointer",
-                fontSize: "14px"
-              }}
-            >
-              My Groups
-            </button>
-          </div>
-        </div>
-
-        {/* Room Info (only show when in a room) */}
-        {room && (
-          <>
-            <div style={{ marginBottom: "20px" }}>
-              <div style={{
-                width: "80px",
-                height: "80px",
-                borderRadius: "50%",
-                overflow: "hidden",
-                margin: "0 auto 15px"
-              }}>
-                <img
-                  src={`https://ui-avatars.com/api/?name=${room.roomname}&background=random`}
-                  alt="Room Avatar"
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-              <h2 style={{
-                textAlign: "center",
-                fontSize: "1.2rem",
-                margin: "0 0 5px 0",
-                color: "#fff"
-              }}>{room.roomname}</h2>
-              <p style={{
-                textAlign: "center",
-                fontSize: "0.9rem",
-                color: "rgba(255,255,255,0.7)",
-                margin: "0 0 15px 0"
-              }}>
-                Created {new Date(room.created_at).toLocaleDateString()}
-              </p>
-            </div>
-
-            <div style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "10px"
-            }}>
-              <button
-                onClick={onBack}
-                style={{
-                  padding: "10px 15px",
-                  backgroundColor: "rgba(255,255,255,0.1)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}
-              >
-                ← Back to Rooms
-              </button>
-
-              <button
-                onClick={handleLeaveRoom}
-                style={{
-                  padding: "10px 15px",
-                  backgroundColor: "rgba(220,53,69,0.8)",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "8px",
-                  cursor: "pointer",
-                  fontSize: "14px",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px"
-                }}
-              >
-                🚪 Leave Room
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-
-      {/* Main Content */}
+      <Sidebar room={room} onBack={onBack} onLeave={onLeave} />
+      {/* Main content */}
       <div style={{
         flex: 1,
         padding: "20px",
-        maxWidth: "1200px",
-        margin: "0 auto",
-        width: "100%"
+        backgroundColor: "#f0f2f5",
+        position: "relative",
+        marginLeft: "-220px"
       }}>
+        {/* Room Header */}
+        <div style={{
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          marginBottom: "20px"
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h1 style={{ margin: 0, fontSize: "24px", color: "#333" }}>{room.roomname}</h1>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={onBack}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#f0f0f0",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  cursor: "pointer"
+                }}
+              >
+                Back to Rooms
+              </button>
+              <button
+                onClick={onLeave}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#dc3545",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer"
+                }}
+              >
+                Leave Room
+              </button>
+            </div>
+          </div>
+          {room.name && (
+            <h1 style={{ margin: "-20px 0 0", color: "#000" }}>{room.name}</h1>
+          )}
+          {room.description && (
+            <p style={{ margin: "10px 0 0", color: "#666" }}>{room.description}</p>
+          )}
+        </div>
+
         {/* Search Section */}
         <div className="search-section" style={{
           backgroundColor: "white",
