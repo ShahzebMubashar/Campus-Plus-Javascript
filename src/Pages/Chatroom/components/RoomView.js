@@ -149,20 +149,6 @@ export default function RoomView({ room, onBack, onLeave }) {
     }
   };
 
-  const trackPostView = async (messageid) => {
-    try {
-      await fetch(
-        `http://localhost:4000/Chatrooms/posts/${messageid}/view`,
-        {
-          method: "POST",
-          credentials: "include",
-        }
-      );
-    } catch (error) {
-      console.error("Error tracking post view:", error);
-    }
-  };
-
   const fetchPosts = async () => {
     console.log(`Fetching Posts...`);
 
@@ -644,6 +630,9 @@ export default function RoomView({ room, onBack, onLeave }) {
               </button>
             </div>
           </div>
+          {room.name && (
+            <h1 style={{ margin: "-40px 0 0", color: "#000" }}>{room.name}</h1>
+          )}
           {room.description && (
             <p style={{ margin: "10px 0 0", color: "#666" }}>{room.description}</p>
           )}
