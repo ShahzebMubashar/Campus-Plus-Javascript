@@ -118,7 +118,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [newComment, setNewComment] = useState("");
   const [newPost, setNewPost] = useState("");
   const [isEditingRoom, setIsEditingRoom] = useState(false);
-  const [editedRoomName, setEditedRoomName] = useState(room.roomname);
+  const [editedRoomName, setEditedRoomName] = useState(room.name);
   const [editedRoomDescription, setEditedRoomDescription] = useState(
     room.description
   );
@@ -605,6 +605,49 @@ export default function RoomView({ room, onBack, onLeave }) {
         backgroundColor: "#f0f2f5",
         position: "relative"
       }}>
+        {/* Room Header */}
+        <div style={{
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          marginBottom: "20px"
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <h1 style={{ margin: 0, fontSize: "24px", color: "#333" }}>{room.roomname}</h1>
+            <div style={{ display: "flex", gap: "10px" }}>
+              <button
+                onClick={onBack}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#f0f0f0",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  cursor: "pointer"
+                }}
+              >
+                Back to Rooms
+              </button>
+              <button
+                onClick={onLeave}
+                style={{
+                  padding: "8px 16px",
+                  backgroundColor: "#dc3545",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer"
+                }}
+              >
+                Leave Room
+              </button>
+            </div>
+          </div>
+          {room.description && (
+            <p style={{ margin: "10px 0 0", color: "#666" }}>{room.description}</p>
+          )}
+        </div>
+
         {/* Search Section */}
         <div className="search-section" style={{
           backgroundColor: "white",

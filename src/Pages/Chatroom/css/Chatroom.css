@@ -27,12 +27,23 @@
     margin-top: 80px;
 }
 
+.sidebar {
+    width: 280px;
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid #e5e7eb;
+    padding: 20px;
+    position: fixed;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+}
+
 .main-content {
     flex: 1;
     padding: 20px;
     background-color: var(--background-color);
     overflow-y: auto;
-    margin-left: 20%;
+    margin-left: 280px;
+    width: calc(100% - 280px);
 }
 
 .chatroom-header {
@@ -48,14 +59,6 @@
     margin: 0;
     font-size: 24px;
     color: var(--text-color);
-}
-
-/* Update Sidebar styles */
-.sidebar {
-    width: 280px;
-    background-color: var(--sidebar-bg);
-    border-right: 1px solid #e5e7eb;
-    padding: 20px;
 }
 
 /* Update RoomList styles */
