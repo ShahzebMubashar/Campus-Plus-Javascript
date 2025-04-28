@@ -3,12 +3,15 @@ const bcrypt = require("bcrypt");
 const { randomBytes } = require("crypto");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
   auth: {
     user: "mahdijaffri5@gmail.com",
-    pass: "linu oegp ppqr lbhs",
+    pass: process.env.MAILER_PASS,
   },
 });
 
@@ -242,7 +245,7 @@ exports.forgotPassword = async (request, response) => {
     if (client) client.release();
   }
 
-  transporter.jsonMail(mailOptions, (error, info) => {
+  transporter.sendMail(mailOptions, (error, info) => {
     if (error) return console.log(`Error: `, error);
   });
 
