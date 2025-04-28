@@ -2,23 +2,30 @@ const pool = require("../config/database.js");
 const bcrypt = require("bcrypt");
 const { randomBytes } = require("crypto");
 const jwt = require("jsonwebtoken");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: "mahdijaffri5@gmail.com",
+    pass: "linu oegp ppqr lbhs",
+  },
+});
+
+const from = "no-reply@campusplus.com";
 
 exports.register = async (request, response) => {
-  // console.log("Register endpoint hit"); // Log to confirm the route is called
-  // console.log("Request body:", request.body); // Log the incoming request body
-
   const {
     body: { username, email, password, rollnumber },
   } = request;
 
   if (!username || !email || !password || !rollnumber) {
     console.log("Missing fields in the request body");
-    return response.status(400).send("Please provide all the fields");
+    return response.status(400).json("Please provide all the fields");
   }
 
   try {
     const client = await pool.connect();
-    // console.log("Database connection established for registration");
     await client.query("BEGIN");
 
     const checkUser = await client.query(
@@ -28,20 +35,15 @@ exports.register = async (request, response) => {
       [username, email, rollnumber]
     );
 
-    // console.log("User existence check result:", checkUser.rows[0]); // Log database query result
-
     const { usernamecount, emailcount, rollnumbercount } = checkUser.rows[0];
 
-    if (parseInt(rollnumbercount)) {
-      // console.log(`Roll Number ${rollnumber} already exists`);
+    if (parseInt(rollnumbercount))
       return response
         .status(409)
-        .send(`Roll Number ${rollnumber} already exists`);
-    }
-    if (parseInt(emailcount)) {
-      // console.log(`Email ${email} already exists`);
-      return response.status(409).send(`Email ${email} already exists`);
-    }
+        .json(`Roll Number ${rollnumber} already exists`);
+
+    if (parseInt(emailcount))
+      return response.status(409).json(`Email ${email} already exists`);
 
     if (parseInt(usernamecount)) {
       let newUserName = username;
@@ -54,21 +56,18 @@ exports.register = async (request, response) => {
         );
         if (!userCheck.rowCount) break;
       }
-      // console.log(`Suggested new username: ${newUserName}`);
+
       return response
         .status(409)
-        .send(`Username ${username} already exists. Try ${newUserName}`);
+        .json(`Username ${username} already exists. Try ${newUserName}`);
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    // console.log("Password hashed successfully");
 
     const result = await client.query(
       `INSERT INTO Users (username, email, password, rollnumber) VALUES ($1, $2, $3, $4) RETURNING userid, username, email, rollnumber`,
       [username, email, hashedPassword, rollnumber]
     );
-
-    // console.log("User successfully registered:", result.rows[0]);
 
     request.session.user = {
       userid: parseInt(result.rows[0].userid),
@@ -90,54 +89,40 @@ exports.register = async (request, response) => {
   } catch (error) {
     console.error("Registration error:", error.message);
     await pool.query("ROLLBACK");
-    return response.status(500).send("Server Error");
+    return response.status(500).json("Server Error");
   }
 };
 
 exports.login = async (request, response) => {
-  console.log("Login attempt received:", request.body);
   const { email, password, username } = request.body;
 
-  if (!email && !username) {
-    console.log("No email or username provided");
-    return response.status(400).send("Please provide Email or Username");
-  }
-  if (!password) {
-    console.log("No password provided");
-    return response.status(400).send("Please provide Password");
-  }
+  if (!email && !username)
+    return response.status(400).json("Please provide Email or Username");
+
+  if (!password) return response.status(400).json("Please provide Password");
 
   try {
-    console.log("Attempting to find user with:", email || username);
     const result = await pool.query(
       "SELECT * FROM Users WHERE email = $1 or username = $1",
       [email || username]
     );
 
-    if (!result.rowCount) {
-      console.log("No user found with provided credentials");
+    if (!result.rowCount)
       return response.status(404).json({ error: "Invalid credentials" });
-    }
 
     const user = result.rows[0];
-    console.log("User found, verifying password");
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) {
-      console.log("Password mismatch");
+    if (!isMatch)
       return response.status(401).json({ error: "Invalid credentials" });
-    }
 
-    console.log("Password verified, setting session");
-    // Set session data
     request.session.user = {
       userid: user.userid,
       email: user.email,
       username: user.username,
       role: user.role,
     };
-    console.log(`request.session.user.userid: ${request.session.user.userid}`);
-    // Save session explicitly and wait for it to complete
+
     await new Promise((resolve, reject) => {
       request.session.save((err) => {
         if (err) {
@@ -148,8 +133,6 @@ exports.login = async (request, response) => {
       });
     });
 
-    console.log("Session saved, sending response");
-    // Set proper headers
     response.header("Access-Control-Allow-Credentials", "true");
     response.header("Access-Control-Allow-Origin", "http://localhost:3000");
 
@@ -168,74 +151,102 @@ exports.login = async (request, response) => {
   }
 };
 
-exports.forgotPassword = async (request, response) => {
+exports.resetPassword = async (request, response) => {
   const {
-    body: { rollnumber, username, email },
+    body: { OTP },
+    session: {
+      user: { userid },
+    },
   } = request;
 
-  if (!rollnumber && !username && !email)
-    return response
-      .status(400)
-      .send("Please provide Roll Number, Username or Email");
+  const client = await pool.connect();
 
   try {
-    const result = await pool.query(
-      "SELECT userid FROM Users WHERE rollnumber = $1 OR email = $1 OR username = $1",
-      [rollnumber || username || email]
+    let res = await pool.query(
+      `Select * from ResetPassword where userid = $1`,
+      [userid]
     );
 
-    if (!result.rowCount)
-      return response.status(401).send("Invalid Credentials");
+    const resetToken = res.rows[0].reset_token;
+    const isMatch = bcrypt.compare(String(resetToken), String(OTP));
 
-    const token = randomBytes(32).toString("hex");
-    const expiry = new Date(Date.now() + 600000).toISOString();
+    if (!isMatch) return response.status(400).json(`Invalid OTP Entered!`);
 
-    await pool.query("INSERT INTO ResetPassword VALUES ($1, $2, $3)", [
-      result.rows[0].userid,
-      token,
-      expiry,
-    ]);
+    await client.query(`BEGIN`);
 
-    return response.status(200).send(`Token: ${token}`);
+    res = client.query(`Delete from ResetPassword where userid = $1`, [userid]);
+
+    await client.query("COMMIT");
+
+    return response.status(200).json("OTP Verrified!");
   } catch (error) {
-    console.error(error.message);
-    return response.status(500).send("Server Error");
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.jsonStatus(500);
+  } finally {
+    if (client) client.release();
   }
 };
 
-exports.resetPassword = async (request, response) => {
-  const { newPassword, confirmPassword, token } = request.body;
+exports.forgotPassword = async (request, response) => {
+  const to = request.session.user.email;
 
-  if (!newPassword || !confirmPassword || !token)
-    return response.status(400).send("Please provide all the fields");
+  const OTPGenerated = Math.floor(100000 + Math.random() * 900000);
+  const signedOTP = jwt.sign(OTPGenerated, process.env.ACCESS_TOKEN_SECRET);
+
+  const mailOptions = {
+    from: from,
+    to: to,
+    subject: "Password Change Verification – One-Time Password (OTP)",
+    text: `Dear User,
+  
+  You have requested to change your password. Please use the following One-Time Password (OTP) to proceed:
+  
+  OTP: ${OTPGenerated}
+  
+  This OTP is valid for 1 hour. 
+  If you did not request a password change, please disregard this email.
+  
+  Thank you,
+  CampusPlus Support Team`,
+  };
+
+  const client = await pool.connect();
 
   try {
-    const result = await pool.query(
-      "SELECT * FROM ResetPassword WHERE reset_token = $1 AND token_expiry > current_timestamp",
-      [token]
+    await client.query("BEGIN");
+
+    const res = await client.query(
+      `Select * from ResetPassword where userid = $1`,
+      [request.session.user.userid]
     );
 
-    if (!result.rowCount)
-      return response.status(401).send("Invalid Token or Token Expired");
-    if (newPassword !== confirmPassword)
-      return response.status(400).send("Passwords do not match");
+    if (res.rowCount)
+      await client.query(
+        `Delete from ResetPassword where userid = $1 or token_expiry < current_timestamp + interval '1 hour'`,
+        [request.session.user.userid]
+      );
 
-    const hashedPassword = await bcrypt.hash(newPassword, 10);
-    const userId = result.rows[0].userid;
+    await client.query(
+      `Insert into ResetPassword (userid, reset_token, token_expiry)
+      Values ($1, $2, current_timestamp + Interval '1 hour')`,
+      [request.session.user.userid, signedOTP]
+    );
 
-    await pool.query("UPDATE Users SET password = $1 WHERE userid = $2", [
-      hashedPassword,
-      userId,
-    ]);
-    await pool.query("DELETE FROM ResetPassword WHERE reset_token = $1", [
-      token,
-    ]);
-
-    return response.status(200).send("Password Reset Successfully");
+    await client.query("COMMIT");
   } catch (error) {
-    console.error(error.message);
-    return response.status(500).send("Server Error");
+    console.log(error.message);
+    await client.query("ROLLBACK");
+    return response.jsonStatus(500);
+  } finally {
+    if (client) client.release();
   }
+
+  transporter.jsonMail(mailOptions, (error, info) => {
+    if (error) return console.log(`Error: `, error);
+  });
+
+  return response.status(200).json("OTP Generated!");
 };
 
 exports.logout = async (request, response) => {
@@ -243,15 +254,15 @@ exports.logout = async (request, response) => {
     request.session.destroy((error) => {
       if (error) {
         console.error("Logout error:", error);
-        return response.status(500).send("Server Error");
+        return response.status(500).json("Server Error");
       }
 
       response.clearCookie("connect.sid");
-      return response.status(200).send("Logged Out Successfully");
+      return response.status(200).json("Logged Out Successfully");
     });
   } catch (error) {
     console.error("Logout error:", error);
-    return response.status(500).send("Server Error");
+    return response.status(500).json("Server Error");
   }
 };
 
@@ -261,9 +272,9 @@ exports.testLogin = async (request, response) => {
   } = request;
 
   if (!username && !email)
-    return response.status(400).send("Please provide Username or Email");
+    return response.status(400).json("Please provide Username or Email");
 
-  if (!password) return response.status(400).send("Please provide Password");
+  if (!password) return response.status(400).json("Please provide Password");
 
   try {
     let res = await pool.query(
@@ -271,17 +282,17 @@ exports.testLogin = async (request, response) => {
       [username || email]
     );
 
-    if (!res.rowCount) return response.status(404).send("Invalid Credentials");
+    if (!res.rowCount) return response.status(404).json("Invalid Credentials");
 
     const user = res.rows[0];
 
     const isMatch = await bcrypt.compare(password, user.password);
 
-    if (!isMatch) return response.status(401).send("Invalid Credentials");
+    if (!isMatch) return response.status(401).json("Invalid Credentials");
 
     const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
 
-    return response.status(200).send(`Login Successful! ${accessToken}`);
+    return response.status(200).json(`Login Successful! ${accessToken}`);
   } catch (error) {
     console.error("Login error:", error);
     return response.status(500).json({ error: "Server error" });
@@ -295,6 +306,6 @@ exports.userRole = async (request, response) => {
       .json({ userRole: request.session.user.role ?? null });
   } catch (error) {
     console.log(error.message);
-    return response.sendStatus(500);
+    return response.jsonStatus(500);
   }
 };

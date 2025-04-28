@@ -1,14 +1,20 @@
 const express = require("express");
-const { login, register, logout, testLogin, userRole } = require("../controllers/authController");
+const {
+  login,
+  register,
+  logout,
+  testLogin,
+  userRole,
+  forgotPassword,
+  resetPassword,
+} = require("../controllers/authController");
 const { checkAuthorisation } = require("../middlewares/authMiddleware");
 const router = express.Router();
 
-// Test route
 router.get("/test", (req, res) => {
   res.send("Auth routes are working!");
 });
 
-// Auth routes
 router.post("/login", login);
 router.post("/register", register);
 router.post("/logout", logout);
@@ -20,8 +26,10 @@ router.get("/user-info", checkAuthorisation, (req, res) => {
   res.json({
     userid: req.session.user.userid,
     role: req.session.user.role,
-    username: req.session.user.username
+    username: req.session.user.username,
   });
 });
+router.post("/forgot", checkAuthorisation, forgotPassword);
+router.post("/reset", checkAuthorisation, resetPassword);
 
 module.exports = router;
