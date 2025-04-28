@@ -260,7 +260,7 @@ const sendReply = async (request, response) => {
 
     return response.status(200).json({
       message: "Reply sent successfully",
-      replyid: res.rows[0].replyid
+      replyid: res.rows[0].replyid,
     });
   } catch (error) {
     console.error("Send reply error:", error.message);
@@ -314,12 +314,19 @@ const processPost = async (request, response) => {
 };
 
 const likePost = async (req, res) => {
-  const messageid = req.params.messageid;
-  const userid = req.session.user.userid;
+  const {
+    params: { messageid },
+    session: {
+      user: { userid },
+    },
+  } = req;
 
   try {
     await pool.query(
-      `INSERT INTO messagereactions (messageid, userid, reaction_type) VALUES ($1, $2, 'Like')`,
+      `INSERT INTO messagereactions (messageid, userid, reaction_type) VALUES ($1, $2, 'Like')
+      on conflict
+      do nothing
+      returning *`,
       [messageid, userid]
     );
 
@@ -497,10 +504,7 @@ const deletePost = async (request, response) => {
     await client.query("BEGIN");
 
     // First delete all replies to this message
-    await client.query(
-      `DELETE FROM replies WHERE messageid = $1`,
-      [messageid]
-    );
+    await client.query(`DELETE FROM replies WHERE messageid = $1`, [messageid]);
 
     // Then delete the message
     const res = await client.query(
@@ -650,7 +654,9 @@ const pinPost = async (request, response) => {
   } = request;
 
   if (role !== "Admin" && role !== "Moderator") {
-    return response.status(403).json("Only admins and moderators can pin posts");
+    return response
+      .status(403)
+      .json("Only admins and moderators can pin posts");
   }
 
   const client = await pool.connect();
@@ -894,8 +900,8 @@ const searchPosts = async (request, response) => {
         m.posted_at DESC
     `;
 
-    console.log('Search query:', query);
-    console.log('Query params:', queryParams);
+    console.log("Search query:", query);
+    console.log("Query params:", queryParams);
 
     const result = await pool.query(query, queryParams);
 
@@ -943,13 +949,13 @@ const getUserJoinedGroups = async (request, response) => {
     );
 
     // Transform the response to match the expected format
-    const transformedGroups = result.rows.map(group => ({
+    const transformedGroups = result.rows.map((group) => ({
       roomid: group.roomid,
       roomname: group.name, // Map 'name' to 'roomname'
       description: group.description,
       created_at: group.created_at,
       member_count: group.member_count,
-      post_count: group.post_count
+      post_count: group.post_count,
     }));
 
     return response.status(200).json(transformedGroups);
