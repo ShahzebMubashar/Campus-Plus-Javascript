@@ -4,7 +4,7 @@ import './ProfilePage.css';
 function ProfilePage() {
     // Sample user data - in a real app, this would come from an API
     const [user, setUser] = useState({
-        fullName: 'John Doe',
+        fullName: 'Shahzeb Mubashar',
         email: 'john.doe@university.edu',
         rollNumber: 'UNI2023001',
         program: 'Computer Science',
