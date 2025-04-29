@@ -7,7 +7,7 @@ function ProfilePage() {
         fullName: 'Shahzeb Mubashar',
         email: 'l226734@lhr.nu.edu.pk',
         rollNumber: '22L-6734',
-        program: 'Computer Science',
+        program: 'BS(CS)',
         semester: '3rd Semester',
         gpa: '3.8',
         enrolledCourses: [
