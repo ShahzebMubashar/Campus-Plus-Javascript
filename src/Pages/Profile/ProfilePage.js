@@ -6,7 +6,7 @@ function ProfilePage() {
     const [user, setUser] = useState({
         fullName: 'Shahzeb Mubashar',
         email: 'l226734@lhr.nu.edu.pk',
-        rollNumber: 'UNI2023001',
+        rollNumber: '22L-6734',
         program: 'Computer Science',
         semester: '3rd Semester',
         gpa: '3.8',
