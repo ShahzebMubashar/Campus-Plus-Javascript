@@ -8,7 +8,7 @@ function ProfilePage() {
         email: 'l226734@lhr.nu.edu.pk',
         rollNumber: '22L-6734',
         program: 'BS(CS)',
-        semester: '3rd Semester',
+        semester: '6th Semester',
         gpa: '3.8',
         enrolledCourses: [
             { id: 1, name: 'Data Structures', code: 'CS201' },
