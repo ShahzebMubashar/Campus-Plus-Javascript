@@ -5,7 +5,7 @@ function ProfilePage() {
     // Sample user data - in a real app, this would come from an API
     const [user, setUser] = useState({
         fullName: 'Shahzeb Mubashar',
-        email: 'john.doe@university.edu',
+        email: 'l226734@lhr.nu.edu.pk',
         rollNumber: 'UNI2023001',
         program: 'Computer Science',
         semester: '3rd Semester',
