@@ -156,11 +156,14 @@ exports.login = async (request, response) => {
 
 exports.resetPassword = async (request, response) => {
   const {
-    body: { OTP },
+    body: { OTP, newPassword },
     session: {
       user: { userid },
     },
   } = request;
+
+  if (!OTP || !newPassword)
+    return response.status(400).json(`Enter all the fields`);
 
   const client = await pool.connect();
 
@@ -177,7 +180,16 @@ exports.resetPassword = async (request, response) => {
 
     await client.query(`BEGIN`);
 
-    res = client.query(`Delete from ResetPassword where userid = $1`, [userid]);
+    res = await client.query(`Delete from ResetPassword where userid = $1`, [
+      userid,
+    ]);
+
+    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
+
+    res = await client.query(
+      `Update Users set password = $1, lasteditted = current_timestamp where userid = $2`,
+      [hashedNewPassword, userid]
+    );
 
     await client.query("COMMIT");
 
