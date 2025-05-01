@@ -1,21 +1,16 @@
 const express = require("express");
 
 const {
-  getTranscript,
   addCourse,
-  removeCourse,
-  editCourse,
+  getTranscript,
+  addSemester,
 } = require("../controllers/transcriptController");
 const { checkAuthorisation } = require("../middlewares/authMiddleware");
 
 const router = express.Router();
 
 router.get("/", checkAuthorisation, getTranscript);
-
 router.post("/add-course", checkAuthorisation, addCourse);
-
-router.put("/edit-course", checkAuthorisation, editCourse);
-
-router.delete("/remove-course", checkAuthorisation, removeCourse);
-
+router.post("/add-semester", checkAuthorisation, addSemester);
 module.exports = router;
+// export default router;

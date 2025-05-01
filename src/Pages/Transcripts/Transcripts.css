@@ -1,0 +1,338 @@
+.transcripts-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .gpa-summary {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    text-align: right;
+  }
+  
+  .gpa-summary h3 {
+    margin: 0;
+    color: #2c3e50;
+  }
+  
+  .gpa-summary span {
+    font-weight: bold;
+    color: #3498db;
+  }
+  
+  .add-semester-btn {
+    background-color: #2ecc71;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-bottom: 20px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+  }
+  
+  .add-semester-btn:hover {
+    background-color: #27ae60;
+  }
+  
+  .semester-card {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    overflow: hidden;
+  }
+  
+  .semester-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .semester-header h2 {
+    margin: 0;
+    font-size: 20px;
+  }
+  
+  .semester-gpa {
+    font-weight: bold;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 5px 10px;
+    border-radius: 20px;
+  }
+  
+  .add-course-btn {
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .add-course-btn:hover {
+    background-color: #e67e22;
+  }
+  
+  .courses-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .courses-table th, .courses-table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .courses-table th {
+    background-color: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+  }
+  
+  .remove-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: background-color 0.3s;
+  }
+  
+  .remove-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  .no-courses {
+    padding: 20px;
+    text-align: center;
+    color: #7f8c8d;
+  }
+  
+  /* Modal Styles */
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+  }
+  
+  .modal-content {
+    background-color: white;
+    padding: 25px;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .modal h2 {
+    margin-top: 0;
+    color: #2c3e50;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 10px;
+  }
+  
+  .form-group {
+    margin-bottom: 15px;
+  }
+  
+  .form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 500;
+    color: #2c3e50;
+  }
+  
+  .form-group input,
+  .form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    box-sizing: border-box;
+  }
+  
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .modal-actions button {
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+  
+  .modal-actions button:first-child {
+    background-color: #3498db;
+    color: white;
+    border: none;
+  }
+  
+  .modal-actions button:last-child {
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+  }
+  
+  .modal-actions button:hover {
+    opacity: 0.9;
+  }
+  
+  @media (max-width: 768px) {
+    .semester-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    
+    .courses-table {
+      display: block;
+      overflow-x: auto;
+    }
+  }
+
+
+  /* Add these to your existing Transcripts.css */
+
+.semester-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  .semester-title {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .semester-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .remove-semester-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+  }
+  
+  .remove-semester-btn:hover {
+    background-color: #c0392b;
+  }
+  
+  .delete-confirmation {
+    background-color: #fff3f3;
+    padding: 15px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border-left: 4px solid #e74c3c;
+  }
+  
+  .delete-confirmation p {
+    margin: 0 0 10px 0;
+    color: #333;
+  }
+  
+  .delete-confirmation div {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .confirm-delete-btn {
+    background-color: #e74c3c;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .cancel-delete-btn {
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  
+  .courses-table th:nth-child(5),
+  .courses-table td:nth-child(5) {
+    text-align: center;
+  }
+
+  .error-banner {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ffebee;
+    color: #c62828;
+    padding: 12px 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    z-index: 1000;
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .error-banner button {
+    background: none;
+    border: none;
+    color: #c62828;
+    font-size: 18px;
+    margin-left: 15px;
+    cursor: pointer;
+    padding: 0 5px;
+  }
+  
+  @keyframes slideIn {
+    from {
+      top: -50px;
+      opacity: 0;
+    }
+    to {
+      top: 20px;
+      opacity: 1;
+    }
+  }
+  
+  .loading {
+    text-align: center;
+    padding: 50px;
+    font-size: 18px;
+    color: #3498db;
+  }

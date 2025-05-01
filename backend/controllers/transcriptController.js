@@ -8,128 +8,148 @@ const getTranscript = async (request, response) => {
   } = request;
 
   try {
-    let res = await pool.query(`Select * from Transcript where userid = $1`, [
-      userid,
-    ]);
+    const res = await pool.query(
+      `SELECT * FROM ViewTranscripts WHERE userid = $1`,
+      [userid]
+    );
 
     if (!res.rowCount)
-      return response.status(404).send(`No Transcript Available`);
+      return response.status(404).json(`Transcript Not Found!`);
 
-    response.status(200).json(res.rows);
+    const organizedTranscript = res.rows.reduce((acc, course) => {
+      const semester = course.semestername; // Changed from course.semester to course.semestername
+
+      if (!acc[semester]) acc[semester] = [];
+
+      acc[semester].push({
+        id: course.transcriptid, // Fixed typo from trancsriptid to transcriptid
+        code: course.coursecode,
+        name: course.coursename,
+        credits: course.credits,
+        grade: course.grade,
+      });
+      return acc;
+    }, {});
+
+    const formattedTranscript = Object.entries(organizedTranscript).map(
+      ([semester, courses]) => ({
+        id: semester,
+        name: semester,
+        courses,
+      })
+    );
+
+    return response.status(200).json(formattedTranscript);
   } catch (error) {
-    console.error("Error in getTranscript:", error);
-    return response.status(500).send("Internal Server Error");
+    console.log(error.message);
+    return response.status(500).json(`Internal Server Error`);
   }
 };
 
 const addCourse = async (request, response) => {
+  console.log(`[ENDPOINT HIT]: GOT: ${request.body}`);
+  console.log(request.body);
   const {
-    body: { courseid, credits, grade, semester },
+    body: { coursecode, credits, grade, semester },
     session: {
       user: { userid },
     },
   } = request;
 
+  if (!coursecode || !credits || !grade || !semester)
+    return response.status(400).json(`Enter all the fields`);
+
+  const client = await pool.connect();
+
   try {
-    const client = await pool.connect();
-
     let res = await client.query(
-      `Select * from Transcript where courseid = $1 and userid = $2`,
-      [courseid, userid]
+      "Select * from Courses where coursecode = $1",
+      [coursecode]
     );
+    console.log(`GOT:`);
+    console.log(res.rows[0]);
+    if (!res.rowCount) return response.status(404).json(`Course Not Found!`);
 
-    if (res.rowCount)
-      return response.status(400).send(`Course already added to transcript!`);
+    const courseid = res.rows[0].courseid;
 
-    await client.query("BEGIN");
+    res = await client.query(`Select * from Semesters where name = $1`, [
+      semester,
+    ]);
+
+    if (!res.rowCount) return response.status(404).json(`Semester Not Found`);
+
+    const semesterid = res.rows[0].semesterid;
 
     res = await client.query(
-      `Insert into Transcript (userid, courseid, credits, grade, semester)
+      `Select * from Transcript where userid = $1 and courseid = $2`,
+      [userid, courseid]
+    );
+    console.log(`GOT FROM DB:`);
+    console.log(res.rows);
+    if (res.rowCount) return response.status(400).json(`Course Already Added!`);
+
+    await client.query(`BEGIN`);
+
+    res = await client.query(
+      `Insert into Transcript (userid, courseid, credits, grade, semesterid)
         values ($1, $2, $3, $4, $5)`,
-      [userid, courseid, credits, grade, semester]
+      [userid, courseid, credits, grade, semesterid]
     );
 
-    await client.query("COMMIT");
+    await client.query(`COMMIT`);
 
-    return response
-      .status(201)
-      .send(`Course successfully added to Transcript!`);
+    return response.status(200).json(`Course Added Successfully`);
   } catch (error) {
-    console.error("Error in addCourse:", error);
-    await pool.query("ROLLBACK");
-    return response.status(500).send("Internal Server Error");
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Internal Server Error`);
   }
 };
 
-const removeCourse = async (request, response) => {
+const addSemester = async (request, response) => {
   const {
-    body: { courseid },
-    session: {
-      user: { userid },
-    },
+    body: { name },
   } = request;
 
+  if (!name) {
+    return response.status(400).json({ error: "Semester name is required" });
+  }
+
+  const client = await pool.connect();
+
   try {
-    const client = await pool.connect();
-
-    let res = await client.query(
-      `Select * from Transcript where courseid = $1 and userid = $2`,
-      [courseid, userid]
+    // Check if semester exists in the shared pool
+    const checkResult = await client.query(
+      "SELECT * FROM semesters WHERE name = $1",
+      [name]
     );
 
-    if (!res.rowCount)
-      return response.status(404).send(`Course not found in transcript!`);
+    // Return existing semester if found
+    if (checkResult.rowCount > 0) {
+      return response.status(200).json({
+        id: checkResult.rows[0].id,
+        name: checkResult.rows[0].name,
+        courses: [], // Empty courses array since we're just getting the semester
+      });
+    }
 
-    await client.query("BEGIN");
-
-    res = await client.query(
-      `Delete from Transcript where courseid = $1 and userid = $2`,
-      [courseid, userid]
+    // Create new shared semester if it doesn't exist
+    const result = await client.query(
+      "INSERT INTO semesters (name) VALUES ($1) RETURNING *",
+      [name]
     );
 
-    await client.query("COMMIT");
-
-    return response
-      .status(200)
-      .send(`Course successfully removed from Transcript!`);
+    return response.status(201).json({
+      id: result.rows[0].id,
+      name: result.rows[0].name,
+      courses: [],
+    });
   } catch (error) {
-    console.error("Error in removeCourse:", error);
-    await pool.query("ROLLBACK");
-    return response.sendStatus(500);
+    console.error("Error adding semester:", error);
+    return response.status(500).json({ error: "Internal server error" });
+  } finally {
+    client.release();
   }
 };
 
-const editCourse = async (request, response) => {
-  const {
-    body: { courseid, credits, grade, semester },
-    session: {
-      user: { userid },
-    },
-  } = request;
-
-  try {
-    const client = await pool.connect();
-
-    let res = await client.query(
-      `Update Transcript 
-        set credits = COALESCE($1, credits),
-            grade = COALESCE($2, grade),
-            semester = COALESCE($3, semester)
-            where
-            courseid = $4 and userid = $5`,
-      [credits, grade, semester, courseid, userid]
-    );
-
-    await client.query("COMMIT");
-
-    return response
-      .status(200)
-      .send(`Course successfully updated in Transcript!`);
-  } catch (error) {
-    console.error("Error in editCourse:", error);
-    await pool.query("ROLLBACK");
-    return response.status(500).send("Internal Server Error");
-  }
-};
-
-module.exports = { getTranscript, addCourse, removeCourse, editCourse };
+module.exports = { addCourse, getTranscript, addSemester };
