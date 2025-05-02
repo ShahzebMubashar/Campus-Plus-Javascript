@@ -9,6 +9,8 @@ import settings from "../../../Assets/images/setting.png"
 import profile from "../../../Assets/images/user.png"
 import notifications from "../../../Assets/images/active.png"
 import logout from "../../../Assets/images/logout.png"
+import usericon from "../../../Assets/images/usericon.png"
+// import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
 
@@ -192,8 +194,9 @@ function Navbar() {
                             <>
                                 <li><Link to="/dashboard">Dashboard</Link></li>
                                 <li className="navbaruser-dropdown">
+
                                     <div className="navbaruser-icon">
-                                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User" />
+                                        <img src={usericon} alt="User" />
                                     </div>
 
                                     <div className="navbaruser-dropdown-menu">
