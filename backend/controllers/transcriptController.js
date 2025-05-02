@@ -164,7 +164,7 @@ const removeCourse = async (request, response) => {
 
   try {
     await client.query("BEGIN");
-    
+
     // Delete using the transcriptId directly
     const res = await client.query(
       `DELETE FROM Transcript 
@@ -188,4 +188,49 @@ const removeCourse = async (request, response) => {
   }
 };
 
-module.exports = { addCourse, getTranscript, addSemester, removeCourse };
+const removeSemester = async (request, response) => {
+  const {
+    params: { semestername },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    let res = await client.query(`Select * from Semesters where name = $1`, [
+      semestername,
+    ]);
+
+    if (!res.rowCount)
+      return response.status(404).json(`Invalid Semester Name`);
+
+    const semesterid = res.rows[0].semesterid;
+
+    await client.query(`BEGIN`);
+
+    res = await client.query(
+      `Delete from Transcript where semesterid = $1 and userid = $2`,
+      [semesterid, userid]
+    );
+
+    await client.query(`COMMIT`);
+
+    return response.status(200).json(`Semester Removed Successfully!`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json(`Internal Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
+module.exports = {
+  addCourse,
+  getTranscript,
+  addSemester,
+  removeCourse,
+  removeSemester,
+};

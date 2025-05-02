@@ -201,9 +201,9 @@ function TranscriptsPage() {
     try {
       const response = await fetch(
         `http://localhost:4000/Transcripts/remove-course/${transcriptId}`, // Send transcriptId in URL
-        { 
-          method: "DELETE", 
-          credentials: "include" 
+        {
+          method: "DELETE",
+          credentials: "include",
         }
       );
 
@@ -218,7 +218,7 @@ function TranscriptsPage() {
             ? {
                 ...semester,
                 courses: semester.courses.filter(
-                  (course) => course.id !== transcriptId // Use transcriptId for comparison
+                  (course) => course.id !== transcriptId
                 ),
               }
             : semester
@@ -234,8 +234,10 @@ function TranscriptsPage() {
 
   const handleRemoveSemester = async (semesterId) => {
     try {
+      const encodedName = encodeURIComponent(semesterId);
+
       const response = await fetch(
-        `http://localhost:4000/Transcripts/${semesterId}`,
+        `http://localhost:4000/Transcripts/remove-semester/${semesterId}`,
         { method: "DELETE", credentials: "include" }
       );
 
