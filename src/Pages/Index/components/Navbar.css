@@ -187,15 +187,6 @@ main {
     transition: transform 0.3s ease;
 }
 
-.navbarbell-icon {
-    cursor: pointer;
-    width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-}
 
 .navbaruser-icon:hover {
     transform: scale(1.1);
