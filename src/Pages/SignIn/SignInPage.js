@@ -78,6 +78,38 @@ function SignInPage() {
         }
     }, [mousePosition, activeField, isPasswordField])
 
+    // Add a useEffect hook to handle responsive layout adjustments
+    useEffect(() => {
+        const handleResize = () => {
+            // Recalculate eye position on resize
+            if (characterCircleRef.current && !isPasswordField) {
+                const rect = characterCircleRef.current.getBoundingClientRect()
+                const centerX = rect.left + rect.width / 2
+                const centerY = rect.top + rect.height / 2
+
+                // Calculate angle between mouse and character center
+                const deltaX = mousePosition.x - centerX
+                const deltaY = mousePosition.y - centerY
+
+                // Limit eye movement range (0-100%)
+                const maxDistance = 30
+                const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance)
+                const angle = Math.atan2(deltaY, deltaX)
+
+                // Convert to percentage (0-100)
+                const moveX = 50 + ((Math.cos(angle) * distance) / maxDistance) * 30
+                const moveY = 50 + ((Math.sin(angle) * distance) / maxDistance) * 30
+
+                setEyePosition({ x: moveX, y: moveY })
+            }
+        }
+
+        window.addEventListener("resize", handleResize)
+        return () => {
+            window.removeEventListener("resize", handleResize)
+        }
+    }, [mousePosition, isPasswordField])
+
     // Smooth transition between sign-in and sign-up modes
     const toggleSignUp = () => {
         setIsAnimating(true)
@@ -113,6 +145,7 @@ function SignInPage() {
         setSignUpData((prev) => ({ ...prev, [name]: value }))
     }
 
+    // Update the handleSignInSubmit function to add proper null checks
     const handleSignInSubmit = async (e) => {
         e.preventDefault()
         console.log("Attempting login with:", signInData)
@@ -142,35 +175,49 @@ function SignInPage() {
                     createPartyPoppers()
 
                     setTimeout(() => {
-                        characterRef.current.classList.remove("success")
+                        // Check if the ref is still valid before removing the class
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("success")
+                        }
                     }, 1000)
                 }
 
                 // Animate button before redirect
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("success")
+                if (button) {
+                    button.classList.add("success")
+                }
 
                 // Redirect after animation completes
                 setTimeout(() => navigate("/"), 2000)
             } else {
                 setMessage(data.error || "Sign in failed. Please try again.")
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("error")
-                setTimeout(() => {
-                    button.classList.remove("error")
-                }, 1000)
+                if (button) {
+                    button.classList.add("error")
+                    setTimeout(() => {
+                        if (button) {
+                            button.classList.remove("error")
+                        }
+                    }, 1000)
+                }
             }
         } catch (error) {
             console.error("Sign in error:", error)
             setMessage("An error occurred. Please try again later.")
             const button = e.target.querySelector(".form-button")
-            button.classList.add("error")
-            setTimeout(() => {
-                button.classList.remove("error")
-            }, 1000)
+            if (button) {
+                button.classList.add("error")
+                setTimeout(() => {
+                    if (button) {
+                        button.classList.remove("error")
+                    }
+                }, 1000)
+            }
         }
     }
 
+    // Update the handleSignUpSubmit function to add proper null checks
     const handleSignUpSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -189,110 +236,138 @@ function SignInPage() {
                 setMessage(data.message)
                 // Animate button on success
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("success")
+                if (button) {
+                    button.classList.add("success")
 
-                // Switch to sign in after successful registration
-                setTimeout(() => {
-                    button.classList.remove("success")
-                    toggleSignUp()
-                }, 1000)
+                    // Switch to sign in after successful registration
+                    setTimeout(() => {
+                        if (button) {
+                            button.classList.remove("success")
+                        }
+                        toggleSignUp()
+                    }, 1000)
+                }
             } else {
                 setMessage(data.error || "Sign up failed. Please try again.")
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("error")
-                setTimeout(() => {
-                    button.classList.remove("error")
-                }, 1000)
+                if (button) {
+                    button.classList.add("error")
+                    setTimeout(() => {
+                        if (button) {
+                            button.classList.remove("error")
+                        }
+                    }, 1000)
+                }
             }
         } catch (error) {
             console.error("Sign up error:", error)
             setMessage("An error occurred. Please try again later.")
             const button = e.target.querySelector(".form-button")
-            button.classList.add("error")
-            setTimeout(() => {
-                button.classList.remove("error")
-            }, 1000)
+            if (button) {
+                button.classList.add("error")
+                setTimeout(() => {
+                    if (button) {
+                        button.classList.remove("error")
+                    }
+                }, 1000)
+            }
         }
     }
 
-    // Function to create party poppers animation
+    // Update the createPartyPoppers function to add proper null checks
     const createPartyPoppers = () => {
         const container = document.querySelector(".auth-wrapper")
         const characterCircle = characterCircleRef.current
 
         if (!container || !characterCircle) return
 
-        const characterRect = characterCircle.getBoundingClientRect()
-        const centerX = characterRect.left + characterRect.width / 2
-        const centerY = characterRect.top
+        try {
+            const characterRect = characterCircle.getBoundingClientRect()
+            const centerX = characterRect.left + characterRect.width / 2
+            const centerY = characterRect.top
 
-        // Create multiple confetti pieces
-        for (let i = 0; i < 50; i++) {
-            const confetti = document.createElement("div")
-            confetti.className = "confetti"
+            // Create multiple confetti pieces
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement("div")
+                confetti.className = "confetti"
 
-            // Random confetti properties
-            const size = Math.random() * 10 + 5
-            const color = `hsl(${Math.random() * 360}, 80%, 60%)`
+                // Random confetti properties
+                const size = Math.random() * 10 + 5
+                const color = `hsl(${Math.random() * 360}, 80%, 60%)`
 
-            confetti.style.width = `${size}px`
-            confetti.style.height = `${size}px`
-            confetti.style.backgroundColor = color
+                confetti.style.width = `${size}px`
+                confetti.style.height = `${size}px`
+                confetti.style.backgroundColor = color
 
-            // Position confetti at character's position
-            confetti.style.left = `${centerX}px`
-            confetti.style.top = `${centerY}px`
+                // Position confetti at character's position
+                confetti.style.left = `${centerX}px`
+                confetti.style.top = `${centerY}px`
 
-            // Random rotation
-            confetti.style.transform = `rotate(${Math.random() * 360}deg)`
+                // Random rotation
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`
 
-            // Random direction and distance
-            const angle = Math.random() * Math.PI * 2
-            const distance = Math.random() * 200 + 50
-            const duration = Math.random() * 1 + 1 // 1-2 seconds
+                // Random direction and distance
+                const angle = Math.random() * Math.PI * 2
+                const distance = Math.random() * 200 + 50
+                const duration = Math.random() * 1 + 1 // 1-2 seconds
 
-            // Calculate end position
-            const endX = centerX + Math.cos(angle) * distance
-            const endY = centerY + Math.sin(angle) * distance - 100 // Upward bias
+                // Calculate end position
+                const endX = centerX + Math.cos(angle) * distance
+                const endY = centerY + Math.sin(angle) * distance - 100 // Upward bias
 
-            // Apply animation
-            confetti.animate(
-                [
-                    { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                // Apply animation
+                confetti.animate(
+                    [
+                        { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                        {
+                            transform: `translate(${endX - centerX}px, ${endY - centerY}px) rotate(${Math.random() * 720}deg)`,
+                            opacity: 0,
+                        },
+                    ],
                     {
-                        transform: `translate(${endX - centerX}px, ${endY - centerY}px) rotate(${Math.random() * 720}deg)`,
-                        opacity: 0,
+                        duration: duration * 1000,
+                        easing: "cubic-bezier(0.1, 0.8, 0.2, 1)",
                     },
-                ],
-                {
-                    duration: duration * 1000,
-                    easing: "cubic-bezier(0.1, 0.8, 0.2, 1)",
-                },
-            )
+                )
 
-            // Add to DOM and remove after animation
-            container.appendChild(confetti)
-            setTimeout(() => {
-                confetti.remove()
-            }, duration * 1000)
+                // Add to DOM and remove after animation
+                container.appendChild(confetti)
+                setTimeout(() => {
+                    if (confetti && confetti.parentNode) {
+                        confetti.remove()
+                    }
+                }, duration * 1000)
+            }
+        } catch (error) {
+            console.error("Error creating party poppers:", error)
         }
     }
 
-    // Add blinking animation effect
+    // Update the blinking animation effect to add proper null checks
     useEffect(() => {
-        const blinkInterval = setInterval(() => {
-            if (characterRef.current) {
-                characterRef.current.classList.add("blinking")
-                setTimeout(() => {
-                    characterRef.current.classList.remove("blinking")
-                }, 300)
-            }
-        }, 3000)
+        let blinkInterval
 
-        return () => clearInterval(blinkInterval)
+        if (characterRef.current) {
+            blinkInterval = setInterval(() => {
+                if (characterRef.current) {
+                    characterRef.current.classList.add("blinking")
+                    setTimeout(() => {
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("blinking")
+                        }
+                    }, 300)
+                }
+            }, 3000)
+        }
+
+        return () => {
+            if (blinkInterval) {
+                clearInterval(blinkInterval)
+            }
+        }
     }, [])
 
-    // Password validation animation
+    // Update the password validation animation to add proper null checks
     useEffect(() => {
         if (activeField === "password" && characterRef.current) {
             const passwordValue = isSignUp ? signUpData.password : signInData.password
@@ -301,12 +376,16 @@ function SignInPage() {
                 if (passwordValue.length < 6) {
                     characterRef.current.classList.add("error")
                     setTimeout(() => {
-                        characterRef.current.classList.remove("error")
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("error")
+                        }
                     }, 500)
                 } else {
                     characterRef.current.classList.add("success")
                     setTimeout(() => {
-                        characterRef.current.classList.remove("success")
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("success")
+                        }
                     }, 500)
                 }
             }

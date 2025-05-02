@@ -998,14 +998,14 @@
     .left-section {
         position: relative;
         width: 100%;
-        height: 50vh;
+        height: 40vh;
         top: 0;
         padding-top: 60px;
     }
 
     .background-circle {
         border-radius: 0 0 50% 50% / 20%;
-        height: 60%;
+        height: 100%;
         top: 0;
     }
 
@@ -1047,6 +1047,7 @@
         top: 0;
         left: 0 !important;
         margin-bottom: 1rem;
+        text-align: center;
     }
 
     .fresher-para,
@@ -1057,20 +1058,72 @@
         margin-bottom: 2rem;
         width: 100%;
         text-align: center;
+        padding: 0 15px;
     }
 
     .toggle-button {
         position: relative;
         left: 0 !important;
         top: 0 !important;
+        margin: 0 auto;
+        display: block;
     }
 
     .dynamic-image {
-        position: absolute;
-        bottom: 0;
-        left: 50% !important;
-        transform: translateX(-50%);
-        max-width: 40% !important;
+        display: none;
+        /* Hide images on smaller screens */
+    }
+
+    /* Adjust sign-up mode for responsive */
+    .signin-container.sign-up-mode .left-section {
+        transform: translateX(0);
+    }
+
+    .signin-container.sign-up-mode .form-section {
+        transform: translateX(0);
+        position: relative;
+    }
+
+    .signin-container.sign-up-mode .background-circle {
+        border-radius: 0 0 50% 50% / 20%;
+    }
+}
+
+@media (max-width: 768px) {
+    .auth-wrapper {
+        width: 95%;
+        height: auto;
+        margin-top: 20px;
+    }
+
+    .signin-container {
+        margin: 0;
+    }
+
+    .left-section {
+        height: 30vh;
+        padding-top: 30px;
+    }
+
+    .fresher-text,
+    .member-text {
+        font-size: 1.5rem;
+        margin-top: 10px;
+    }
+
+    .fresher-para,
+    .member-para {
+        font-size: 0.9rem;
+        margin-top: 5px;
+    }
+
+    .character-circle-container {
+        top: -60px;
+    }
+
+    .character-circle {
+        width: 120px;
+        height: 120px;
     }
 }
 
@@ -1081,24 +1134,73 @@
     }
 
     .character-circle {
-        width: 120px;
-        height: 120px;
+        width: 100px;
+        height: 100px;
     }
 
     .animated-character {
-        transform: scale(0.9) translateY(10px);
+        transform: scale(0.8) translateY(10px);
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+        text-align: center;
+    }
+
+    .left-section {
+        height: 25vh;
+    }
+
+    .background-circle {
+        height: 100%;
+    }
+
+    .signin-form,
+    .signup-form {
+        padding: 0 10px;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-wrapper {
+        padding: 10px;
     }
 
     .form-title {
         font-size: 1.5rem;
     }
 
-    .left-section h1 {
-        font-size: 1.8rem;
+    .toggle-button {
+        padding: 8px 20px;
+        font-size: 0.9rem;
     }
 
-    .left-section p {
-        font-size: 1rem;
+    .form-input {
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .form-button {
+        font-size: 0.9rem;
+        padding: 10px 15px;
+    }
+
+    .left-section {
+        height: 22vh;
+    }
+
+    .fresher-text,
+    .member-text {
+        font-size: 1.3rem;
+    }
+
+    .fresher-para,
+    .member-para {
+        font-size: 0.8rem;
+    }
+
+    .character-circle-container {
+        top: -50px;
     }
 }
 
@@ -1135,93 +1237,20 @@
     animation: happyJump 0.8s ease;
 }
 
-
-
-
-
-/* Improve sign-up mode for responsive design */
-.signin-container.sign-up-mode .left-section {
-    transform: translateX(0);
+.animated-character.success .character-mouth {
+    height: 10px;
+    border-radius: 0 0 50% 50%;
+    animation: happyMouth 0.8s ease;
 }
 
-@media (max-width: 992px) {
-    .signin-container.sign-up-mode .left-section {
-        transform: translateY(0);
+@keyframes happyMouth {
+
+    0%,
+    100% {
+        transform: scaleX(1);
     }
 
-    .signin-container.sign-up-mode .form-section {
-        transform: translateX(0);
-        position: relative;
-    }
-
-    .signin-container.sign-up-mode .background-circle {
-        border-radius: 0 0 50% 50% / 20%;
-    }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/* Responsive Breakpoints */
-@media (max-width: 992px) {
-    .signin-container {
-        flex-direction: column;
-    }
-
-    .left-section,
-    .form-section {
-        flex: 1 1 100%;
-    }
-}
-
-@media (max-width: 768px) {
-
-    .fresher-text,
-    .member-text {
-        font-size: 1.5rem;
-    }
-
-    .fresher-para,
-    .member-para {
-        font-size: 0.9rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .auth-wrapper {
-        padding: 10px;
-    }
-
-    .form-title {
-        font-size: 1.5rem;
-    }
-
-    .toggle-button {
-        padding: 8px 20px;
-        font-size: 0.9rem;
-    }
-
-    .form-input {
-        font-size: 0.9rem;
-    }
-
-    .form-button {
-        font-size: 0.9rem;
+    50% {
+        transform: scaleX(1.5);
     }
 }
