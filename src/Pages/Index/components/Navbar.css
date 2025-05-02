@@ -3,7 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 50px;
+    padding: 7px 50px;
     background-color: #fff;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     width: 100%;
@@ -18,7 +18,7 @@
     position: relative;
     width: 95%;
     margin-left: 4%;
-    margin-top: 0;
+    margin-top: 1%;
     margin-bottom: 0;
     display: flex;
     justify-content: space-between;
@@ -179,23 +179,14 @@ main {
 
 .navbaruser-icon {
     cursor: pointer;
-    width: 35px;
-    height: 35px;
+    width: 36px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: transform 0.3s ease;
 }
 
-.navbarbell-icon {
-    cursor: pointer;
-    width: 25px;
-    height: 25px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: transform 0.3s ease;
-}
 
 .navbaruser-icon:hover {
     transform: scale(1.1);
