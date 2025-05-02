@@ -302,14 +302,14 @@
     width: 100%;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
     margin-top: -330px;
-    margin-left: 30%;
+    margin-left: 60%;
 }
 
 .signup-form {
     width: 105%;
     transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
-    margin-top: 50%;
-    margin-left: -48%;
+    margin-top: 65%;
+    margin-left: -6%;
 }
 
 .hidden {
@@ -388,6 +388,9 @@
 
 .form-button {
     padding: 12px 20px;
+    margin-top: 3%;
+    margin-right: 32%;
+    margin-left: -32%;
     font-size: 1rem;
     color: white;
     background: linear-gradient(to right, #4481eb, #04befe);
