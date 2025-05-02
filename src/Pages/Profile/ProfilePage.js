@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "./ProfilePage.css";
+import Navbar from '../Index/components/Navbar'
 
 function ProfilePage() {
   const [user, setUser] = useState({
@@ -129,6 +130,7 @@ function ProfilePage() {
 
   return (
     <div className="lms-profile-root">
+      <Navbar />
       <div className="lms-profile-container">
         <div className="lms-profile-header">
           <h1>Student Profile</h1>

@@ -209,6 +209,7 @@ main {
     flex-direction: column;
     min-width: 160px;
     z-index: 1000;
+    font-weight: bold;
 }
 
 /* Show dropdown when hovering over .navbaruser-dropdown or .navbaruser-dropdown-menu */

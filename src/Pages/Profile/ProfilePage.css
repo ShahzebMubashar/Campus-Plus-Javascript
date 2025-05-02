@@ -13,6 +13,7 @@
     --lms-error-color: #ea4335;
     --lms-border-radius: 8px;
     --lms-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: var(--lms-background-color);
 }
 
 /* Profile Container */
@@ -21,7 +22,7 @@
     margin: 0 auto;
     padding: 30px;
     font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
-    background-color: var(--lms-background-color);
+    /* background-color: var(--lms-background-color); */
     color: var(--lms-text-color);
     line-height: 1.5;
     box-sizing: border-box;
