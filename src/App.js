@@ -12,7 +12,6 @@ import Contact from "./Pages/Contact/ContactPage.js"; // Import the Contact comp
 import Error404 from "./Pages/Error404/Error404.js";
 import FacultySection from "./Pages/Faculty/Faculty.js";
 import PastPapers from "./Pages/Past Papers/PastPapers.js";
-import TranscriptsPage from "./Pages/Transcripts/Transcripts.js";
 
 function App() {
   return (
@@ -37,8 +36,7 @@ function App() {
           <Route path="/error404" element={<Error404 />} />
           <Route path="/faculty" element={<FacultySection />} />
           <Route path="/past-papers" element={<PastPapers />} />
-          <Route path="/transcripts" element={<TranscriptsPage />}></Route>
-          
+
         </Routes>
       </Router>
     </div>
