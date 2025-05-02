@@ -177,14 +177,21 @@ function Navbar() {
                         {isLoggedIn ? (
                             <>
                                 <li><Link to="/dashboard">Dashboard</Link></li>
-                                <li onClick={handleLogout} style={{ cursor: "pointer" }}>
-                                    Logout
+                                <li className="user-dropdown">
+                                    <div className="user-icon">
+                                        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User" />
+                                    </div>
+                                    <div className="user-dropdown-menu">
+                                        <Link to="/edit-profile">Edit Profile</Link>
+                                        <Link to="/settings">Settings</Link>
+                                        <span onClick={handleLogout} style={{ cursor: "pointer" }}>Logout</span>
+                                    </div>
                                 </li>
                             </>
                         ) : (
-                            // Show "Sign In" if the user is not logged in
                             <li><Link to="/sign-in">Sign In</Link></li>
                         )}
+
 
                     </ul>
                 </div>
