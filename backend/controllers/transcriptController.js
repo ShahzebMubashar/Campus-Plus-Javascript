@@ -8,128 +8,221 @@ const getTranscript = async (request, response) => {
   } = request;
 
   try {
-    let res = await pool.query(`Select * from Transcript where userid = $1`, [
-      userid,
-    ]);
+    const res = await pool.query(
+      `SELECT * FROM ViewTranscripts WHERE userid = $1`,
+      [userid]
+    );
 
     if (!res.rowCount)
-      return response.status(404).send(`No Transcript Available`);
+      return response.status(404).json(`Transcript Not Found!`);
 
-    response.status(200).json(res.rows);
+    const organizedTranscript = res.rows.reduce((acc, course) => {
+      const semester = course.semestername;
+
+      if (!acc[semester]) acc[semester] = [];
+
+      acc[semester].push({
+        id: course.transcriptid,
+        code: course.coursecode,
+        name: course.coursename,
+        credits: course.credits,
+        grade: course.grade,
+      });
+      return acc;
+    }, {});
+
+    const formattedTranscript = Object.entries(organizedTranscript).map(
+      ([semester, courses]) => ({
+        id: semester,
+        name: semester,
+        courses,
+      })
+    );
+
+    return response.status(200).json(formattedTranscript);
   } catch (error) {
-    console.error("Error in getTranscript:", error);
-    return response.status(500).send("Internal Server Error");
+    console.log(error.message);
+    return response.status(500).json(`Internal Server Error`);
   }
 };
 
 const addCourse = async (request, response) => {
   const {
-    body: { courseid, credits, grade, semester },
+    body: { coursecode, credits, grade, semester },
     session: {
       user: { userid },
     },
   } = request;
 
-  try {
-    const client = await pool.connect();
+  if (!coursecode || !credits || !grade || !semester)
+    return response.status(400).json(`Enter all the fields`);
 
+  const client = await pool.connect();
+
+  try {
     let res = await client.query(
-      `Select * from Transcript where courseid = $1 and userid = $2`,
-      [courseid, userid]
+      "Select * from Courses where coursecode = $1",
+      [coursecode]
     );
 
-    if (res.rowCount)
-      return response.status(400).send(`Course already added to transcript!`);
+    if (!res.rowCount) return response.status(404).json(`Course Not Found!`);
 
-    await client.query("BEGIN");
+    const courseid = res.rows[0].courseid;
+
+    res = await client.query(`Select * from Semesters where name = $1`, [
+      semester,
+    ]);
+
+    if (!res.rowCount) return response.status(404).json(`Semester Not Found`);
+
+    const semesterid = res.rows[0].semesterid;
 
     res = await client.query(
-      `Insert into Transcript (userid, courseid, credits, grade, semester)
+      `Select * from Transcript where userid = $1 and courseid = $2`,
+      [userid, courseid]
+    );
+    
+    if (res.rowCount) return response.status(400).json(`Course Already Added!`);
+
+    await client.query(`BEGIN`);
+
+    res = await client.query(
+      `Insert into Transcript (userid, courseid, credits, grade, semesterid)
         values ($1, $2, $3, $4, $5)`,
-      [userid, courseid, credits, grade, semester]
+      [userid, courseid, credits, grade, semesterid]
     );
 
-    await client.query("COMMIT");
+    await client.query(`COMMIT`);
 
-    return response
-      .status(201)
-      .send(`Course successfully added to Transcript!`);
+    return response.status(200).json(`Course Added Successfully`);
   } catch (error) {
-    console.error("Error in addCourse:", error);
-    await pool.query("ROLLBACK");
-    return response.status(500).send("Internal Server Error");
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Internal Server Error`);
+  }
+};
+
+const addSemester = async (request, response) => {
+  const {
+    body: { name },
+  } = request;
+
+  if (!name) {
+    return response.status(400).json({ error: "Semester name is required" });
+  }
+
+  const client = await pool.connect();
+
+  try {
+    const checkResult = await client.query(
+      "SELECT * FROM semesters WHERE name = $1",
+      [name]
+    );
+
+    if (checkResult.rowCount > 0) {
+      return response.status(200).json({
+        id: checkResult.rows[0].id,
+        name: checkResult.rows[0].name,
+        courses: [],
+      });
+    }
+
+    const result = await client.query(
+      "INSERT INTO semesters (name) VALUES ($1) RETURNING *",
+      [name]
+    );
+
+    return response.status(201).json({
+      id: result.rows[0].id,
+      name: result.rows[0].name,
+      courses: [],
+    });
+  } catch (error) {
+    console.error("Error adding semester:", error);
+    return response.status(500).json({ error: "Internal server error" });
+  } finally {
+    client.release();
   }
 };
 
 const removeCourse = async (request, response) => {
   const {
-    body: { courseid },
+    params: { transcriptId },
     session: {
       user: { userid },
     },
   } = request;
 
+  const client = await pool.connect();
+
   try {
-    const client = await pool.connect();
-
-    let res = await client.query(
-      `Select * from Transcript where courseid = $1 and userid = $2`,
-      [courseid, userid]
-    );
-
-    if (!res.rowCount)
-      return response.status(404).send(`Course not found in transcript!`);
-
     await client.query("BEGIN");
 
-    res = await client.query(
-      `Delete from Transcript where courseid = $1 and userid = $2`,
-      [courseid, userid]
+    const res = await client.query(
+      `DELETE FROM Transcript 
+       WHERE transcriptid = $1 AND userid = $2 
+       RETURNING *`,
+      [transcriptId, userid]
     );
 
-    await client.query("COMMIT");
+    if (res.rowCount === 0) {
+      return response.status(404).json(`Course not found in transcript`);
+    }
 
-    return response
-      .status(200)
-      .send(`Course successfully removed from Transcript!`);
+    await client.query("COMMIT");
+    return response.status(200).json(`Deleted Course Successfully!`);
   } catch (error) {
-    console.error("Error in removeCourse:", error);
-    await pool.query("ROLLBACK");
-    return response.sendStatus(500);
+    console.log(error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json(`Internal Server Error`);
+  } finally {
+    if (client) client.release();
   }
 };
 
-const editCourse = async (request, response) => {
+const removeSemester = async (request, response) => {
   const {
-    body: { courseid, credits, grade, semester },
+    params: { semestername },
     session: {
       user: { userid },
     },
   } = request;
 
-  try {
-    const client = await pool.connect();
+  const client = await pool.connect();
 
-    let res = await client.query(
-      `Update Transcript 
-        set credits = COALESCE($1, credits),
-            grade = COALESCE($2, grade),
-            semester = COALESCE($3, semester)
-            where
-            courseid = $4 and userid = $5`,
-      [credits, grade, semester, courseid, userid]
+  try {
+    let res = await client.query(`Select * from Semesters where name = $1`, [
+      semestername,
+    ]);
+
+    if (!res.rowCount)
+      return response.status(404).json(`Invalid Semester Name`);
+
+    const semesterid = res.rows[0].semesterid;
+
+    await client.query(`BEGIN`);
+
+    res = await client.query(
+      `Delete from Transcript where semesterid = $1 and userid = $2`,
+      [semesterid, userid]
     );
 
-    await client.query("COMMIT");
+    await client.query(`COMMIT`);
 
-    return response
-      .status(200)
-      .send(`Course successfully updated in Transcript!`);
+    return response.status(200).json(`Semester Removed Successfully!`);
   } catch (error) {
-    console.error("Error in editCourse:", error);
-    await pool.query("ROLLBACK");
-    return response.status(500).send("Internal Server Error");
+    console.log(error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json(`Internal Server Error`);
+  } finally {
+    if (client) client.release();
   }
 };
 
-module.exports = { getTranscript, addCourse, removeCourse, editCourse };
+module.exports = {
+  addCourse,
+  getTranscript,
+  addSemester,
+  removeCourse,
+  removeSemester,
+};
