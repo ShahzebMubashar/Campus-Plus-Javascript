@@ -20,7 +20,7 @@ function AcademicDashboard() {
     degree: "",
     batch: "",
   });
-  const [isEditing, setIsEditing] = useState(false);
+
 
   const gradePoints = {
     "A+": 4.0,
@@ -64,34 +64,34 @@ function AcademicDashboard() {
     setCourses(updatedCourses);
   };
 
-  const fetchEditProfile = async () => {
-    try {
-      const res = await fetch("http://localhost:4000/user/profile", {
-        credentials: "include",
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(editData),
-      });
+  // const fetchEditProfile = async () => {
+  //   try {
+  //     const res = await fetch("http://localhost:4000/user/profile", {
+  //       credentials: "include",
+  //       method: "PUT",
+  //       headers: { "Content-Type": "application/json" },
+  //       body: JSON.stringify(editData),
+  //     });
 
-      const contentType = res.headers.get("content-type");
-      if (!contentType || !contentType.includes("application/json")) {
-        const text = await res.text();
-        throw new Error(text || "Non-JSON response received");
-      }
+  //     const contentType = res.headers.get("content-type");
+  //     if (!contentType || !contentType.includes("application/json")) {
+  //       const text = await res.text();
+  //       throw new Error(text || "Non-JSON response received");
+  //     }
 
-      const data = await res.json();
+  //     const data = await res.json();
 
-      if (!res.ok) {
-        throw new Error(data.message || "Update failed");
-      }
+  //     if (!res.ok) {
+  //       throw new Error(data.message || "Update failed");
+  //     }
 
-      setUser(data);
-      setIsEditing(false);
-      window.location.reload();
-    } catch (error) {
-      console.error("Update failed:", error.message);
-    }
-  };
+  //     setUser(data);
+  //     setIsEditing(false);
+  //     window.location.reload();
+  //   } catch (error) {
+  //     console.error("Update failed:", error.message);
+  //   }
+  // };
 
   const fetchUserInfo = async () => {
     try {
@@ -167,14 +167,7 @@ function AcademicDashboard() {
               <div className="profile-actions">
                 <button
                   className="profile-action-btn edit-profile"
-                  onClick={() => {
-                    setIsEditing(true);
-                    setEditData({
-                      name: User?.name || "",
-                      degree: User?.degree || "B.Sc Computer Science",
-                      batch: User?.batch || "",
-                    });
-                  }}
+                  onClick={() => window.location.href = '/profile'}
                 >
                   <span className="action-icon">✏️</span>
                   Edit Profile
@@ -191,45 +184,6 @@ function AcademicDashboard() {
             </div>
           </div>
 
-          {isEditing && (
-            <div className="edit-profile-modal">
-              <div className="modal-content">
-                <h3>Edit Profile</h3>
-
-                <label>Name</label>
-                <input
-                  type="text"
-                  value={editData.name}
-                  onChange={(e) =>
-                    setEditData({ ...editData, name: e.target.value })
-                  }
-                />
-
-                <label>Degree</label>
-                <input
-                  type="text"
-                  value={editData.degree}
-                  onChange={(e) =>
-                    setEditData({ ...editData, degree: e.target.value })
-                  }
-                />
-
-                <label>Batch</label>
-                <input
-                  type="text"
-                  value={editData.batch}
-                  onChange={(e) =>
-                    setEditData({ ...editData, batch: e.target.value })
-                  }
-                />
-
-                <div className="modal-actions">
-                  <button onClick={() => setIsEditing(false)}>Cancel</button>
-                  <button onClick={fetchEditProfile}>Save</button>
-                </div>
-              </div>
-            </div>
-          )}
         </section>
 
         {/* My Courses */}
