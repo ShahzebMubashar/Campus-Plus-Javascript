@@ -149,6 +149,12 @@ function ProfilePage() {
             </button>
             <button
               className="lms-btn lms-secondary"
+              onClick={() => window.location.href = '/transcript'}
+            >
+              View Transcript
+            </button>
+            <button
+              className="lms-btn lms-secondary"
               onClick={() => setShowSettingsModal(true)}
             >
               Settings
