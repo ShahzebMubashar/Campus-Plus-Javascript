@@ -10,22 +10,6 @@ import Footer from "../Footer/Footer.js";
 
 const Support = () => {
     const [searchQuery, setSearchQuery] = useState("");
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const timer = setTimeout(() => setLoading(false), 2000); // Simulates loader
-        return () => clearTimeout(timer);
-    }, []);
-
-    if (loading) {
-        return (
-            <div className="loader-wrapper">
-                <div className="loader">
-                    <img src="/assets/images/cp_logo.png" alt="Logo" className="loader-logo" />
-                </div>
-            </div>
-        );
-    }
 
     return (
         <div className="support-page">

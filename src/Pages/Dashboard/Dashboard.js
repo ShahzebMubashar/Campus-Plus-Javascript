@@ -429,6 +429,74 @@ function AcademicDashboard() {
           </div>
         </div>
       </div>
+
+      {/* Quick Links Section */}
+      <section className="quick-links-section">
+        <div className="section-header">
+          <h2>🔗 Quick Links</h2>
+        </div>
+        <div className="quick-links-grid">
+          <a href="/playlists" className="quick-link-card">
+            <div className="quick-link-icon youtube">
+              <svg viewBox="0 0 24 24">
+                <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+              </svg>
+            </div>
+            <h3>YouTube Playlists</h3>
+            <p>Access curated educational content</p>
+          </a>
+
+          <a href="/timetable" className="quick-link-card">
+            <div className="quick-link-icon timetable">
+              <svg viewBox="0 0 24 24">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" />
+              </svg>
+            </div>
+            <h3>Time Table</h3>
+            <p>Generate your class schedule</p>
+          </a>
+
+          <a href="/datesheet" className="quick-link-card">
+            <div className="quick-link-icon datesheet">
+              <svg viewBox="0 0 24 24">
+                <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z" />
+              </svg>
+            </div>
+            <h3>Date Sheet</h3>
+            <p>Create exam schedules</p>
+          </a>
+
+          <a href="/support" className="quick-link-card">
+            <div className="quick-link-icon support">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z" />
+              </svg>
+            </div>
+            <h3>Support</h3>
+            <p>Get help and assistance</p>
+          </a>
+
+          <a href="/news" className="quick-link-card">
+            <div className="quick-link-icon news">
+              <svg viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V7h14v12zm-7-2h2v-4h4v-2h-4V7h-2v4H8v2h4z" />
+              </svg>
+            </div>
+            <h3>News</h3>
+            <p>Stay updated with campus news</p>
+          </a>
+
+          <a href="/applications" className="quick-link-card">
+            <div className="quick-link-icon applications">
+              <svg viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 10h2v7H7zm4-3h2v10h-2zm4 6h2v4h-2z" />
+              </svg>
+            </div>
+            <h3>Applications</h3>
+            <p>Generate applications & emails</p>
+          </a>
+        </div>
+      </section>
     </div>
   );
 }

@@ -1236,21 +1236,3 @@
 .animated-character.success {
     animation: happyJump 0.8s ease;
 }
-
-.animated-character.success .character-mouth {
-    height: 10px;
-    border-radius: 0 0 50% 50%;
-    animation: happyMouth 0.8s ease;
-}
-
-@keyframes happyMouth {
-
-    0%,
-    100% {
-        transform: scaleX(1);
-    }
-
-    50% {
-        transform: scaleX(1.5);
-    }
-}
