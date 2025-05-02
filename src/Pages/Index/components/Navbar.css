@@ -194,15 +194,16 @@ main {
 .navbaruser-dropdown-menu {
     display: none;
     position: absolute;
-    top: 37px;
+    top: 38px;
     right: 0;
     background: white;
     border: 1px solid #ddd;
-    border-radius: 10px;
+    border-radius: 6px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     flex-direction: column;
-    min-width: 200px;
+    min-width: 250px;
     z-index: 1000;
+    font-weight: bold;
     padding: 8px 0;
 }
 

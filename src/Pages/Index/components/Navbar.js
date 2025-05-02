@@ -3,6 +3,10 @@ import './Navbar.css';
 import Logo from '../cp_logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
+import support from "../../../Assets/images/support.png"
+import message from "../../../Assets/images/conversation.png"
+import settings from "../../../Assets/images/setting.png"
+import profile from "../../../Assets/images/user.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
 
@@ -192,27 +196,41 @@ function Navbar() {
 
                                     <div className="navbaruser-dropdown-menu">
                                         {/* Section 1 */}
-                                        <Link to="/profile">My Profile</Link>
-                                        <Link to="/settings">Settings</Link>
-                                        <Link to="/help">Help</Link>
+                                        <Link to="/profile">
+                                            <img src={profile} alt="Profile" style={{ width: '18px', marginRight: '8px' }} />
+                                            My Profile
+                                        </Link>
+                                        <Link to="/settings">
+                                            <img src={settings} alt="Settings" style={{ width: '18px', marginRight: '8px' }} />
+                                            Settings
+                                        </Link>
+                                        <Link to="/help">
+                                            <img src={support} alt="Help" style={{ width: '20px', marginRight: '8px' }} />
+                                            Help
+                                        </Link>
 
                                         <hr className="dropdown-divider" />
 
                                         {/* Section 2 */}
-
-                                        <Link to="/notifications">Notifications</Link>
-                                        {/* <span className="badge">9+</span> */}
-
-
-                                        <Link to="/messages">Messages</Link>
-                                        {/* <span className="badge">9+</span> */}
-
+                                        <Link to="/notifications">
+                                            <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png" alt="Notifications" style={{ width: '18px', marginRight: '8px' }} />
+                                            Notifications
+                                        </Link>
+                                        <Link to="/messages">
+                                            <img src={message} alt="Messages" style={{ width: '18px', marginRight: '8px' }} />
+                                            Messages
+                                        </Link>
 
                                         <hr className="dropdown-divider" />
 
                                         {/* Section 3 */}
-                                        <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Log out</span>
+                                        <span onClick={handleLogout} style={{ cursor: 'pointer' }}>
+                                            <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png" alt="Logout" style={{ width: '18px', marginRight: '8px' }} />
+                                            Log out
+                                        </span>
                                     </div>
+
+
                                 </li>
 
                             </>
