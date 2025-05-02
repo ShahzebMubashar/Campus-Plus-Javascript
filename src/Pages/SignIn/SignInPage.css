@@ -1158,3 +1158,70 @@
         border-radius: 0 0 50% 50% / 20%;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Responsive Breakpoints */
+@media (max-width: 992px) {
+    .signin-container {
+        flex-direction: column;
+    }
+
+    .left-section,
+    .form-section {
+        flex: 1 1 100%;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .fresher-text,
+    .member-text {
+        font-size: 1.5rem;
+    }
+
+    .fresher-para,
+    .member-para {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .auth-wrapper {
+        padding: 10px;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .toggle-button {
+        padding: 8px 20px;
+        font-size: 0.9rem;
+    }
+
+    .form-input {
+        font-size: 0.9rem;
+    }
+
+    .form-button {
+        font-size: 0.9rem;
+    }
+}
