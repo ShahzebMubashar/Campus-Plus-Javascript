@@ -65,7 +65,8 @@
     padding: 1rem;
   }
   
-  .course-card {
+.pastpapers-app {
+    .course-card {
     background: white;
     border-radius: 12px;
     padding: 1.5rem;
@@ -353,6 +354,7 @@
     color: #1976d2;
     font-size: 0.9rem;
   }
+}
   
   .loading-container {
     display: flex;
