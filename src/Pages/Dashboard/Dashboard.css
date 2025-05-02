@@ -612,7 +612,26 @@
     display: flex;
     gap: 10px;
     margin-left: auto;
+
 }
+
+.profile-actions button {
+
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 1px 6px rgba(30, 24, 24, 0.2);
+
+    transition: all 0.3s ease;
+}
+
+.profile-actions button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 6px rgba(30, 24, 24, 0.4);
+}
+
 
 .profile-action-btn {
     display: flex;
@@ -637,6 +656,7 @@
 
 .action-icon {
     font-size: 16px;
+
 }
 
 /* Deadlines Section */
