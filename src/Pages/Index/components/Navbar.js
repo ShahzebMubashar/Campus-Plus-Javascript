@@ -184,6 +184,7 @@ function Navbar() {
                         </li>
                         {isLoggedIn ? (
                             <>
+                                <li><Link to="/dashboard">Dashboard</Link></li>
                                 <li className="navbaruser-dropdown">
 
                                     <div className="navbaruser-icon">
