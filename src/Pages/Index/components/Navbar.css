@@ -172,37 +172,48 @@ main {
     padding: 20px;
 }
 
-/* User Icon + Dropdown */
+/* User dropdown block */
 .navbaruser-dropdown {
     position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
-.navbaruser-icon img {
+/* User icon */
+.navbaruser-icon {
+    cursor: pointer;
     width: 35px;
     height: 35px;
-    border-radius: 50%;
-    object-fit: cover;
-    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0d47a1;
     transition: transform 0.3s ease;
 }
 
-.navbaruser-icon img:hover {
+.navbaruser-icon:hover {
     transform: scale(1.1);
 }
 
+/* Dropdown menu (hidden by default) */
 .navbaruser-dropdown-menu {
+    display: none;
     position: absolute;
-    top: 45px;
+    top: 40px;
     right: 0;
     background: white;
     border: 1px solid #ddd;
     border-radius: 8px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
-    display: none;
     flex-direction: column;
-    min-width: 150px;
+    min-width: 160px;
     z-index: 1000;
+}
+
+/* Show dropdown when hovering over .navbaruser-dropdown or .navbaruser-dropdown-menu */
+.navbaruser-dropdown:hover .navbaruser-dropdown-menu {
+    display: flex;
 }
 
 .navbaruser-dropdown-menu a,
@@ -217,22 +228,4 @@ main {
 .navbaruser-dropdown-menu a:hover,
 .navbaruser-dropdown-menu span:hover {
     background: #f5f5f5;
-}
-
-/* .user-dropdown:hover .user-dropdown-menu,
-.user-dropdown-menu:hover {
-    display: flex;
-} */
-/* Container that holds icon + dropdown together */
-.navbaruser-container {
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: black;
-}
-
-/* Show dropdown when hovering over the whole container */
-.navbaruser-container:hover .navbaruser-dropdown-menu {
-    display: flex;
 }
