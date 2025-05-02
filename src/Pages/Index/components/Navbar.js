@@ -3,6 +3,22 @@ import './Navbar.css';
 import Logo from '../cp_logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
+import support from "../../../Assets/images/support.png"
+import message from "../../../Assets/images/conversation.png"
+import settings from "../../../Assets/images/setting.png"
+import profile from "../../../Assets/images/user.png"
+import notifications from "../../../Assets/images/active.png"
+import logout from "../../../Assets/images/logout.png"
+import usericon from "../../../Assets/images/usericon.png"
+// import bell from "../../../Assets/images/bell.png"
+// import { FaUserCircle } from 'react-icons/fa';
+
+
+// const [showUserMenu, setShowUserMenu] = useState(false);
+
+// const toggleUserMenu = () => {
+//     setShowUserMenu(!showUserMenu);
+// };
 
 function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -177,18 +193,60 @@ function Navbar() {
                         {isLoggedIn ? (
                             <>
                                 <li><Link to="/dashboard">Dashboard</Link></li>
-                                <li onClick={handleLogout} style={{ cursor: "pointer" }}>
-                                    Logout
+                                <li className="navbaruser-dropdown">
+
+                                    <div className="navbaruser-icon">
+                                        <img src={usericon} alt="User" />
+                                    </div>
+
+                                    <div className="navbaruser-dropdown-menu">
+                                        {/* Section 1 */}
+                                        <Link to="/profile">
+                                            <img src={profile} alt="Profile" style={{ width: '18px', marginRight: '8px' }} />
+                                            My Profile
+                                        </Link>
+                                        <Link to="/settings">
+                                            <img src={settings} alt="Settings" style={{ width: '18px', marginRight: '8px' }} />
+                                            Settings
+                                        </Link>
+                                        <Link to="/help">
+                                            <img src={support} alt="Help" style={{ width: '20px', marginRight: '8px' }} />
+                                            Help
+                                        </Link>
+
+                                        <hr className="dropdown-divider" />
+
+                                        {/* Section 2 */}
+                                        <Link to="/notifications">
+                                            <img src={notifications} alt="Notifications" style={{ width: '18px', marginRight: '8px' }} />
+                                            Notifications
+                                        </Link>
+                                        <Link to="/messages">
+                                            <img src={message} alt="Messages" style={{ width: '18px', marginRight: '8px' }} />
+                                            Messages
+                                        </Link>
+
+                                        <hr className="dropdown-divider" />
+
+                                        {/* Section 3 */}
+                                        <span onClick={handleLogout} style={{ cursor: 'pointer' }}>
+                                            <img src={logout} alt="Logout" style={{ width: '18px', marginRight: '8px' }} />
+                                            Log out
+                                        </span>
+                                    </div>
+
+
                                 </li>
+
                             </>
                         ) : (
-                            // Show "Sign In" if the user is not logged in
                             <li><Link to="/sign-in">Sign In</Link></li>
                         )}
 
+
                     </ul>
                 </div>
-            </nav>
+            </nav >
             <main>{/* Your main content */}</main>
         </>
     );

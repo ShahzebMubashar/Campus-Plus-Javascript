@@ -25,6 +25,8 @@ import TestSignin from '../Pages/testsignin/page.js'
 import Dashboard from '../Pages/Dashboard/Dashboard.js'
 import ToDo from '../Pages/ToDoList/ToDo.js'
 import Profile from '../Pages/Profile/ProfilePage.js'
+import Transcript from '../Pages/Transcripts/Transcripts.js'
+
 
 function AppRoutes() {
     const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +75,7 @@ function AppRoutes() {
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/todo" element={<ToDo />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/transcript" element={<Transcript />} />
             </Routes>
         </>
     );
