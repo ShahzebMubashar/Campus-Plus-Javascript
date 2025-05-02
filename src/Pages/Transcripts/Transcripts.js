@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Transcripts.css";
+import Navbar from "../Index/components/Navbar";
 
 const gradePoints = {
   "A+": 4.0,
@@ -152,7 +153,7 @@ function TranscriptsPage() {
       setShowError(true);
       return;
     }
-      
+
     try {
       const response = await fetch(
         "http://localhost:4000/Transcripts/add-course",
@@ -162,7 +163,7 @@ function TranscriptsPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             coursecode: newCourse.code.trim(),
-            coursename: newCourse.name.trim(), 
+            coursename: newCourse.name.trim(),
             credits: parseInt(newCourse.credits),
             grade: newCourse.grade,
             semester: newCourse.semesterName,
@@ -184,7 +185,7 @@ function TranscriptsPage() {
         semesterId: prev.semesterId,
         semesterName: prev.semesterName,
         code: "",
-        name: "", 
+        name: "",
         credits: 3,
         grade: "A",
       }));
@@ -199,7 +200,7 @@ function TranscriptsPage() {
   const handleRemoveCourse = async (semesterId, transcriptId) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/Transcripts/remove-course/${transcriptId}`, 
+        `http://localhost:4000/Transcripts/remove-course/${transcriptId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -215,11 +216,11 @@ function TranscriptsPage() {
         prev.map((semester) =>
           semester.id === semesterId
             ? {
-                ...semester,
-                courses: semester.courses.filter(
-                  (course) => course.id !== transcriptId
-                ),
-              }
+              ...semester,
+              courses: semester.courses.filter(
+                (course) => course.id !== transcriptId
+              ),
+            }
             : semester
         )
       );
@@ -261,6 +262,7 @@ function TranscriptsPage() {
 
   return (
     <div className="transcripts-container">
+      <Navbar />
       {showError && (
         <div className="error-banner">
           {error}
