@@ -3,14 +3,14 @@ import './Navbar.css';
 import Logo from '../cp_logo.png';
 import { Link, useNavigate } from 'react-router-dom';
 import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
-import { FaUserCircle } from 'react-icons/fa';
+// import { FaUserCircle } from 'react-icons/fa';
 
 
-const [showUserMenu, setShowUserMenu] = useState(false);
+// const [showUserMenu, setShowUserMenu] = useState(false);
 
-const toggleUserMenu = () => {
-    setShowUserMenu(!showUserMenu);
-};
+// const toggleUserMenu = () => {
+//     setShowUserMenu(!showUserMenu);
+// };
 
 function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -187,7 +187,7 @@ function Navbar() {
                                 <li className="navbaruser-dropdown">
 
                                     <div className="navbaruser-icon">
-                                        <FaUserCircle size={32} />
+                                        <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="User" />
                                     </div>
 
                                     <div className="navbaruser-dropdown-menu">
