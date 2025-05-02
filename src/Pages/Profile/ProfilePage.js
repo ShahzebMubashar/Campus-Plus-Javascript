@@ -219,27 +219,7 @@ function ProfilePage() {
             </ul>
           </div>
 
-          <div className="lms-profile-card lms-quick-links">
-            <h3>Quick Links</h3>
-            <div className="lms-links-grid">
-              <div className="lms-link-item">
-                <span className="lms-link-icon">📚</span>
-                <span className="lms-link-text">My Courses</span>
-              </div>
-              <div className="lms-link-item">
-                <span className="lms-link-icon">📝</span>
-                <span className="lms-link-text">Assignments</span>
-              </div>
-              <div className="lms-link-item">
-                <span className="lms-link-icon">📊</span>
-                <span className="lms-link-text">Grades</span>
-              </div>
-              <div className="lms-link-item">
-                <span className="lms-link-icon">📅</span>
-                <span className="lms-link-text">Calendar</span>
-              </div>
-            </div>
-          </div>
+
         </div>
 
         {/* Edit Profile Modal */}
