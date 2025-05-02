@@ -17,12 +17,12 @@ const getTranscript = async (request, response) => {
       return response.status(404).json(`Transcript Not Found!`);
 
     const organizedTranscript = res.rows.reduce((acc, course) => {
-      const semester = course.semestername; // Changed from course.semester to course.semestername
+      const semester = course.semestername;
 
       if (!acc[semester]) acc[semester] = [];
 
       acc[semester].push({
-        id: course.transcriptid, // Fixed typo from trancsriptid to transcriptid
+        id: course.transcriptid,
         code: course.coursecode,
         name: course.coursename,
         credits: course.credits,
@@ -47,8 +47,6 @@ const getTranscript = async (request, response) => {
 };
 
 const addCourse = async (request, response) => {
-  console.log(`[ENDPOINT HIT]: GOT: ${request.body}`);
-  console.log(request.body);
   const {
     body: { coursecode, credits, grade, semester },
     session: {
@@ -66,8 +64,7 @@ const addCourse = async (request, response) => {
       "Select * from Courses where coursecode = $1",
       [coursecode]
     );
-    console.log(`GOT:`);
-    console.log(res.rows[0]);
+
     if (!res.rowCount) return response.status(404).json(`Course Not Found!`);
 
     const courseid = res.rows[0].courseid;
@@ -84,8 +81,7 @@ const addCourse = async (request, response) => {
       `Select * from Transcript where userid = $1 and courseid = $2`,
       [userid, courseid]
     );
-    console.log(`GOT FROM DB:`);
-    console.log(res.rows);
+    
     if (res.rowCount) return response.status(400).json(`Course Already Added!`);
 
     await client.query(`BEGIN`);
@@ -118,22 +114,19 @@ const addSemester = async (request, response) => {
   const client = await pool.connect();
 
   try {
-    // Check if semester exists in the shared pool
     const checkResult = await client.query(
       "SELECT * FROM semesters WHERE name = $1",
       [name]
     );
 
-    // Return existing semester if found
     if (checkResult.rowCount > 0) {
       return response.status(200).json({
         id: checkResult.rows[0].id,
         name: checkResult.rows[0].name,
-        courses: [], // Empty courses array since we're just getting the semester
+        courses: [],
       });
     }
 
-    // Create new shared semester if it doesn't exist
     const result = await client.query(
       "INSERT INTO semesters (name) VALUES ($1) RETURNING *",
       [name]
@@ -154,7 +147,7 @@ const addSemester = async (request, response) => {
 
 const removeCourse = async (request, response) => {
   const {
-    params: { transcriptId }, // Changed to receive transcriptId directly
+    params: { transcriptId },
     session: {
       user: { userid },
     },
@@ -165,7 +158,6 @@ const removeCourse = async (request, response) => {
   try {
     await client.query("BEGIN");
 
-    // Delete using the transcriptId directly
     const res = await client.query(
       `DELETE FROM Transcript 
        WHERE transcriptid = $1 AND userid = $2 

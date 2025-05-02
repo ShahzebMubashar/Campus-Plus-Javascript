@@ -152,7 +152,7 @@ function TranscriptsPage() {
       setShowError(true);
       return;
     }
-    console.log(newCourse.semesterName);
+      
     try {
       const response = await fetch(
         "http://localhost:4000/Transcripts/add-course",
@@ -162,7 +162,7 @@ function TranscriptsPage() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             coursecode: newCourse.code.trim(),
-            coursename: newCourse.name.trim(), // ✅ Send course name
+            coursename: newCourse.name.trim(), 
             credits: parseInt(newCourse.credits),
             grade: newCourse.grade,
             semester: newCourse.semesterName,
@@ -175,7 +175,6 @@ function TranscriptsPage() {
         throw new Error(error.message || "Failed to add course");
       }
 
-      // Refetch updated transcript
       const updated = await fetch("http://localhost:4000/Transcripts/", {
         credentials: "include",
       }).then((res) => res.json());
@@ -185,7 +184,7 @@ function TranscriptsPage() {
         semesterId: prev.semesterId,
         semesterName: prev.semesterName,
         code: "",
-        name: "", // ✅ Clear course name after adding
+        name: "", 
         credits: 3,
         grade: "A",
       }));
@@ -200,7 +199,7 @@ function TranscriptsPage() {
   const handleRemoveCourse = async (semesterId, transcriptId) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/Transcripts/remove-course/${transcriptId}`, // Send transcriptId in URL
+        `http://localhost:4000/Transcripts/remove-course/${transcriptId}`, 
         {
           method: "DELETE",
           credentials: "include",
