@@ -211,7 +211,7 @@ function Navbar() {
                                             Transcript
                                         </Link>
 
-                                        <Link to="/help">
+                                        <Link to="/support">
                                             <img src={support} alt="Help" style={{ width: '20px', marginRight: '8px' }} />
                                             Help
                                         </Link>
@@ -223,7 +223,7 @@ function Navbar() {
                                             <img src={notifications} alt="Notifications" style={{ width: '18px', marginRight: '8px' }} />
                                             Notifications
                                         </Link>
-                                        <Link to="/messages">
+                                        <Link to="/chatroom">
                                             <img src={message} alt="Messages" style={{ width: '18px', marginRight: '8px' }} />
                                             Messages
                                         </Link>
