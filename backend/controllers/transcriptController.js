@@ -152,4 +152,40 @@ const addSemester = async (request, response) => {
   }
 };
 
-module.exports = { addCourse, getTranscript, addSemester };
+const removeCourse = async (request, response) => {
+  const {
+    params: { transcriptId }, // Changed to receive transcriptId directly
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+    
+    // Delete using the transcriptId directly
+    const res = await client.query(
+      `DELETE FROM Transcript 
+       WHERE transcriptid = $1 AND userid = $2 
+       RETURNING *`,
+      [transcriptId, userid]
+    );
+
+    if (res.rowCount === 0) {
+      return response.status(404).json(`Course not found in transcript`);
+    }
+
+    await client.query("COMMIT");
+    return response.status(200).json(`Deleted Course Successfully!`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json(`Internal Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
+module.exports = { addCourse, getTranscript, addSemester, removeCourse };

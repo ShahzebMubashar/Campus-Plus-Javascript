@@ -197,11 +197,14 @@ function TranscriptsPage() {
     }
   };
 
-  const handleRemoveCourse = async (semesterId, courseId) => {
+  const handleRemoveCourse = async (semesterId, transcriptId) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/Transcripts/${semesterId}/courses/${courseId}`,
-        { method: "DELETE", credentials: "include" }
+        `http://localhost:4000/Transcripts/remove-course/${transcriptId}`, // Send transcriptId in URL
+        { 
+          method: "DELETE", 
+          credentials: "include" 
+        }
       );
 
       if (!response.ok) {
@@ -215,7 +218,7 @@ function TranscriptsPage() {
             ? {
                 ...semester,
                 courses: semester.courses.filter(
-                  (course) => course.id !== courseId
+                  (course) => course.id !== transcriptId // Use transcriptId for comparison
                 ),
               }
             : semester
