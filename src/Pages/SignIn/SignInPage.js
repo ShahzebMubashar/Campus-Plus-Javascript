@@ -32,10 +32,10 @@ function SignInPage() {
             setMousePosition({ x: e.clientX, y: e.clientY })
         }
 
-        window.addEventListener('mousemove', handleMouseMove)
+        window.addEventListener("mousemove", handleMouseMove)
 
         return () => {
-            window.removeEventListener('mousemove', handleMouseMove)
+            window.removeEventListener("mousemove", handleMouseMove)
         }
     }, [])
 
@@ -46,38 +46,69 @@ function SignInPage() {
             return
         }
 
-        if (characterCircleRef.current && !activeField) {
-            const rect = characterCircleRef.current.getBoundingClientRect()
-            const centerX = rect.left + rect.width / 2
-            const centerY = rect.top + rect.height / 2
+        const handleEyeMovement = () => {
+            if (characterCircleRef.current) {
+                const rect = characterCircleRef.current.getBoundingClientRect()
+                const centerX = rect.left + rect.width / 2
+                const centerY = rect.top + rect.height / 2
 
-            // Calculate angle between mouse and character center
-            const deltaX = mousePosition.x - centerX
-            const deltaY = mousePosition.y - centerY
+                // Calculate angle between mouse and character center
+                const deltaX = mousePosition.x - centerX
+                const deltaY = mousePosition.y - centerY
 
-            // Limit eye movement range (0-100%)
-            const maxDistance = 30
-            const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance)
-            const angle = Math.atan2(deltaY, deltaX)
+                // Limit eye movement range (0-100%)
+                const maxDistance = 30
+                const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance)
+                const angle = Math.atan2(deltaY, deltaX)
 
-            // Convert to percentage (0-100)
-            const moveX = 50 + (Math.cos(angle) * distance / maxDistance) * 30
-            const moveY = 50 + (Math.sin(angle) * distance / maxDistance) * 30
+                // Convert to percentage (0-100)
+                const moveX = 50 + ((Math.cos(angle) * distance) / maxDistance) * 30
+                const moveY = 50 + ((Math.sin(angle) * distance) / maxDistance) * 30
 
-            setEyePosition({ x: moveX, y: moveY })
-        } else if (activeField) {
-            // Different positions based on which field is active
-            const positions = {
-                email: { x: 70, y: 40 },
-                username: { x: 30, y: 40 },
-                rollnumber: { x: 60, y: 60 },
-            }
-
-            if (positions[activeField]) {
-                setEyePosition(positions[activeField])
+                setEyePosition({ x: moveX, y: moveY })
             }
         }
+
+        handleEyeMovement()
+
+        // Add window resize listener to recalculate eye position
+        window.addEventListener("resize", handleEyeMovement)
+        return () => {
+            window.removeEventListener("resize", handleEyeMovement)
+        }
     }, [mousePosition, activeField, isPasswordField])
+
+    // Add a useEffect hook to handle responsive layout adjustments
+    useEffect(() => {
+        const handleResize = () => {
+            // Recalculate eye position on resize
+            if (characterCircleRef.current && !isPasswordField) {
+                const rect = characterCircleRef.current.getBoundingClientRect()
+                const centerX = rect.left + rect.width / 2
+                const centerY = rect.top + rect.height / 2
+
+                // Calculate angle between mouse and character center
+                const deltaX = mousePosition.x - centerX
+                const deltaY = mousePosition.y - centerY
+
+                // Limit eye movement range (0-100%)
+                const maxDistance = 30
+                const distance = Math.min(Math.sqrt(deltaX * deltaX + deltaY * deltaY), maxDistance)
+                const angle = Math.atan2(deltaY, deltaX)
+
+                // Convert to percentage (0-100)
+                const moveX = 50 + ((Math.cos(angle) * distance) / maxDistance) * 30
+                const moveY = 50 + ((Math.sin(angle) * distance) / maxDistance) * 30
+
+                setEyePosition({ x: moveX, y: moveY })
+            }
+        }
+
+        window.addEventListener("resize", handleResize)
+        return () => {
+            window.removeEventListener("resize", handleResize)
+        }
+    }, [mousePosition, isPasswordField])
 
     // Smooth transition between sign-in and sign-up modes
     const toggleSignUp = () => {
@@ -114,6 +145,7 @@ function SignInPage() {
         setSignUpData((prev) => ({ ...prev, [name]: value }))
     }
 
+    // Update the handleSignInSubmit function to add proper null checks
     const handleSignInSubmit = async (e) => {
         e.preventDefault()
         console.log("Attempting login with:", signInData)
@@ -134,37 +166,58 @@ function SignInPage() {
             if (response.ok) {
                 setMessage("Sign in successful!")
                 localStorage.setItem("user", JSON.stringify(data.user))
-                // Animate character on success
+
+                // Animate character and show party poppers on success
                 if (characterRef.current) {
                     characterRef.current.classList.add("success")
+
+                    // Create and animate party poppers
+                    createPartyPoppers()
+
                     setTimeout(() => {
-                        characterRef.current.classList.remove("success")
+                        // Check if the ref is still valid before removing the class
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("success")
+                        }
                     }, 1000)
                 }
+
                 // Animate button before redirect
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("success")
+                if (button) {
+                    button.classList.add("success")
+                }
+
                 // Redirect after animation completes
-                setTimeout(() => navigate("/"), 1000)
+                setTimeout(() => navigate("/"), 2000)
             } else {
                 setMessage(data.error || "Sign in failed. Please try again.")
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("error")
-                setTimeout(() => {
-                    button.classList.remove("error")
-                }, 1000)
+                if (button) {
+                    button.classList.add("error")
+                    setTimeout(() => {
+                        if (button) {
+                            button.classList.remove("error")
+                        }
+                    }, 1000)
+                }
             }
         } catch (error) {
             console.error("Sign in error:", error)
             setMessage("An error occurred. Please try again later.")
             const button = e.target.querySelector(".form-button")
-            button.classList.add("error")
-            setTimeout(() => {
-                button.classList.remove("error")
-            }, 1000)
+            if (button) {
+                button.classList.add("error")
+                setTimeout(() => {
+                    if (button) {
+                        button.classList.remove("error")
+                    }
+                }, 1000)
+            }
         }
     }
 
+    // Update the handleSignUpSubmit function to add proper null checks
     const handleSignUpSubmit = async (e) => {
         e.preventDefault()
         try {
@@ -183,84 +236,161 @@ function SignInPage() {
                 setMessage(data.message)
                 // Animate button on success
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("success")
+                if (button) {
+                    button.classList.add("success")
 
-                // Switch to sign in after successful registration
-                setTimeout(() => {
-                    button.classList.remove("success")
-                    toggleSignUp()
-                }, 1000)
+                    // Switch to sign in after successful registration
+                    setTimeout(() => {
+                        if (button) {
+                            button.classList.remove("success")
+                        }
+                        toggleSignUp()
+                    }, 1000)
+                }
             } else {
                 setMessage(data.error || "Sign up failed. Please try again.")
                 const button = e.target.querySelector(".form-button")
-                button.classList.add("error")
-                setTimeout(() => {
-                    button.classList.remove("error")
-                }, 1000)
+                if (button) {
+                    button.classList.add("error")
+                    setTimeout(() => {
+                        if (button) {
+                            button.classList.remove("error")
+                        }
+                    }, 1000)
+                }
             }
         } catch (error) {
             console.error("Sign up error:", error)
             setMessage("An error occurred. Please try again later.")
             const button = e.target.querySelector(".form-button")
-            button.classList.add("error")
-            setTimeout(() => {
-                button.classList.remove("error")
-            }, 1000)
+            if (button) {
+                button.classList.add("error")
+                setTimeout(() => {
+                    if (button) {
+                        button.classList.remove("error")
+                    }
+                }, 1000)
+            }
         }
     }
 
-    // Add this to your existing JavaScript code
-    document.addEventListener('DOMContentLoaded', () => {
-        const character = document.querySelector('.animated-character');
-        const eyes = document.querySelectorAll('.eyeball');
-        const form = document.querySelector('.signin-form');
-        const passwordInput = document.querySelector('input[type="password"]');
+    // Update the createPartyPoppers function to add proper null checks
+    const createPartyPoppers = () => {
+        const container = document.querySelector(".auth-wrapper")
+        const characterCircle = characterCircleRef.current
 
-        // Eye tracking
-        document.addEventListener('mousemove', (e) => {
-            const rect = character.getBoundingClientRect();
-            const centerX = rect.left + rect.width / 2;
-            const centerY = rect.top + rect.height / 2;
+        if (!container || !characterCircle) return
 
-            eyes.forEach(eye => {
-                const angle = Math.atan2(e.clientY - centerY, e.clientX - centerX);
-                const distance = Math.min(3, Math.sqrt(
-                    Math.pow(e.clientX - centerX, 2) +
-                    Math.pow(e.clientY - centerY, 2)
-                ) / 100);
+        try {
+            const characterRect = characterCircle.getBoundingClientRect()
+            const centerX = characterRect.left + characterRect.width / 2
+            const centerY = characterRect.top
 
-                const x = Math.cos(angle) * distance;
-                const y = Math.sin(angle) * distance;
+            // Create multiple confetti pieces
+            for (let i = 0; i < 50; i++) {
+                const confetti = document.createElement("div")
+                confetti.className = "confetti"
 
-                eye.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-            });
-        });
+                // Random confetti properties
+                const size = Math.random() * 10 + 5
+                const color = `hsl(${Math.random() * 360}, 80%, 60%)`
 
-        // Blinking animation
-        setInterval(() => {
-            character.classList.add('blinking');
-            setTimeout(() => {
-                character.classList.remove('blinking');
-            }, 300);
-        }, 3000);
+                confetti.style.width = `${size}px`
+                confetti.style.height = `${size}px`
+                confetti.style.backgroundColor = color
 
-        // Password validation animations
-        passwordInput.addEventListener('input', (e) => {
-            if (e.target.value.length > 0) {
-                if (e.target.value.length < 6) {
-                    character.classList.add('error');
+                // Position confetti at character's position
+                confetti.style.left = `${centerX}px`
+                confetti.style.top = `${centerY}px`
+
+                // Random rotation
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`
+
+                // Random direction and distance
+                const angle = Math.random() * Math.PI * 2
+                const distance = Math.random() * 200 + 50
+                const duration = Math.random() * 1 + 1 // 1-2 seconds
+
+                // Calculate end position
+                const endX = centerX + Math.cos(angle) * distance
+                const endY = centerY + Math.sin(angle) * distance - 100 // Upward bias
+
+                // Apply animation
+                confetti.animate(
+                    [
+                        { transform: `translate(0, 0) rotate(0deg)`, opacity: 1 },
+                        {
+                            transform: `translate(${endX - centerX}px, ${endY - centerY}px) rotate(${Math.random() * 720}deg)`,
+                            opacity: 0,
+                        },
+                    ],
+                    {
+                        duration: duration * 1000,
+                        easing: "cubic-bezier(0.1, 0.8, 0.2, 1)",
+                    },
+                )
+
+                // Add to DOM and remove after animation
+                container.appendChild(confetti)
+                setTimeout(() => {
+                    if (confetti && confetti.parentNode) {
+                        confetti.remove()
+                    }
+                }, duration * 1000)
+            }
+        } catch (error) {
+            console.error("Error creating party poppers:", error)
+        }
+    }
+
+    // Update the blinking animation effect to add proper null checks
+    useEffect(() => {
+        let blinkInterval
+
+        if (characterRef.current) {
+            blinkInterval = setInterval(() => {
+                if (characterRef.current) {
+                    characterRef.current.classList.add("blinking")
                     setTimeout(() => {
-                        character.classList.remove('error');
-                    }, 500);
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("blinking")
+                        }
+                    }, 300)
+                }
+            }, 3000)
+        }
+
+        return () => {
+            if (blinkInterval) {
+                clearInterval(blinkInterval)
+            }
+        }
+    }, [])
+
+    // Update the password validation animation to add proper null checks
+    useEffect(() => {
+        if (activeField === "password" && characterRef.current) {
+            const passwordValue = isSignUp ? signUpData.password : signInData.password
+
+            if (passwordValue.length > 0) {
+                if (passwordValue.length < 6) {
+                    characterRef.current.classList.add("error")
+                    setTimeout(() => {
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("error")
+                        }
+                    }, 500)
                 } else {
-                    character.classList.add('success');
+                    characterRef.current.classList.add("success")
                     setTimeout(() => {
-                        character.classList.remove('success');
-                    }, 500);
+                        if (characterRef.current) {
+                            characterRef.current.classList.remove("success")
+                        }
+                    }, 500)
                 }
             }
-        });
-    });
+        }
+    }, [isSignUp ? signUpData.password : signInData.password, activeField, isSignUp])
 
     return (
         <div className="signincontainerfull">
@@ -282,29 +412,24 @@ function SignInPage() {
                                 : "Join us to explore amazing opportunities and resources. Don't have an accout?"}
                         </p>
 
-                        <button className={`toggle-button ${isSignUp ? "sign-in-btn" : "sign-up-btn"}`}
-                            onClick={toggleSignUp}>
+                        <button className={`toggle-button ${isSignUp ? "sign-in-btn" : "sign-up-btn"}`} onClick={toggleSignUp}>
                             <span className="button-text">{isSignUp ? "Sign In" : "Sign Up"}</span>
                             <span className="button-icon"></span>
                         </button>
-                        <img src={isSignUp ? humanImg : rocketImg}
+                        <img
+                            src={isSignUp ? humanImg : rocketImg}
                             alt={isSignUp ? "Human" : "Rocket"}
-                            className={`dynamic-image ${isSignUp ? "human-img" : "rocket-img"}`} />
+                            className={`dynamic-image ${isSignUp ? "human-img" : "rocket-img"}`}
+                        />
                     </div>
 
                     <div className="form-section">
                         <div className={`form-container ${isAnimating ? "fade" : ""}`}>
                             {/* Character Circle Container */}
                             <div className={`character-circle-container ${isSignUp ? "sign-up-char" : "sign-in-char"}`}>
-                                <div
-                                    className={`character-circle ${isPasswordField ? "hiding-eyes" : ""}`}
-                                    ref={characterCircleRef}
-                                >
+                                <div className={`character-circle ${isPasswordField ? "hiding-eyes" : ""}`} ref={characterCircleRef}>
                                     {/* Animated Character */}
-                                    <div
-                                        className={`animated-character ${isPasswordField ? "hiding-eyes" : ""} `}
-                                        ref={characterRef}
-                                    >
+                                    <div className={`animated-character ${isPasswordField ? "hiding-eyes" : ""} `} ref={characterRef}>
                                         <div className="graduation-cap">
                                             <div className="cap-top"></div>
                                             <div className="cap-tassel"></div>
@@ -338,7 +463,6 @@ function SignInPage() {
                                             <div className="character-tie"></div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
 
@@ -407,7 +531,6 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-
                                     </div>
                                     <div className="input-group">
                                         <input
@@ -421,7 +544,6 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-
                                     </div>
                                     <div className="input-group">
                                         <input
@@ -435,7 +557,6 @@ function SignInPage() {
                                             className="form-input"
                                             required
                                         />
-
                                     </div>
                                     <button type="submit" className="form-button">
                                         <span className="button-text">Register</span>
