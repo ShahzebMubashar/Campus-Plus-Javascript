@@ -81,7 +81,7 @@ const addCourse = async (request, response) => {
       `Select * from Transcript where userid = $1 and courseid = $2`,
       [userid, courseid]
     );
-    
+
     if (res.rowCount) return response.status(400).json(`Course Already Added!`);
 
     await client.query(`BEGIN`);
@@ -114,7 +114,15 @@ const addSemester = async (request, response) => {
   const client = await pool.connect();
 
   try {
-    const checkResult = await client.query(
+    let checkResult = await client.query(
+      `Select * from ViewTranscripts where semestername = $1`,
+      [name]
+    );
+
+    if (checkResult.rowCount)
+      return response.status(400).json(`Semester Already Exists!`);
+
+    checkResult = await client.query(
       "SELECT * FROM semesters WHERE name = $1",
       [name]
     );
