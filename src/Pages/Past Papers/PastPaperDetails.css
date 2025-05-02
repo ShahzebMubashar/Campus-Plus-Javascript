@@ -49,26 +49,41 @@
 }
 
 /* Adjusting the paper year and paper type alignment and colors */
-
-/* Paper Section */
+/* Paper Section - Modern, Strong, and Clean */
 .paper-section {
-  background: #f9f9fb; /* Light background color for more visibility */
-  border-radius: 10px;
-  padding: 1.25rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); /* Enhanced shadow for better visibility */
+  background: #ffffff;
+  border: 2px solid #dee2e6; /* Distinct, clean border */
+  border-radius: 14px;
+  padding: 1.75rem;
+  box-shadow: 0 4px 14px rgba(20, 66, 114, 0.06); /* Colored soft shadow */
   display: flex;
   flex-direction: column;
-  height: auto; /* important for dynamic height */
-  overflow: visible;
-  margin-bottom: 1.5rem;
-  break-inside: avoid; /* Prevent paper sections from breaking across columns */
-  border: 1px solid #bcbec0; /* Border with light gray color */
+  margin-bottom: 1.75rem;
+  break-inside: avoid;
+  transition: all 0.25s ease-in-out;
+  position: relative;
+  z-index: 1;
 }
 
+/* Fancy border edge using gradient strip */
+.paper-section::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 4px;
+  background: linear-gradient(to bottom, #144272, #205295); /* Themed vertical strip */
+  border-radius: 14px 0 0 14px;
+  z-index: 2;
+}
+
+/* Hover effect - modern lift and highlight */
 .paper-section:hover {
-  border-color: #144272; /* Border color changes on hover to match theme */
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
-  background-color: #f0f4f8; /* Slightly darker background on hover */
+  border-color: #144272;
+  box-shadow: 0 8px 24px rgba(20, 66, 114, 0.12);
+  transform: translateY(-6px);
+  background-color: #f8fbff;
 }
 
 .section-title {

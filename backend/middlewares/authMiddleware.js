@@ -2,12 +2,10 @@ const checkAuthorisation = (request, response, next) => {
   console.log('\n[AUTH] Checking session:', request.sessionID);
   
   if (!request.session) {
-    console.log('[AUTH] No session object');
     return response.status(401).send("No session found");
   }
 
   if (!request.session.user) {
-    console.log('[AUTH] No user in session');
     return response.status(401).send("Please log in");
   }
 
