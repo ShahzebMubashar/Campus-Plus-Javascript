@@ -10,6 +10,7 @@ import profile from "../../../Assets/images/user.png"
 import notifications from "../../../Assets/images/active.png"
 import logout from "../../../Assets/images/logout.png"
 import usericon from "../../../Assets/images/usericon.png"
+import transcript from "../../../Assets/images/transcript.png"
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -205,10 +206,11 @@ function Navbar() {
                                             <img src={profile} alt="Profile" style={{ width: '18px', marginRight: '8px' }} />
                                             My Profile
                                         </Link>
-                                        <Link to="/settings">
-                                            <img src={settings} alt="Settings" style={{ width: '18px', marginRight: '8px' }} />
-                                            Settings
+                                        <Link to="/transcript">
+                                            <img src={transcript} alt="Transcript" style={{ width: '18px', marginRight: '8px' }} />
+                                            Transcript
                                         </Link>
+
                                         <Link to="/help">
                                             <img src={support} alt="Help" style={{ width: '20px', marginRight: '8px' }} />
                                             Help
@@ -229,6 +231,10 @@ function Navbar() {
                                         <hr className="dropdown-divider" />
 
                                         {/* Section 3 */}
+                                        <Link to="/settings">
+                                            <img src={settings} alt="Settings" style={{ width: '18px', marginRight: '8px' }} />
+                                            Settings
+                                        </Link>
                                         <span onClick={handleLogout} style={{ cursor: 'pointer' }}>
                                             <img src={logout} alt="Logout" style={{ width: '18px', marginRight: '8px' }} />
                                             Log out
