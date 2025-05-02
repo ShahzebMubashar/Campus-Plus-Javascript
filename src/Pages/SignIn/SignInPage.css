@@ -76,10 +76,10 @@
 }
 
 /* .animated-text {
-    transition: opacity 0.3s ease, transform 0.5s ease;
-    margin-left: -6%;
-    margin-top: 5%;
-} */
+      transition: opacity 0.3s ease, transform 0.5s ease;
+      margin-left: -6%;
+      margin-top: 5%;
+  } */
 
 .fresher-text {
     transition: opacity 0.3s ease, transform 0.5s ease;
@@ -128,23 +128,23 @@
 }
 
 /* .left-section h1 {
-    font-size: 2.5rem;
-    margin-bottom: 5%;
-    position: absolute;
-    top: 15%;
-    left: 13%;
-} */
+      font-size: 2.5rem;
+      margin-bottom: 5%;
+      position: absolute;
+      top: 15%;
+      left: 13%;
+  } */
 
 /* .left-section p {
-    font-size: 1.2rem;
-    margin-bottom: 1.5rem;
-    padding: 0 20px;
-    position: absolute;
-    top: 25%;
-    left: 10%;
-    margin-right: 10%;
-    text-align: left;
-} */
+      font-size: 1.2rem;
+      margin-bottom: 1.5rem;
+      padding: 0 20px;
+      position: absolute;
+      top: 25%;
+      left: 10%;
+      margin-right: 10%;
+      text-align: left;
+  } */
 
 .toggle-button {
     padding: 12px 30px;
@@ -213,15 +213,14 @@
     transition: opacity 0.5s ease-in-out, transform 0.8s cubic-bezier(0.68, -0.55, 0.27, 1.55);
     z-index: 999;
     /* top: 40%;
-    left: 25%;
-    max-width: 75%; */
+      left: 25%;
+      max-width: 75%; */
 }
 
 .rocket-img {
     top: 40%;
     left: 25%;
     max-width: 75%;
-
 }
 
 .human-img {
@@ -788,7 +787,6 @@
     75% {
         transform: translateX(5px) rotate(5deg) translateY(10px);
     }
-
 }
 
 /* Add blinking animation */
@@ -858,9 +856,7 @@
     }
 }
 
-.animated-character.success .character-mouth {
-    animation: happyMouth 0.5s ease;
-}
+
 
 @keyframes happyMouth {
 
@@ -947,9 +943,218 @@
     left: 10% !important;
     transform: translateX(-50%) !important;
     z-index: 200;
-
 }
 
 .sign-in-char {
     left: 75%;
+}
+
+/* Confetti/Party Popper Animation */
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background-color: #f00;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+@keyframes confettiFall {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+/* Improve eye tracking */
+.eye .eyeball {
+    transition: transform 0.1s ease-out;
+}
+
+/* Improve responsive design */
+@media (max-width: 1200px) {
+    .auth-wrapper {
+        width: 90%;
+    }
+
+    .character-circle {
+        width: 140px;
+        height: 140px;
+    }
+}
+
+@media (max-width: 992px) {
+    .signin-container {
+        flex-direction: column;
+        height: auto;
+        min-height: 100vh;
+    }
+
+    .left-section {
+        position: relative;
+        width: 100%;
+        height: 50vh;
+        top: 0;
+        padding-top: 60px;
+    }
+
+    .background-circle {
+        border-radius: 0 0 50% 50% / 20%;
+        height: 60%;
+        top: 0;
+    }
+
+    .form-section {
+        position: relative;
+        width: 100%;
+        right: 0;
+        top: 0;
+        padding: 2rem;
+    }
+
+    .character-circle-container {
+        top: -70px;
+        left: 50%;
+    }
+
+    .signin-form,
+    .signup-form {
+        margin-left: 0;
+        margin-top: 0;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
+
+    .form-input {
+        margin-left: 0;
+    }
+
+    .form-button {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+
+    .fresher-text,
+    .member-text {
+        position: relative;
+        top: 0;
+        left: 0 !important;
+        margin-bottom: 1rem;
+    }
+
+    .fresher-para,
+    .member-para {
+        position: relative;
+        top: 0;
+        left: 0 !important;
+        margin-bottom: 2rem;
+        width: 100%;
+        text-align: center;
+    }
+
+    .toggle-button {
+        position: relative;
+        left: 0 !important;
+        top: 0 !important;
+    }
+
+    .dynamic-image {
+        position: absolute;
+        bottom: 0;
+        left: 50% !important;
+        transform: translateX(-50%);
+        max-width: 40% !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .auth-wrapper {
+        width: 100%;
+        padding: 0 1rem;
+    }
+
+    .character-circle {
+        width: 120px;
+        height: 120px;
+    }
+
+    .animated-character {
+        transform: scale(0.9) translateY(10px);
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .left-section h1 {
+        font-size: 1.8rem;
+    }
+
+    .left-section p {
+        font-size: 1rem;
+    }
+}
+
+/* Improve hiding eyes animation */
+.hiding-eyes .eye {
+    position: relative;
+    overflow: hidden;
+}
+
+.hiding-eyes .eye::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f8c9a7;
+    transform: translateY(0);
+    animation: blinkEyes 0.2s ease forwards;
+}
+
+@keyframes blinkEyes {
+    0% {
+        transform: translateY(100%);
+    }
+
+    100% {
+        transform: translateY(0);
+    }
+}
+
+/* Success animation with party poppers */
+.animated-character.success {
+    animation: happyJump 0.8s ease;
+}
+
+
+
+
+
+/* Improve sign-up mode for responsive design */
+.signin-container.sign-up-mode .left-section {
+    transform: translateX(0);
+}
+
+@media (max-width: 992px) {
+    .signin-container.sign-up-mode .left-section {
+        transform: translateY(0);
+    }
+
+    .signin-container.sign-up-mode .form-section {
+        transform: translateX(0);
+        position: relative;
+    }
+
+    .signin-container.sign-up-mode .background-circle {
+        border-radius: 0 0 50% 50% / 20%;
+    }
 }
