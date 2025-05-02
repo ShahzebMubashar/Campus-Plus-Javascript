@@ -7,6 +7,8 @@ import support from "../../../Assets/images/support.png"
 import message from "../../../Assets/images/conversation.png"
 import settings from "../../../Assets/images/setting.png"
 import profile from "../../../Assets/images/user.png"
+import notifications from "../../../Assets/images/active.png"
+import logout from "../../../Assets/images/logout.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
 
@@ -213,7 +215,7 @@ function Navbar() {
 
                                         {/* Section 2 */}
                                         <Link to="/notifications">
-                                            <img src="https://cdn-icons-png.flaticon.com/512/1827/1827392.png" alt="Notifications" style={{ width: '18px', marginRight: '8px' }} />
+                                            <img src={notifications} alt="Notifications" style={{ width: '18px', marginRight: '8px' }} />
                                             Notifications
                                         </Link>
                                         <Link to="/messages">
@@ -225,7 +227,7 @@ function Navbar() {
 
                                         {/* Section 3 */}
                                         <span onClick={handleLogout} style={{ cursor: 'pointer' }}>
-                                            <img src="https://cdn-icons-png.flaticon.com/512/1828/1828479.png" alt="Logout" style={{ width: '18px', marginRight: '8px' }} />
+                                            <img src={logout} alt="Logout" style={{ width: '18px', marginRight: '8px' }} />
                                             Log out
                                         </span>
                                     </div>
