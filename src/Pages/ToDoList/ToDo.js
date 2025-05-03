@@ -97,7 +97,7 @@ function ToDo() {
 
     try {
       const todo = todos.find((t) => t.id === id);
-      await fetch(`http://localhost:4000/user/update-reminder/${id}`, {
+      await fetch(`http://localhost:4000/user/update-priority/${id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -146,7 +146,7 @@ function ToDo() {
     setTodos(updatedTodos);
 
     try {
-      await fetch(`http://localhost:4000/user/update-reminder/${id}`, {
+      await fetch(`http://localhost:4000/user/update-priority/${id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
