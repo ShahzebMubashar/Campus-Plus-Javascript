@@ -20,6 +20,19 @@ const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => 
                 </div>
             </div>
 
+            {/* Navigation Links */}
+            <div className="sidebar-nav-links">
+                <a href="/profile" className="sidebar-nav-link">
+                    👤 Profile
+                </a>
+                <a href="/settings" className="sidebar-nav-link">
+                    ⚙️ Settings
+                </a>
+                <a href="/notifications" className="sidebar-nav-link">
+                    🔔 Notifications
+                </a>
+            </div>
+
             {/* Joined Rooms Section */}
             <div className="rooms-section">
                 <h3>My Rooms ({joinedRooms?.length || 0})</h3>
