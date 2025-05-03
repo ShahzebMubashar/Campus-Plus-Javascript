@@ -1,3 +1,4 @@
+const { request } = require("express");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -174,24 +175,44 @@ const createRoom = async (request, response) => {
   }
 };
 
-const joinRoom = async (req, res) => {
-  const { roomid } = req.params;
-  const { userid } = req.session.user;
+const joinRoom = async (request, response) => {
+  const {
+    params: { roomid },
+    session: {
+      user: { userid },
+    },
+  } = request;
 
   if (!userid || !roomid) {
     return res.status(400).json("User ID and Room ID are required");
   }
 
+  const client = await pool.connect();
+
   try {
-    const result = await pool.query(
-      `INSERT INTO RoomMembers (roomid, userid) VALUES ($1, $2) ON CONFLICT DO NOTHING`,
-      [roomid, userid]
+    let res = await pool.query(
+      `Select * from RoomMembers where userid = $1 and roomid = $2`,
+      [userid, roomid]
     );
 
-    res.status(200).json("Joined successfully");
+    if (res.rowCount)
+      return response.status(200).json(`Already A Member of the Room!`);
+
+    await client.query("BEGIN");
+
+    res = await client.query(
+      `Insert into RoomMembers (userid, roomid) Values ($1, $2)`,
+      [userid, roomid]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).json("Joined successfully");
   } catch (error) {
     console.error("Error joining room:", error);
-    res.status(500).json("Server error");
+    return response.status(500).json("Server error");
+  } finally {
+    if (client) client.release();
   }
 };
 
@@ -965,6 +986,32 @@ const getUserJoinedGroups = async (request, response) => {
   }
 };
 
+const myRooms = async (request, response) => {
+  const {
+    params: { userid },
+  } = request;
+  console.log("ENDPOINT HIT FOR GET ROOMS");
+  try {
+    let res = await pool.query(
+      `Select * from Rooms r
+      left join RoomMembers rm on rm.roomid = r.roomid
+      where userid = $1
+      `,
+      [userid]
+    );
+
+    if (!res.rowCount)
+      return response.status(404).json("You have not joined any rooms yet!");
+
+    console.log(res.rows);
+
+    return response.status(200).json(res.rows);
+  } catch (error) {
+    console.log(error.message);
+    return response.status(500).json("Internal Server Error");
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -990,4 +1037,5 @@ module.exports = {
   trackPostView,
   searchPosts,
   getUserJoinedGroups,
+  myRooms,
 };
