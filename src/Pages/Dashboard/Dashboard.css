@@ -916,84 +916,8 @@
 }
 
 .no-rooms-message {
-    padding: 20px;
-    text-align: center;
-    color: #666;
-    font-style: italic;
-  }
-
-  /* Reminders Section */
-.reminders-section {
-    background: white;
-    border-radius: 10px;
-    padding: 20px;
-    margin-bottom: 20px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  .reminder-form {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-  }
-  
-  .reminder-form .form-group {
-    flex: 1;
-  }
-  
-  .reminder-form input {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  .add-reminder-btn {
-    padding: 10px 15px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .reminders-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .reminder-card {
-    background: #f9f9f9;
-    padding: 15px;
-    border-radius: 5px;
-    border-left: 4px solid #4CAF50;
-  }
-  
-  .reminder-content {
-    font-weight: 500;
-    margin-bottom: 5px;
-  }
-  
-  .reminder-meta {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-size: 0.9em;
-    color: #666;
-  }
-  
-  .reminder-delete {
-    background: none;
-    border: none;
-    color: #ff4444;
-    font-size: 1.2em;
-    cursor: pointer;
-    padding: 0 5px;
-  }
-  
-  .no-reminders {
-    text-align: center;
-    color: #999;
-    padding: 20px;
-  }
+  padding: 20px;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
