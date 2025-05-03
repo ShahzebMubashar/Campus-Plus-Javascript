@@ -99,6 +99,8 @@ const addCourse = async (request, response) => {
     console.log(error.message);
     await client.query(`ROLLBACK`);
     return response.status(500).json(`Internal Server Error`);
+  } finally {
+    if (client) client.release();
   }
 };
 
