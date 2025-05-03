@@ -107,6 +107,9 @@ const addCourse = async (request, response) => {
 const addSemester = async (request, response) => {
   const {
     body: { name },
+    session: {
+      user: { userid },
+    },
   } = request;
 
   if (!name) {
@@ -117,9 +120,10 @@ const addSemester = async (request, response) => {
 
   try {
     let checkResult = await client.query(
-      `Select * from ViewTranscripts where semestername = $1`,
-      [name]
+      `Select * from ViewTranscripts where semestername = $1 and userid = $2`,
+      [name, userid]
     );
+    console.log(checkResult.rows);
 
     if (checkResult.rowCount)
       return response.status(400).json(`Semester Already Exists!`);
