@@ -102,6 +102,50 @@ function AcademicDashboard() {
     }
   };
 
+  const [tasks, setTodos] = useState([]);
+
+  // Fetch tasks from backend
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/my-reminders", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        setTodos([]);
+        throw new Error("Failed to fetch tasks");
+      }
+
+      const data = await res.json();
+      if (data) {
+        setTodos(
+          data.map((task) => ({
+            id: task.taskid,
+            title: task.content, // Changed from 'text' to 'title' to match deadlines structure
+            completed: task.status,
+            priority: task.priority.toLowerCase(),
+            dueDate: new Date(task.duedate).toISOString().split("T")[0],
+            dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
+            course: "Task", // Added to match deadlines structure
+          }))
+        );
+        console.log(data);
+      } else {
+        setTodos([]);
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [User?.userid]);
+
   const fetchJoinedRooms = async () => {
     try {
       const result = await fetch(
@@ -206,12 +250,15 @@ function AcademicDashboard() {
                     <p>{course.coursecode || "No code available"}</p>
                     <div className="progress-container">
                       <div className="progress-text">
-                        {Math.floor(Math.random() * 10)}/{Math.floor(Math.random() * 15)}
+                        {Math.floor(Math.random() * 10)}/
+                        {Math.floor(Math.random() * 15)}
                       </div>
                       <div className="progress-bar">
                         <div
                           className="progress-fill"
-                          style={{ width: `${Math.floor(Math.random() * 100)}%` }}
+                          style={{
+                            width: `${Math.floor(Math.random() * 100)}%`,
+                          }}
                         ></div>
                       </div>
                     </div>
@@ -246,40 +293,34 @@ function AcademicDashboard() {
             </a>
           </div>
           <div className="deadlines-list">
-            {[
-              {
-                title: "Database Systems Assignment",
-                dueDate: "2024-03-15",
-                course: "CS-301",
-                priority: "high",
-              },
-              {
-                title: "Software Engineering Project",
-                dueDate: "2024-03-20",
-                course: "CS-401",
-                priority: "medium",
-              },
-            ].map((deadline, index) => (
-              <div
-                key={index}
-                className="deadline-card"
-                onClick={() => (window.location.href = "/assignment-details")}
-              >
-                <div className="deadline-content">
-                  <h3>{deadline.title}</h3>
-                  <div className="deadline-meta">
-                    <span className="course-code">{deadline.course}</span>
-                    <span className="due-date">
-                      <span className="icon">📅</span>
-                      {new Date(deadline.dueDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+            {/* Replace the hardcoded deadlines with your fetched todos */}
+            {tasks.length > 0 ? (
+              tasks.slice(0, 3).map((task, index) => (
                 <div
-                  className={`priority-indicator ${deadline.priority}`}
-                ></div>
+                  key={task.id || index} // Use task.id if available, otherwise fall back to index
+                  className="deadline-card"
+                  onClick={() => console.log("Task clicked:", task.id)} // You can replace this with your navigation
+                >
+                  <div className="deadline-content">
+                    <h3>{task.title}</h3>
+                    <div className="deadline-meta">
+                      <span className="course-code">{task.course}</span>
+                      <span className="due-date">
+                        <span className="icon">📅</span>
+                        {new Date(
+                          `${task.dueDate}T${task.dueTime}`
+                        ).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={`priority-indicator ${task.priority}`}></div>
+                </div>
+              ))
+            ) : (
+              <div className="no-deadlines-message">
+                No upcoming deadlines found
               </div>
-            ))}
+            )}
           </div>
         </section>
 
