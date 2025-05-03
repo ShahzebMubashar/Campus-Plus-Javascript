@@ -1,3 +1,4 @@
+const { request } = require("express");
 const pool = require("../config/database");
 
 const viewUserInfo = async (request, response) => {
@@ -97,4 +98,105 @@ const currentCourses = async (request, response) => {
   }
 };
 
-module.exports = { viewUserInfo, editUserInfo, currentCourses };
+const addReminder = async (request, response) => {
+  const client = await pool.connect();
+
+  try {
+    const {
+      body: { deadline, content },
+      session: { user },
+    } = request;
+
+    if (!user || !user.userid) {
+      return response.status(401).json({ error: "Unauthorized" });
+    }
+
+    await client.query("BEGIN");
+
+    const result = await client.query(
+      `INSERT INTO Reminders (userid, content, deadline)
+       VALUES ($1, $2, $3)
+       RETURNING *`,
+      [user.userid, content, new Date(deadline)]
+    );
+
+    if (!result.rowCount) {
+      return response.status(500).json({ error: "Failed to Add Reminder" });
+    }
+
+    await client.query("COMMIT");
+    return response.status(201).json(result.rows[0]);
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error adding reminder:", error.message);
+    return response.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    client.release();
+  }
+};
+
+// Add this new endpoint to fetch reminders
+const getReminders = async (request, response) => {
+  const client = await pool.connect();
+
+  try {
+    const { user } = request.session;
+
+    if (!user || !user.userid) {
+      return response.status(401).json({ error: "Unauthorized" });
+    }
+
+    const result = await client.query(
+      `SELECT * FROM Reminders 
+       WHERE userid = $1 
+       ORDER BY deadline ASC`,
+      [user.userid]
+    );
+
+    return response.status(200).json(result.rows);
+  } catch (error) {
+    console.error("Error fetching reminders:", error.message);
+    return response.status(500).json({ error: "Internal Server Error" });
+  } finally {
+    client.release();
+  }
+};
+
+const deleteReminder = async (request, response) => {
+  const {
+    params: { reminderid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query(`BEGIN`);
+
+    const res = await client.query(
+      `Delete from Reminders where reminderid = $1 and userid = $2`,
+      [reminderid, userid]
+    );
+
+    await client.query(`COMMIT`);
+
+    return response.status(200).json(`Reminder Deleted Successfully`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Internal Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
+module.exports = {
+  viewUserInfo,
+  editUserInfo,
+  currentCourses,
+  addReminder,
+  getReminders,
+  deleteReminder,
+};
