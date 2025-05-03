@@ -311,31 +311,34 @@ function TranscriptsPage() {
                 .join("")}
             </div>
           )}
-          <div className="sidebar-profile-name lms-user-details" style={{textAlign: 'center', margin: 0}}>
-            <h2 style={{fontSize: '1.2rem', margin: 0, color: '#2563eb'}}>{user?.name || user?.fullName || "Student"}</h2>
+          <div className="sidebar-profile-name lms-user-details">
+            <h2>{user?.name || user?.fullName || "Student"}</h2>
           </div>
         </div>
         <hr className="sidebar-separator" />
-        <div className="sidebar-header">
-          <h2>Transcript Summary</h2>
-          <div className="sidebar-cgpa">
-            <span>CGPA</span>
-            <span className="cgpa-value">{calculateCGPA()}</span>
-          </div>
+
+        {/* CGPA Section */}
+        <div className="sidebar-cgpa-section">
+          <span>CGPA</span>
+          <span className="cgpa-value">{calculateCGPA()}</span>
         </div>
+        <hr className="sidebar-separator" />
+
+        {/* Simplified Semesters List */}
         <ul className="sidebar-semesters-list">
-          {semesters.map((semester) => (
-            <li
-              key={semester.id}
-              className={`sidebar-semester-item${selectedSemesterId === semester.id ? " selected" : ""}`}
-              onClick={() => setSelectedSemesterId(semester.id)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="sidebar-semester-name">{semester.name}</div>
-              <div className="sidebar-semester-sgpa">
-                SGPA: <span>{calculateSGPA(semester.courses)}</span>
-              </div>
-            </li>
+          {semesters.map((semester, index) => (
+            <React.Fragment key={semester.id}>
+              <li
+                className={`sidebar-semester-item${selectedSemesterId === semester.id ? " selected" : ""}`}
+                onClick={() => setSelectedSemesterId(semester.id)}
+              >
+                <div className="sidebar-semester-name">{semester.name}</div>
+                <div className="sidebar-semester-sgpa">
+                  SGPA: {calculateSGPA(semester.courses)}
+                </div>
+              </li>
+              {index < semesters.length - 1 && <hr className="semester-divider" />}
+            </React.Fragment>
           ))}
         </ul>
       </aside>
