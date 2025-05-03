@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
-//  Yelo
+
 function AcademicDashboard() {
   const [courses, setCourses] = useState([
     { name: "Course 1", credits: 3, grade: "A" },
@@ -15,12 +15,8 @@ function AcademicDashboard() {
     grade: "A",
   });
   const [User, setUser] = useState({});
-  const [editData, setEditData] = useState({
-    name: "",
-    degree: "",
-    batch: "",
-  });
-  const [myRooms, setMyRooms] = useState({});
+  const [currentCourses, setCurrentCourses] = useState([]);
+  const [myRooms, setMyRooms] = useState([]);
 
   const gradePoints = {
     "A+": 4.0,
@@ -64,34 +60,26 @@ function AcademicDashboard() {
     setCourses(updatedCourses);
   };
 
-  // const fetchEditProfile = async () => {
-  //   try {
-  //     const res = await fetch("http://localhost:4000/user/profile", {
-  //       credentials: "include",
-  //       method: "PUT",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(editData),
-  //     });
+  const fetchCurrentCourses = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/current-courses", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  //     const contentType = res.headers.get("content-type");
-  //     if (!contentType || !contentType.includes("application/json")) {
-  //       const text = await res.text();
-  //       throw new Error(text || "Non-JSON response received");
-  //     }
+      if (!res.ok) {
+        throw new Error(`HTTP Error! Status: ${res.status}`);
+      }
 
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       throw new Error(data.message || "Update failed");
-  //     }
-
-  //     setUser(data);
-  //     setIsEditing(false);
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Update failed:", error.message);
-  //   }
-  // };
+      const data = await res.json();
+      setCurrentCourses(data);
+    } catch (error) {
+      console.error("Error fetching courses:", error.message);
+    }
+  };
 
   const fetchUserInfo = async () => {
     try {
@@ -104,29 +92,14 @@ function AcademicDashboard() {
       });
 
       if (!res.ok) {
-        console.log(`Error`);
         throw new Error(`HTTP error! status: ${res.status}`);
       }
 
       const data = await res.json();
-
-      if (data) setUser(data);
-      else setUser(null);
+      setUser(data);
     } catch (error) {
       console.error("Error Fetching User Info:", error.message);
     }
-  };
-
-  useEffect(() => {
-    fetchUserInfo();
-  }, []);
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewCourse({
-      ...newCourse,
-      [name]: name === "credits" ? parseInt(value) || 0 : value,
-    });
   };
 
   const fetchJoinedRooms = async () => {
@@ -137,13 +110,11 @@ function AcademicDashboard() {
       );
       const data = await result.json();
 
-      // Transform API data to match frontend structure
       const formattedRooms = data.map((room) => ({
-        title: room.name || "Unnamed Room", // Map 'roomname' to 'title'
-        desc: room.description || "No description", // Add if your API provides this
-        // members: room.membercount || 0, // Adjust based on your API
-        online: Math.floor(Math.random() * 10), // Placeholder (or use real data)
-        active: Math.random() > 0.5, // Placeholder
+        title: room.name || "Unnamed Room",
+        desc: room.description || "No description",
+        online: Math.floor(Math.random() * 10),
+        active: Math.random() > 0.5,
       }));
 
       setMyRooms(formattedRooms);
@@ -154,16 +125,28 @@ function AcademicDashboard() {
   };
 
   useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  useEffect(() => {
     if (User?.userid) {
+      fetchCurrentCourses();
       fetchJoinedRooms();
     }
   }, [User?.userid]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewCourse({
+      ...newCourse,
+      [name]: name === "credits" ? parseInt(value) || 0 : value,
+    });
+  };
 
   return (
     <div className="academic-dashboard">
       <Navbar />
       <div className="dashboardcontainer">
-        {/* User Profile Section */}
         <section className="user-profile-section">
           <img src={Shahzebpic} alt="Profile" className="profile-picture" />
           <div className="user-info">
@@ -207,7 +190,6 @@ function AcademicDashboard() {
           </div>
         </section>
 
-        {/* My Courses */}
         <section className="courses-section">
           <div className="section-header">
             <h2>📘 My Courses</h2>
@@ -216,47 +198,36 @@ function AcademicDashboard() {
             </a>
           </div>
           <div className="courses-grid">
-            {[
-              {
-                title: "Cinema 4D",
-                desc: "Elements design for websites and apps",
-                progress: "08/12",
-                percent: 66,
-              },
-              {
-                title: "UI/UX Design",
-                desc: "From concept to prototype",
-                progress: "04/15",
-                percent: 27,
-              },
-              {
-                title: "Graphic Design",
-                desc: "Digital computer graphics",
-                progress: "01/10",
-                percent: 10,
-              },
-            ].map((course, i) => (
-              <div className="course-card" key={i}>
-                <div className="course-content">
-                  <h3>{course.title}</h3>
-                  <p>{course.desc}</p>
-                  <div className="progress-container">
-                    <div className="progress-text">{course.progress}</div>
-                    <div className="progress-bar">
-                      <div
-                        className="progress-fill"
-                        style={{ width: `${course.percent}%` }}
-                      ></div>
+            {currentCourses.length > 0 ? (
+              currentCourses.map((course, i) => (
+                <div className="course-card" key={i}>
+                  <div className="course-content">
+                    <h3>{course.coursename || "Unnamed Course"}</h3>
+                    <p>{course.coursecode || "No code available"}</p>
+                    <div className="progress-container">
+                      <div className="progress-text">
+                        {Math.floor(Math.random() * 10)}/{Math.floor(Math.random() * 15)}
+                      </div>
+                      <div className="progress-bar">
+                        <div
+                          className="progress-fill"
+                          style={{ width: `${Math.floor(Math.random() * 100)}%` }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
+                  <div className="course-arrow">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                    </svg>
+                  </div>
                 </div>
-                <div className="course-arrow">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                  </svg>
-                </div>
+              ))
+            ) : (
+              <div className="no-courses-message">
+                No courses found for current semester
               </div>
-            ))}
+            )}
 
             <div className="course-card add-card">
               <div className="add-content">
@@ -267,7 +238,6 @@ function AcademicDashboard() {
           </div>
         </section>
 
-        {/* Upcoming Deadlines */}
         <section className="deadlines-section">
           <div className="section-header">
             <h2>⏰ Upcoming Deadlines</h2>
@@ -313,9 +283,7 @@ function AcademicDashboard() {
           </div>
         </section>
 
-        {/* Bottom Sections */}
         <div className="bottom-sections">
-          {/* GPA Section */}
           <div className="gpa-calculator-section">
             <div className="section-header">
               <h2>🎓 GPA Calculator</h2>
@@ -400,7 +368,6 @@ function AcademicDashboard() {
             </div>
           </div>
 
-          {/* Chatrooms Section */}
           <div className="chatrooms-section">
             <div className="section-header">
               <h2>💬 Chatrooms Joined</h2>
@@ -416,9 +383,8 @@ function AcademicDashboard() {
                     <div className="chatroom-card" key={i}>
                       <div className="chatroom-icon">💬</div>
                       <div className="chatroom-info">
-                        <h3>{room.title}</h3> {/* Now displays roomname */}
-                        <p>{room.desc}</p>{" "}
-                        {/* Displays description if available */}
+                        <h3>{room.title}</h3>
+                        <p>{room.desc}</p>
                         <p> • {room.online} online</p>
                       </div>
                     </div>
@@ -439,7 +405,6 @@ function AcademicDashboard() {
         </div>
       </div>
 
-      {/* Quick Links Section */}
       <section className="quick-links-section">
         <div className="section-header">
           <h2>🔗 Quick Links</h2>
