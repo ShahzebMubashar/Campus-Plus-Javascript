@@ -649,6 +649,21 @@ export default function RoomView({ room, onBack, onLeave }) {
               >
                 Back to Rooms
               </button>
+              {userRole === "Admin" && (
+                <button
+                  onClick={() => setIsEditingRoom(true)}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#28a745",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                >
+                  Edit Room Info
+                </button>
+              )}
               <button
                 onClick={onLeave}
                 style={{
@@ -671,6 +686,90 @@ export default function RoomView({ room, onBack, onLeave }) {
             <p style={{ margin: "10px 0 0", color: "#666" }}>{room.description}</p>
           )}
         </div>
+
+        {/* Add Edit Room Modal */}
+        {isEditingRoom && (
+          <div className="modal-overlay" style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999
+          }}>
+            <div style={{
+              backgroundColor: 'white',
+              padding: '24px',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              width: '90%',
+              maxWidth: '500px',
+              position: 'relative',
+              zIndex: 10000
+            }}>
+              <h2 style={{ marginTop: 0, marginBottom: '20px' }}>Edit Room Information</h2>
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Room Name</label>
+                <input
+                  type="text"
+                  value={editedRoomName}
+                  onChange={(e) => setEditedRoomName(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Description</label>
+                <textarea
+                  value={editedRoomDescription}
+                  onChange={(e) => setEditedRoomDescription(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    minHeight: '100px'
+                  }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                <button
+                  onClick={() => setIsEditingRoom(false)}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: '#f0f0f0',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUpdateRoom}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Search Section */}
         <div className="search-section" style={{
