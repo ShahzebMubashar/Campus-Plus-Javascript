@@ -5,6 +5,7 @@ const {
   currentCourses,
   getReminders,
   addReminder,
+  deleteReminder,
 } = require("../controllers/userController");
 const { checkAuthorisation } = require("../middlewares/authMiddleware");
 
@@ -15,5 +16,10 @@ router.put("/profile", checkAuthorisation, editUserInfo);
 router.get("/current-courses", checkAuthorisation, currentCourses);
 router.get("/my-reminders", checkAuthorisation, getReminders);
 router.post("/add-reminder", checkAuthorisation, addReminder);
+router.delete(
+  "/delete-reminder/:reminderid",
+  checkAuthorisation,
+  deleteReminder
+);
 
 module.exports = router;

@@ -1,3 +1,4 @@
+const { request } = require("express");
 const pool = require("../config/database");
 
 const viewUserInfo = async (request, response) => {
@@ -161,10 +162,41 @@ const getReminders = async (request, response) => {
   }
 };
 
+const deleteReminder = async (request, response) => {
+  const {
+    params: { reminderid },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query(`BEGIN`);
+
+    const res = await client.query(
+      `Delete from Reminders where reminderid = $1 and userid = $2`,
+      [reminderid, userid]
+    );
+
+    await client.query(`COMMIT`);
+
+    return response.status(200).json(`Reminder Deleted Successfully`);
+  } catch (error) {
+    console.log(error.message);
+    await client.query(`ROLLBACK`);
+    return response.status(500).json(`Internal Server Error`);
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   viewUserInfo,
   editUserInfo,
   currentCourses,
   addReminder,
   getReminders,
+  deleteReminder,
 };
