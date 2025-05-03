@@ -114,7 +114,7 @@ const FacultySection = () => {
 };
 
 const IntroSection = () => (
-    <section className="intro-section" style={{ marginTop: '100px' }}>
+    <section className="intro-section" style={{ marginTop: '-90px' }}>
         <h1>Faculty Information</h1>
         <p>Need to find your prof? Names, offices, emails—sab kuch yahan milega</p>
     </section>
