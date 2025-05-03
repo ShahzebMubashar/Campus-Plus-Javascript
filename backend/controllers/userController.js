@@ -103,25 +103,22 @@ const addReminder = async (request, response) => {
 
   try {
     const {
-      body: { deadline, content },
-      session: { user },
+      body: { duedate, content, priority },
+      session: {
+        user: { userid },
+      },
     } = request;
-
-    if (!user || !user.userid) {
-      return response.status(401).json({ error: "Unauthorized" });
-    }
 
     await client.query("BEGIN");
 
     const result = await client.query(
-      `INSERT INTO Reminders (userid, content, deadline)
-       VALUES ($1, $2, $3)
-       RETURNING *`,
-      [user.userid, content, new Date(deadline)]
+      `Insert into UserTasks (userid, content, priority, duedate, status)
+      Values ($1, $2, $3, $4, 'Pending')`,
+      [userid, content, priority, duedate]
     );
 
     if (!result.rowCount) {
-      return response.status(500).json({ error: "Failed to Add Reminder" });
+      return response.status(500).json({ error: "Failed to Add Task" });
     }
 
     await client.query("COMMIT");
@@ -137,22 +134,24 @@ const addReminder = async (request, response) => {
 
 // Add this new endpoint to fetch reminders
 const getReminders = async (request, response) => {
+  const {
+    session: {
+      user: { userid },
+    },
+  } = request;
+
   const client = await pool.connect();
 
   try {
-    const { user } = request.session;
-
-    if (!user || !user.userid) {
-      return response.status(401).json({ error: "Unauthorized" });
-    }
-
     const result = await client.query(
-      `SELECT * FROM Reminders 
+      `SELECT * FROM UserTasks 
        WHERE userid = $1 
-       ORDER BY deadline ASC`,
-      [user.userid]
+       ORDER BY priority, duedate`,
+      [userid]
     );
 
+    if (!result.rowCount) return response.status(404).json("No Upcoming Tasks");
+    console.log(result.rows);
     return response.status(200).json(result.rows);
   } catch (error) {
     console.error("Error fetching reminders:", error.message);
@@ -176,7 +175,7 @@ const deleteReminder = async (request, response) => {
     await client.query(`BEGIN`);
 
     const res = await client.query(
-      `Delete from Reminders where reminderid = $1 and userid = $2`,
+      `Delete from UserTasks where taskid = $1 and userid = $2`,
       [reminderid, userid]
     );
 
