@@ -72,4 +72,29 @@ const editUserInfo = async (request, response) => {
   }
 };
 
-module.exports = { viewUserInfo, editUserInfo };
+const currentCourses = async (request, response) => {
+  const {
+    session: {
+      user: { userid },
+    },
+  } = request;
+  
+  try {
+    let res = await pool.query(
+      `Select * from ViewTranscripts where userid = $1 and grade = 'I'`,
+      [userid]
+    );
+
+    if (!res.rowCount)
+      return response
+        .status(404)
+        .json(`You are not enrolled in any Courses currently`);
+
+    return response.status(200).json(res.rows);
+  } catch (error) {
+    console.log(error.message);
+    return response.status(500).json(`Internal Server Error`);
+  }
+};
+
+module.exports = { viewUserInfo, editUserInfo, currentCourses };
