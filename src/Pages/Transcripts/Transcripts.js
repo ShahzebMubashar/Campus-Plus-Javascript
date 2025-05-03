@@ -40,6 +40,14 @@ function TranscriptsPage() {
   const [showAddSemesterModal, setShowAddSemesterModal] = useState(false);
   const [showAddCourseModal, setShowAddCourseModal] = useState(false);
   const [confirmDeleteSemester, setConfirmDeleteSemester] = useState(null);
+  const [selectedSemesterId, setSelectedSemesterId] = useState(null);
+  const semesterRefs = React.useRef({});
+
+  useEffect(() => {
+    if (selectedSemesterId && semesterRefs.current[selectedSemesterId]) {
+      semesterRefs.current[selectedSemesterId].scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [selectedSemesterId]);
 
   useEffect(() => {
     const fetchTranscript = async () => {
@@ -261,238 +269,271 @@ function TranscriptsPage() {
   if (loading) return <div className="loading">Loading transcript data...</div>;
 
   return (
-    <div className="transcripts-container">
-      <Navbar />
-      {showError && (
-        <div className="error-banner">
-          {error}
-          <button onClick={() => setShowError(false)}>×</button>
+    <div className="transcripts-layout">
+      {/* Sidebar for summary */}
+      <aside className="transcripts-sidebar">
+        <div className="sidebar-header">
+          <h2>Transcript Summary</h2>
+          <div className="sidebar-cgpa">
+            <span>CGPA</span>
+            <span className="cgpa-value">{calculateCGPA()}</span>
+          </div>
         </div>
-      )}
-
-      <h1>Academic Transcript</h1>
-      <div className="gpa-summary">
-        <h3>
-          CGPA: <span>{calculateCGPA()}</span>
-        </h3>
-      </div>
-
-      <button
-        className="add-semester-btn"
-        onClick={() => setShowAddSemesterModal(true)}
-      >
-        Add New Semester
-      </button>
-
-      {semesters.length === 0 ? (
-        <p className="no-semesters">
-          No semesters found. Add a semester to get started.
-        </p>
-      ) : (
-        semesters.map((semester) => (
-          <div key={semester.id} className="semester-card">
-            <div className="semester-header">
-              <div className="semester-title">
-                <h2>{semester.name}</h2>
-                <span className="semester-gpa">
-                  SGPA: {calculateSGPA(semester.courses)}
-                </span>
+        <ul className="sidebar-semesters-list">
+          {semesters.map((semester) => (
+            <li
+              key={semester.id}
+              className={`sidebar-semester-item${selectedSemesterId === semester.id ? " selected" : ""}`}
+              onClick={() => setSelectedSemesterId(semester.id)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className="sidebar-semester-name">{semester.name}</div>
+              <div className="sidebar-semester-sgpa">
+                SGPA: <span>{calculateSGPA(semester.courses)}</span>
               </div>
-              <div className="semester-actions">
-                <button
-                  className="add-course-btn"
-                  onClick={() => {
-                    setNewCourse({
-                      semesterId: semester.semesterId,
-                      semesterName: semester.name || semester.semesterName,
-                      code: "",
-                      name: "",
-                      credits: 3,
-                      grade: "A",
-                    });
-                    setShowAddCourseModal(true);
-                  }}
-                >
-                  Add Course
-                </button>
-                <button
-                  className="remove-semester-btn"
-                  onClick={() => setConfirmDeleteSemester(semester.id)}
-                >
-                  Remove Semester
-                </button>
-              </div>
-            </div>
+            </li>
+          ))}
+        </ul>
+      </aside>
 
-            {confirmDeleteSemester === semester.id && (
-              <div className="delete-confirmation">
-                <p>
-                  Are you sure you want to delete this semester and all its
-                  courses?
-                </p>
-                <div>
+      {/* Main Content */}
+      <div className="transcripts-container">
+        <Navbar />
+        {showError && (
+          <div className="error-banner">
+            {error}
+            <button onClick={() => setShowError(false)}>×</button>
+          </div>
+        )}
+
+        <h1>Academic Transcript</h1>
+        <div className="gpa-summary">
+          <h3>
+            CGPA: <span>{calculateCGPA()}</span>
+          </h3>
+        </div>
+
+        <button
+          className="add-semester-btn"
+          onClick={() => setShowAddSemesterModal(true)}
+        >
+          Add New Semester
+        </button>
+
+        {semesters.length === 0 ? (
+          <p className="no-semesters">
+            No semesters found. Add a semester to get started.
+          </p>
+        ) : (
+          semesters.map((semester) => (
+            <div
+              key={semester.id}
+              className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""}`}
+              ref={el => (semesterRefs.current[semester.id] = el)}
+            >
+              <div className="semester-header">
+                <div className="semester-title">
+                  <h2>{semester.name}</h2>
+                  <span className="semester-gpa">
+                    SGPA: {calculateSGPA(semester.courses)}
+                  </span>
+                </div>
+                <div className="semester-actions">
                   <button
-                    className="confirm-delete-btn"
-                    onClick={() => handleRemoveSemester(semester.id)}
+                    className="add-course-btn"
+                    onClick={() => {
+                      setNewCourse({
+                        semesterId: semester.semesterId,
+                        semesterName: semester.name || semester.semesterName,
+                        code: "",
+                        name: "",
+                        credits: 3,
+                        grade: "A",
+                      });
+                      setShowAddCourseModal(true);
+                    }}
                   >
-                    Yes, Delete
+                    Add Course
                   </button>
                   <button
-                    className="cancel-delete-btn"
-                    onClick={() => setConfirmDeleteSemester(null)}
+                    className="remove-semester-btn"
+                    onClick={() => setConfirmDeleteSemester(semester.id)}
                   >
-                    Cancel
+                    Remove Semester
                   </button>
                 </div>
               </div>
-            )}
 
-            {semester.courses.length > 0 ? (
-              <table className="courses-table">
-                <thead>
-                  <tr>
-                    <th>Code</th>
-                    <th>Course Name</th>
-                    <th>Credits</th>
-                    <th>Grade</th>
-                    <th>GPA Points</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {semester.courses.map((course) => (
-                    <tr key={`${semester.id}-${course.id}`}>
-                      <td>{course.code}</td>
-                      <td>{course.name}</td>
-                      <td>{course.credits}</td>
-                      <td>{course.grade}</td>
-                      <td>{calculateCourseGPA(course.grade)}</td>
-                      <td>
-                        <button
-                          className="remove-btn"
-                          onClick={() =>
-                            handleRemoveCourse(semester.id, course.id)
-                          }
-                        >
-                          Remove
-                        </button>
-                      </td>
+              {confirmDeleteSemester === semester.id && (
+                <div className="delete-confirmation">
+                  <p>
+                    Are you sure you want to delete this semester and all its
+                    courses?
+                  </p>
+                  <div>
+                    <button
+                      className="confirm-delete-btn"
+                      onClick={() => handleRemoveSemester(semester.id)}
+                    >
+                      Yes, Delete
+                    </button>
+                    <button
+                      className="cancel-delete-btn"
+                      onClick={() => setConfirmDeleteSemester(null)}
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {semester.courses.length > 0 ? (
+                <table className="courses-table">
+                  <thead>
+                    <tr>
+                      <th>Code</th>
+                      <th>Course Name</th>
+                      <th>Credits</th>
+                      <th>Grade</th>
+                      <th>GPA Points</th>
+                      <th>Actions</th>
                     </tr>
+                  </thead>
+                  <tbody>
+                    {semester.courses.map((course) => (
+                      <tr key={`${semester.id}-${course.id}`}>
+                        <td>{course.code}</td>
+                        <td>{course.name}</td>
+                        <td>{course.credits}</td>
+                        <td>{course.grade}</td>
+                        <td>{calculateCourseGPA(course.grade)}</td>
+                        <td>
+                          <button
+                            className="remove-btn"
+                            onClick={() =>
+                              handleRemoveCourse(semester.id, course.id)
+                            }
+                          >
+                            Remove
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p className="no-courses">No courses added for this semester</p>
+              )}
+            </div>
+          ))
+        )}
+
+        {/* Add Semester Modal */}
+        {showAddSemesterModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Add New Semester</h2>
+              <div className="form-group">
+                <label>Semester:</label>
+                <select
+                  value={newSemester.name}
+                  onChange={(e) =>
+                    setNewSemester((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                >
+                  <option value="">Select Semester</option>
+                  <option value="Spring">Spring</option>
+                  <option value="Summer">Summer</option>
+                  <option value="Fall">Fall</option>
+                </select>
+              </div>
+              <div className="form-group">
+                <label>Year:</label>
+                <input
+                  type="number"
+                  value={newSemester.year}
+                  onChange={(e) =>
+                    setNewSemester((prev) => ({ ...prev, year: e.target.value }))
+                  }
+                  placeholder="2023"
+                  min="2000"
+                  max="2100"
+                />
+              </div>
+              <div className="modal-actions">
+                <button onClick={handleAddSemester}>Add Semester</button>
+                <button onClick={() => setShowAddSemesterModal(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Add Course Modal */}
+        {showAddCourseModal && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Add New Course</h2>
+              <div className="form-group">
+                <label>Course Code:</label>
+                <input
+                  type="text"
+                  value={newCourse.code}
+                  onChange={(e) =>
+                    setNewCourse((prev) => ({ ...prev, code: e.target.value }))
+                  }
+                  placeholder="CS101"
+                />
+              </div>
+              <div className="form-group">
+                <label>Course Name:</label>
+                <input
+                  type="text"
+                  value={newCourse.name}
+                  onChange={(e) =>
+                    setNewCourse((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  placeholder="Introduction to Programming"
+                />
+              </div>
+              <div className="form-group">
+                <label>Credits:</label>
+                <input
+                  type="number"
+                  value={newCourse.credits}
+                  onChange={(e) =>
+                    setNewCourse((prev) => ({ ...prev, credits: e.target.value }))
+                  }
+                  min="1"
+                  max="5"
+                />
+              </div>
+              <div className="form-group">
+                <label>Grade:</label>
+                <select
+                  value={newCourse.grade}
+                  onChange={(e) =>
+                    setNewCourse((prev) => ({ ...prev, grade: e.target.value }))
+                  }
+                >
+                  {Object.keys(gradePoints).map((grade) => (
+                    <option key={grade} value={grade}>
+                      {grade}
+                    </option>
                   ))}
-                </tbody>
-              </table>
-            ) : (
-              <p className="no-courses">No courses added for this semester</p>
-            )}
-          </div>
-        ))
-      )}
-
-      {/* Add Semester Modal */}
-      {showAddSemesterModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Add New Semester</h2>
-            <div className="form-group">
-              <label>Semester:</label>
-              <select
-                value={newSemester.name}
-                onChange={(e) =>
-                  setNewSemester((prev) => ({ ...prev, name: e.target.value }))
-                }
-              >
-                <option value="">Select Semester</option>
-                <option value="Spring">Spring</option>
-                <option value="Summer">Summer</option>
-                <option value="Fall">Fall</option>
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Year:</label>
-              <input
-                type="number"
-                value={newSemester.year}
-                onChange={(e) =>
-                  setNewSemester((prev) => ({ ...prev, year: e.target.value }))
-                }
-                placeholder="2023"
-                min="2000"
-                max="2100"
-              />
-            </div>
-            <div className="modal-actions">
-              <button onClick={handleAddSemester}>Add Semester</button>
-              <button onClick={() => setShowAddSemesterModal(false)}>
-                Cancel
-              </button>
+                </select>
+              </div>
+              <div className="modal-actions">
+                <button onClick={handleAddCourse}>Add Course</button>
+                <button onClick={() => setShowAddCourseModal(false)}>
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-
-      {/* Add Course Modal */}
-      {showAddCourseModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <h2>Add New Course</h2>
-            <div className="form-group">
-              <label>Course Code:</label>
-              <input
-                type="text"
-                value={newCourse.code}
-                onChange={(e) =>
-                  setNewCourse((prev) => ({ ...prev, code: e.target.value }))
-                }
-                placeholder="CS101"
-              />
-            </div>
-            <div className="form-group">
-              <label>Course Name:</label>
-              <input
-                type="text"
-                value={newCourse.name}
-                onChange={(e) =>
-                  setNewCourse((prev) => ({ ...prev, name: e.target.value }))
-                }
-                placeholder="Introduction to Programming"
-              />
-            </div>
-            <div className="form-group">
-              <label>Credits:</label>
-              <input
-                type="number"
-                value={newCourse.credits}
-                onChange={(e) =>
-                  setNewCourse((prev) => ({ ...prev, credits: e.target.value }))
-                }
-                min="1"
-                max="5"
-              />
-            </div>
-            <div className="form-group">
-              <label>Grade:</label>
-              <select
-                value={newCourse.grade}
-                onChange={(e) =>
-                  setNewCourse((prev) => ({ ...prev, grade: e.target.value }))
-                }
-              >
-                {Object.keys(gradePoints).map((grade) => (
-                  <option key={grade} value={grade}>
-                    {grade}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="modal-actions">
-              <button onClick={handleAddCourse}>Add Course</button>
-              <button onClick={() => setShowAddCourseModal(false)}>
-                Cancel
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
