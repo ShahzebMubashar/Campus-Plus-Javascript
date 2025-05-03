@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
+import defaultAvatar from "../../Assets/images/avatar_1.jpg"; // fallback avatar
+import "../Profile/ProfilePage.css";
 
 const gradePoints = {
   "A+": 4.0,
@@ -22,6 +24,7 @@ function TranscriptsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showError, setShowError] = useState(false);
+  const [user, setUser] = useState(null);
 
   const [newSemester, setNewSemester] = useState({
     name: "",
@@ -79,6 +82,25 @@ function TranscriptsPage() {
     };
 
     fetchTranscript();
+
+    // Fetch user profile for sidebar
+    const fetchUserInfo = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/User/profile`, {
+          credentials: "include",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        setUser(data);
+      } catch (error) {
+        // fallback: no user info
+      }
+    };
+    fetchUserInfo();
   }, []);
 
   const calculateCourseGPA = (grade) => gradePoints[grade] || 0.0;
@@ -272,6 +294,28 @@ function TranscriptsPage() {
     <div className="transcripts-layout">
       {/* Sidebar for summary */}
       <aside className="transcripts-sidebar">
+        {/* Profile section styled like ProfilePage */}
+        <div className="sidebar-profile">
+          {user?.profilepic ? (
+            <img
+              className="lms-profile-avatar sidebar-profile-img"
+              src={user.profilepic}
+              alt="Profile"
+              onError={e => { e.target.onerror = null; e.target.src = require('../../Assets/images/avatar_1.jpg'); }}
+            />
+          ) : (
+            <div className="lms-profile-avatar sidebar-profile-img">
+              {(user?.name || user?.fullName || "S")
+                .split(" ")
+                .map((n) => n[0])
+                .join("")}
+            </div>
+          )}
+          <div className="sidebar-profile-name lms-user-details" style={{textAlign: 'center', margin: 0}}>
+            <h2 style={{fontSize: '1.2rem', margin: 0, color: '#2563eb'}}>{user?.name || user?.fullName || "Student"}</h2>
+          </div>
+        </div>
+        <hr className="sidebar-separator" />
         <div className="sidebar-header">
           <h2>Transcript Summary</h2>
           <div className="sidebar-cgpa">
