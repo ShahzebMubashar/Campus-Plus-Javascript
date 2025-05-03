@@ -14,13 +14,13 @@ function AcademicDashboard() {
     credits: 3,
     grade: "A",
   });
-  const [User, setUser] = useState(null);
+  const [User, setUser] = useState({});
   const [editData, setEditData] = useState({
     name: "",
     degree: "",
     batch: "",
   });
-
+  const [myRooms, setMyRooms] = useState({});
 
   const gradePoints = {
     "A+": 4.0,
@@ -129,6 +129,36 @@ function AcademicDashboard() {
     });
   };
 
+  const fetchJoinedRooms = async () => {
+    try {
+      const result = await fetch(
+        `http://localhost:4000/Chatrooms/my-rooms/${User.userid}`,
+        { credentials: "include" }
+      );
+      const data = await result.json();
+
+      // Transform API data to match frontend structure
+      const formattedRooms = data.map((room) => ({
+        title: room.name || "Unnamed Room", // Map 'roomname' to 'title'
+        desc: room.description || "No description", // Add if your API provides this
+        // members: room.membercount || 0, // Adjust based on your API
+        online: Math.floor(Math.random() * 10), // Placeholder (or use real data)
+        active: Math.random() > 0.5, // Placeholder
+      }));
+
+      setMyRooms(formattedRooms);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+      setMyRooms([]);
+    }
+  };
+
+  useEffect(() => {
+    if (User?.userid) {
+      fetchJoinedRooms();
+    }
+  }, [User?.userid]);
+
   return (
     <div className="academic-dashboard">
       <Navbar />
@@ -167,17 +197,14 @@ function AcademicDashboard() {
               <div className="profile-actions">
                 <button
                   className="profile-action-btn edit-profile"
-                  onClick={() => window.location.href = '/profile'}
+                  onClick={() => (window.location.href = "/profile")}
                 >
                   <span className="action-icon">✏️</span>
                   Edit Profile
                 </button>
-
-
               </div>
             </div>
           </div>
-
         </section>
 
         {/* My Courses */}
@@ -383,48 +410,30 @@ function AcademicDashboard() {
             </div>
 
             <div className="chatrooms-list">
-              {[
-                {
-                  title: "UI/UX Design Group",
-                  members: 32,
-                  online: 5,
-                  active: true,
-                },
-                {
-                  title: "Cinema 4D Beginners",
-                  members: 18,
-                  online: 2,
-                  active: false,
-                },
-                {
-                  title: "Graphic Design Portfolio",
-                  members: 45,
-                  online: 8,
-                  active: true,
-                },
-              ].map((room, i) => (
-                <div className="chatroom-card" key={i}>
-                  <div className="chatroom-icon">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
-                    </svg>
-                  </div>
-                  <div className="chatroom-info">
-                    <h3>{room.title}</h3>
-                    <p>
-                      {room.members} members • {room.online} online
-                    </p>
-                  </div>
-                  <div
-                    className={`chatroom-status ${room.active ? "active" : ""}`}
-                  ></div>
-                </div>
-              ))}
+              {myRooms.length > 0 ? (
+                <>
+                  {myRooms.map((room, i) => (
+                    <div className="chatroom-card" key={i}>
+                      <div className="chatroom-icon">💬</div>
+                      <div className="chatroom-info">
+                        <h3>{room.title}</h3> {/* Now displays roomname */}
+                        <p>{room.desc}</p>{" "}
+                        {/* Displays description if available */}
+                        <p> • {room.online} online</p>
+                      </div>
+                    </div>
+                  ))}
 
-              <div className="chatroom-card add-chatroom">
-                <div className="add-icon">+</div>
-                <span>Join new chatroom</span>
-              </div>
+                  <div className="chatroom-card add-chatroom">
+                    <div className="add-icon">+</div>
+                    <span>Join new chatroom</span>
+                  </div>
+                </>
+              ) : (
+                <div className="no-rooms-message">
+                  You haven't joined any chatrooms yet
+                </div>
+              )}
             </div>
           </div>
         </div>

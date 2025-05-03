@@ -1,3 +1,4 @@
+const { request } = require("express");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -965,6 +966,32 @@ const getUserJoinedGroups = async (request, response) => {
   }
 };
 
+const myRooms = async (request, response) => {
+  const {
+    params: { userid },
+  } = request;
+  console.log("ENDPOINT HIT FOR GET ROOMS");
+  try {
+    let res = await pool.query(
+      `Select * from Rooms r
+      left join RoomMembers rm on rm.roomid = r.roomid
+      where userid = $1
+      `,
+      [userid]
+    );
+
+    if (!res.rowCount)
+      return response.status(404).json("You have not joined any rooms yet!");
+
+    console.log(res.rows);
+
+    return response.status(200).json(res.rows);
+  } catch (error) {
+    console.log(error.message);
+    return response.status(500).json("Internal Server Error");
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -990,4 +1017,5 @@ module.exports = {
   trackPostView,
   searchPosts,
   getUserJoinedGroups,
+  myRooms,
 };
