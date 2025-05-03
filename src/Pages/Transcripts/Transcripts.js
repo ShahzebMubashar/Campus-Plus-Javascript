@@ -48,7 +48,10 @@ function TranscriptsPage() {
 
   useEffect(() => {
     if (selectedSemesterId && semesterRefs.current[selectedSemesterId]) {
-      semesterRefs.current[selectedSemesterId].scrollIntoView({ behavior: "smooth", block: "start" });
+      semesterRefs.current[selectedSemesterId].scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
   }, [selectedSemesterId]);
 
@@ -141,7 +144,6 @@ function TranscriptsPage() {
     if (!newSemester.name || !newSemester.year) return;
 
     const semesterName = `${newSemester.name} ${newSemester.year}`;
-
     try {
       const response = await fetch(
         "http://localhost:4000/Transcripts/add-semester",
@@ -246,11 +248,11 @@ function TranscriptsPage() {
         prev.map((semester) =>
           semester.id === semesterId
             ? {
-              ...semester,
-              courses: semester.courses.filter(
-                (course) => course.id !== transcriptId
-              ),
-            }
+                ...semester,
+                courses: semester.courses.filter(
+                  (course) => course.id !== transcriptId
+                ),
+              }
             : semester
         )
       );
@@ -301,7 +303,10 @@ function TranscriptsPage() {
               className="lms-profile-avatar sidebar-profile-img"
               src={user.profilepic}
               alt="Profile"
-              onError={e => { e.target.onerror = null; e.target.src = require('../../Assets/images/avatar_1.jpg'); }}
+              onError={(e) => {
+                e.target.onerror = null;
+                e.target.src = require("../../Assets/images/avatar_1.jpg");
+              }}
             />
           ) : (
             <div className="lms-profile-avatar sidebar-profile-img">
@@ -329,7 +334,9 @@ function TranscriptsPage() {
           {semesters.map((semester, index) => (
             <React.Fragment key={semester.id}>
               <li
-                className={`sidebar-semester-item${selectedSemesterId === semester.id ? " selected" : ""}`}
+                className={`sidebar-semester-item${
+                  selectedSemesterId === semester.id ? " selected" : ""
+                }`}
                 onClick={() => setSelectedSemesterId(semester.id)}
               >
                 <div className="sidebar-semester-name">{semester.name}</div>
@@ -337,7 +344,9 @@ function TranscriptsPage() {
                   SGPA: {calculateSGPA(semester.courses)}
                 </div>
               </li>
-              {index < semesters.length - 1 && <hr className="semester-divider" />}
+              {index < semesters.length - 1 && (
+                <hr className="semester-divider" />
+              )}
             </React.Fragment>
           ))}
         </ul>
@@ -375,8 +384,10 @@ function TranscriptsPage() {
           semesters.map((semester) => (
             <div
               key={semester.id}
-              className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""}`}
-              ref={el => (semesterRefs.current[semester.id] = el)}
+              className={`semester-card${
+                selectedSemesterId === semester.id ? " selected" : ""
+              }`}
+              ref={(el) => (semesterRefs.current[semester.id] = el)}
             >
               <div className="semester-header">
                 <div className="semester-title">
@@ -485,7 +496,10 @@ function TranscriptsPage() {
                 <select
                   value={newSemester.name}
                   onChange={(e) =>
-                    setNewSemester((prev) => ({ ...prev, name: e.target.value }))
+                    setNewSemester((prev) => ({
+                      ...prev,
+                      name: e.target.value,
+                    }))
                   }
                 >
                   <option value="">Select Semester</option>
@@ -500,7 +514,10 @@ function TranscriptsPage() {
                   type="number"
                   value={newSemester.year}
                   onChange={(e) =>
-                    setNewSemester((prev) => ({ ...prev, year: e.target.value }))
+                    setNewSemester((prev) => ({
+                      ...prev,
+                      year: e.target.value,
+                    }))
                   }
                   placeholder="2023"
                   min="2000"
@@ -550,7 +567,10 @@ function TranscriptsPage() {
                   type="number"
                   value={newCourse.credits}
                   onChange={(e) =>
-                    setNewCourse((prev) => ({ ...prev, credits: e.target.value }))
+                    setNewCourse((prev) => ({
+                      ...prev,
+                      credits: e.target.value,
+                    }))
                   }
                   min="1"
                   max="5"
