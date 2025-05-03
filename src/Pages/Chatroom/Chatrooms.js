@@ -3,7 +3,6 @@ import Sidebar from "./components/Sidebar.js";
 import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from '../Index/components/Navbar.js';
-import Footer from '../Footer/Footer.js';
 import "../Chatroom/css/Chatroom.css";
 
 export default function Chatrooms() {
@@ -116,7 +115,7 @@ export default function Chatrooms() {
                         )}
                     </div>
                 </div>
-                <Footer />
+
             </div>
         </div>
     );
