@@ -128,9 +128,14 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [searchUsername, setSearchUsername] = useState("");
   const [searchDate, setSearchDate] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [rooms, setRooms] = useState([]);
+  const [joinedRooms, setJoinedRooms] = useState([]);
+
 
   useEffect(() => {
     fetchUserInfo();
+    fetchJoinedRooms();
     fetchPosts();
   }, [room.roomid]);
 
@@ -141,12 +146,44 @@ export default function RoomView({ room, onBack, onLeave }) {
       });
       if (response.ok) {
         const data = await response.json();
-        setUserid(data.userid);
-        setUserRole(data.role);
+        setUserInfo(data);
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
+  };
+
+  const fetchJoinedRooms = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/Chatrooms/user/groups", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setJoinedRooms(data);
+      }
+    } catch (error) {
+      console.error("Error fetching joined rooms:", error);
+    }
+  };
+
+  const handleRoomSelect = async (room) => {
+    // If room is not joined, join it first
+    if (!joinedRooms.find(r => r.roomid === room.roomid)) {
+      try {
+        const response = await fetch(`http://localhost:4000/Chatrooms/join/${room.roomid}`, {
+          method: "POST",
+          credentials: "include",
+        });
+        if (response.ok) {
+          await fetchJoinedRooms(); // Refresh joined rooms list
+        }
+      } catch (error) {
+        console.error("Error joining room:", error);
+        return;
+      }
+    }
+
   };
 
   const fetchPosts = async () => {
@@ -577,7 +614,10 @@ export default function RoomView({ room, onBack, onLeave }) {
       position: "relative",
       paddingLeft: "280px"
     }}>
-      <Sidebar room={room} onBack={onBack} onLeave={onLeave} />
+      <Sidebar room={room} onBack={onBack} onLeave={onLeave} userInfo={userInfo}
+        rooms={rooms}
+        joinedRooms={joinedRooms}
+        onRoomSelect={handleRoomSelect} />
       {/* Main content */}
       <div style={{
         flex: 1,
@@ -609,6 +649,21 @@ export default function RoomView({ room, onBack, onLeave }) {
               >
                 Back to Rooms
               </button>
+              {userRole === "Admin" && (
+                <button
+                  onClick={() => setIsEditingRoom(true)}
+                  style={{
+                    padding: "8px 16px",
+                    backgroundColor: "#28a745",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
+                  }}
+                >
+                  Edit Room Info
+                </button>
+              )}
               <button
                 onClick={onLeave}
                 style={{
@@ -631,6 +686,90 @@ export default function RoomView({ room, onBack, onLeave }) {
             <p style={{ margin: "10px 0 0", color: "#666" }}>{room.description}</p>
           )}
         </div>
+
+        {/* Add Edit Room Modal */}
+        {isEditingRoom && (
+          <div className="modal-overlay" style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            zIndex: 9999
+          }}>
+            <div style={{
+              backgroundColor: 'white',
+              padding: '24px',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+              width: '90%',
+              maxWidth: '500px',
+              position: 'relative',
+              zIndex: 10000
+            }}>
+              <h2 style={{ marginTop: 0, marginBottom: '20px' }}>Edit Room Information</h2>
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Room Name</label>
+                <input
+                  type="text"
+                  value={editedRoomName}
+                  onChange={(e) => setEditedRoomName(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px'
+                  }}
+                />
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Description</label>
+                <textarea
+                  value={editedRoomDescription}
+                  onChange={(e) => setEditedRoomDescription(e.target.value)}
+                  style={{
+                    width: '100%',
+                    padding: '8px',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    minHeight: '100px'
+                  }}
+                />
+              </div>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
+                <button
+                  onClick={() => setIsEditingRoom(false)}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: '#f0f0f0',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleUpdateRoom}
+                  style={{
+                    padding: '8px 16px',
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
+                  }}
+                >
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Search Section */}
         <div className="search-section" style={{
