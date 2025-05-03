@@ -78,10 +78,10 @@ const currentCourses = async (request, response) => {
       user: { userid },
     },
   } = request;
-  
+
   try {
     let res = await pool.query(
-      `Select * from ViewTranscripts where userid = $1 and grade = 'I'`,
+      `Select * from ViewTranscripts where userid = $1 and grade = 'I' limit 3`,
       [userid]
     );
 
