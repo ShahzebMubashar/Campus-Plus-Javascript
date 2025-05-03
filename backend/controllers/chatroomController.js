@@ -990,12 +990,13 @@ const myRooms = async (request, response) => {
   const {
     params: { userid },
   } = request;
-  console.log("ENDPOINT HIT FOR GET ROOMS");
+
   try {
     let res = await pool.query(
       `Select * from Rooms r
       left join RoomMembers rm on rm.roomid = r.roomid
       where userid = $1
+      limit 3
       `,
       [userid]
     );
