@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
-import defaultAvatar from "../../Assets/images/avatar_1.jpg"; // fallback avatar
-import "../Profile/ProfilePage.css";
+import defaultAvatar from "../../Assets/images/avatar_1.jpg";
 
 const gradePoints = {
+  I: null, // In-progress courses (excluded from GPA)
   "A+": 4.0,
   A: 4.0,
   "A-": 3.67,
@@ -25,12 +25,7 @@ function TranscriptsPage() {
   const [error, setError] = useState(null);
   const [showError, setShowError] = useState(false);
   const [user, setUser] = useState(null);
-
-  const [newSemester, setNewSemester] = useState({
-    name: "",
-    year: "",
-  });
-
+  const [newSemester, setNewSemester] = useState({ name: "", year: "" });
   const [newCourse, setNewCourse] = useState({
     semesterId: "",
     semesterName: "",
@@ -39,43 +34,31 @@ function TranscriptsPage() {
     credits: 3,
     grade: "A",
   });
-
   const [showAddSemesterModal, setShowAddSemesterModal] = useState(false);
   const [showAddCourseModal, setShowAddCourseModal] = useState(false);
   const [confirmDeleteSemester, setConfirmDeleteSemester] = useState(null);
   const [selectedSemesterId, setSelectedSemesterId] = useState(null);
   const semesterRefs = React.useRef({});
 
+  // Fetch data on mount
   useEffect(() => {
-    if (selectedSemesterId && semesterRefs.current[selectedSemesterId]) {
-      semesterRefs.current[selectedSemesterId].scrollIntoView({
-        behavior: "smooth",
-        block: "start",
-      });
-    }
-  }, [selectedSemesterId]);
-
-  useEffect(() => {
-    const fetchTranscript = async () => {
+    const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:4000/Transcripts/", {
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
+        const [transcriptRes, userRes] = await Promise.all([
+          fetch("http://localhost:4000/Transcripts/", {
+            credentials: "include",
+          }),
+          fetch("http://localhost:4000/User/profile", {
+            credentials: "include",
+          }),
+        ]);
 
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(
-            errorData.message || "Failed to fetch transcript data"
-          );
-        }
+        const transcriptData = await transcriptRes.json();
+        const userData = userRes.ok ? await userRes.json() : null;
 
-        const data = await response.json();
-        setSemesters(data);
+        setSemesters(transcriptData);
+        setUser(userData);
       } catch (err) {
-        console.error("Error fetching transcript:", err);
         setError(err.message);
         setShowError(true);
         setTimeout(() => setShowError(false), 5000);
@@ -83,41 +66,25 @@ function TranscriptsPage() {
         setLoading(false);
       }
     };
-
-    fetchTranscript();
-
-    // Fetch user profile for sidebar
-    const fetchUserInfo = async () => {
-      try {
-        const res = await fetch(`http://localhost:4000/User/profile`, {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        if (!res.ok) return;
-        const data = await res.json();
-        setUser(data);
-      } catch (error) {
-        // fallback: no user info
-      }
-    };
-    fetchUserInfo();
+    fetchData();
   }, []);
 
-  const calculateCourseGPA = (grade) => gradePoints[grade] || 0.0;
+  // GPA Calculations (excludes "I" grades)
+  const calculateCourseGPA = (grade) =>
+    grade === "I" ? "In Progress" : gradePoints[grade]?.toFixed(2) || "0.00";
 
   const calculateSGPA = (courses) => {
     const { totalPoints, totalCredits } = courses.reduce(
-      (acc, course) => ({
-        totalPoints:
-          acc.totalPoints + gradePoints[course.grade] * course.credits,
-        totalCredits: acc.totalCredits + course.credits,
-      }),
+      (acc, course) => {
+        if (course.grade === "I") return acc;
+        return {
+          totalPoints:
+            acc.totalPoints + (gradePoints[course.grade] || 0) * course.credits,
+          totalCredits: acc.totalCredits + course.credits,
+        };
+      },
       { totalPoints: 0, totalCredits: 0 }
     );
-
     return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
   };
 
@@ -127,166 +94,121 @@ function TranscriptsPage() {
         totalPoints:
           acc.totalPoints +
           semester.courses.reduce(
-            (sum, course) => sum + gradePoints[course.grade] * course.credits,
+            (sum, course) =>
+              course.grade === "I"
+                ? sum
+                : sum + (gradePoints[course.grade] || 0) * course.credits,
             0
           ),
         totalCredits:
           acc.totalCredits +
-          semester.courses.reduce((sum, course) => sum + course.credits, 0),
+          semester.courses.reduce(
+            (sum, course) =>
+              course.grade === "I" ? sum : sum + course.credits,
+            0
+          ),
       }),
       { totalPoints: 0, totalCredits: 0 }
     );
-
     return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
   };
 
+  // Course/Semester Management
   const handleAddSemester = async () => {
     if (!newSemester.name || !newSemester.year) return;
-
-    const semesterName = `${newSemester.name} ${newSemester.year}`;
     try {
-      const response = await fetch(
+      const res = await fetch(
         "http://localhost:4000/Transcripts/add-semester",
         {
           method: "POST",
           credentials: "include",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ name: semesterName }),
+          body: JSON.stringify({
+            name: `${newSemester.name} ${newSemester.year}`,
+          }),
         }
       );
-
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.error || "Failed to add semester");
-
-      setSemesters((prev) => [...prev, data]);
-      setNewSemester({ name: "", year: "" });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error);
+      setSemesters([...semesters, data]);
       setShowAddSemesterModal(false);
     } catch (err) {
-      console.error("Error adding semester:", err);
       setError(err.message);
       setShowError(true);
-      setTimeout(() => setShowError(false), 5000);
     }
   };
 
   const handleAddCourse = async () => {
-    if (!newCourse.semesterName) {
-      setError("No semester selected");
-      setShowError(true);
-      return;
-    }
-    if (!newCourse.code?.trim()) {
-      setError("Course code required");
-      setShowError(true);
-      return;
-    }
-    if (!newCourse.name?.trim()) {
-      setError("Course name required");
+    if (!newCourse.code.trim() || !newCourse.name.trim()) {
+      setError("Course code and name required");
       setShowError(true);
       return;
     }
 
     try {
-      const response = await fetch(
-        "http://localhost:4000/Transcripts/add-course",
-        {
-          method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            coursecode: newCourse.code.trim(),
-            coursename: newCourse.name.trim(),
-            credits: parseInt(newCourse.credits),
-            grade: newCourse.grade,
-            semester: newCourse.semesterName,
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.message || "Failed to add course");
-      }
-
+      const res = await fetch("http://localhost:4000/Transcripts/add-course", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          coursecode: newCourse.code.trim(),
+          coursename: newCourse.name.trim(),
+          credits: parseInt(newCourse.credits),
+          grade: newCourse.grade,
+          semester: newCourse.semesterName,
+        }),
+      });
+      if (!res.ok) throw new Error((await res.json()).message);
       const updated = await fetch("http://localhost:4000/Transcripts/", {
         credentials: "include",
-      }).then((res) => res.json());
-
+      }).then((r) => r.json());
       setSemesters(updated);
-      setNewCourse((prev) => ({
-        semesterId: prev.semesterId,
-        semesterName: prev.semesterName,
-        code: "",
-        name: "",
-        credits: 3,
-        grade: "A",
-      }));
       setShowAddCourseModal(false);
     } catch (err) {
-      console.error("Add course failed:", err);
       setError(err.message);
       setShowError(true);
     }
   };
 
-  const handleRemoveCourse = async (semesterId, transcriptId) => {
+  const handleRemoveCourse = async (semesterId, courseId) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Transcripts/remove-course/${transcriptId}`,
+      await fetch(
+        `http://localhost:4000/Transcripts/remove-course/${courseId}`,
         {
           method: "DELETE",
           credentials: "include",
         }
       );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to remove course");
-      }
-
-      setSemesters((prev) =>
-        prev.map((semester) =>
+      setSemesters(
+        semesters.map((semester) =>
           semester.id === semesterId
             ? {
                 ...semester,
-                courses: semester.courses.filter(
-                  (course) => course.id !== transcriptId
-                ),
+                courses: semester.courses.filter((c) => c.id !== courseId),
               }
             : semester
         )
       );
     } catch (err) {
-      console.error("Error removing course:", err);
       setError(err.message);
       setShowError(true);
-      setTimeout(() => setShowError(false), 5000);
     }
   };
 
   const handleRemoveSemester = async (semesterId) => {
     try {
-      const encodedName = encodeURIComponent(semesterId);
-
-      const response = await fetch(
+      await fetch(
         `http://localhost:4000/Transcripts/remove-semester/${semesterId}`,
-        { method: "DELETE", credentials: "include" }
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
       );
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.message || "Failed to remove semester");
-      }
-
-      setSemesters((prev) =>
-        prev.filter((semester) => semester.id !== semesterId)
-      );
+      setSemesters(semesters.filter((s) => s.id !== semesterId));
       setConfirmDeleteSemester(null);
     } catch (err) {
-      console.error("Error removing semester:", err);
       setError(err.message);
       setShowError(true);
-      setTimeout(() => setShowError(false), 5000);
     }
   };
 
@@ -294,60 +216,38 @@ function TranscriptsPage() {
 
   return (
     <div className="transcripts-layout">
-      {/* Sidebar for summary */}
+      {/* Sidebar */}
       <aside className="transcripts-sidebar">
-        {/* Profile section styled like ProfilePage */}
         <div className="sidebar-profile">
           {user?.profilepic ? (
             <img
-              className="lms-profile-avatar sidebar-profile-img"
               src={user.profilepic}
               alt="Profile"
-              onError={(e) => {
-                e.target.onerror = null;
-                e.target.src = require("../../Assets/images/avatar_1.jpg");
-              }}
+              onError={(e) => (e.target.src = defaultAvatar)}
             />
           ) : (
-            <div className="lms-profile-avatar sidebar-profile-img">
-              {(user?.name || user?.fullName || "S")
-                .split(" ")
-                .map((n) => n[0])
-                .join("")}
-            </div>
+            <div className="lms-profile-avatar">{(user?.name || "S")[0]}</div>
           )}
-          <div className="sidebar-profile-name lms-user-details">
-            <h2>{user?.name || user?.fullName || "Student"}</h2>
-          </div>
+          <h2>{user?.name || "Student"}</h2>
         </div>
-        <hr className="sidebar-separator" />
-
-        {/* CGPA Section */}
+        <hr />
         <div className="sidebar-cgpa-section">
           <span>CGPA</span>
           <span className="cgpa-value">{calculateCGPA()}</span>
         </div>
-        <hr className="sidebar-separator" />
-
-        {/* Simplified Semesters List */}
+        <hr />
         <ul className="sidebar-semesters-list">
-          {semesters.map((semester, index) => (
-            <React.Fragment key={semester.id}>
-              <li
-                className={`sidebar-semester-item${
-                  selectedSemesterId === semester.id ? " selected" : ""
-                }`}
-                onClick={() => setSelectedSemesterId(semester.id)}
-              >
-                <div className="sidebar-semester-name">{semester.name}</div>
-                <div className="sidebar-semester-sgpa">
-                  SGPA: {calculateSGPA(semester.courses)}
-                </div>
-              </li>
-              {index < semesters.length - 1 && (
-                <hr className="semester-divider" />
-              )}
-            </React.Fragment>
+          {semesters.map((semester) => (
+            <li
+              key={semester.id}
+              className={selectedSemesterId === semester.id ? "selected" : ""}
+              onClick={() => setSelectedSemesterId(semester.id)}
+            >
+              <div className="sidebar-semester-name">{semester.name}</div>
+              <div className="sidebar-semester-sgpa">
+                SGPA: {calculateSGPA(semester.courses)}
+              </div>
+            </li>
           ))}
         </ul>
       </aside>
@@ -367,6 +267,11 @@ function TranscriptsPage() {
           <h3>
             CGPA: <span>{calculateCGPA()}</span>
           </h3>
+          <p>
+            <em>
+              Note: In-progress courses (I) are excluded from GPA calculations
+            </em>
+          </p>
         </div>
 
         <button
@@ -390,19 +295,17 @@ function TranscriptsPage() {
               ref={(el) => (semesterRefs.current[semester.id] = el)}
             >
               <div className="semester-header">
-                <div className="semester-title">
-                  <h2>{semester.name}</h2>
-                  <span className="semester-gpa">
-                    SGPA: {calculateSGPA(semester.courses)}
-                  </span>
-                </div>
+                <h2>{semester.name}</h2>
+                <span className="semester-gpa">
+                  SGPA: {calculateSGPA(semester.courses)}
+                </span>
                 <div className="semester-actions">
                   <button
                     className="add-course-btn"
                     onClick={() => {
                       setNewCourse({
-                        semesterId: semester.semesterId,
-                        semesterName: semester.name || semester.semesterName,
+                        semesterId: semester.id,
+                        semesterName: semester.name,
                         code: "",
                         name: "",
                         credits: 3,
@@ -424,24 +327,13 @@ function TranscriptsPage() {
 
               {confirmDeleteSemester === semester.id && (
                 <div className="delete-confirmation">
-                  <p>
-                    Are you sure you want to delete this semester and all its
-                    courses?
-                  </p>
-                  <div>
-                    <button
-                      className="confirm-delete-btn"
-                      onClick={() => handleRemoveSemester(semester.id)}
-                    >
-                      Yes, Delete
-                    </button>
-                    <button
-                      className="cancel-delete-btn"
-                      onClick={() => setConfirmDeleteSemester(null)}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+                  <p>Delete this semester and all its courses?</p>
+                  <button onClick={() => handleRemoveSemester(semester.id)}>
+                    Confirm
+                  </button>
+                  <button onClick={() => setConfirmDeleteSemester(null)}>
+                    Cancel
+                  </button>
                 </div>
               )}
 
@@ -450,16 +342,19 @@ function TranscriptsPage() {
                   <thead>
                     <tr>
                       <th>Code</th>
-                      <th>Course Name</th>
+                      <th>Course</th>
                       <th>Credits</th>
                       <th>Grade</th>
-                      <th>GPA Points</th>
+                      <th>Points</th>
                       <th>Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {semester.courses.map((course) => (
-                      <tr key={`${semester.id}-${course.id}`}>
+                      <tr
+                        key={course.id}
+                        className={course.grade === "I" ? "in-progress" : ""}
+                      >
                         <td>{course.code}</td>
                         <td>{course.name}</td>
                         <td>{course.credits}</td>
@@ -480,7 +375,7 @@ function TranscriptsPage() {
                   </tbody>
                 </table>
               ) : (
-                <p className="no-courses">No courses added for this semester</p>
+                <p className="no-courses">No courses in this semester</p>
               )}
             </div>
           ))
@@ -490,19 +385,16 @@ function TranscriptsPage() {
         {showAddSemesterModal && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Add New Semester</h2>
+              <h2>Add Semester</h2>
               <div className="form-group">
-                <label>Semester:</label>
+                <label>Term:</label>
                 <select
                   value={newSemester.name}
                   onChange={(e) =>
-                    setNewSemester((prev) => ({
-                      ...prev,
-                      name: e.target.value,
-                    }))
+                    setNewSemester({ ...newSemester, name: e.target.value })
                   }
                 >
-                  <option value="">Select Semester</option>
+                  <option value="">Select Term</option>
                   <option value="Spring">Spring</option>
                   <option value="Summer">Summer</option>
                   <option value="Fall">Fall</option>
@@ -514,18 +406,14 @@ function TranscriptsPage() {
                   type="number"
                   value={newSemester.year}
                   onChange={(e) =>
-                    setNewSemester((prev) => ({
-                      ...prev,
-                      year: e.target.value,
-                    }))
+                    setNewSemester({ ...newSemester, year: e.target.value })
                   }
                   placeholder="2023"
                   min="2000"
-                  max="2100"
                 />
               </div>
               <div className="modal-actions">
-                <button onClick={handleAddSemester}>Add Semester</button>
+                <button onClick={handleAddSemester}>Add</button>
                 <button onClick={() => setShowAddSemesterModal(false)}>
                   Cancel
                 </button>
@@ -538,14 +426,14 @@ function TranscriptsPage() {
         {showAddCourseModal && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Add New Course</h2>
+              <h2>Add Course to {newCourse.semesterName}</h2>
               <div className="form-group">
                 <label>Course Code:</label>
                 <input
                   type="text"
                   value={newCourse.code}
                   onChange={(e) =>
-                    setNewCourse((prev) => ({ ...prev, code: e.target.value }))
+                    setNewCourse({ ...newCourse, code: e.target.value })
                   }
                   placeholder="CS101"
                 />
@@ -556,7 +444,7 @@ function TranscriptsPage() {
                   type="text"
                   value={newCourse.name}
                   onChange={(e) =>
-                    setNewCourse((prev) => ({ ...prev, name: e.target.value }))
+                    setNewCourse({ ...newCourse, name: e.target.value })
                   }
                   placeholder="Introduction to Programming"
                 />
@@ -567,10 +455,7 @@ function TranscriptsPage() {
                   type="number"
                   value={newCourse.credits}
                   onChange={(e) =>
-                    setNewCourse((prev) => ({
-                      ...prev,
-                      credits: e.target.value,
-                    }))
+                    setNewCourse({ ...newCourse, credits: e.target.value })
                   }
                   min="1"
                   max="5"
@@ -581,18 +466,21 @@ function TranscriptsPage() {
                 <select
                   value={newCourse.grade}
                   onChange={(e) =>
-                    setNewCourse((prev) => ({ ...prev, grade: e.target.value }))
+                    setNewCourse({ ...newCourse, grade: e.target.value })
                   }
                 >
-                  {Object.keys(gradePoints).map((grade) => (
-                    <option key={grade} value={grade}>
-                      {grade}
-                    </option>
-                  ))}
+                  <option value="I">In Progress (I)</option>
+                  {Object.keys(gradePoints)
+                    .filter((g) => g !== "I")
+                    .map((grade) => (
+                      <option key={grade} value={grade}>
+                        {grade}
+                      </option>
+                    ))}
                 </select>
               </div>
               <div className="modal-actions">
-                <button onClick={handleAddCourse}>Add Course</button>
+                <button onClick={handleAddCourse}>Add</button>
                 <button onClick={() => setShowAddCourseModal(false)}>
                   Cancel
                 </button>
