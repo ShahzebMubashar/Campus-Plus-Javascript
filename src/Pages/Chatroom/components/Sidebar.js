@@ -61,7 +61,7 @@ const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => 
                             onClick={() => onRoomSelect(room)}
                         >
                             <span className="room-icon">🌐</span>
-                            {room.roomname}
+                            {room.roomname || 'Unnamed Room'}
                         </button>
                     ))}
                 </div>
