@@ -95,10 +95,13 @@ export default function EmailGenerator() {
         }
     }
 
+
     const handleCloseForm = () => {
-        setShowResult(false);
         setShowEmailForm(false);
+        setShowResult(false);  // ← reset the result view
+
     };
+
 
     return (
         <div className="email-generator">
