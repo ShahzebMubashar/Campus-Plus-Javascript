@@ -10,7 +10,7 @@ import FacultySection from '../Pages/Faculty/Faculty.js';
 import PastPapers from '../Pages/Past Papers/PastPapers.js';
 import SignInPage from '../Pages/SignIn/SignInPage.js';
 import PlaylistsPage from '../Pages/Playlists/PlaylistsPage.js';
-import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator.jsx';
+import EmailGenerator from '../Pages/EmailGenerator/EmailGenerator.js';
 import ApplicationGenerator from '../Pages/ApplicationGenerator/ApplicationGenerator.js';
 import Support from '../Pages/Support/support.js';
 import Timetable from '../Pages/Timetable/Timetable.js';

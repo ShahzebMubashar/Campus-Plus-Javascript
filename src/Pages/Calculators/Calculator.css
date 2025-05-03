@@ -319,6 +319,7 @@
 .sgpa-cgpa-section {
     max-width: 90%;
     margin: 0 auto;
+    margin-bottom: 2%;
     padding: 2rem;
     background-color: white;
     border-radius: 8px;
@@ -567,6 +568,7 @@
 .aggregate-calculator {
     max-width: 90%;
     margin: 0 auto;
+    margin-bottom: 2%;
     padding: 2rem;
     background-color: white;
     border-radius: 8px;
