@@ -191,6 +191,37 @@ const deleteReminder = async (request, response) => {
   }
 };
 
+const updatePriority = async (request, response) => {
+  const {
+    params: { taskid },
+    session: {
+      user: { userid },
+    },
+    body: { priority, status },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    let res = await client.query(
+      `Update UserTasks set priority = COALESCE($1, priority), status = COALESCE($2, status) where userid = $3 and taskid = $4`,
+      [priority, status, userid, taskid]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).json("Priority Updated Successfully");
+  } catch (error) {
+    console.log(error.message);
+    await client.query("ROLLBACK");
+    return response.status(500).json("Internal Server Error");
+  } finally {
+    if (client) client.release();
+  }
+};
+
 module.exports = {
   viewUserInfo,
   editUserInfo,
@@ -198,4 +229,5 @@ module.exports = {
   addReminder,
   getReminders,
   deleteReminder,
+  updatePriority,
 };
