@@ -128,9 +128,14 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [searchUsername, setSearchUsername] = useState("");
   const [searchDate, setSearchDate] = useState("");
   const [isSearching, setIsSearching] = useState(false);
+  const [userInfo, setUserInfo] = useState(null);
+  const [rooms, setRooms] = useState([]);
+  const [joinedRooms, setJoinedRooms] = useState([]);
+
 
   useEffect(() => {
     fetchUserInfo();
+    fetchJoinedRooms();
     fetchPosts();
   }, [room.roomid]);
 
@@ -141,12 +146,44 @@ export default function RoomView({ room, onBack, onLeave }) {
       });
       if (response.ok) {
         const data = await response.json();
-        setUserid(data.userid);
-        setUserRole(data.role);
+        setUserInfo(data);
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
+  };
+
+  const fetchJoinedRooms = async () => {
+    try {
+      const response = await fetch("http://localhost:4000/Chatrooms/user/groups", {
+        credentials: "include",
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setJoinedRooms(data);
+      }
+    } catch (error) {
+      console.error("Error fetching joined rooms:", error);
+    }
+  };
+
+  const handleRoomSelect = async (room) => {
+    // If room is not joined, join it first
+    if (!joinedRooms.find(r => r.roomid === room.roomid)) {
+      try {
+        const response = await fetch(`http://localhost:4000/Chatrooms/join/${room.roomid}`, {
+          method: "POST",
+          credentials: "include",
+        });
+        if (response.ok) {
+          await fetchJoinedRooms(); // Refresh joined rooms list
+        }
+      } catch (error) {
+        console.error("Error joining room:", error);
+        return;
+      }
+    }
+
   };
 
   const fetchPosts = async () => {
@@ -577,7 +614,10 @@ export default function RoomView({ room, onBack, onLeave }) {
       position: "relative",
       paddingLeft: "280px"
     }}>
-      <Sidebar room={room} onBack={onBack} onLeave={onLeave} />
+      <Sidebar room={room} onBack={onBack} onLeave={onLeave} userInfo={userInfo}
+        rooms={rooms}
+        joinedRooms={joinedRooms}
+        onRoomSelect={handleRoomSelect} />
       {/* Main content */}
       <div style={{
         flex: 1,
