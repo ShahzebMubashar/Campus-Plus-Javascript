@@ -1,338 +1,539 @@
 .transcripts-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  }
-  
-  .gpa-summary {
-    background-color: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    text-align: right;
-  }
-  
-  .gpa-summary h3 {
-    margin: 0;
-    color: #2c3e50;
-  }
-  
-  .gpa-summary span {
-    font-weight: bold;
-    color: #3498db;
-  }
-  
-  .add-semester-btn {
-    background-color: #2ecc71;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  }
-  
-  .add-semester-btn:hover {
-    background-color: #27ae60;
-  }
-  
-  .semester-card {
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    margin-bottom: 30px;
-    overflow: hidden;
-  }
-  
-  .semester-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px;
-    background-color: #3498db;
-    color: white;
-  }
-  
-  .semester-header h2 {
-    margin: 0;
-    font-size: 20px;
-  }
-  
-  .semester-gpa {
-    font-weight: bold;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 5px 10px;
-    border-radius: 20px;
-  }
-  
-  .add-course-btn {
-    background-color: #f39c12;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-  }
-  
-  .add-course-btn:hover {
-    background-color: #e67e22;
-  }
-  
-  .courses-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  
-  .courses-table th, .courses-table td {
-    padding: 12px 15px;
-    text-align: left;
-    border-bottom: 1px solid #e0e0e0;
-  }
-  
-  .courses-table th {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    color: #2c3e50;
-  }
-  
-  .remove-btn {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-    font-size: 13px;
-    transition: background-color 0.3s;
-  }
-  
-  .remove-btn:hover {
-    background-color: #c0392b;
-  }
-  
-  .no-courses {
-    padding: 20px;
-    text-align: center;
-    color: #7f8c8d;
-  }
-  
-  /* Modal Styles */
-  .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-  }
-  
-  .modal-content {
-    background-color: white;
-    padding: 25px;
-    border-radius: 8px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-  }
-  
-  .modal h2 {
-    margin-top: 0;
-    color: #2c3e50;
-    border-bottom: 1px solid #eee;
-    padding-bottom: 10px;
-  }
-  
-  .form-group {
-    margin-bottom: 15px;
-  }
-  
-  .form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: 500;
-    color: #2c3e50;
-  }
-  
-  .form-group input,
-  .form-group select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 16px;
-    box-sizing: border-box;
-  }
-  
-  .modal-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-  }
-  
-  .modal-actions button {
-    padding: 8px 15px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .modal-actions button:first-child {
-    background-color: #3498db;
-    color: white;
-    border: none;
-  }
-  
-  .modal-actions button:last-child {
-    background-color: #95a5a6;
-    color: white;
-    border: none;
-  }
-  
-  .modal-actions button:hover {
-    opacity: 0.9;
-  }
-  
-  @media (max-width: 768px) {
-    .semester-header {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 10px;
-    }
-    
-    .courses-table {
-      display: block;
-      overflow-x: auto;
-    }
-  }
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  flex: 1;
+  margin-left: 0;
+  padding: 32px 24px;
+}
 
+.gpa-summary {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: right;
+}
 
-  /* Add these to your existing Transcripts.css */
+.gpa-summary h3 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.gpa-summary span {
+  font-weight: bold;
+  color: #3498db;
+}
+
+.add-semester-btn {
+  background-color: #2ecc71;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-bottom: 20px;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.add-semester-btn:hover {
+  background-color: #27ae60;
+}
+
+.semester-card {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  overflow: hidden;
+}
 
 .semester-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  background-color: #3498db;
+  color: white;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.semester-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.semester-gpa {
+  font-weight: bold;
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 5px 10px;
+  border-radius: 20px;
+}
+
+.add-course-btn {
+  background-color: #f39c12;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.add-course-btn:hover {
+  background-color: #e67e22;
+}
+
+.courses-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.courses-table th,
+.courses-table td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.courses-table th {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.remove-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background-color 0.3s;
+}
+
+.remove-btn:hover {
+  background-color: #c0392b;
+}
+
+.no-courses {
+  padding: 20px;
+  text-align: center;
+  color: #7f8c8d;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 25px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.modal h2 {
+  margin-top: 0;
+  color: #2c3e50;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  box-sizing: border-box;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 8px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.modal-actions button:first-child {
+  background-color: #3498db;
+  color: white;
+  border: none;
+}
+
+.modal-actions button:last-child {
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+}
+
+.modal-actions button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .semester-header {
+    flex-direction: column;
+    align-items: flex-start;
     gap: 10px;
-  }
-  
-  .semester-title {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-  }
-  
-  .semester-actions {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .remove-semester-btn {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-  }
-  
-  .remove-semester-btn:hover {
-    background-color: #c0392b;
-  }
-  
-  .delete-confirmation {
-    background-color: #fff3f3;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 5px;
-    border-left: 4px solid #e74c3c;
-  }
-  
-  .delete-confirmation p {
-    margin: 0 0 10px 0;
-    color: #333;
-  }
-  
-  .delete-confirmation div {
-    display: flex;
-    gap: 10px;
-  }
-  
-  .confirm-delete-btn {
-    background-color: #e74c3c;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .cancel-delete-btn {
-    background-color: #95a5a6;
-    color: white;
-    border: none;
-    padding: 5px 10px;
-    border-radius: 3px;
-    cursor: pointer;
-  }
-  
-  .courses-table th:nth-child(5),
-  .courses-table td:nth-child(5) {
-    text-align: center;
   }
 
-  .error-banner {
-    position: fixed;
+  .courses-table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
+/* Add these to your existing Transcripts.css */
+
+.semester-title {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.semester-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.remove-semester-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.remove-semester-btn:hover {
+  background-color: #c0392b;
+}
+
+.delete-confirmation {
+  background-color: #fff3f3;
+  padding: 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border-left: 4px solid #e74c3c;
+}
+
+.delete-confirmation p {
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.delete-confirmation div {
+  display: flex;
+  gap: 10px;
+}
+
+.confirm-delete-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.cancel-delete-btn {
+  background-color: #95a5a6;
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.courses-table th:nth-child(5),
+.courses-table td:nth-child(5) {
+  text-align: center;
+}
+
+.error-banner {
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px 20px;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  display: flex;
+  align-items: center;
+  z-index: 1000;
+  animation: slideIn 0.3s ease-out;
+}
+
+.error-banner button {
+  background: none;
+  border: none;
+  color: #c62828;
+  font-size: 18px;
+  margin-left: 15px;
+  cursor: pointer;
+  padding: 0 5px;
+}
+
+@keyframes slideIn {
+  from {
+    top: -50px;
+    opacity: 0;
+  }
+
+  to {
     top: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #ffebee;
-    color: #c62828;
-    padding: 12px 20px;
-    border-radius: 4px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    display: flex;
-    align-items: center;
-    z-index: 1000;
-    animation: slideIn 0.3s ease-out;
+    opacity: 1;
   }
-  
-  .error-banner button {
-    background: none;
-    border: none;
-    color: #c62828;
-    font-size: 18px;
-    margin-left: 15px;
-    cursor: pointer;
-    padding: 0 5px;
+}
+
+.loading {
+  text-align: center;
+  padding: 50px;
+  font-size: 18px;
+  color: #3498db;
+}
+
+/* Layout for sidebar + main content */
+.transcripts-layout {
+  display: flex;
+  min-height: 100vh;
+  background: #f4f8fb;
+}
+
+/* Sidebar styles */
+.transcripts-sidebar {
+  width: 250px;
+  min-width: 250px;
+  background: white;
+  padding: 24px 16px;
+  border-right: 1px solid #e5e7eb;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+}
+
+.sidebar-profile {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 40%;
+}
+
+/* Avatar style to match ProfilePage */
+.sidebar-profile-img.lms-profile-avatar {
+  width: 90px;
+  height: 90px;
+  background-color: var(--lms-primary-color, #2563eb);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.5rem;
+  font-weight: bold;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.12);
+  border: 4px solid #fff;
+  object-fit: cover;
+  margin-bottom: 10px;
+  overflow: hidden;
+}
+
+.sidebar-profile-img.lms-profile-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.sidebar-profile-name.lms-user-details {
+  width: 100%;
+  text-align: center;
+  margin: 0;
+}
+
+.sidebar-profile-name.lms-user-details h2 {
+  color: var(--lms-primary-dark, #2563eb);
+  margin-top: 0;
+  margin-bottom: 8px;
+  text-align: center;
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-profile-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #2563eb;
+  margin-bottom: 8px;
+}
+
+.sidebar-separator {
+  width: 100%;
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 16px 0;
+}
+
+.sidebar-header {
+  width: 100%;
+  margin-bottom: 32px;
+}
+
+.sidebar-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0 0 10px 0;
+  color: #2563eb;
+  letter-spacing: 0.5px;
+}
+
+.sidebar-cgpa {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  background: rgba(37, 99, 235, 0.10);
+  padding: 8px 16px;
+  border-radius: 12px;
+  margin-bottom: 10px;
+  color: #2563eb;
+}
+
+.cgpa-value {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #2563eb;
+  letter-spacing: 1px;
+}
+
+.sidebar-semesters-list {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-semester-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border-radius: 8px;
+}
+
+.sidebar-semester-item:hover {
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.sidebar-semester-item.selected {
+  background: rgba(37, 99, 235, 0.12);
+}
+
+.sidebar-semester-name {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #1f2937;
+  margin-bottom: 4px;
+}
+
+.sidebar-semester-sgpa {
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.semester-divider {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+@media (max-width: 900px) {
+  .transcripts-layout {
+    flex-direction: column;
   }
-  
-  @keyframes slideIn {
-    from {
-      top: -50px;
-      opacity: 0;
-    }
-    to {
-      top: 20px;
-      opacity: 1;
-    }
+
+  .transcripts-sidebar {
+    width: 100%;
+    min-width: unset;
+    border-radius: 0 0 24px 24px;
+    flex-direction: row;
+    align-items: flex-start;
+    height: auto;
+    position: static;
+    margin-bottom: 20px;
   }
-  
-  .loading {
-    text-align: center;
-    padding: 50px;
-    font-size: 18px;
-    color: #3498db;
+
+  .sidebar-header,
+  .sidebar-semesters-list {
+    width: auto;
   }
+}
+
+/* Enhanced CGPA Section */
+.sidebar-cgpa-section {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #2563eb;
+  color: white;
+  padding: 16px;
+  border-radius: 12px;
+  margin: 8px 0;
+  box-shadow: 0 4px 6px rgba(37, 99, 235, 0.1);
+}
+
+.sidebar-cgpa-section span:first-child {
+  font-size: 1.1rem;
+  font-weight: 500;
+}
+
+.sidebar-cgpa-section .cgpa-value {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: white;
+}
