@@ -62,9 +62,9 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
         marginBottom: "12px",
         backgroundColor: colors.cardBg,
         borderRadius: "8px",
-        marginLeft: `20px`,
-        borderLeft: `3px solid ${colors.primaryLight}`,
-        boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+        marginLeft: `${level > 0 ? 16 : 20}px`,
+        borderLeft: `3px solid ${level > 0 ? colors.primaryLight : colors.primaryLight}`,
+        boxShadow: "0 1px 3px rgba(0,0,0,0.4)",
       }}
     >
       <div
@@ -131,13 +131,16 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
         </div>
       )}
       {comment.replies?.map((reply) => (
-        <Comment
-          key={reply.commentid}
-          comment={reply}
-          level={level + 1}
-          room={room}
-          fetchPosts={fetchPosts}
-        />
+        <div key={reply.commentid} style={{
+          marginTop: '10px'
+        }}>
+          <Comment
+            comment={reply}
+            level={level + 1}
+            room={room}
+            fetchPosts={fetchPosts}
+          />
+        </div>
       ))}
     </div>
   );
@@ -713,8 +716,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       if (searchDate) params.append("date", searchDate);
 
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/search/${
-          room.roomid
+        `http://localhost:4000/Chatrooms/search/${room.roomid
         }?${params.toString()}`,
         {
           credentials: "include",
@@ -1099,8 +1101,8 @@ export default function RoomView({ room, onBack, onLeave }) {
                     post.status === "Pending"
                       ? `4px solid ${colors.pending}`
                       : post.is_pinned
-                      ? `4px solid ${colors.primary}`
-                      : `1px solid ${colors.border}`,
+                        ? `4px solid ${colors.primary}`
+                        : `1px solid ${colors.border}`,
                   position: "relative",
                   transition: "transform 0.2s, box-shadow 0.2s",
                 }}
