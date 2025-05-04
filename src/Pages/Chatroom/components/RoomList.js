@@ -79,7 +79,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
                             className="create-room-button"
                             onClick={() => setShowCreateRoomForm(true)}
                         >
-                            <span>➕</span> Create Room
+                            <span style={{ fontSize: "18px" }}>+</span> Create Room
                         </button>
                     )}
                 </div>
