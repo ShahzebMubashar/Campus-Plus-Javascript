@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
 
@@ -37,7 +37,7 @@ function TranscriptsPage() {
   const [showAddCourseModal, setShowAddCourseModal] = useState(false);
   const [confirmDeleteSemester, setConfirmDeleteSemester] = useState(null);
   const [selectedSemesterId, setSelectedSemesterId] = useState(null);
-  const semesterRefs = React.useRef({});
+  const semesterRefs = useRef({});
 
   // Fetch data on mount
   useEffect(() => {
@@ -57,6 +57,11 @@ function TranscriptsPage() {
 
         setSemesters(transcriptData);
         setUser(userData);
+
+        // Set the first semester as selected by default if available
+        if (transcriptData.length > 0 && !selectedSemesterId) {
+          setSelectedSemesterId(transcriptData[0].id);
+        }
       } catch (err) {
         setError(err.message);
         setShowError(true);
@@ -66,7 +71,17 @@ function TranscriptsPage() {
       }
     };
     fetchData();
-  }, []);
+  }, [selectedSemesterId]);
+
+  // When selectedSemesterId changes, scroll to that semester card
+  useEffect(() => {
+    if (selectedSemesterId && semesterRefs.current[selectedSemesterId]) {
+      semesterRefs.current[selectedSemesterId].scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    }
+  }, [selectedSemesterId]);
 
   // GPA Calculations (excludes "I" grades)
   const calculateCourseGPA = (grade) =>
@@ -297,8 +312,7 @@ function TranscriptsPage() {
           semesters.map((semester) => (
             <div
               key={semester.id}
-              className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""
-                }`}
+              className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""}`}
               ref={(el) => (semesterRefs.current[semester.id] = el)}
             >
               <div className="semester-header">
