@@ -315,7 +315,7 @@ function Dashboard() {
               {getUserInitials()}
             </div>
             <div className="user-info">
-              <h1 className="user-name">{User?.name || "Loading..."}</h1>
+              <h1 className="user-name">{User?.fullName || User?.name || "Loading..."}</h1>
               <h5 className="user-name-username">
                 @{User?.username || "Loading..."}
               </h5>
