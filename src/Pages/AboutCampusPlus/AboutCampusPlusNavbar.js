@@ -3,6 +3,7 @@ import { Link } from 'react-scroll'; // Importing Link from react-scroll
 
 const Navbar = () => {
     return (
+
         <nav className="aboutcp-navbar fixed-top navbar-expand-lg navbar-light bg-white" data-aos="fade-down">
             <div className="container">
                 <div className="aboutcp-navbar-wrapper d-flex justify-content-between align-items-center w-100">
