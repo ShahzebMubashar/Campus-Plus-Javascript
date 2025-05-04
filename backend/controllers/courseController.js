@@ -165,6 +165,63 @@ const addCourse = async (request, response) => {
   }
 };
 
+const addCourses = async (request, response) => {
+  const { courses } = request.body;
+
+  if (!Array.isArray(courses) || courses.length === 0) {
+    return response.status(400).json({ message: "Courses array is required" });
+  }
+
+  const client = await pool.connect();
+
+  try {
+    await client.query("BEGIN");
+
+    for (const course of courses) {
+      const { coursename, coursecode, credits, grading, difficulty } = course;
+
+      // Validate each course
+      if (!coursename || !coursecode || !credits || !grading || !difficulty) {
+        await client.query("ROLLBACK");
+        return response.status(400).json({ message: "All fields are required for each course" });
+      }
+
+      // Check if course exists
+      const existsRes = await client.query(
+        `SELECT 1 FROM viewcourseinfo WHERE coursecode ILIKE $1 and coursename ILIKE $2`,
+        [coursecode, coursename]
+      );
+      if (existsRes.rowCount > 0) {
+        await client.query("ROLLBACK");
+        return response.status(400).json({ message: `Course with code ${coursecode} and ${coursename} already exists` });
+      }
+
+      // Insert into Courses
+      const res = await client.query(
+        `INSERT INTO Courses (coursecode) VALUES ($1) RETURNING courseid`,
+        [coursecode]
+      );
+      const courseid = res.rows[0].courseid;
+
+      // Insert into CourseInfo
+      await client.query(
+        `INSERT INTO CourseInfo (courseid, coursename, credits, grading, difficulty)
+         VALUES ($1, $2, $3, $4, $5)`,
+        [courseid, coursename, credits, grading, difficulty]
+      );
+    }
+
+    await client.query("COMMIT");
+    return response.status(201).json({ message: "All courses added successfully" });
+  } catch (error) {
+    await client.query("ROLLBACK");
+    console.error("Error in addCourses transaction:", error);
+    return response.status(500).json({ message: "Internal Server Error" });
+  } finally {
+    client.release();
+  }
+};
+
 const getPastPapers = async (req, res) => {
   const { courseId } = req.params;
   try {
@@ -295,4 +352,5 @@ module.exports = {
   downloadPastPapers,
   getCourseDetails,
   rateCourseDifficulty,
+  addCourses,
 };

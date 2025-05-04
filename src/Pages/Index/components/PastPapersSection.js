@@ -78,7 +78,7 @@ const PastPapersSection = () => (
                         </li>
                     ))}
                 </ul>
-                <a href="/html/pastpapers.html" className="btn btn-primary">
+                <a href="/past-papers" className="btn btn-primary">
                     View All Past Papers
                 </a>
             </div>
