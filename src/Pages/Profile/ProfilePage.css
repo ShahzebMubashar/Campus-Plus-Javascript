@@ -364,31 +364,31 @@
     cursor: pointer;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
+    width: 100%;
+    height: 100%;
     background-color: #ccc;
-    transition: .4s;
-    border-radius: 34px;
+    transition: 0.4s;
+    border-radius: 30px;
 }
 
 .lms-toggle-switch label:before {
-    position: absolute;
     content: "";
-    height: 22px;
-    width: 22px;
-    left: 4px;
-    bottom: 4px;
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    left: 2px;
+    top: 2px;
     background-color: white;
-    transition: .4s;
+    transition: 0.4s;
     border-radius: 50%;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.lms-toggle-switch input:checked+label {
+.lms-toggle-switch input:checked + label {
     background-color: var(--lms-primary-color);
 }
 
-.lms-toggle-switch input:checked+label:before {
+.lms-toggle-switch input:checked + label:before {
     transform: translateX(30px);
 }
 
