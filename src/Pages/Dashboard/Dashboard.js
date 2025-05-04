@@ -18,6 +18,39 @@ function AcademicDashboard() {
   const [currentCourses, setCurrentCourses] = useState([]);
   const [myRooms, setMyRooms] = useState([]);
 
+  const getInitials = (name) => {
+    if (!name) return "";
+    const names = name.split(" ");
+    let initials = names[0][0];
+    if (names.length > 1) initials += names[names.length - 1][0];
+    return initials.toUpperCase();
+  };
+
+  const getAvatarColor = (initials) => {
+    const colors = [
+      "#4A90E2", 
+      "#5DADE2", 
+      "#2980B9", 
+      "#85C1E9", 
+      "#2874A6", 
+      "#3498DB", 
+      "#2E86C1", 
+      "#1F618D", 
+      "#AED6F1", 
+      "#34495E", 
+      "#7FB3D5", 
+      "#154360", 
+      "#D6EAF8", 
+      "#1A5276", 
+      "#21618C"  
+    ];
+    
+    const charSum = initials
+      .split("")
+      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return colors[charSum % colors.length];
+  };
+
   const gradePoints = {
     "A+": 4.0,
     A: 4.0,
@@ -192,7 +225,12 @@ function AcademicDashboard() {
       <Navbar />
       <div className="dashboardcontainer">
         <section className="user-profile-section">
-          <img src={Shahzebpic} alt="Profile" className="profile-picture" />
+          <div
+            className="profile-picture"
+            style={{ backgroundColor: getAvatarColor(getInitials(User?.name)) }}
+          >
+            {getInitials(User?.name)}
+          </div>
           <div className="user-info">
             <h1 className="user-name">{User?.name || "Loading..."}</h1>
             <h5 className="user-name-username">
