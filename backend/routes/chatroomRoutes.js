@@ -104,7 +104,6 @@ router.post("/:roomid/posts/:messageid/pin", checkAuthorisation, pinPost);
 // Post reporting routes
 router.post("/posts/:messageid/report", checkAuthorisation, reportPost);
 
-// Post view tracking route
 router.post("/posts/:messageid/view", checkAuthorisation, trackPostView);
 
 router.get("/messages/:roomid", getRoomMessages);
