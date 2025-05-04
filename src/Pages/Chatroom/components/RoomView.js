@@ -62,9 +62,9 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
         marginBottom: "12px",
         backgroundColor: colors.cardBg,
         borderRadius: "8px",
-        marginLeft: `20px`,
-        borderLeft: `3px solid ${colors.primaryLight}`,
-        boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+        marginLeft: `${level > 0 ? 16 : 20}px`,
+        borderLeft: `3px solid ${level > 0 ? colors.primaryLight : colors.primaryLight}`,
+        boxShadow: "0 1px 3px rgba(0,0,0,0.4)",
       }}
     >
       <div
@@ -131,13 +131,16 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
         </div>
       )}
       {comment.replies?.map((reply) => (
-        <Comment
-          key={reply.commentid}
-          comment={reply}
-          level={level + 1}
-          room={room}
-          fetchPosts={fetchPosts}
-        />
+        <div key={reply.commentid} style={{
+          marginTop: '10px'
+        }}>
+          <Comment
+            comment={reply}
+            level={level + 1}
+            room={room}
+            fetchPosts={fetchPosts}
+          />
+        </div>
       ))}
     </div>
   );
@@ -162,6 +165,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [userInfo, setUserInfo] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [joinedRooms, setJoinedRooms] = useState([]);
+  const [postMessage, setPostMessage] = useState({ show: false, message: "", type: "" });
 
   // Button styles for reusability
   const buttonStyles = {
@@ -383,11 +387,29 @@ export default function RoomView({ room, onBack, onLeave }) {
         if (response.ok) {
           setNewPost("");
           fetchPosts();
+          setPostMessage({ show: true, message: "Post submitted for approval", type: "success" });
+
+          // Auto-hide the message after 5 seconds
+          setTimeout(() => {
+            setPostMessage({ show: false, message: "", type: "" });
+          }, 5000);
         } else {
           console.error("Failed to create post");
+          setPostMessage({ show: true, message: "Failed to create post", type: "error" });
+
+          // Auto-hide the error message after 5 seconds
+          setTimeout(() => {
+            setPostMessage({ show: false, message: "", type: "" });
+          }, 5000);
         }
       } catch (error) {
         console.error("Error creating post:", error);
+        setPostMessage({ show: true, message: "Error creating post", type: "error" });
+
+        // Auto-hide the error message after 5 seconds
+        setTimeout(() => {
+          setPostMessage({ show: false, message: "", type: "" });
+        }, 5000);
       }
     }
   };
@@ -713,8 +735,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       if (searchDate) params.append("date", searchDate);
 
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/search/${
-          room.roomid
+        `http://localhost:4000/Chatrooms/search/${room.roomid
         }?${params.toString()}`,
         {
           credentials: "include",
@@ -1056,6 +1077,38 @@ export default function RoomView({ room, onBack, onLeave }) {
             borderLeft: `4px solid ${colors.primary}`,
           }}
         >
+          {postMessage.show && (
+            <div
+              style={{
+                padding: "10px 15px",
+                marginBottom: "15px",
+                borderRadius: "6px",
+                backgroundColor: postMessage.type === "success" ? "#e6f7ee" : "#ffebee",
+                color: postMessage.type === "success" ? "#1e8e3e" : "#d32f2f",
+                border: `1px solid ${postMessage.type === "success" ? "#b7dfca" : "#f5c2c7"}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}
+            >
+              <span>
+                {postMessage.type === "success" ? "✅" : "⚠️"} {postMessage.message}
+              </span>
+              <button
+                onClick={() => setPostMessage({ show: false, message: "", type: "" })}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  color: postMessage.type === "success" ? "#1e8e3e" : "#d32f2f",
+                }}
+              >
+                ×
+              </button>
+            </div>
+          )}
+
           <div style={{ display: "flex", gap: "12px" }}>
             <input
               type="text"
@@ -1099,8 +1152,8 @@ export default function RoomView({ room, onBack, onLeave }) {
                     post.status === "Pending"
                       ? `4px solid ${colors.pending}`
                       : post.is_pinned
-                      ? `4px solid ${colors.primary}`
-                      : `1px solid ${colors.border}`,
+                        ? `4px solid ${colors.primary}`
+                        : `1px solid ${colors.border}`,
                   position: "relative",
                   transition: "transform 0.2s, box-shadow 0.2s",
                 }}
