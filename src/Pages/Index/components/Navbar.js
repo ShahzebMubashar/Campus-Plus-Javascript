@@ -242,7 +242,7 @@ function Navbar() {
                                             {userData?.profilePic ? (
                                                 <img src={userData.profilePic} alt="Profile" />
                                             ) : (
-                                                <span>{userData?.username ? getUserInitials(userData.username) : "U"}</span>
+                                                <span>{userData?.name ? getUserInitials(userData.name) : (userData?.username ? getUserInitials(userData.username) : "U")}</span>
                                             )}
                                         </div>
                                     </div>
