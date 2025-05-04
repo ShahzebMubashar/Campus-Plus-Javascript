@@ -51,32 +51,23 @@
 /* Adjusting the paper year and paper type alignment and colors */
 /* Paper Section - Modern, Strong, and Clean */
 .paper-section {
-  background: #ffffff;
-  border: 2px solid #dee2e6; /* Distinct, clean border */
-  border-radius: 14px;
-  padding: 1.75rem;
-  box-shadow: 0 4px 14px rgba(20, 66, 114, 0.06); /* Colored soft shadow */
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1.75rem;
   break-inside: avoid;
-  transition: all 0.25s ease-in-out;
-  position: relative;
-  z-index: 1;
+  background-color: white;
+  border: 1px solid #aaa; /* light grey border */
+  border-radius: 12px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* subtle shadow for depth */
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Fancy border edge using gradient strip */
-.paper-section::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 4px;
-  background: linear-gradient(to bottom, #144272, #205295); /* Themed vertical strip */
-  border-radius: 14px 0 0 14px;
-  z-index: 2;
+.paper-section:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
+
+
+
 
 /* Hover effect - modern lift and highlight */
 .paper-section:hover {
@@ -507,3 +498,20 @@
     column-count: 2; /* Maintain 2 columns on medium screens */
   }
 }
+.paper-card:focus,
+.signin-button:focus {
+  outline: 2px solid #144272;
+  outline-offset: 2px;
+}
+.rating-bar-fill {
+  width: 0;
+  animation: fill-bar 0.6s forwards ease-out;
+}
+
+@keyframes fill-bar {
+  to {
+    width: 100%;
+  }
+}
+
+

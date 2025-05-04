@@ -72,7 +72,7 @@
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
     transition: all 0.3s ease;
-    border: 1px solid #e9ecef;
+    border: 1px solid #aaa;
     cursor: pointer;
     position: relative;
     overflow: visible;
