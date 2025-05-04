@@ -109,7 +109,7 @@ router.post("/posts/:messageid/view", checkAuthorisation, trackPostView);
 router.get("/messages/:roomid", getRoomMessages);
 router.get("/search/:roomid", searchPosts);
 
-router.get("/user/groups", getUserJoinedGroups);
+router.get("/user/groups", checkAuthorisation, getUserJoinedGroups);
 
 router.get("/my-rooms/:userid", checkAuthorisation, myRooms);
 

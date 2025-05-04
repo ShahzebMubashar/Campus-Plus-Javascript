@@ -33,7 +33,6 @@ function Dashboard() {
     const handleSettingsChange = (e) => {
       e.preventDefault();
       alert("Settings updated successfully!");
-      setShowSettingsModal(false);
     };
 
     // Function to get user's initials from name or username
@@ -315,7 +314,7 @@ function Dashboard() {
               {getUserInitials()}
             </div>
             <div className="user-info">
-              <h1 className="user-name">{User?.fullName || User?.name || "Loading..."}</h1>
+              <h1 className="user-name">{User?.fullName || User?.name || User.username || "Loading..."}</h1>
               <h5 className="user-name-username">
                 @{User?.username || "Loading..."}
               </h5>
