@@ -165,6 +165,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [userInfo, setUserInfo] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [joinedRooms, setJoinedRooms] = useState([]);
+  const [postMessage, setPostMessage] = useState({ show: false, message: "", type: "" });
 
   // Button styles for reusability
   const buttonStyles = {
@@ -386,11 +387,29 @@ export default function RoomView({ room, onBack, onLeave }) {
         if (response.ok) {
           setNewPost("");
           fetchPosts();
+          setPostMessage({ show: true, message: "Post submitted for approval", type: "success" });
+
+          // Auto-hide the message after 5 seconds
+          setTimeout(() => {
+            setPostMessage({ show: false, message: "", type: "" });
+          }, 5000);
         } else {
           console.error("Failed to create post");
+          setPostMessage({ show: true, message: "Failed to create post", type: "error" });
+
+          // Auto-hide the error message after 5 seconds
+          setTimeout(() => {
+            setPostMessage({ show: false, message: "", type: "" });
+          }, 5000);
         }
       } catch (error) {
         console.error("Error creating post:", error);
+        setPostMessage({ show: true, message: "Error creating post", type: "error" });
+
+        // Auto-hide the error message after 5 seconds
+        setTimeout(() => {
+          setPostMessage({ show: false, message: "", type: "" });
+        }, 5000);
       }
     }
   };
@@ -1058,6 +1077,38 @@ export default function RoomView({ room, onBack, onLeave }) {
             borderLeft: `4px solid ${colors.primary}`,
           }}
         >
+          {postMessage.show && (
+            <div
+              style={{
+                padding: "10px 15px",
+                marginBottom: "15px",
+                borderRadius: "6px",
+                backgroundColor: postMessage.type === "success" ? "#e6f7ee" : "#ffebee",
+                color: postMessage.type === "success" ? "#1e8e3e" : "#d32f2f",
+                border: `1px solid ${postMessage.type === "success" ? "#b7dfca" : "#f5c2c7"}`,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between"
+              }}
+            >
+              <span>
+                {postMessage.type === "success" ? "✅" : "⚠️"} {postMessage.message}
+              </span>
+              <button
+                onClick={() => setPostMessage({ show: false, message: "", type: "" })}
+                style={{
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: "16px",
+                  color: postMessage.type === "success" ? "#1e8e3e" : "#d32f2f",
+                }}
+              >
+                ×
+              </button>
+            </div>
+          )}
+
           <div style={{ display: "flex", gap: "12px" }}>
             <input
               type="text"
