@@ -1,12 +1,18 @@
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import templateData from '../emails.json'
+import Select from 'react-select'
 const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
+    
     let emailTypes=[]
+
   for(let key in templateData.templates) 
   {
-    emailTypes.push(key)
+    emailTypes.push({value:key,label:key})
   }
-    const [showEmailForm, setShowEmailForm] = useState(true);
+  let teachersOptions=teachers.map(teacher=>({value:teacher.name,label:teacher.name}))
+
+  const selectInputRef = useRef(null);
+  const [showEmailForm, setShowEmailForm] = useState(true);
 
     const handleChange = (field, value) => {
         setFormData((prev) => ({
@@ -14,10 +20,20 @@ const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
             [field]: value,
         }));
     };
-
+    const handleSelectChange = (selectedOption, actionMeta) => {
+        const name = actionMeta.name;
+        setFormData(prev => ({
+          ...prev,
+          [name]: selectedOption.value
+        }));
+        console.log(formData)
+      };
+      
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        const activeElement = document.activeElement;
+        const isSelectFocused = selectInputRef.current && selectInputRef.current.inputRef === activeElement;
+if(isSelectFocused)return;    
         const teacherName =
             formData.selectedTeacher === "Other"
                 ? `${formData.teacherSalutation} ${formData.customTeacher}`
@@ -88,7 +104,7 @@ const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
                 </div>
                 <div className="form-group">
                     <label>Teacher</label>
-                    <select
+                    {/* <select
                         value={formData.selectedTeacher}
                         onChange={(e) => handleChange("selectedTeacher", e.target.value)}
                     >
@@ -99,7 +115,16 @@ const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
                             </option>
                         ))}
                         <option value="Other">Other</option>
-                    </select>
+                    </select> */}
+                    <Select
+                    value={{value:formData.selectedTeacher,label:formData.selectedTeacher}}
+                    name="selectedTeacher"
+                    options={teachersOptions}
+                    onChange={handleSelectChange}
+                    isSearchable
+                    styles={{ container: base => ({ ...base, width: '100%' }) }}
+                    ref={selectInputRef}
+                    ></Select>
                     {formData.selectedTeacher === "Other" && (
                         <div className="custom-teacher">
                             <input
@@ -124,15 +149,24 @@ const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
                 </div>
                 <div className="form-group">
                     <label>Email Type</label>
-                    <select
+                    <Select
+  name="emailType"
+  options={emailTypes}
+  value={{value:formData.emailType,label:formData.emailType}}
+  onChange={handleSelectChange}
+  isSearchable
+  styles={{ container: base => ({ ...base, width: '100%' }) }}
+/>
+
+                    {/* <select
                         value={formData.emailType}
                         onChange={(e) => handleChange("emailType", e.target.value)}
                     >
-                    {emailTypes.map(type=>(<option>{type}</option>))}
+                    {emailTypes.map(type=>(<option>{type.value}</option>))} */}
                         {/* <option value="select">Select Email Type</option>
                         <option value="assignment">Assignment Email</option>
                         <option value="project">Project Email</option> */}
-                    </select>
+                    {/* </select> */}
                 </div>
                 <button type="submit" className="btn btn-primary">
                     Submit

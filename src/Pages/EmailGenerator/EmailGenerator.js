@@ -22,7 +22,7 @@ export default function EmailGenerator() {
         selectedTeacher: "",
         customTeacher: "",
         teacherSalutation: "",
-        emailType: "select",
+        emailType: "",
     });
     const [teachers, setTeachers] = useState([]);
 
@@ -102,7 +102,10 @@ export default function EmailGenerator() {
 
     };
 
-
+const handleCardClick=(title)=>{
+setShowEmailForm(true)
+// setFormData(prev=>({...prev,emailType:title}))
+};
     return (
         <div className="email-generator">
             <Navbar />
@@ -114,7 +117,7 @@ export default function EmailGenerator() {
                 {!showEmailForm ? (
                     <div className="card-container">
                         {cards.map((card) => (
-                            <EmailCard key={card.title} data={card} setShowEmailForm={setShowEmailForm} />
+                            <EmailCard key={card.title} data={card} handleCardClick={handleCardClick} />
                         ))}
                     </div>
                 ) : (

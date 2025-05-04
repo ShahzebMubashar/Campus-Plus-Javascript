@@ -1,5 +1,5 @@
 
-export default function EmailCard({data:{title, description,image}, setShowEmailForm}){
+export default function EmailCard({data:{title, description,image}, handleCardClick}){
 
 
 
@@ -9,7 +9,7 @@ export default function EmailCard({data:{title, description,image}, setShowEmail
         return (
             <div
                             className="card"
-                            onClick={() => setShowEmailForm(true)}
+                            onClick={() => handleCardClick(title)}
                         >
                             <img src={image} alt="Card" />
                             <div className="card-footer">
