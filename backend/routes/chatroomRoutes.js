@@ -23,6 +23,7 @@ const {
   searchPosts,
   getUserJoinedGroups,
   myRooms,
+  addnestedReply,
 } = require("../controllers/chatroomController");
 
 const {
@@ -46,12 +47,6 @@ router.post(
   checkAuthorisation,
   checkRoomMember,
   sendMessage
-);
-router.post(
-  "/reply/:roomid/:parentMessage",
-  checkAuthorisation,
-  checkRoomMember,
-  sendReply
 );
 router.post(
   "/process/:roomid",
@@ -112,5 +107,11 @@ router.get("/search/:roomid", searchPosts);
 router.get("/user/groups", getUserJoinedGroups);
 
 router.get("/my-rooms/:userid", checkAuthorisation, myRooms);
+
+router.post(
+  "/reply/:roomid/:parentReplyId",
+  checkAuthorisation,
+  addnestedReply
+);
 
 module.exports = router;

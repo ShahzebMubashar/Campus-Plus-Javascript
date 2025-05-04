@@ -29,14 +29,15 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
   const handleReply = async () => {
     if (replyText.trim()) {
       try {
+        console.log(room.roomid, comment.messageid, comment.commentid);
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply/${room.roomid}/${comment.messageid || comment.commentid}`,
+          `http://localhost:4000/Chatrooms/reply/${room.roomid}/${comment.commentid}`,
           {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ message: replyText }),
+            body: JSON.stringify({ content: replyText }),
             credentials: "include",
           }
         );
@@ -472,7 +473,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     }
   };
 
-  const handleComment = async (postId) => {
+  const handleComment = async (postId, parentReplyId = null) => {
     if (newComment.trim()) {
       try {
         const response = await fetch(
@@ -482,14 +483,17 @@ export default function RoomView({ room, onBack, onLeave }) {
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ message: newComment }),
+            body: JSON.stringify({
+              message: newComment,
+              parentReplyId: parentReplyId, // can be null or an integer
+            }),
             credentials: "include",
           }
         );
-
+  
         if (response.ok) {
           setNewComment("");
-          fetchPosts();
+          fetchPosts(); // reload the posts and replies
         } else {
           console.error("Failed to add comment");
         }
@@ -498,6 +502,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       }
     }
   };
+  
 
   const handleLeaveRoom = async () => {
     const confirmLeave = window.confirm(

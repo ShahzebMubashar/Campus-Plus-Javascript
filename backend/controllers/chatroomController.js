@@ -10,37 +10,99 @@ const getRooms = async (request, response) => {
     let res;
 
     if (roomid) {
+      // Get room details and all messages with their replies
       res = await pool.query(
-        `SELECT * FROM viewroommessages1 WHERE roomid = $1`,
+        `SELECT 
+          r.roomid, r.roomname, r.description,
+          m.messageid, m.userid as message_userid, m.username as message_username, 
+          m.rollnumber as message_rollnumber, m.content as message_content, 
+          m.posted_at as message_posted_at,
+          re.replyid, re.userid as reply_userid, re.username as reply_username,
+          re.rollnumber as reply_rollnumber, re.content as reply_content,
+          re.posted_at as reply_posted_at, re.parent_reply_id
+        FROM rooms r
+        LEFT JOIN messages m ON m.roomid = r.roomid
+        LEFT JOIN messagereplies1 re ON re.messageid = m.messageid
+        WHERE r.roomid = $1
+        ORDER BY m.posted_at, re.posted_at`,
         [roomid]
       );
 
-      if (!res.rowCount)
+      if (!res.rowCount) {
         return response.status(404).json("No messages found for this room");
+      }
 
-      const roomMessages = res.rows;
-
-      const structuredResponse = {
-        roomid: roomMessages[0].roomid,
-        roomname: roomMessages[0].roomname,
-        description: roomMessages[0].description,
-        messages: roomMessages.map((msg) => ({
-          messageid: msg.messageid,
-          userid: msg.userid,
-          username: msg.username,
-          rollnumber: msg.rollnumber,
-          content: msg.content,
-          posted_at: msg.posted_at,
-        })),
+      // Structure the response with nested replies
+      const roomData = {
+        roomid: res.rows[0].roomid,
+        roomname: res.rows[0].roomname,
+        description: res.rows[0].description,
+        messages: [],
       };
 
-      return response.status(200).json(structuredResponse);
+      // Create a map for messages and replies
+      const messagesMap = new Map();
+      const repliesMap = new Map();
+
+      res.rows.forEach((row) => {
+        // Process messages
+        if (row.messageid && !messagesMap.has(row.messageid)) {
+          messagesMap.set(row.messageid, {
+            messageid: row.messageid,
+            userid: row.message_userid,
+            username: row.message_username,
+            rollnumber: row.message_rollnumber,
+            content: row.message_content,
+            posted_at: row.message_posted_at,
+            replies: [], // Initialize empty array for replies
+          });
+        }
+
+        // Process replies
+        if (row.replyid) {
+          const reply = {
+            replyid: row.replyid,
+            userid: row.reply_userid,
+            username: row.reply_username,
+            rollnumber: row.reply_rollnumber,
+            content: row.reply_content,
+            posted_at: row.reply_posted_at,
+            parent_reply_id: row.parent_reply_id,
+            replies: [], // For nested replies
+          };
+
+          repliesMap.set(row.replyid, reply);
+        }
+      });
+
+      // Build the reply hierarchy
+      repliesMap.forEach((reply) => {
+        if (reply.parent_reply_id) {
+          // This is a nested reply, add to its parent
+          const parentReply = repliesMap.get(reply.parent_reply_id);
+          if (parentReply) {
+            parentReply.replies.push(reply);
+          }
+        } else {
+          // Top-level reply, add to its message
+          const message = messagesMap.get(row.messageid);
+          if (message) {
+            message.replies.push(reply);
+          }
+        }
+      });
+
+      // Convert messages map to array and sort by posted_at
+      roomData.messages = Array.from(messagesMap.values()).sort(
+        (a, b) => new Date(a.posted_at) - new Date(b.posted_at)
+      );
+
+      return response.status(200).json(roomData);
     }
 
+    // Handle case when no roomid is provided (get all rooms)
     res = await pool.query("SELECT * FROM rooms");
-
     if (!res.rowCount) return response.status(404).json("No rooms found");
-
     return response.status(200).json(res.rows);
   } catch (error) {
     console.error("Get Rooms Error:", error.message);
@@ -59,7 +121,7 @@ const getRoomMessages = async (req, res) => {
   try {
     let messagesResult;
 
-    if (role == "Admin" || role == "Moderator")
+    if (role === "Admin" || role === "Moderator") {
       messagesResult = await pool.query(
         `SELECT m.*, u.username, u.rollnumber, 
                 CASE WHEN pp.pinid IS NOT NULL THEN true ELSE false END as is_pinned
@@ -72,7 +134,7 @@ const getRoomMessages = async (req, res) => {
            m.posted_at DESC`,
         [roomid]
       );
-    else
+    } else {
       messagesResult = await pool.query(
         `SELECT m.*, u.username, u.rollnumber,
                 CASE WHEN pp.pinid IS NOT NULL THEN true ELSE false END as is_pinned
@@ -85,6 +147,7 @@ const getRoomMessages = async (req, res) => {
            m.posted_at DESC`,
         [roomid]
       );
+    }
 
     if (messagesResult.rowCount === 0) {
       return res.status(404).json({
@@ -93,10 +156,49 @@ const getRoomMessages = async (req, res) => {
       });
     }
 
+    // Fetch replies using the nested view
     const commentsResult = await pool.query(
-      `SELECT * FROM MessageReplies1 WHERE roomid = $1 order by posted_at`,
+      `SELECT * FROM MESSAGEREPLIES WHERE roomid = $1 ORDER BY posted_at`,
       [roomid]
     );
+
+    // Step 1: Group replies by messageId
+    const repliesByMessage = {};
+    for (const reply of commentsResult.rows) {
+      if (!repliesByMessage[reply.messageid]) {
+        repliesByMessage[reply.messageid] = [];
+      }
+      repliesByMessage[reply.messageid].push(reply);
+    }
+
+    // Step 2: Build nested replies for a given flat list
+    function buildReplyTree(flatReplies) {
+      const replyMap = {};
+      const rootReplies = [];
+
+      // Initialize map
+      for (const reply of flatReplies) {
+        reply.replies = [];
+        replyMap[reply.replyid] = reply;
+      }
+
+      // Assign children to their parents
+      for (const reply of flatReplies) {
+        if (reply.parent_reply_id) {
+          const parent = replyMap[reply.parent_reply_id];
+          if (parent) {
+            parent.replies.push(reply);
+          } else {
+            // Orphaned reply (parent not found), treat as root-level
+            rootReplies.push(reply);
+          }
+        } else {
+          rootReplies.push(reply);
+        }
+      }
+
+      return rootReplies;
+    }
 
     const structuredResponse = {
       roomid: messagesResult.rows[0].roomid,
@@ -111,16 +213,9 @@ const getRoomMessages = async (req, res) => {
         posted_at: msg.posted_at,
         status: msg.status || "Approved",
         is_pinned: msg.is_pinned,
-        comments: commentsResult.rows
-          .filter((comment) => comment.messageid === msg.messageid)
-          .map((comment) => ({
-            commentid: comment.replyid,
-            userid: comment.userid,
-            username: comment.username,
-            rollnumber: comment.rollnumber,
-            content: comment.content,
-            posted_at: comment.posted_at,
-          })),
+        comments: buildReplyTree(repliesByMessage[msg.messageid] || []).map(
+          cleanReply
+        ),
       })),
     };
 
@@ -135,6 +230,22 @@ const getRoomMessages = async (req, res) => {
     return res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// Helper to clean and structure reply
+function cleanReply(reply) {
+  return {
+    commentid: reply.replyid,
+    parent_reply_id: reply.parent_reply_id,
+    userid: reply.userid,
+    username: reply.username,
+    rollnumber: reply.rollnumber,
+    content: reply.content,
+    posted_at: reply.posted_at,
+    reply_count: reply.reply_count,
+    parent_author_name: reply.parent_author_name,
+    replies: reply.replies?.map(cleanReply) || [],
+  };
+}
 
 const createRoom = async (request, response) => {
   const {
@@ -218,7 +329,7 @@ const joinRoom = async (request, response) => {
 
 const sendMessage = async (request, response) => {
   const {
-    body: { message },
+    body: { message, parent_reply_id = null, messageid = null },
     params: { roomid },
     session: {
       user: { userid },
@@ -230,28 +341,37 @@ const sendMessage = async (request, response) => {
   try {
     await client.query("BEGIN");
 
-    let res = await client.query(
-      `Insert into Messages (roomid, userid, content, posted_at)
-      values ($1, $2, $3, current_timestamp)`,
-      [roomid, userid, message]
-    );
+    if (messageid) {
+      // It's a reply
+      await client.query(
+        `INSERT INTO Replies (messageid, userid, content, posted_at, parent_reply_id)
+         VALUES ($1, $2, $3, current_timestamp, $4)`,
+        [messageid, userid, message, parent_reply_id]
+      );
+    } else {
+      // It's a top-level message
+      await client.query(
+        `INSERT INTO Messages (roomid, userid, content, posted_at)
+         VALUES ($1, $2, $3, current_timestamp)`,
+        [roomid, userid, message]
+      );
+    }
 
     await client.query("COMMIT");
-
     return response.status(200).json("Message sent successfully");
   } catch (error) {
     console.error("Send message error:", error.message);
     await client.query("ROLLBACK");
     return response.status(500).json("Server Error");
   } finally {
-    if (client) client.release();
+    client.release();
   }
 };
 
 const sendReply = async (request, response) => {
   const {
-    body: { message },
-    params: { roomid, parentMessage },
+    body: { message, parent_reply_id = null },
+    params: { roomid, parentMessage }, // parentMessage is the messageid
     session: {
       user: { userid },
     },
@@ -260,33 +380,92 @@ const sendReply = async (request, response) => {
   const client = await pool.connect();
 
   try {
-    let res = await client.query(
-      `Select * from Messages where messageid = $1 and roomid = $2`,
+    await client.query("BEGIN");
+
+    // Validate parent message exists and belongs to the room
+    const messageCheck = await client.query(
+      `SELECT * FROM Messages WHERE messageid = $1 AND roomid = $2`,
       [parentMessage, roomid]
     );
 
-    if (!res.rowCount)
+    if (!messageCheck.rowCount) {
+      await client.query("ROLLBACK");
       return response.status(400).json("Parent message not found");
+    }
 
-    await client.query("BEGIN");
+    // If replying to another reply, validate it belongs to same message
+    if (parent_reply_id !== null) {
+      const replyCheck = await client.query(
+        `SELECT * FROM Replies WHERE replyid = $1 AND messageid = $2`,
+        [parent_reply_id, parentMessage]
+      );
 
-    res = await client.query(
-      `Insert into Replies (messageid, roomid, userid, content, posted_at)
-      values ($1, $2, $3, $4, current_timestamp)
-      RETURNING replyid`,
-      [parentMessage, roomid, userid, message]
+      if (!replyCheck.rowCount) {
+        await client.query("ROLLBACK");
+        return response
+          .status(400)
+          .json("Parent reply not found or doesn't belong to the same message");
+      }
+    }
+
+    const insertResult = await client.query(
+      `INSERT INTO Replies (messageid, userid, content, posted_at, parent_reply_id)
+       VALUES ($1, $2, $3, current_timestamp, $4)
+       RETURNING replyid`,
+      [parentMessage, userid, message, parent_reply_id]
     );
 
     await client.query("COMMIT");
 
     return response.status(200).json({
       message: "Reply sent successfully",
-      replyid: res.rows[0].replyid,
+      replyid: insertResult.rows[0].replyid,
     });
   } catch (error) {
     console.error("Send reply error:", error.message);
     await client.query("ROLLBACK");
     return response.status(500).json("Server Error");
+  } finally {
+    client.release();
+  }
+};
+
+const addnestedReply = async (request, response) => {
+  console.log("ADDING NESTED\n\n\n\n\n\n\n");
+  const {
+    params: { roomid, parentReplyId },
+    body: { content },
+    session: {
+      user: { userid },
+    },
+  } = request;
+
+  const client = await pool.connect();
+
+  try {
+    let res = await pool.query("Select * from Replies where replyid = $1", [
+      parentReplyId,
+    ]);
+
+    if (!res.rowCount) return response.status(404).json("Reply Not Found");
+
+    const parentMessageId = res.rows[0].messageid;
+
+    await client.query("BEGIN");
+
+    res = await client.query(
+      `Insert into Replies (messageid, roomid, userid, content, posted_at, parent_reply_id)
+      Values ($1, $2, $3, $4, current_timestamp, $5)`,
+      [parentMessageId, roomid, userid, content, parentReplyId]
+    );
+
+    await client.query("COMMIT");
+
+    return response.status(200).json("Successfully Sent Reply");
+  } catch (error) {
+    console.log(error.message);
+    await client.query("ROlLBACK");
+    return response.status(500).json("Internal Server Error");
   } finally {
     if (client) client.release();
   }
@@ -1039,4 +1218,5 @@ module.exports = {
   searchPosts,
   getUserJoinedGroups,
   myRooms,
+  addnestedReply,
 };
