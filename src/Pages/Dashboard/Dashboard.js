@@ -28,23 +28,23 @@ function AcademicDashboard() {
 
   const getAvatarColor = (initials) => {
     const colors = [
-      "#4A90E2", 
-      "#5DADE2", 
-      "#2980B9", 
-      "#85C1E9", 
-      "#2874A6", 
-      "#3498DB", 
-      "#2E86C1", 
-      "#1F618D", 
-      "#AED6F1", 
-      "#34495E", 
-      "#7FB3D5", 
-      "#154360", 
-      "#D6EAF8", 
-      "#1A5276", 
-      "#21618C"  
+      "#4A90E2",
+      "#5DADE2",
+      "#2980B9",
+      "#85C1E9",
+      "#2874A6",
+      "#3498DB",
+      "#2E86C1",
+      "#1F618D",
+      "#AED6F1",
+      "#34495E",
+      "#7FB3D5",
+      "#154360",
+      "#D6EAF8",
+      "#1A5276",
+      "#21618C"
     ];
-    
+
     const charSum = initials
       .split("")
       .reduce((sum, char) => sum + char.charCodeAt(0), 0);
@@ -135,7 +135,7 @@ function AcademicDashboard() {
     }
   };
 
-  const [tasks, setTodos] = useState([]);
+  const [tasks, setTasks] = useState([]);
 
   // Fetch tasks from backend
   const fetchTasks = async () => {
@@ -149,17 +149,21 @@ function AcademicDashboard() {
       });
 
       if (!res.ok) {
-        setTodos([]);
+        setTasks([]);
         throw new Error("Failed to fetch tasks");
       }
 
       const data = await res.json();
+      // Get completed task IDs from localStorage
+      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+
       if (data) {
-        setTodos(
+        setTasks(
           data.map((task) => ({
             id: task.taskid,
             title: task.content, // Changed from 'text' to 'title' to match deadlines structure
-            completed: task.status,
+            // Use either the server status or check if it's in our localStorage completed list
+            completed: task.status === true || completedTaskIds.includes(task.taskid),
             priority: task.priority.toLowerCase(),
             dueDate: new Date(task.duedate).toISOString().split("T")[0],
             dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
@@ -168,7 +172,7 @@ function AcademicDashboard() {
         );
         console.log(data);
       } else {
-        setTodos([]);
+        setTasks([]);
       }
     } catch (error) {
       console.error("Error:", error.message);
@@ -218,6 +222,58 @@ function AcademicDashboard() {
       ...newCourse,
       [name]: name === "credits" ? parseInt(value) || 0 : value,
     });
+  };
+
+  // Toggle task completion
+  const toggleTaskCompletion = async (id) => {
+    try {
+      const task = tasks.find(t => t.id === id);
+      const newStatus = !task.completed;
+
+      // Optimistically update UI
+      const updatedTasks = tasks.map(task =>
+        task.id === id ? { ...task, completed: newStatus } : task
+      );
+      setTasks(updatedTasks);
+
+      // Save completed task IDs to localStorage for persistence across pages
+      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+      if (newStatus) {
+        // Add to completed tasks if not already in the list
+        if (!completedTaskIds.includes(id)) {
+          completedTaskIds.push(id);
+        }
+      } else {
+        // Remove from completed tasks
+        const index = completedTaskIds.indexOf(id);
+        if (index > -1) {
+          completedTaskIds.splice(index, 1);
+        }
+      }
+      localStorage.setItem('completedTaskIds', JSON.stringify(completedTaskIds));
+
+      const response = await fetch(`http://localhost:4000/user/update-priority/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: newStatus,
+        }),
+      });
+
+      if (!response.ok) {
+        // If the API call fails, revert the optimistic update
+        setTasks(tasks);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Don't fetch tasks again - this is causing the completed status to reset
+      // The UI is already updated optimistically above
+    } catch (error) {
+      console.error("Error toggling task completion:", error.message);
+    }
   };
 
   return (
@@ -331,32 +387,38 @@ function AcademicDashboard() {
             </a>
           </div>
           <div className="deadlines-list">
-            {/* Replace the hardcoded deadlines with your fetched todos */}
-            {tasks.length > 0 ? (
-              tasks.slice(0, 3).map((task, index) => (
+            {/* Only show pending tasks in the dashboard */}
+            {tasks.filter(task => !task.completed).length > 0 ? (
+              tasks.filter(task => !task.completed).slice(0, 3).map((task, index) => (
                 <div
-                  key={task.id || index} // Use task.id if available, otherwise fall back to index
+                  key={task.id || index}
                   className="deadline-card"
-                  onClick={() => console.log("Task clicked:", task.id)} // You can replace this with your navigation
+                  onClick={() => toggleTaskCompletion(task.id)}
                 >
                   <div className="deadline-content">
-                    <h3>{task.title}</h3>
-                    <div className="deadline-meta">
-                      <span className="course-code">{task.course}</span>
-                      <span className="due-date">
+                    <div className="deadline-header">
+                      <div className="deadline-course">{task.course}</div>
+                      <div className="deadline-status">
+                        <div className="status-indicator pending"></div>
+                        <span>Pending</span>
+                      </div>
+                    </div>
+                    <h3 className="deadline-title">{task.title}</h3>
+                    <div className="deadline-details">
+                      <span className="deadline-date">
                         <span className="icon">📅</span>
-                        {new Date(
-                          `${task.dueDate}T${task.dueTime}`
-                        ).toLocaleString()}
+                        {new Date(`${task.dueDate}T${task.dueTime}`).toLocaleString()}
+                      </span>
+                      <span className={`deadline-priority ${task.priority}`}>
+                        {task.priority.toUpperCase()}
                       </span>
                     </div>
                   </div>
-                  <div className={`priority-indicator ${task.priority}`}></div>
                 </div>
               ))
             ) : (
               <div className="no-deadlines-message">
-                No upcoming deadlines found
+                No pending deadlines found
               </div>
             )}
           </div>
