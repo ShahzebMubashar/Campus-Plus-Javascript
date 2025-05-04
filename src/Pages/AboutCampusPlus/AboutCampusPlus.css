@@ -133,6 +133,7 @@ section {
 .navbar-light .navbar-nav .show>.nav-link {
     background: -webkit-linear-gradient(#00e0fe, #1107fe);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
@@ -158,6 +159,7 @@ section {
 .feature i {
     background: -webkit-linear-gradient(#00e0fe, #1107fe);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     font-size: 54px;
 }
@@ -268,6 +270,7 @@ footer a {
     text-align: center;
     background: linear-gradient(to right, #00e0fe, #1107fe);
     -webkit-background-clip: text;
+    background-clip: text;
     -webkit-text-fill-color: transparent;
     text-decoration: none;
     transition: transform 0.3s ease;
@@ -280,4 +283,68 @@ footer a {
 .navbar-nav .nav-link {
     cursor: pointer;
     /* This will change the cursor to a pointer on hover */
+}
+
+/* AboutCampusPlus Navbar Styles */
+.aboutcp-navbar {
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
+    padding: 10px 0;
+}
+
+.aboutcp-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.aboutcp-navbar-brand {
+    font-size: 1.5rem;
+    font-weight: 700;
+    background: -webkit-linear-gradient(#00e0fe, #1107fe);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-right: 2rem;
+}
+
+.aboutcp-navbar-collapse {
+    flex-grow: 0;
+}
+
+.aboutcp-navbar-nav {
+    display: flex;
+    align-items: center;
+}
+
+.aboutcp-nav-item {
+    margin-left: 10px;
+}
+
+.aboutcp-nav-link {
+    color: #20212c !important;
+    font-weight: 600;
+    padding: 8px 15px !important;
+    transition: all 0.3s ease;
+}
+
+.aboutcp-nav-link:hover,
+.aboutcp-nav-link.active {
+    background: -webkit-linear-gradient(#00e0fe, #1107fe);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+@media (max-width: 991px) {
+    .aboutcp-navbar-collapse {
+        flex-grow: 1;
+    }
+
+    .aboutcp-navbar-nav {
+        margin-top: 15px;
+    }
+
+    .aboutcp-nav-item {
+        margin-left: 0;
+    }
 }
