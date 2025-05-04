@@ -28,7 +28,6 @@ export default function RoomList({ rooms, onJoinRoom }) {
             console.error("Error fetching user role:", error);
         }
     };
-
     const handleCreateRoom = async () => {
         if (newRoomName.trim() && newRoomDescription.trim()) {
             try {
@@ -59,9 +58,10 @@ export default function RoomList({ rooms, onJoinRoom }) {
     };
 
     const filteredRooms = rooms.filter(room =>
-        room.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        room.description.toLowerCase().includes(searchQuery.toLowerCase())
+        room.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        room.description?.toLowerCase().includes(searchQuery.toLowerCase())
     );
+
 
     return (
         <div className="room-list-container">
@@ -71,7 +71,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
                     <div>
                         <h1 className="room-list-title">Chat Rooms</h1>
                         <p className="room-list-subtitle">
-                            Join existing rooms or create your own to start chatting
+                            Browse and join chat rooms to start discussing
                         </p>
                     </div>
                     {userRole === "Admin" && (
@@ -79,7 +79,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
                             className="create-room-button"
                             onClick={() => setShowCreateRoomForm(true)}
                         >
-                            <span>➕</span> Create Room
+                            <span style={{ fontSize: "18px" }}>+</span> Create Room
                         </button>
                     )}
                 </div>
@@ -93,6 +93,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
                     <span className="room-list-search-icon">🔍</span>
                 </div>
             </div>
+
 
             {/* Create Room Modal */}
             {showCreateRoomForm && (
@@ -130,22 +131,29 @@ export default function RoomList({ rooms, onJoinRoom }) {
                 </div>
             )}
 
-            {/* Rooms List */}
+
+            {/* Rooms Grid */}
             <div className="room-grid">
-                {filteredRooms.map((room) => (
-                    <div key={room.roomid} className="room-card">
-                        <div className="room-card-content">
-                            <h3 className="room-card-title">{room.name}</h3>
-                            <p className="room-card-description">{room.description}</p>
+                {filteredRooms.length > 0 ? (
+                    filteredRooms.map((room) => (
+                        <div key={room.roomid} className="room-card">
+                            <div className="room-card-content">
+                                <h3 className="room-card-title">{room.name || room.roomname}</h3>
+                                <p className="room-card-description">{room.description}</p>
+                            </div>
+                            <button
+                                className="join-room-button"
+                                onClick={() => onJoinRoom(room.roomid)}
+                            >
+                                Join Room
+                            </button>
                         </div>
-                        <button
-                            className="join-room-button"
-                            onClick={() => onJoinRoom(room.roomid)}
-                        >
-                            Join
-                        </button>
+                    ))
+                ) : (
+                    <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '40px', color: '#666' }}>
+                        No rooms found matching your search.
                     </div>
-                ))}
+                )}
             </div>
         </div>
     );

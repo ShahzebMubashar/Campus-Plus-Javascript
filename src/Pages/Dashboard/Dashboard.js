@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
-//  Yelo
+
 function AcademicDashboard() {
   const [courses, setCourses] = useState([
     { name: "Course 1", credits: 3, grade: "A" },
@@ -14,13 +14,38 @@ function AcademicDashboard() {
     credits: 3,
     grade: "A",
   });
-  const [User, setUser] = useState(null);
-  const [editData, setEditData] = useState({
-    name: "",
-    degree: "",
-    batch: "",
-  });
+  const [User, setUser] = useState({});
+  const [currentCourses, setCurrentCourses] = useState([]);
+  const [myRooms, setMyRooms] = useState([]);
 
+  const getUserInitials = () => {
+    const displayName = User?.username || "";
+
+    if (!displayName) return "U";
+
+    return displayName
+      .split(" ")
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .map(name => name[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  const getAvatarBackgroundColor = (name) => {
+    if (!name) return "#4A90E2";
+
+    const colors = [
+      "#4A90E2", "#5DADE2", "#2980B9", "#85C1E9", "#2874A6",
+      "#3498DB", "#2E86C1", "#1F618D", "#AED6F1", "#34495E",
+      "#7FB3D5", "#154360", "#D6EAF8", "#1A5276", "#21618C"
+    ];
+
+    const charSum = name
+      .split("")
+      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+    return colors[charSum % colors.length];
+  };
 
   const gradePoints = {
     "A+": 4.0,
@@ -64,34 +89,26 @@ function AcademicDashboard() {
     setCourses(updatedCourses);
   };
 
-  // const fetchEditProfile = async () => {
-  //   try {
-  //     const res = await fetch("http://localhost:4000/user/profile", {
-  //       credentials: "include",
-  //       method: "PUT",
-  //       headers: { "Content-Type": "application/json" },
-  //       body: JSON.stringify(editData),
-  //     });
+  const fetchCurrentCourses = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/current-courses", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  //     const contentType = res.headers.get("content-type");
-  //     if (!contentType || !contentType.includes("application/json")) {
-  //       const text = await res.text();
-  //       throw new Error(text || "Non-JSON response received");
-  //     }
+      if (!res.ok) {
+        throw new Error(`HTTP Error! Status: ${res.status}`);
+      }
 
-  //     const data = await res.json();
-
-  //     if (!res.ok) {
-  //       throw new Error(data.message || "Update failed");
-  //     }
-
-  //     setUser(data);
-  //     setIsEditing(false);
-  //     window.location.reload();
-  //   } catch (error) {
-  //     console.error("Update failed:", error.message);
-  //   }
-  // };
+      const data = await res.json();
+      setCurrentCourses(data);
+    } catch (error) {
+      console.error("Error fetching courses:", error.message);
+    }
+  };
 
   const fetchUserInfo = async () => {
     try {
@@ -104,22 +121,96 @@ function AcademicDashboard() {
       });
 
       if (!res.ok) {
-        console.log(`Error`);
         throw new Error(`HTTP error! status: ${res.status}`);
       }
 
       const data = await res.json();
-
-      if (data) setUser(data);
-      else setUser(null);
+      setUser(data);
     } catch (error) {
       console.error("Error Fetching User Info:", error.message);
+    }
+  };
+
+  const [tasks, setTasks] = useState([]);
+
+  // Fetch tasks from backend
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/my-reminders", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        setTasks([]);
+        throw new Error("Failed to fetch tasks");
+      }
+
+      const data = await res.json();
+      // Get completed task IDs from localStorage
+      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+
+      if (data) {
+        setTasks(
+          data.map((task) => ({
+            id: task.taskid,
+            title: task.content, // Changed from 'text' to 'title' to match deadlines structure
+            // Use either the server status or check if it's in our localStorage completed list
+            completed: task.status === true || completedTaskIds.includes(task.taskid),
+            priority: task.priority.toLowerCase(),
+            dueDate: new Date(task.duedate).toISOString().split("T")[0],
+            dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
+            course: "Task", // Added to match deadlines structure
+          }))
+        );
+        console.log(data);
+      } else {
+        setTasks([]);
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [User?.userid]);
+
+  const fetchJoinedRooms = async () => {
+    try {
+      const result = await fetch(
+        `http://localhost:4000/Chatrooms/my-rooms/${User.userid}`,
+        { credentials: "include" }
+      );
+      const data = await result.json();
+
+      const formattedRooms = data.map((room) => ({
+        title: room.name || "Unnamed Room",
+        desc: room.description || "No description",
+        online: Math.floor(Math.random() * 10),
+        active: Math.random() > 0.5,
+      }));
+
+      setMyRooms(formattedRooms);
+    } catch (error) {
+      console.error("Error fetching rooms:", error);
+      setMyRooms([]);
     }
   };
 
   useEffect(() => {
     fetchUserInfo();
   }, []);
+
+  useEffect(() => {
+    if (User?.userid) {
+      fetchCurrentCourses();
+      fetchJoinedRooms();
+    }
+  }, [User?.userid]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -129,15 +220,82 @@ function AcademicDashboard() {
     });
   };
 
+  // Toggle task completion
+  const toggleTaskCompletion = async (id) => {
+    try {
+      const task = tasks.find(t => t.id === id);
+      const newStatus = !task.completed;
+
+      // Optimistically update UI
+      const updatedTasks = tasks.map(task =>
+        task.id === id ? { ...task, completed: newStatus } : task
+      );
+      setTasks(updatedTasks);
+
+      // Save completed task IDs to localStorage for persistence across pages
+      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+      if (newStatus) {
+        // Add to completed tasks if not already in the list
+        if (!completedTaskIds.includes(id)) {
+          completedTaskIds.push(id);
+        }
+      } else {
+        // Remove from completed tasks
+        const index = completedTaskIds.indexOf(id);
+        if (index > -1) {
+          completedTaskIds.splice(index, 1);
+        }
+      }
+      localStorage.setItem('completedTaskIds', JSON.stringify(completedTaskIds));
+
+      const response = await fetch(`http://localhost:4000/user/update-priority/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          status: newStatus,
+        }),
+      });
+
+      if (!response.ok) {
+        // If the API call fails, revert the optimistic update
+        setTasks(tasks);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Don't fetch tasks again - this is causing the completed status to reset
+      // The UI is already updated optimistically above
+    } catch (error) {
+      console.error("Error toggling task completion:", error.message);
+    }
+  };
+
   return (
     <div className="academic-dashboard">
       <Navbar />
       <div className="dashboardcontainer">
-        {/* User Profile Section */}
         <section className="user-profile-section">
-          <img src={Shahzebpic} alt="Profile" className="profile-picture" />
+          <div
+            className="profile-picture"
+            style={{
+              backgroundColor: "#1a73e8",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              fontSize: "2.5rem",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "1px"
+            }}
+          >
+            {getUserInitials()}
+          </div>
           <div className="user-info">
-            <h1 className="user-name">{User?.name || "Loading..."}</h1>
+            <h1 className="user-name">{User?.username || "Loading..."}</h1>
             <h5 className="user-name-username">
               @{User?.username || "Loading..."}
             </h5>
@@ -167,20 +325,16 @@ function AcademicDashboard() {
               <div className="profile-actions">
                 <button
                   className="profile-action-btn edit-profile"
-                  onClick={() => window.location.href = '/profile'}
+                  onClick={() => (window.location.href = "/profile")}
                 >
                   <span className="action-icon">✏️</span>
                   Edit Profile
                 </button>
-
-
               </div>
             </div>
           </div>
-
         </section>
 
-        {/* My Courses */}
         <section className="courses-section">
           <div className="section-header">
             <h2>📘 My Courses</h2>
@@ -189,47 +343,39 @@ function AcademicDashboard() {
             </a>
           </div>
           <div className="courses-grid">
-            {[
-              {
-                title: "Cinema 4D",
-                desc: "Elements design for websites and apps",
-                progress: "08/12",
-                percent: 66,
-              },
-              {
-                title: "UI/UX Design",
-                desc: "From concept to prototype",
-                progress: "04/15",
-                percent: 27,
-              },
-              {
-                title: "Graphic Design",
-                desc: "Digital computer graphics",
-                progress: "01/10",
-                percent: 10,
-              },
-            ].map((course, i) => (
-              <div className="course-card" key={i}>
-                <div className="course-content">
-                  <h3>{course.title}</h3>
-                  <p>{course.desc}</p>
-                  <div className="progress-container">
-                    <div className="progress-text">{course.progress}</div>
-                    <div className="progress-bar">
-                      <div
-                        className="progress-fill"
-                        style={{ width: `${course.percent}%` }}
-                      ></div>
+            {currentCourses.length > 0 ? (
+              currentCourses.map((course, i) => (
+                <div className="course-card" key={i}>
+                  <div className="course-content">
+                    <h3>{course.coursename || "Unnamed Course"}</h3>
+                    <p>{course.coursecode || "No code available"}</p>
+                    <div className="progress-container">
+                      <div className="progress-text">
+                        {Math.floor(Math.random() * 10)}/
+                        {Math.floor(Math.random() * 15)}
+                      </div>
+                      <div className="progress-bar">
+                        <div
+                          className="progress-fill"
+                          style={{
+                            width: `${Math.floor(Math.random() * 100)}%`,
+                          }}
+                        ></div>
+                      </div>
                     </div>
                   </div>
+                  <div className="course-arrow">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
+                    </svg>
+                  </div>
                 </div>
-                <div className="course-arrow">
-                  <svg viewBox="0 0 24 24">
-                    <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z" />
-                  </svg>
-                </div>
+              ))
+            ) : (
+              <div className="no-courses-message">
+                No courses found for current semester
               </div>
-            ))}
+            )}
 
             <div className="course-card add-card">
               <div className="add-content">
@@ -240,7 +386,6 @@ function AcademicDashboard() {
           </div>
         </section>
 
-        {/* Upcoming Deadlines */}
         <section className="deadlines-section">
           <div className="section-header">
             <h2>⏰ Upcoming Deadlines</h2>
@@ -249,46 +394,44 @@ function AcademicDashboard() {
             </a>
           </div>
           <div className="deadlines-list">
-            {[
-              {
-                title: "Database Systems Assignment",
-                dueDate: "2024-03-15",
-                course: "CS-301",
-                priority: "high",
-              },
-              {
-                title: "Software Engineering Project",
-                dueDate: "2024-03-20",
-                course: "CS-401",
-                priority: "medium",
-              },
-            ].map((deadline, index) => (
-              <div
-                key={index}
-                className="deadline-card"
-                onClick={() => (window.location.href = "/assignment-details")}
-              >
-                <div className="deadline-content">
-                  <h3>{deadline.title}</h3>
-                  <div className="deadline-meta">
-                    <span className="course-code">{deadline.course}</span>
-                    <span className="due-date">
-                      <span className="icon">📅</span>
-                      {new Date(deadline.dueDate).toLocaleDateString()}
-                    </span>
+            {/* Only show pending tasks in the dashboard */}
+            {tasks.filter(task => !task.completed).length > 0 ? (
+              tasks.filter(task => !task.completed).slice(0, 3).map((task, index) => (
+                <div
+                  key={task.id || index}
+                  className="deadline-card"
+                  onClick={() => toggleTaskCompletion(task.id)}
+                >
+                  <div className="deadline-content">
+                    <div className="deadline-header">
+                      <div className="deadline-course">{task.course}</div>
+                      <div className="deadline-status">
+                        <div className="status-indicator pending"></div>
+                        <span>Pending</span>
+                      </div>
+                    </div>
+                    <h3 className="deadline-title">{task.title}</h3>
+                    <div className="deadline-details">
+                      <span className="deadline-date">
+                        <span className="icon">📅</span>
+                        {new Date(`${task.dueDate}T${task.dueTime}`).toLocaleString()}
+                      </span>
+                      <span className={`deadline-priority ${task.priority}`}>
+                        {task.priority.toUpperCase()}
+                      </span>
+                    </div>
                   </div>
                 </div>
-                <div
-                  className={`priority-indicator ${deadline.priority}`}
-                ></div>
+              ))
+            ) : (
+              <div className="no-deadlines-message">
+                No pending deadlines found
               </div>
-            ))}
+            )}
           </div>
         </section>
 
-        {/* Bottom Sections */}
         <div className="bottom-sections">
-          {/* GPA Section */}
           <div className="gpa-calculator-section">
             <div className="section-header">
               <h2>🎓 GPA Calculator</h2>
@@ -373,7 +516,6 @@ function AcademicDashboard() {
             </div>
           </div>
 
-          {/* Chatrooms Section */}
           <div className="chatrooms-section">
             <div className="section-header">
               <h2>💬 Chatrooms Joined</h2>
@@ -383,54 +525,34 @@ function AcademicDashboard() {
             </div>
 
             <div className="chatrooms-list">
-              {[
-                {
-                  title: "UI/UX Design Group",
-                  members: 32,
-                  online: 5,
-                  active: true,
-                },
-                {
-                  title: "Cinema 4D Beginners",
-                  members: 18,
-                  online: 2,
-                  active: false,
-                },
-                {
-                  title: "Graphic Design Portfolio",
-                  members: 45,
-                  online: 8,
-                  active: true,
-                },
-              ].map((room, i) => (
-                <div className="chatroom-card" key={i}>
-                  <div className="chatroom-icon">
-                    <svg viewBox="0 0 24 24">
-                      <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
-                    </svg>
-                  </div>
-                  <div className="chatroom-info">
-                    <h3>{room.title}</h3>
-                    <p>
-                      {room.members} members • {room.online} online
-                    </p>
-                  </div>
-                  <div
-                    className={`chatroom-status ${room.active ? "active" : ""}`}
-                  ></div>
-                </div>
-              ))}
+              {myRooms.length > 0 ? (
+                <>
+                  {myRooms.map((room, i) => (
+                    <div className="chatroom-card" key={i}>
+                      <div className="chatroom-icon">💬</div>
+                      <div className="chatroom-info">
+                        <h3>{room.title}</h3>
+                        <p>{room.desc}</p>
+                        <p> • {room.online} online</p>
+                      </div>
+                    </div>
+                  ))}
 
-              <div className="chatroom-card add-chatroom">
-                <div className="add-icon">+</div>
-                <span>Join new chatroom</span>
-              </div>
+                  <div className="chatroom-card add-chatroom">
+                    <div className="add-icon">+</div>
+                    <span>Join new chatroom</span>
+                  </div>
+                </>
+              ) : (
+                <div className="no-rooms-message">
+                  You haven't joined any chatrooms yet
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
 
-      {/* Quick Links Section */}
       <section className="quick-links-section">
         <div className="section-header">
           <h2>🔗 Quick Links</h2>

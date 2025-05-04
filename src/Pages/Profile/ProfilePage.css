@@ -126,13 +126,16 @@
     grid-row: span 2;
 }
 
+/* Profile Avatar Enhancements */
 .lms-profile-avatar-container {
+    display: flex;
+    justify-content: center;
     margin-bottom: 30px;
 }
 
 .lms-profile-avatar {
-    width: 120px;
-    height: 120px;
+    width: 150px;
+    height: 150px;
     background-color: var(--lms-primary-color);
     color: white;
     border-radius: 50%;
@@ -143,6 +146,15 @@
     font-weight: bold;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     border: 4px solid white;
+    overflow: hidden;
+    text-align: center;
+    user-select: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.lms-profile-avatar:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .lms-user-details {

@@ -283,57 +283,385 @@
 
     /* RoomView.css */
 
-    .room-view-container {
-        display: flex;
-        min-height: 100vh;
-        background-color: #f0f4ff;
-        /* Light blue background */
-        padding: 20px;
-    }
+.room-view-container {
+    display: flex;
+    min-height: 100vh;
+    background-color: #f0f7ff;
+    padding: 20px;
+}
 
-    .room-view-content {
-        flex: 1;
-        padding: 20px;
-        background-color: #ffffff;
-        /* White background for content */
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        margin-left: 20px;
-        /* Space between sidebar and content */
-    }
+.room-view-content {
+    flex: 1;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(33, 150, 243, 0.1);
+    margin-left: 20px;
+}
 
-    .room-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 20px;
-    }
+.room-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    padding: 20px;
+    background: linear-gradient(135deg, #2196f3, #1976d2);
+    border-radius: 12px;
+    color: white;
+}
 
-    .room-title {
-        font-size: 28px;
-        color: #007bff;
-        /* Blue color for title */
-        margin: 0;
-    }
+.room-title {
+    font-size: 28px;
+    margin: 0;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
 
-    .leave-room-button {
-        padding: 10px 15px;
-        background-color: #dc3545;
-        /* Red color for leave button */
-        color: white;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
+.room-description {
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.9);
+    margin-top: 8px;
+}
 
-    .leave-room-button:hover {
-        background-color: #c82333;
-        /* Darker red on hover */
-    }
+.leave-room-button {
+    padding: 12px 24px;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    backdrop-filter: blur(8px);
+}
 
-    .room-description {
-        font-size: 16px;
-        color: #666;
-    }
+.leave-room-button:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-1px);
+}
+
+.post-section {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.post-input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #e3f2fd;
+    border-radius: 12px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+    margin-bottom: 16px;
+    resize: vertical;
+}
+
+.post-input:focus {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+    outline: none;
+}
+
+.post-button {
+    padding: 12px 24px;
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.post-button:hover {
+    background: #1976d2;
+    transform: translateY(-1px);
+}
+
+.comments-section {
+    margin-top: 20px;
+    padding: 20px;
+    background: #f8faff;
+    border-radius: 12px;
+}
+
+.comment {
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.comment-author {
+    font-weight: 600;
+    color: #1a2236;
+}
+
+.comment-timestamp {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.comment-content {
+    color: #374151;
+    line-height: 1.5;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(4px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-content {
+    background: white;
+    padding: 32px;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 500px;
+    position: relative;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+    z-index: 10000;
+}
+
+.modal-header {
+    margin-bottom: 24px;
+}
+
+.modal-header h2 {
+    margin: 0;
+    color: #1a2236;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.modal-form-group {
+    margin-bottom: 20px;
+}
+
+.modal-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #4b5563;
+    font-weight: 500;
+}
+
+.modal-form-group input,
+.modal-form-group textarea {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.2s ease;
+}
+
+.modal-form-group input:focus,
+.modal-form-group textarea:focus {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+    outline: none;
+}
+
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.modal-button {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-button-primary {
+    background: #2196f3;
+    color: white;
+    border: none;
+}
+
+.modal-button-primary:hover {
+    background: #1976d2;
+    transform: translateY(-1px);
+}
+
+.modal-button-secondary {
+    background: #f3f4f6;
+    color: #4b5563;
+    border: 1px solid #e5e7eb;
+}
+
+.modal-button-secondary:hover {
+    background: #e5e7eb;
+}
+
+/* Search Section Styling */
+.search-container {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.search-input-group {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.search-input {
+    flex: 1;
+    padding: 12px 16px;
+    border: 2px solid #e3f2fd;
+    border-radius: 8px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    border-color: #2196f3;
+    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+    outline: none;
+}
+
+/* Post Card Styling */
+.post-card {
+    background: white;
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e3f2fd;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.post-author {
+    font-weight: 600;
+    color: #1a2236;
+    font-size: 1.1rem;
+}
+
+.post-timestamp {
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.post-content {
+    color: #374151;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.post-actions {
+    display: flex;
+    gap: 12px;
+    padding-top: 16px;
+    border-top: 1px solid #e3f2fd;
+}
+
+.action-button {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.like-button {
+    background: #e3f2fd;
+    color: #2196f3;
+    border: none;
+}
+
+.like-button:hover {
+    background: #bbdefb;
+}
+
+.comment-button {
+    background: #f3f4f6;
+    color: #4b5563;
+    border: none;
+}
+
+.comment-button:hover {
+    background: #e5e7eb;
+}
+
+.share-button {
+    background: #f0f7ff;
+    color: #2196f3;
+    border: none;
+}
+
+.share-button:hover {
+    background: #e3f2fd;
+}
+
+/* Status badges */
+.status-badge {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-pending {
+    background: #fff8e1;
+    color: #f57c00;
+}
+
+.status-approved {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.pin-badge {
+    background: #e3f2fd;
+    color: #2196f3;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }

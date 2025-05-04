@@ -1,14 +1,17 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 import './Sidebar.css';
 
-const Sidebar = ({ room, onBack, onLeave }) => {
-    const navigate = useNavigate();
-
-    const handleLeaveRoom = () => {
-        if (onLeave) {
-            onLeave();
-        }
+const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => {
+    // Function to get initials from username
+    const getInitials = (name) => {
+        console.log(userInfo);
+        if (!name) return 'U';
+        
+        const names = name.split(' ');
+        if (names.length === 1) return names[0][0];
+        
+        // Get first letter of first name and first letter of last name
+        return `${names[0][0]}${names[names.length - 1][0]}`;
     };
 
     return (
@@ -17,13 +20,19 @@ const Sidebar = ({ room, onBack, onLeave }) => {
             <div className="profile-section">
                 <div className="profile-content">
                     <div className="avatar">
-                        <img
-                            src={`https://ui-avatars.com/api/?name=User&background=2196f3&color=fff`}
-                            alt="User Avatar"
-                        />
+                        {userInfo?.profilepic ? (
+                            <img
+                                src={userInfo.profilepic}
+                                alt="User Avatar"
+                            />
+                        ) : (
+                            <div className="avatar-initials">
+                                {getInitials(userInfo?.name)}
+                            </div>
+                        )}
                     </div>
                     <div className="profile-info">
-                        <h3>Welcome Back</h3>
+                        <h3>{userInfo?.name || 'Welcome Back'}</h3>
                         <p>Campus+ Member</p>
                     </div>
                 </div>
@@ -42,48 +51,26 @@ const Sidebar = ({ room, onBack, onLeave }) => {
                 </a>
             </div>
 
-            {/* Groups Navigation */}
-            <div className="groups-section">
-                <h3>Groups</h3>
-                <div className="groups-buttons">
-                    <button
-                        onClick={() => navigate('/chatroom')}
-                        className="group-button"
-                    >
-                        🌐 All Groups
-                    </button>
-                    <button
-                        onClick={() => navigate('/chatroom/my-groups')}
-                        className="group-button"
-                    >
-                        👥 My Groups
-                    </button>
+            {/* Joined Rooms Section */}
+            <div className="rooms-section">
+                <h3>My Rooms ({joinedRooms?.length || 0})</h3>
+                <div className="rooms-list">
+                    {joinedRooms?.map(room => (
+                        <button
+                            key={room.roomid}
+                            className={`room-button ${activeRoom?.roomid === room.roomid ? 'active' : ''}`}
+                            onClick={() => onRoomSelect(room)}
+                        >
+                            <span className="room-icon">💬</span>
+                            {room.roomname}
+                        </button>
+                    ))}
                 </div>
             </div>
 
-            {/* Room Info */}
-            {room && (
-                <div className="room-info">
-                    <div className="room-avatar">
-                        <img
-                            src={`https://ui-avatars.com/api/?name=${room.roomname}&background=2196f3&color=fff`}
-                            alt="Room Avatar"
-                        />
-                    </div>
-                    <h2>{room.roomname}</h2>
-                    <p>Created {new Date(room.created_at).toLocaleDateString()}</p>
-                    <div className="room-buttons">
-                        <button onClick={onBack} className="back-button">
-                            ← Back to Rooms
-                        </button>
-                        <button onClick={handleLeaveRoom} className="leave-button">
-                            🚪 Leave Room
-                        </button>
-                    </div>
-                </div>
-            )}
+
         </div>
     );
 };
 
-export default Sidebar; 
+export default Sidebar;

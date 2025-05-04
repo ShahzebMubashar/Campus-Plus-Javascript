@@ -3,24 +3,29 @@ import Sidebar from "./components/Sidebar.js";
 import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from '../Index/components/Navbar.js';
-import Footer from '../Footer/Footer.js';
 import "../Chatroom/css/Chatroom.css";
 
 export default function Chatrooms() {
     const [rooms, setRooms] = useState([]);
+    const [joinedRooms, setJoinedRooms] = useState([]);
     const [activeRoom, setActiveRoom] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-    // Fetch user info and rooms on initial render
     useEffect(() => {
         fetchUserInfo();
-        fetchRooms();
+        fetchAllRooms();
+        fetchJoinedRooms();
     }, []);
 
     const fetchUserInfo = async () => {
         try {
-            const response = await fetch("http://localhost:4000/auth/user-info", {
+            const response = await fetch("http://localhost:4000/user/profile", {
+                method:"GET",
                 credentials: "include",
+                headers: {
+                    "Content-Type":"apploication/json"
+                }
             });
             if (response.ok) {
                 const data = await response.json();
@@ -31,7 +36,7 @@ export default function Chatrooms() {
         }
     };
 
-    const fetchRooms = async () => {
+    const fetchAllRooms = async () => {
         try {
             const response = await fetch("http://localhost:4000/Chatrooms", {
                 credentials: "include",
@@ -39,51 +44,45 @@ export default function Chatrooms() {
             if (response.ok) {
                 const data = await response.json();
                 setRooms(data);
-            } else {
-                console.error("Failed to fetch rooms");
             }
         } catch (error) {
             console.error("Error fetching rooms:", error);
+        } finally {
+            setLoading(false);
         }
     };
 
-    // Handles joining a room and activating RoomView
-    const handleJoinRoom = async (roomId) => {
+    const fetchJoinedRooms = async () => {
         try {
-            const response = await fetch(`http://localhost:4000/Chatrooms/join/${roomId}`, {
-                method: "POST",
+            const response = await fetch("http://localhost:4000/Chatrooms/user/groups", {
                 credentials: "include",
             });
             if (response.ok) {
-                const room = rooms.find((r) => r.roomid === roomId);
-                if (room) {
-                    setActiveRoom(room);
-                }
-            } else {
-                console.error("Failed to join room");
+                const data = await response.json();
+                setJoinedRooms(data);
             }
         } catch (error) {
-            console.error("Error joining room:", error);
+            console.error("Error fetching joined rooms:", error);
         }
     };
 
-    // Return to the room list
-    const handleBackToRooms = () => {
-        setActiveRoom(null);
-    };
-
-    const handleNavigation = (page) => {
-        // Handle navigation to different pages
-        switch (page) {
-            case 'all-groups':
-                setActiveRoom(null);
-                break;
-            case 'my-groups':
-                setActiveRoom(null);
-                break;
-            default:
-                break;
+    const handleRoomSelect = async (room) => {
+        // If room is not joined, join it first
+        if (!joinedRooms.find(r => r.roomid === room.roomid)) {
+            try {
+                const response = await fetch(`http://localhost:4000/Chatrooms/join/${room.roomid}`, {
+                    method: "POST",
+                    credentials: "include",
+                });
+                if (response.ok) {
+                    await fetchJoinedRooms(); // Refresh joined rooms list
+                }
+            } catch (error) {
+                console.error("Error joining room:", error);
+                return;
+            }
         }
+        setActiveRoom(room);
     };
 
     return (
@@ -92,25 +91,50 @@ export default function Chatrooms() {
                 <Navbar />
                 <div className="content-wrapper">
                     <Sidebar
-                        username={userInfo?.username || ''}
-                        onNavigate={handleNavigation}
+                        userInfo={userInfo}
+                        rooms={rooms}
+                        joinedRooms={joinedRooms}
                         activeRoom={activeRoom}
-                        onLeaveRoom={() => setActiveRoom(null)}
+                        onRoomSelect={handleRoomSelect}
                     />
                     <div className="main-content">
                         {activeRoom ? (
                             <RoomView
                                 room={activeRoom}
-                                onBack={handleBackToRooms}
-                                onLeave={() => setActiveRoom(null)}
+                                onBack={() => setActiveRoom(null)}
+                                onLeave={async () => {
+                                    await handleLeaveRoom(activeRoom.roomid);
+                                    setActiveRoom(null);
+                                    fetchJoinedRooms();
+                                }}
                             />
                         ) : (
-                            <RoomList rooms={rooms} onJoinRoom={handleJoinRoom} />
+                            <RoomList
+                                rooms={rooms}
+                                onJoinRoom={(roomId) => {
+                                    const room = rooms.find(r => r.roomid === roomId);
+                                    if (room) handleRoomSelect(room);
+                                }}
+                            />
                         )}
                     </div>
                 </div>
-                <Footer />
+
             </div>
         </div>
     );
+}
+
+// Helper function for leaving a room
+async function handleLeaveRoom(roomId) {
+    try {
+        const response = await fetch(`http://localhost:4000/Chatrooms/leave/${roomId}`, {
+            method: "DELETE",
+            credentials: "include",
+        });
+        return response.ok;
+    } catch (error) {
+        console.error("Error leaving room:", error);
+        return false;
+    }
 }

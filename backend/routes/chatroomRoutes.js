@@ -22,6 +22,8 @@ const {
   getRoomMessages,
   searchPosts,
   getUserJoinedGroups,
+  myRooms,
+  addnestedReply,
 } = require("../controllers/chatroomController");
 
 const {
@@ -47,7 +49,7 @@ router.post(
   sendMessage
 );
 router.post(
-  "/reply/:roomid/:parentMessage",
+  "/reply1/:roomid/:parentMessage",
   checkAuthorisation,
   checkRoomMember,
   sendReply
@@ -86,14 +88,15 @@ router.delete(
   checkRoomMember,
   deletePost
 );
-router.get(
-  "/:roomid/messages/:messageid",
-  getPost
-);
+router.get("/:roomid/messages/:messageid", getPost);
 
 // Post editing routes
 router.post("/:roomid/posts/:messageid/edit", checkAuthorisation, editPost);
-router.get("/posts/:messageid/edit-history", checkAuthorisation, getPostEditHistory);
+router.get(
+  "/posts/:messageid/edit-history",
+  checkAuthorisation,
+  getPostEditHistory
+);
 
 // Post pinning routes
 router.post("/:roomid/posts/:messageid/pin", checkAuthorisation, pinPost);
@@ -101,12 +104,19 @@ router.post("/:roomid/posts/:messageid/pin", checkAuthorisation, pinPost);
 // Post reporting routes
 router.post("/posts/:messageid/report", checkAuthorisation, reportPost);
 
-// Post view tracking route
 router.post("/posts/:messageid/view", checkAuthorisation, trackPostView);
 
 router.get("/messages/:roomid", getRoomMessages);
 router.get("/search/:roomid", searchPosts);
 
 router.get("/user/groups", getUserJoinedGroups);
+
+router.get("/my-rooms/:userid", checkAuthorisation, myRooms);
+
+router.post(
+  "/reply/:roomid/:parentReplyId",
+  checkAuthorisation,
+  addnestedReply
+);
 
 module.exports = router;

@@ -1,25 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProfilePage.css";
-import Navbar from '../Index/components/Navbar'
+import Navbar from "../Index/components/Navbar";
 
 function ProfilePage() {
   const [user, setUser] = useState({
-    fullName: "Shahzeb Mubashar",
-    email: "l226734@lhr.nu.edu.pk",
-    rollNumber: "22L-6734",
-    program: "BS(CS)",
-    semester: "6th Semester",
-    gpa: "3.8",
-    enrolledCourses: [
-      { id: 1, name: "Data Structures", code: "CS201" },
-      { id: 2, name: "Database Systems", code: "CS202" },
-      { id: 3, name: "Web Development", code: "CS203" },
-    ],
-    notifications: [
-      { id: 1, message: "Assignment due for CS201", date: "2023-10-15" },
-      { id: 2, message: "Midterm exam schedule published", date: "2023-10-10" },
-    ],
+    fullName: "",
+    email: "",
+    rollNumber: "",
+    program: "",
+    batch: "",
+    gpa: "",
+    enrolledCourses: [],
+    notifications: [],
   });
+
+  const [currentCourses, setCurrentCourses] = useState({});
+
+  const fetchCurrentCourses = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/current-courses", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to Fetch Current Courses");
+      }
+
+      const data = await res.json();
+
+      setUser((prevUser) => ({
+        ...prevUser,
+        enrolledCourses: data,
+      }));
+    } catch (error) {
+      console.log("Error: Failed to fetch current COurses");
+    }
+  };
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/profile", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to Fetch User Information");
+      }
+
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      console.log("Error fetching User Info", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentCourses();
+  }, [user?.userid]);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -33,6 +82,11 @@ function ProfilePage() {
     confirmPassword: "",
   });
 
+  // Update editForm when user data changes
+  useEffect(() => {
+    setEditForm({ ...user });
+  }, [user]);
+
   const handleEditFormChange = (e) => {
     const { name, value } = e.target;
     setEditForm({
@@ -41,10 +95,33 @@ function ProfilePage() {
     });
   };
 
-  const handleEditFormSubmit = (e) => {
+  const handleEditFormSubmit = async (e) => {
     e.preventDefault();
-    setUser({ ...editForm });
-    setShowEditModal(false);
+    try {
+      const response = await fetch("http://localhost:4000/user/profile", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: editForm.name,
+          degree: editForm.degree,
+          batch: editForm.batch,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update profile");
+      }
+
+      fetchUserInfo();
+      setShowEditModal(false);
+    } catch (error) {
+      console.error("Update error:", error);
+      alert(error.message || "Failed to update profile");
+    }
   };
 
   const handlePasswordFormChange = (e) => {
@@ -128,6 +205,38 @@ function ProfilePage() {
     setShowSettingsModal(false);
   };
 
+  // Function to get user's initials from name or username
+  const getUserInitials = () => {
+    // Try to use name first, then fallback to username if available
+    const displayName = user.name || user.username;
+
+    if (!displayName) return "U";
+
+    return displayName
+      .split(" ")
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .map(name => name[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  // Function to generate a background color based on the name
+  const getAvatarColor = (name) => {
+    if (!name) return "#1a73e8"; // Default color
+
+    const colors = [
+      "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
+      "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff"
+    ];
+
+    // Sum the character codes to get a deterministic but unique color
+    const charSum = name
+      .split("")
+      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+    return colors[charSum % colors.length];
+  };
+
   return (
     <div className="lms-profile-root">
       <Navbar />
@@ -149,7 +258,7 @@ function ProfilePage() {
             </button>
             <button
               className="lms-btn lms-secondary"
-              onClick={() => window.location.href = '/transcript'}
+              onClick={() => (window.location.href = "/transcript")}
             >
               View Transcript
             </button>
@@ -165,61 +274,92 @@ function ProfilePage() {
         <div className="lms-profile-content">
           <div className="lms-profile-card lms-main-info">
             <div className="lms-profile-avatar-container">
-              <div className="lms-profile-avatar">
-                {user.fullName
-                  .split(" ")
-                  .map((name) => name[0])
-                  .join("")}
+              <div
+                className="lms-profile-avatar"
+                style={{
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  fontSize: '2.5rem',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  backgroundColor: getAvatarColor(user.name || user.username || ""),
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  cursor: 'default',
+                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                  border: '4px solid white'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                }}
+              >
+                {getUserInitials()}
               </div>
             </div>
             <div className="lms-user-details">
-              <h2>{user.fullName}</h2>
+              <h2>{user.name || "Loading..."}</h2>
               <p>
-                <span className="lms-label">Email:</span> {user.email}
+                <span className="lms-label">Email:</span> {user.email || "N/A"}
               </p>
               <p>
                 <span className="lms-label">Roll Number:</span>{" "}
-                {user.rollNumber}
+                {user.rollnumber || "N/A"}
               </p>
               <p>
-                <span className="lms-label">Program:</span> {user.program}
+                <span className="lms-label">Program:</span>{" "}
+                {user.degree || "N/A"}
               </p>
               <p>
-                <span className="lms-label">Semester:</span> {user.semester}
+                <span className="lms-label">Batch:</span>{" "}
+                {user.batch || "N/A"}
               </p>
               <p>
-                <span className="lms-label">GPA:</span> {user.gpa}
+                <span className="lms-label">GPA:</span> {user.gpa || "N/A"}
               </p>
             </div>
           </div>
 
           <div className="lms-profile-card lms-enrolled-courses">
             <h3>Enrolled Courses</h3>
-            <ul className="lms-course-list">
-              {user.enrolledCourses.map((course) => (
-                <li key={course.id} className="lms-course-item">
-                  <span className="lms-course-code">{course.code}</span>
-                  <span className="lms-course-name">{course.name}</span>
-                </li>
-              ))}
-            </ul>
+            {user.enrolledCourses && user.enrolledCourses.length > 0 ? (
+              <ul className="lms-course-list">
+                {user.enrolledCourses.map((course) => (
+                  <li key={course.id} className="lms-course-item">
+                    <span className="lms-course-code">{course.coursecode}</span>
+                    <span className="lms-course-name">{course.coursename}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No courses enrolled</p>
+            )}
           </div>
 
           <div className="lms-profile-card lms-notifications">
             <h3>Notifications</h3>
-            <ul className="lms-notification-list">
-              {user.notifications.map((notification) => (
-                <li key={notification.id} className="lms-notification-item">
-                  <p className="lms-notification-message">
-                    {notification.message}
-                  </p>
-                  <p className="lms-notification-date">{notification.date}</p>
-                </li>
-              ))}
-            </ul>
+            {user.notifications && user.notifications.length > 0 ? (
+              <ul className="lms-notification-list">
+                {user.notifications.map((notification) => (
+                  <li key={notification.id} className="lms-notification-item">
+                    <p className="lms-notification-message">
+                      {notification.message}
+                    </p>
+                    <p className="lms-notification-date">{notification.date}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No notifications</p>
+            )}
           </div>
-
-
         </div>
 
         {/* Edit Profile Modal */}
@@ -232,8 +372,8 @@ function ProfilePage() {
                   <label>Full Name</label>
                   <input
                     type="text"
-                    name="fullName"
-                    value={editForm.fullName}
+                    name="name"
+                    value={editForm.name || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
@@ -242,7 +382,7 @@ function ProfilePage() {
                   <input
                     type="email"
                     name="email"
-                    value={editForm.email}
+                    value={editForm.email || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
@@ -250,17 +390,17 @@ function ProfilePage() {
                   <label>Program</label>
                   <input
                     type="text"
-                    name="program"
-                    value={editForm.program}
+                    name="degree"
+                    value={editForm.degree || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
                 <div className="lms-form-group">
-                  <label>Semester</label>
+                  <label>Batch</label>
                   <input
                     type="text"
-                    name="semester"
-                    value={editForm.semester}
+                    name="batch"
+                    value={editForm.batch || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
