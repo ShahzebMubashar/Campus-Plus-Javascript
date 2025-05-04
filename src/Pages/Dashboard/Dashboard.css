@@ -508,6 +508,13 @@
         letter-spacing: -0.5px;
     }
 
+    .user-name-username {
+        color: #666;
+        margin-top: 0;
+        margin-bottom: 15px;
+        font-weight: normal;
+    }
+
     .user-details-container {
         display: flex;
         justify-content: space-between;
@@ -934,10 +941,19 @@
     font-weight: bold;
     color: white;
     margin-right: 20px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
     text-transform: uppercase;
     background-color: #4a6fa5;
     /* Fallback color */
+    border: 4px solid white;
+    overflow: hidden;
+    user-select: none;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-picture:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Completed task styling */
@@ -1022,4 +1038,23 @@
 .deadline-priority.low {
     background-color: rgba(76, 175, 80, 0.2);
     color: #4caf50;
+}
+
+@media (max-width: 768px) {
+    .user-profile-section {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-picture {
+        margin-right: 0;
+        margin-bottom: 20px;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 }

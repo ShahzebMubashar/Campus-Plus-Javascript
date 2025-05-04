@@ -18,36 +18,32 @@ function AcademicDashboard() {
   const [currentCourses, setCurrentCourses] = useState([]);
   const [myRooms, setMyRooms] = useState([]);
 
-  const getInitials = (name) => {
-    if (!name) return "";
-    const names = name.split(" ");
-    let initials = names[0][0];
-    if (names.length > 1) initials += names[names.length - 1][0];
-    return initials.toUpperCase();
+  const getUserInitials = () => {
+    const displayName = User?.username || "";
+
+    if (!displayName) return "U";
+
+    return displayName
+      .split(" ")
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .map(name => name[0])
+      .join("")
+      .toUpperCase();
   };
 
-  const getAvatarColor = (initials) => {
+  const getAvatarBackgroundColor = (name) => {
+    if (!name) return "#4A90E2";
+
     const colors = [
-      "#4A90E2",
-      "#5DADE2",
-      "#2980B9",
-      "#85C1E9",
-      "#2874A6",
-      "#3498DB",
-      "#2E86C1",
-      "#1F618D",
-      "#AED6F1",
-      "#34495E",
-      "#7FB3D5",
-      "#154360",
-      "#D6EAF8",
-      "#1A5276",
-      "#21618C"
+      "#4A90E2", "#5DADE2", "#2980B9", "#85C1E9", "#2874A6",
+      "#3498DB", "#2E86C1", "#1F618D", "#AED6F1", "#34495E",
+      "#7FB3D5", "#154360", "#D6EAF8", "#1A5276", "#21618C"
     ];
 
-    const charSum = initials
+    const charSum = name
       .split("")
       .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
     return colors[charSum % colors.length];
   };
 
@@ -283,12 +279,23 @@ function AcademicDashboard() {
         <section className="user-profile-section">
           <div
             className="profile-picture"
-            style={{ backgroundColor: getAvatarColor(getInitials(User?.name)) }}
+            style={{
+              backgroundColor: "#1a73e8",
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              fontSize: "2.5rem",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "1px"
+            }}
           >
-            {getInitials(User?.name)}
+            {getUserInitials()}
           </div>
           <div className="user-info">
-            <h1 className="user-name">{User?.name || "Loading..."}</h1>
+            <h1 className="user-name">{User?.username || "Loading..."}</h1>
             <h5 className="user-name-username">
               @{User?.username || "Loading..."}
             </h5>
