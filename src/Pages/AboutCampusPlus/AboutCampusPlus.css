@@ -1,3 +1,4 @@
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
 
 
@@ -119,10 +120,18 @@ section {
     align-items: center;
     color: #fff;
     border-radius: 100px;
+    transition: all 0.3s ease;
 }
 
-.video-btn i {
-    font-size: 32px;
+.video-btn:hover {
+    transform: scale(1.1);
+    color: #fff;
+}
+
+.video-btn svg {
+    font-size: 24px;
+    margin-left: 3px;
+    /* Slight adjustment for visual centering */
 }
 
 .navbar {
@@ -285,130 +294,307 @@ footer a {
     /* This will change the cursor to a pointer on hover */
 }
 
-.about-campus-navbar {
+/* AboutCampusPlus Navbar Styles */
+.aboutcp-navbar {
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-    padding: 1rem 2rem;
-    position: fixed;
-    width: 100%;
-    z-index: 1000;
+    padding: 0px 0;
+    height: 100px;
 }
 
-.about-campus-container {
+.aboutcp-navbar-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    max-width: 1200px;
-    margin: 0 auto;
     width: 100%;
+    min-height: 50px;
+    /* Ensure minimum height for the navbar */
 }
 
-.about-campus-brand {
-    font-size: 1.5rem;
+.aboutcp-navbar-brand {
+    font-size: 1.7rem;
     font-weight: 700;
-    text-decoration: none;
-    color: #333;
-    margin-right: auto;
+    background: -webkit-linear-gradient(#00e0fe, #1107fe);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-right: 2rem;
+    flex-shrink: 0;
+    margin-top: -25px;
+    /* Slight adjustment to brand logo */
 }
 
-.about-campus-nav {
+.aboutcp-navbar-collapse {
     display: flex;
-    list-style: none;
-    margin: 0;
-    padding: 0;
+    justify-content: flex-end;
+    flex-basis: auto;
+}
+
+.aboutcp-navbar-nav {
+    display: flex;
+    align-items: center;
     margin-left: auto;
+    margin-top: -25px;
+    /* Move links a bit more upward */
 }
 
-.about-campus-nav-item {
-    margin-left: 2rem;
+.aboutcp-nav-item {
+    margin-left: 10px;
 }
 
-.about-campus-nav-link {
-    color: #333;
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: color 0.3s ease;
+.aboutcp-nav-link {
+    color: #20212c !important;
+    font-weight: 600;
+    padding: 0px 15px !important;
+    transition: all 0.3s ease;
+    display: inline-block;
+    line-height: 1;
 }
 
-.about-campus-nav-link:hover {
+.aboutcp-nav-link:hover,
+.aboutcp-nav-link.active {
     background: -webkit-linear-gradient(#00e0fe, #1107fe);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.about-campus-toggler {
-    display: none;
-    background: none;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
-}
-
-.about-campus-toggler-icon {
-    display: block;
-    width: 24px;
-    height: 2px;
-    background-color: #333;
-    position: relative;
-    transition: background-color 0.3s ease;
-}
-
-.about-campus-toggler-icon::before,
-.about-campus-toggler-icon::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    background-color: #333;
-    transition: transform 0.3s ease;
-}
-
-.about-campus-toggler-icon::before {
-    top: -6px;
-}
-
-.about-campus-toggler-icon::after {
-    bottom: -6px;
-}
-
-@media (max-width: 992px) {
-    .about-campus-toggler {
-        display: block;
+@media (max-width: 991px) {
+    .aboutcp-navbar-wrapper {
+        flex-wrap: wrap;
+        min-height: 40px;
+        /* Slightly smaller height for mobile */
     }
 
-    .about-campus-collapse {
+    .aboutcp-navbar-brand {
+        margin-top: 0;
+        /* Reset margin for mobile */
+    }
+
+    .aboutcp-navbar-collapse {
         display: none;
         width: 100%;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        background: white;
-        padding: 1rem;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        order: 3;
     }
 
-    .about-campus-collapse.show {
-        display: block;
+    .collapse.show.aboutcp-navbar-collapse {
+        display: block !important;
+        margin-top: 10px;
     }
 
-    .about-campus-nav {
+    .aboutcp-navbar-nav {
         flex-direction: column;
-        align-items: center;
+        align-items: flex-start;
+        margin-top: 0;
+        /* Reset the negative margin for mobile */
     }
 
-    .about-campus-nav-item {
-        margin: 1rem 0;
+    .aboutcp-nav-item {
         margin-left: 0;
+        margin-bottom: 5px;
+        width: 100%;
+    }
+
+    .aboutcp-navbar-toggler {
+        padding: 3px 6px;
+        margin-top: -2px;
+        /* Align the toggler button */
     }
 }
 
-/* Remove any conflicting styles */
-.navbar,
-.navbar-brand,
-.navbar-nav,
-.nav-link,
-.navbar-toggler {
-    all: unset;
+/* AboutCampusPlus Footer Styles - Updated Two Column Layout */
+.aboutcp-footer {
+    background: linear-gradient(to right, #00e0fe, #1107fe);
+    color: #fff;
+    position: relative;
+    width: 100%;
+    padding: 50px 0 30px;
+    margin: 0 auto;
+    height: 460px;
+}
+
+.aboutcp-footer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
+}
+
+.aboutcp-footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #fff;
+}
+
+.aboutcp-footer-text {
+    font-size: 1rem;
+    opacity: 0.9;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    max-width: 90%;
+}
+
+.aboutcp-social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 1.5rem;
+}
+
+.aboutcp-social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.aboutcp-social-icon:hover {
+    background-color: #fff;
+    color: #1107fe;
+    transform: translateY(-3px);
+}
+
+.aboutcp-contact-info {
+    margin-bottom: 1.5rem;
+}
+
+.aboutcp-contact-info p {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.aboutcp-footer-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.aboutcp-newsletter-form {
+    display: flex;
+    margin-top: 12px;
+}
+
+.aboutcp-form-input {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 4px 0 0 4px;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.aboutcp-form-button {
+    padding: 12px 20px;
+    background-color: #fff;
+    color: #1107fe;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.aboutcp-form-button:hover {
+    background-color: #f0f0f0;
+    transform: translateX(2px);
+}
+
+.aboutcp-footer-divider {
+    margin: 35px 0 25px;
+    border-color: rgba(255, 255, 255, 0.2);
+    opacity: 0.5;
+}
+
+.aboutcp-copyright {
+    opacity: 0.9;
+    font-size: 1rem;
+    text-align: center;
+    width: 100%;
+    padding: 5px 0;
+    letter-spacing: 0.5px;
+}
+
+.aboutcp-footer-bottom-links {
+    display: none;
+}
+
+@media (max-width: 767px) {
+    .aboutcp-footer {
+        padding: 40px 0 20px;
+    }
+
+    .aboutcp-footer-text {
+        max-width: 100%;
+    }
+}
+
+/* Contributors Section Styling */
+#Contributors {
+    padding: 60px 0;
+}
+
+#Contributors .service {
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#Contributors .service:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+}
+
+.contributor-description {
+    min-height: 80px;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    line-clamp: 3;
+    -webkit-box-orient: vertical;
+    box-orient: vertical;
+    overflow: hidden;
+}
+
+#Contributors .divider {
+    margin-bottom: 30px;
+}
+
+#Contributors .row {
+    margin-bottom: 20px;
+}
+
+/* Additional style for user icon in contributor cards */
+#contributors .service img[src*="user.png"] {
+    object-fit: contain;
+    padding: 30px;
+    background-color: #f8f9fa;
+}
+
+/* Font Awesome icon placeholders for contributor profiles */
+.icon-placeholder {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #00e0fe, #1107fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.fa-icon-placeholder {
+    font-size: 100px;
+    color: white;
 }
