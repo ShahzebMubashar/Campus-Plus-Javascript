@@ -305,7 +305,7 @@ function ProfilePage() {
               </div>
             </div>
             <div className="lms-user-details">
-              <h2>{user.name || "Loading..."}</h2>
+              <h2>{user.name || user.username || "Loading..."}</h2>
               <p>
                 <span className="lms-label">Email:</span> {user.email || "N/A"}
               </p>
