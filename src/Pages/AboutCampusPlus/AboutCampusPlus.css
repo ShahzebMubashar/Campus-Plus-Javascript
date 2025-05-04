@@ -573,3 +573,27 @@ footer a {
 #Contributors .row {
     margin-bottom: 20px;
 }
+
+/* Additional style for user icon in contributor cards */
+#contributors .service img[src*="user.png"] {
+    object-fit: contain;
+    padding: 30px;
+    background-color: #f8f9fa;
+}
+
+/* Font Awesome icon placeholders for contributor profiles */
+.icon-placeholder {
+    width: 220px;
+    height: 220px;
+    border-radius: 50%;
+    background: linear-gradient(to right, #00e0fe, #1107fe);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.fa-icon-placeholder {
+    font-size: 100px;
+    color: white;
+}
