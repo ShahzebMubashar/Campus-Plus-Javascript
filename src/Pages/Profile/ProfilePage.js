@@ -98,24 +98,29 @@ function ProfilePage() {
   const handleEditFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:4000/user/profile", {
+      const response = await fetch("http://localhost:4000/user/profile", {
         method: "PUT",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(editForm),
+        body: JSON.stringify({
+          name: editForm.name,
+          degree: editForm.degree,
+          batch: editForm.semester,
+        }),
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to update profile");
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.message || "Failed to update profile");
       }
 
-      const updatedUser = await res.json();
-      setUser(updatedUser);
+      fetchUserInfo();
       setShowEditModal(false);
     } catch (error) {
-      console.log("Error updating profile", error);
+      console.error("Update error:", error);
+      alert(error.message || "Failed to update profile");
     }
   };
 
@@ -320,7 +325,7 @@ function ProfilePage() {
                   <label>Full Name</label>
                   <input
                     type="text"
-                    name="fullName"
+                    name="name"
                     value={editForm.name || ""}
                     onChange={handleEditFormChange}
                   />
@@ -338,8 +343,8 @@ function ProfilePage() {
                   <label>Program</label>
                   <input
                     type="text"
-                    name="program"
-                    value={editForm.program || ""}
+                    name="degree"
+                    value={editForm.degree || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
