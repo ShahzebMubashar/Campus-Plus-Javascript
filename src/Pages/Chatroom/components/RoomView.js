@@ -19,7 +19,7 @@ const colors = {
   danger: "#f44336",
   warning: "#ff9800",
   pending: "#78909c",
-  pinned: "#bbdefb"
+  pinned: "#bbdefb",
 };
 
 const Comment = ({ comment, level = 0, room, fetchPosts }) => {
@@ -62,18 +62,28 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
         marginBottom: "12px",
         backgroundColor: colors.cardBg,
         borderRadius: "8px",
-        marginLeft: `${level * 20}px`,
+        marginLeft: `20px`,
         borderLeft: `3px solid ${colors.primaryLight}`,
         boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
       }}
     >
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <strong style={{ color: colors.textPrimary }}>{comment.username}</strong>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <strong style={{ color: colors.textPrimary }}>
+          {comment.username}
+        </strong>
         <span style={{ color: colors.textSecondary, fontSize: "12px" }}>
           {new Date(comment.posted_at).toLocaleString()}
         </span>
       </div>
-      <p style={{ margin: "8px 0 0", color: colors.textPrimary }}>{comment.content}</p>
+      <p style={{ margin: "8px 0 0", color: colors.textPrimary }}>
+        {comment.content}
+      </p>
       <div style={{ marginTop: "8px" }}>
         <button
           onClick={() => setShowReplyBox(!showReplyBox)}
@@ -220,7 +230,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       gap: "6px",
       fontSize: "14px",
       transition: "background-color 0.2s, color 0.2s",
-    }
+    },
   };
 
   // Card container styles
@@ -232,7 +242,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
       marginBottom: "20px",
       border: `1px solid ${colors.border}`,
-    }
+    },
   };
 
   // Input styles
@@ -245,7 +255,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       fontSize: "15px",
       transition: "border-color 0.2s, box-shadow 0.2s",
       outline: "none",
-    }
+    },
   };
 
   useEffect(() => {
@@ -270,9 +280,12 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const fetchJoinedRooms = async () => {
     try {
-      const response = await fetch("http://localhost:4000/Chatrooms/user/groups", {
-        credentials: "include",
-      });
+      const response = await fetch(
+        "http://localhost:4000/Chatrooms/user/groups",
+        {
+          credentials: "include",
+        }
+      );
       if (response.ok) {
         const data = await response.json();
         setJoinedRooms(data);
@@ -284,12 +297,15 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handleRoomSelect = async (room) => {
     // If room is not joined, join it first
-    if (!joinedRooms.find(r => r.roomid === room.roomid)) {
+    if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
-        const response = await fetch(`http://localhost:4000/Chatrooms/join/${room.roomid}`, {
-          method: "POST",
-          credentials: "include",
-        });
+        const response = await fetch(
+          `http://localhost:4000/Chatrooms/join/${room.roomid}`,
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
         if (response.ok) {
           await fetchJoinedRooms(); // Refresh joined rooms list
         }
@@ -474,10 +490,11 @@ export default function RoomView({ room, onBack, onLeave }) {
   };
 
   const handleComment = async (postId, parentReplyId = null) => {
+    console.log(postId);
     if (newComment.trim()) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply/${room.roomid}/${postId}`,
+          `http://localhost:4000/Chatrooms/reply1/${room.roomid}/${postId}`,
           {
             method: "POST",
             headers: {
@@ -490,7 +507,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             credentials: "include",
           }
         );
-  
+
         if (response.ok) {
           setNewComment("");
           fetchPosts(); // reload the posts and replies
@@ -502,7 +519,6 @@ export default function RoomView({ room, onBack, onLeave }) {
       }
     }
   };
-  
 
   const handleLeaveRoom = async () => {
     const confirmLeave = window.confirm(
@@ -579,15 +595,17 @@ export default function RoomView({ room, onBack, onLeave }) {
 
     if (navigator.share) {
       // Use Web Share API if available
-      navigator.share({
-        title: `Post by ${post.username}`,
-        text: post.content,
-        url: shareUrl,
-      }).catch((error) => {
-        console.error('Error sharing:', error);
-        // Fallback to copying to clipboard
-        copyToClipboard(shareUrl);
-      });
+      navigator
+        .share({
+          title: `Post by ${post.username}`,
+          text: post.content,
+          url: shareUrl,
+        })
+        .catch((error) => {
+          console.error("Error sharing:", error);
+          // Fallback to copying to clipboard
+          copyToClipboard(shareUrl);
+        });
     } else {
       // Fallback to copying to clipboard
       copyToClipboard(shareUrl);
@@ -595,12 +613,15 @@ export default function RoomView({ room, onBack, onLeave }) {
   };
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert('Link copied to clipboard!');
-    }).catch((error) => {
-      console.error('Error copying to clipboard:', error);
-      alert('Failed to copy link. Please try again.');
-    });
+    navigator.clipboard
+      .writeText(text)
+      .then(() => {
+        alert("Link copied to clipboard!");
+      })
+      .catch((error) => {
+        console.error("Error copying to clipboard:", error);
+        alert("Failed to copy link. Please try again.");
+      });
   };
 
   const handleEditPost = async (messageid, currentContent) => {
@@ -692,12 +713,14 @@ export default function RoomView({ room, onBack, onLeave }) {
     setIsSearching(true);
     try {
       const params = new URLSearchParams();
-      if (searchQuery) params.append('keyword', searchQuery);
-      if (searchUsername) params.append('username', searchUsername);
-      if (searchDate) params.append('date', searchDate);
+      if (searchQuery) params.append("keyword", searchQuery);
+      if (searchUsername) params.append("username", searchUsername);
+      if (searchDate) params.append("date", searchDate);
 
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/search/${room.roomid}?${params.toString()}`,
+        `http://localhost:4000/Chatrooms/search/${
+          room.roomid
+        }?${params.toString()}`,
         {
           credentials: "include",
         }
@@ -718,40 +741,79 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const highlightText = (text, query) => {
     if (!query) return text;
-    const regex = new RegExp(`(${query})`, 'gi');
+    const regex = new RegExp(`(${query})`, "gi");
     return text.split(regex).map((part, i) =>
-      regex.test(part) ? <mark key={i} style={{ backgroundColor: colors.primaryLight, color: colors.primaryDark, padding: '2px 0' }}>{part}</mark> : part
+      regex.test(part) ? (
+        <mark
+          key={i}
+          style={{
+            backgroundColor: colors.primaryLight,
+            color: colors.primaryDark,
+            padding: "2px 0",
+          }}
+        >
+          {part}
+        </mark>
+      ) : (
+        part
+      )
     );
   };
 
   return (
-    <div style={{
-      display: "flex",
-      minHeight: "100vh",
-      backgroundColor: colors.background,
-      position: "relative",
-      paddingLeft: "280px"
-    }}>
-      <Sidebar room={room} onBack={onBack} onLeave={onLeave} userInfo={userInfo}
-        rooms={rooms}
-        joinedRooms={joinedRooms}
-        onRoomSelect={handleRoomSelect} />
-      {/* Main content */}
-      <div style={{
-        flex: 1,
-        padding: "24px",
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
         backgroundColor: colors.background,
         position: "relative",
-        marginLeft: "-220px"
-      }}>
+        paddingLeft: "280px",
+      }}
+    >
+      <Sidebar
+        room={room}
+        onBack={onBack}
+        onLeave={onLeave}
+        userInfo={userInfo}
+        rooms={rooms}
+        joinedRooms={joinedRooms}
+        onRoomSelect={handleRoomSelect}
+      />
+      {/* Main content */}
+      <div
+        style={{
+          flex: 1,
+          padding: "24px",
+          backgroundColor: colors.background,
+          position: "relative",
+          marginLeft: "-220px",
+        }}
+      >
         {/* Room Header */}
-        <div style={{
-          ...cardStyles.container,
-          borderTop: `4px solid ${colors.primary}`,
-          marginBottom: "24px"
-        }}>
-          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 style={{ margin: 0, fontSize: "26px", color: colors.primary, fontWeight: "600" }}>{room.roomname}</h1>
+        <div
+          style={{
+            ...cardStyles.container,
+            borderTop: `4px solid ${colors.primary}`,
+            marginBottom: "24px",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <h1
+              style={{
+                margin: 0,
+                fontSize: "26px",
+                color: colors.primary,
+                fontWeight: "600",
+              }}
+            >
+              {room.roomname}
+            </h1>
             <div style={{ display: "flex", gap: "12px" }}>
               <button
                 onClick={onBack}
@@ -759,7 +821,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                   ...buttonStyles.secondary,
                   display: "flex",
                   alignItems: "center",
-                  gap: "6px"
+                  gap: "6px",
                 }}
               >
                 <span style={{ fontSize: "18px" }}>←</span> Back
@@ -768,7 +830,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 <button
                   onClick={() => setIsEditingRoom(true)}
                   style={{
-                    ...buttonStyles.primary
+                    ...buttonStyles.primary,
                   }}
                 >
                   Edit Room Info
@@ -777,7 +839,7 @@ export default function RoomView({ room, onBack, onLeave }) {
               <button
                 onClick={onLeave}
                 style={{
-                  ...buttonStyles.danger
+                  ...buttonStyles.danger,
                 }}
               >
                 Leave Room
@@ -785,70 +847,123 @@ export default function RoomView({ room, onBack, onLeave }) {
             </div>
           </div>
           {room.name && (
-            <h1 style={{ margin: "10px 0 0", color: colors.textPrimary, fontSize: "24px" }}>{room.name}</h1>
+            <h1
+              style={{
+                margin: "10px 0 0",
+                color: colors.textPrimary,
+                fontSize: "24px",
+              }}
+            >
+              {room.name}
+            </h1>
           )}
           {room.description && (
-            <p style={{ margin: "12px 0 0", color: colors.textSecondary, lineHeight: "1.5" }}>{room.description}</p>
+            <p
+              style={{
+                margin: "12px 0 0",
+                color: colors.textSecondary,
+                lineHeight: "1.5",
+              }}
+            >
+              {room.description}
+            </p>
           )}
         </div>
 
         {/* Add Edit Room Modal */}
         {isEditingRoom && (
-          <div className="modal-overlay" style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            zIndex: 9999,
-            backdropFilter: 'blur(3px)'
-          }}>
-            <div style={{
-              backgroundColor: colors.cardBg,
-              padding: '28px',
-              borderRadius: '12px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-              width: '90%',
-              maxWidth: '500px',
-              position: 'relative',
-              zIndex: 10000,
-              border: `1px solid ${colors.border}`,
-              borderTop: `4px solid ${colors.primary}`
-            }}>
-              <h2 style={{ marginTop: 0, marginBottom: '24px', color: colors.primary }}>Edit Room Information</h2>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', color: colors.textPrimary, fontWeight: '500' }}>Room Name</label>
+          <div
+            className="modal-overlay"
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0, 0, 0, 0.6)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 9999,
+              backdropFilter: "blur(3px)",
+            }}
+          >
+            <div
+              style={{
+                backgroundColor: colors.cardBg,
+                padding: "28px",
+                borderRadius: "12px",
+                boxShadow: "0 8px 24px rgba(0, 0, 0, 0.15)",
+                width: "90%",
+                maxWidth: "500px",
+                position: "relative",
+                zIndex: 10000,
+                border: `1px solid ${colors.border}`,
+                borderTop: `4px solid ${colors.primary}`,
+              }}
+            >
+              <h2
+                style={{
+                  marginTop: 0,
+                  marginBottom: "24px",
+                  color: colors.primary,
+                }}
+              >
+                Edit Room Information
+              </h2>
+              <div style={{ marginBottom: "20px" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: colors.textPrimary,
+                    fontWeight: "500",
+                  }}
+                >
+                  Room Name
+                </label>
                 <input
                   type="text"
                   value={editedRoomName}
                   onChange={(e) => setEditedRoomName(e.target.value)}
                   style={{
                     ...inputStyles.standard,
-                    marginBottom: '8px'
+                    marginBottom: "8px",
                   }}
                 />
               </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', color: colors.textPrimary, fontWeight: '500' }}>Description</label>
+              <div style={{ marginBottom: "24px" }}>
+                <label
+                  style={{
+                    display: "block",
+                    marginBottom: "8px",
+                    color: colors.textPrimary,
+                    fontWeight: "500",
+                  }}
+                >
+                  Description
+                </label>
                 <textarea
                   value={editedRoomDescription}
                   onChange={(e) => setEditedRoomDescription(e.target.value)}
                   style={{
                     ...inputStyles.standard,
-                    minHeight: '120px',
-                    resize: 'vertical'
+                    minHeight: "120px",
+                    resize: "vertical",
                   }}
                 />
               </div>
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <div
+                style={{
+                  display: "flex",
+                  gap: "12px",
+                  justifyContent: "flex-end",
+                }}
+              >
                 <button
                   onClick={() => setIsEditingRoom(false)}
                   style={{
-                    ...buttonStyles.secondary
+                    ...buttonStyles.secondary,
                   }}
                 >
                   Cancel
@@ -856,7 +971,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 <button
                   onClick={handleUpdateRoom}
                   style={{
-                    ...buttonStyles.primary
+                    ...buttonStyles.primary,
                   }}
                 >
                   Save Changes
@@ -867,10 +982,13 @@ export default function RoomView({ room, onBack, onLeave }) {
         )}
 
         {/* Search Section */}
-        <div className="search-section" style={{
-          ...cardStyles.container,
-          marginBottom: "24px"
-        }}>
+        <div
+          className="search-section"
+          style={{
+            ...cardStyles.container,
+            marginBottom: "24px",
+          }}
+        >
           <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
             <input
               type="text"
@@ -906,7 +1024,7 @@ export default function RoomView({ room, onBack, onLeave }) {
               disabled={isSearching}
               style={{
                 ...buttonStyles.primary,
-                opacity: isSearching ? 0.7 : 1
+                opacity: isSearching ? 0.7 : 1,
               }}
             >
               {isSearching ? "Searching..." : "Search"}
@@ -919,7 +1037,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 fetchPosts();
               }}
               style={{
-                ...buttonStyles.secondary
+                ...buttonStyles.secondary,
               }}
             >
               Clear
@@ -928,11 +1046,13 @@ export default function RoomView({ room, onBack, onLeave }) {
         </div>
 
         {/* Create Post Section */}
-        <div style={{
-          ...cardStyles.container,
-          marginBottom: "24px",
-          borderLeft: `4px solid ${colors.primary}`
-        }}>
+        <div
+          style={{
+            ...cardStyles.container,
+            marginBottom: "24px",
+            borderLeft: `4px solid ${colors.primary}`,
+          }}
+        >
           <div style={{ display: "flex", gap: "12px" }}>
             <input
               type="text"
@@ -948,12 +1068,12 @@ export default function RoomView({ room, onBack, onLeave }) {
               onClick={handleCreatePost}
               style={{
                 ...buttonStyles.primary,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
+                display: "flex",
+                alignItems: "center",
+                gap: "6px",
               }}
             >
-              <span style={{ fontSize: '18px' }}>+</span> Post
+              <span style={{ fontSize: "18px" }}>+</span> Post
             </button>
           </div>
         </div>
@@ -966,10 +1086,15 @@ export default function RoomView({ room, onBack, onLeave }) {
                 key={post.messageid}
                 style={{
                   ...cardStyles.container,
-                  backgroundColor: post.status === "Pending" ? "#f8fafc" : colors.cardBg,
+                  backgroundColor:
+                    post.status === "Pending" ? "#f8fafc" : colors.cardBg,
                   marginBottom: "24px",
-                  borderLeft: post.status === "Pending" ? `4px solid ${colors.pending}` :
-                    post.is_pinned ? `4px solid ${colors.primary}` : `1px solid ${colors.border}`,
+                  borderLeft:
+                    post.status === "Pending"
+                      ? `4px solid ${colors.pending}`
+                      : post.is_pinned
+                      ? `4px solid ${colors.primary}`
+                      : `1px solid ${colors.border}`,
                   position: "relative",
                   transition: "transform 0.2s, box-shadow 0.2s",
                 }}
@@ -981,76 +1106,108 @@ export default function RoomView({ room, onBack, onLeave }) {
                       justifyContent: "space-between",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      <span style={{ fontWeight: "600", color: colors.primary, fontSize: "16px" }}>
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontWeight: "600",
+                          color: colors.primary,
+                          fontSize: "16px",
+                        }}
+                      >
                         {post.username}
                       </span>
                       {post.is_pinned && (
-                        <span style={{
-                          backgroundColor: colors.pinned,
-                          color: colors.primaryDark,
-                          padding: "4px 10px",
-                          borderRadius: "12px",
-                          fontSize: "12px",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: "4px",
-                          fontWeight: "500"
-                        }}>
+                        <span
+                          style={{
+                            backgroundColor: colors.pinned,
+                            color: colors.primaryDark,
+                            padding: "4px 10px",
+                            borderRadius: "12px",
+                            fontSize: "12px",
+                            display: "flex",
+                            alignItems: "center",
+                            gap: "4px",
+                            fontWeight: "500",
+                          }}
+                        >
                           📌 Pinned
                         </span>
                       )}
                       {post.status === "Pending" && (
-                        <span style={{
-                          backgroundColor: colors.pending,
-                          color: "white",
-                          padding: "4px 10px",
-                          borderRadius: "12px",
-                          fontSize: "12px",
-                          fontWeight: "500"
-                        }}>
+                        <span
+                          style={{
+                            backgroundColor: colors.pending,
+                            color: "white",
+                            padding: "4px 10px",
+                            borderRadius: "12px",
+                            fontSize: "12px",
+                            fontWeight: "500",
+                          }}
+                        >
                           Pending
                         </span>
                       )}
                     </div>
-                    <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
-                      {post.status === "Pending" && (userRole === "Admin" || userRole === "Moderator") && (
-                        <div style={{ display: "flex", gap: "8px" }}>
-                          <button
-                            onClick={() => handleProcessPost(post.messageid, "Approved")}
-                            style={{
-                              ...buttonStyles.success,
-                              padding: "6px 12px",
-                              fontSize: "13px"
-                            }}
-                          >
-                            Approve
-                          </button>
-                          <button
-                            onClick={() => handleProcessPost(post.messageid, "Rejected")}
-                            style={{
-                              ...buttonStyles.danger,
-                              padding: "6px 12px",
-                              fontSize: "13px"
-                            }}
-                          >
-                            Reject
-                          </button>
-                        </div>
-                      )}
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "12px",
+                        alignItems: "center",
+                      }}
+                    >
+                      {post.status === "Pending" &&
+                        (userRole === "Admin" || userRole === "Moderator") && (
+                          <div style={{ display: "flex", gap: "8px" }}>
+                            <button
+                              onClick={() =>
+                                handleProcessPost(post.messageid, "Approved")
+                              }
+                              style={{
+                                ...buttonStyles.success,
+                                padding: "6px 12px",
+                                fontSize: "13px",
+                              }}
+                            >
+                              Approve
+                            </button>
+                            <button
+                              onClick={() =>
+                                handleProcessPost(post.messageid, "Rejected")
+                              }
+                              style={{
+                                ...buttonStyles.danger,
+                                padding: "6px 12px",
+                                fontSize: "13px",
+                              }}
+                            >
+                              Reject
+                            </button>
+                          </div>
+                        )}
                       {post.status === "Approved" && userRole === "Admin" && (
                         <button
                           onClick={() => handleDeletePost(post.messageid)}
                           style={{
                             ...buttonStyles.danger,
                             padding: "6px 12px",
-                            fontSize: "13px"
+                            fontSize: "13px",
                           }}
                         >
                           Delete
                         </button>
                       )}
-                      <span style={{ color: colors.textSecondary, fontSize: "14px" }}>
+                      <span
+                        style={{
+                          color: colors.textSecondary,
+                          fontSize: "14px",
+                        }}
+                      >
                         {(() => {
                           const postDate = new Date(post.posted_at);
                           const today = new Date();
@@ -1075,12 +1232,14 @@ export default function RoomView({ room, onBack, onLeave }) {
                       </span>
                     </div>
                   </div>
-                  <div style={{
-                    marginTop: "12px",
-                    color: colors.textPrimary,
-                    fontSize: "15px",
-                    lineHeight: "1.5"
-                  }}>
+                  <div
+                    style={{
+                      marginTop: "12px",
+                      color: colors.textPrimary,
+                      fontSize: "15px",
+                      lineHeight: "1.5",
+                    }}
+                  >
                     {highlightText(post.content, searchQuery)}
                   </div>
                 </div>
@@ -1110,8 +1269,14 @@ export default function RoomView({ room, onBack, onLeave }) {
                     }
                     style={{
                       ...buttonStyles.iconBtn,
-                      backgroundColor: activePost === post.messageid ? colors.secondary : "transparent",
-                      color: activePost === post.messageid ? colors.primary : colors.textSecondary,
+                      backgroundColor:
+                        activePost === post.messageid
+                          ? colors.secondary
+                          : "transparent",
+                      color:
+                        activePost === post.messageid
+                          ? colors.primary
+                          : colors.textSecondary,
                     }}
                   >
                     💬 {post.comments?.length || 0}
@@ -1123,7 +1288,14 @@ export default function RoomView({ room, onBack, onLeave }) {
                         ...buttonStyles.iconBtn,
                       }}
                     >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg
+                        width="14"
+                        height="14"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                      >
                         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                         <polyline points="16 6 12 2 8 6"></polyline>
                         <line x1="12" y1="2" x2="12" y2="15"></line>
@@ -1151,12 +1323,22 @@ export default function RoomView({ room, onBack, onLeave }) {
                         />
                       ))
                     ) : (
-                      <p style={{ color: colors.textSecondary, textAlign: "center", padding: "16px" }}>
+                      <p
+                        style={{
+                          color: colors.textSecondary,
+                          textAlign: "center",
+                          padding: "16px",
+                        }}
+                      >
                         No comments yet
                       </p>
                     )}
                     <div
-                      style={{ display: "flex", gap: "12px", marginTop: "16px" }}
+                      style={{
+                        display: "flex",
+                        gap: "12px",
+                        marginTop: "16px",
+                      }}
                     >
                       <input
                         type="text"
@@ -1171,7 +1353,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                       <button
                         onClick={() => handleComment(post.messageid)}
                         style={{
-                          ...buttonStyles.primary
+                          ...buttonStyles.primary,
                         }}
                       >
                         Add Comment
@@ -1181,10 +1363,14 @@ export default function RoomView({ room, onBack, onLeave }) {
                 )}
 
                 {post.status === "Approved" && (
-                  <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
+                  <div
+                    style={{ display: "flex", gap: "10px", marginTop: "16px" }}
+                  >
                     {(userRole === "Admin" || post.userid === userid) && (
                       <button
-                        onClick={() => handleEditPost(post.messageid, post.content)}
+                        onClick={() =>
+                          handleEditPost(post.messageid, post.content)
+                        }
                         style={{
                           ...buttonStyles.iconBtn,
                           padding: "4px 10px",
@@ -1201,8 +1387,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                           ...buttonStyles.iconBtn,
                           padding: "4px 10px",
                           fontSize: "13px",
-                          backgroundColor: post.is_pinned ? colors.pinned : "transparent",
-                          color: post.is_pinned ? colors.primaryDark : colors.textSecondary,
+                          backgroundColor: post.is_pinned
+                            ? colors.pinned
+                            : "transparent",
+                          color: post.is_pinned
+                            ? colors.primaryDark
+                            : colors.textSecondary,
                         }}
                       >
                         📌 {post.is_pinned ? "Unpin" : "Pin"}
@@ -1231,13 +1421,24 @@ export default function RoomView({ room, onBack, onLeave }) {
                 color: colors.textSecondary,
               }}
             >
-              {isSearching ?
-                <p style={{ fontSize: "16px" }}>No matching posts found</p> :
+              {isSearching ? (
+                <p style={{ fontSize: "16px" }}>No matching posts found</p>
+              ) : (
                 <div>
-                  <p style={{ fontSize: "18px", marginBottom: "12px", color: colors.primary }}>No posts yet</p>
-                  <p style={{ fontSize: "16px" }}>Be the first to post something!</p>
+                  <p
+                    style={{
+                      fontSize: "18px",
+                      marginBottom: "12px",
+                      color: colors.primary,
+                    }}
+                  >
+                    No posts yet
+                  </p>
+                  <p style={{ fontSize: "16px" }}>
+                    Be the first to post something!
+                  </p>
                 </div>
-              }
+              )}
             </div>
           )}
         </div>

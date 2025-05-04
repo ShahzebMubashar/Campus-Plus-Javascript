@@ -49,6 +49,12 @@ router.post(
   sendMessage
 );
 router.post(
+  "/reply1/:roomid/:parentMessage",
+  checkAuthorisation,
+  checkRoomMember,
+  sendReply
+);
+router.post(
   "/process/:roomid",
   checkAuthorisation,
   checkModerator,
