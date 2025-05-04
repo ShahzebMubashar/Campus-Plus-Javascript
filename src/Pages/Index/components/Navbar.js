@@ -9,7 +9,6 @@ import settings from "../../../Assets/images/setting.png"
 import profile from "../../../Assets/images/user.png"
 import notifications from "../../../Assets/images/active.png"
 import logout from "../../../Assets/images/logout.png"
-import usericon from "../../../Assets/images/usericon.png"
 import transcript from "../../../Assets/images/transcript.png"
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
@@ -21,8 +20,31 @@ import transcript from "../../../Assets/images/transcript.png"
 //     setShowUserMenu(!showUserMenu);
 // };
 
+// Helper function to get user initials from username
+const getUserInitials = (username) => {
+    if (!username) return "U";
+
+    // Split the username by spaces to get first and last name
+    const nameParts = username.split(" ");
+
+    // If there are multiple parts, use first letter of first and last part
+    if (nameParts.length > 1) {
+        return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
+    }
+
+    // If no spaces (single name), check for other separators like underscore, dots, etc.
+    const parts = username.split(/[._-]/);
+    if (parts.length > 1) {
+        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+    }
+
+    // If single word with no separators, use first two letters
+    return username.substring(0, 2).toUpperCase();
+};
+
 function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userData, setUserData] = useState(null);
     const navigate = useNavigate();
 
     const checkSession = async () => {
@@ -30,8 +52,14 @@ function Navbar() {
             const response = await fetch("http://localhost:4000/user/profile", {
                 credentials: "include"
             });
-            setIsLoggedIn(response.ok);
-            if (!response.ok) {
+
+            if (response.ok) {
+                setIsLoggedIn(true);
+                const data = await response.json();
+                setUserData(data);
+                localStorage.setItem("user", JSON.stringify(data));
+            } else {
+                setIsLoggedIn(false);
                 localStorage.removeItem("user");
             }
         } catch (error) {
@@ -43,6 +71,18 @@ function Navbar() {
 
     useEffect(() => {
         checkSession();
+
+        // Try to get user data from localStorage if available
+        const storedUser = localStorage.getItem("user");
+        if (storedUser) {
+            try {
+                setUserData(JSON.parse(storedUser));
+                setIsLoggedIn(true);
+            } catch (error) {
+                console.error("Error parsing stored user data:", error);
+            }
+        }
+
         // Check session every 5 minutes
         const interval = setInterval(checkSession, 5 * 60 * 1000);
         return () => clearInterval(interval);
@@ -58,6 +98,7 @@ function Navbar() {
             if (response.ok) {
                 localStorage.removeItem("user");
                 setIsLoggedIn(false);
+                setUserData(null);
                 navigate("/sign-in");
             } else {
                 console.error("Logout failed:", response.statusText);
@@ -197,7 +238,13 @@ function Navbar() {
                                 <li className="navbaruser-dropdown">
 
                                     <div className="navbaruser-icon">
-                                        <img src={usericon} alt="User" />
+                                        <div className="navbar-profile-avatar">
+                                            {userData?.profilePic ? (
+                                                <img src={userData.profilePic} alt="Profile" />
+                                            ) : (
+                                                <span>{userData?.username ? getUserInitials(userData.username) : "U"}</span>
+                                            )}
+                                        </div>
                                     </div>
 
                                     <div className="navbaruser-dropdown-menu">
