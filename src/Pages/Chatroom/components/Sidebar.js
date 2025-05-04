@@ -68,22 +68,7 @@ const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => 
                 </div>
             </div>
 
-            {/* All Rooms Section */}
-            <div className="rooms-section">
-                <h3>All Rooms ({rooms?.length || 0})</h3>
-                <div className="rooms-list">
-                    {rooms?.map(room => (
-                        <button
-                            key={room.roomid}
-                            className={`room-button ${activeRoom?.roomid === room.roomid ? 'active' : ''}`}
-                            onClick={() => onRoomSelect(room)}
-                        >
-                            <span className="room-icon">🌐</span>
-                            {room.roomname || 'Unnamed Room'}
-                        </button>
-                    ))}
-                </div>
-            </div>
+
         </div>
     );
 };

@@ -1,4 +1,6 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlay } from '@fortawesome/free-solid-svg-icons';
 
 const AboutSection = () => {
     return (
@@ -10,7 +12,9 @@ const AboutSection = () => {
                         <h1>Watch our video</h1>
                         <div className="divider"></div>
                         <p>Discover how Campus+ enhances your university experience through our engaging video.<br />Watch now to see our platform in action!</p>
-                        <a href="#" className="video-btn"><i className="bx bx-play"></i></a>
+                        <a href="#" className="video-btn">
+                            <FontAwesomeIcon icon={faPlay} />
+                        </a>
                     </div>
                 </div>
             </div>

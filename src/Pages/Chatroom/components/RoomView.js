@@ -88,21 +88,19 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
         <button
           onClick={() => setShowReplyBox(!showReplyBox)}
           style={{
-            padding: "4px 10px",
-            backgroundColor: colors.secondary,
-            color: colors.primary,
-            border: "none",
+            padding: "2px 8px",
+            backgroundColor: "#f0f0f0",
+            border: "1px solid #ddd",
             borderRadius: "4px",
             cursor: "pointer",
             fontSize: "12px",
-            transition: "background-color 0.2s",
           }}
         >
           Reply
         </button>
       </div>
       {showReplyBox && (
-        <div style={{ marginTop: "12px" }}>
+        <div style={{ marginTop: "10px" }}>
           <input
             type="text"
             placeholder="Write a reply..."
@@ -110,26 +108,22 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
             onChange={(e) => setReplyText(e.target.value)}
             style={{
               width: "100%",
-              padding: "10px",
-              border: `1px solid ${colors.border}`,
+              padding: "8px",
+              border: "1px solid #ddd",
               borderRadius: "4px",
-              marginBottom: "8px",
-              outline: "none",
-              transition: "border-color 0.2s",
+              marginBottom: "5px",
             }}
           />
           <button
             onClick={handleReply}
             style={{
-              padding: "6px 12px",
-              backgroundColor: colors.primary,
+              padding: "5px 10px",
+              backgroundColor: "#28a745",
               color: "white",
               border: "none",
               borderRadius: "4px",
               cursor: "pointer",
               fontSize: "12px",
-              transition: "background-color 0.2s",
-              fontWeight: "500",
             }}
           >
             Post Reply
@@ -314,6 +308,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         return;
       }
     }
+
   };
 
   const fetchPosts = async () => {
@@ -824,7 +819,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                   gap: "6px",
                 }}
               >
-                <span style={{ fontSize: "18px" }}>←</span> Back
+                Back to Rooms
               </button>
               {userRole === "Admin" && (
                 <button
@@ -996,8 +991,11 @@ export default function RoomView({ room, onBack, onLeave }) {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
-                ...inputStyles.standard,
                 flex: 2,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
               }}
             />
             <input
@@ -1006,8 +1004,11 @@ export default function RoomView({ room, onBack, onLeave }) {
               value={searchUsername}
               onChange={(e) => setSearchUsername(e.target.value)}
               style={{
-                ...inputStyles.standard,
                 flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
               }}
             />
             <input
@@ -1015,8 +1016,10 @@ export default function RoomView({ room, onBack, onLeave }) {
               value={searchDate}
               onChange={(e) => setSearchDate(e.target.value)}
               style={{
-                ...inputStyles.standard,
-                padding: "11px 14px",
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
               }}
             />
             <button
@@ -1060,8 +1063,11 @@ export default function RoomView({ room, onBack, onLeave }) {
               value={newPost}
               onChange={(e) => setNewPost(e.target.value)}
               style={{
-                ...inputStyles.standard,
                 flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px",
               }}
             />
             <button
@@ -1099,7 +1105,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                   transition: "transform 0.2s, box-shadow 0.2s",
                 }}
               >
-                <div style={{ marginBottom: "16px" }}>
+                <div style={{ marginBottom: "10px" }}>
                   <div
                     style={{
                       display: "flex",
@@ -1247,16 +1253,22 @@ export default function RoomView({ room, onBack, onLeave }) {
                 <div
                   style={{
                     display: "flex",
-                    gap: "12px",
-                    borderTop: `1px solid ${colors.border}`,
-                    paddingTop: "16px",
+                    gap: "10px",
+                    borderTop: "1px solid #eee",
+                    paddingTop: "15px",
                   }}
                 >
                   <button
                     onClick={() => handleLike(post.messageid)}
                     style={{
-                      ...buttonStyles.iconBtn,
-                      backgroundColor: colors.secondary,
+                      padding: "8px 15px",
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
                   >
                     👍 {post.likeCount || 0}
@@ -1285,7 +1297,14 @@ export default function RoomView({ room, onBack, onLeave }) {
                     <button
                       onClick={() => handleSharePost(post)}
                       style={{
-                        ...buttonStyles.iconBtn,
+                        padding: "8px 15px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
                       }}
                     >
                       <svg
@@ -1308,9 +1327,9 @@ export default function RoomView({ room, onBack, onLeave }) {
                 {activePost === post.messageid && (
                   <div
                     style={{
-                      marginTop: "16px",
-                      borderTop: `1px solid ${colors.border}`,
-                      paddingTop: "16px",
+                      marginTop: "15px",
+                      borderTop: "1px solid #eee",
+                      paddingTop: "15px",
                     }}
                   >
                     {post.comments?.length > 0 ? (
@@ -1346,8 +1365,10 @@ export default function RoomView({ room, onBack, onLeave }) {
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         style={{
-                          ...inputStyles.standard,
                           flex: 1,
+                          padding: "10px",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
                         }}
                       />
                       <button
@@ -1372,9 +1393,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                           handleEditPost(post.messageid, post.content)
                         }
                         style={{
-                          ...buttonStyles.iconBtn,
-                          padding: "4px 10px",
-                          fontSize: "13px",
+                          padding: "5px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
                         }}
                       >
                         ✏️ Edit
@@ -1401,9 +1425,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                     <button
                       onClick={() => handleReportPost(post.messageid)}
                       style={{
-                        ...buttonStyles.iconBtn,
-                        padding: "4px 10px",
-                        fontSize: "13px",
+                        padding: "5px 10px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "12px",
                       }}
                     >
                       ⚠️ Report
@@ -1415,10 +1442,12 @@ export default function RoomView({ room, onBack, onLeave }) {
           ) : (
             <div
               style={{
-                ...cardStyles.container,
-                padding: "48px 24px",
+                backgroundColor: "white",
+                padding: "40px 20px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 textAlign: "center",
-                color: colors.textSecondary,
+                color: "#666",
               }}
             >
               {isSearching ? (

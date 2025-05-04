@@ -1,6 +1,59 @@
 import React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faUser, faUserGraduate } from '@fortawesome/free-solid-svg-icons';
+import Mujtaba from '../../Assets/images/mujtaba.webp';
+import Taha from '../../Assets/images/taha.webp';
+import Ammar from '../../Assets/images/Ammar Profile.webp';
+import Harris from '../../Assets/images/Harris Profile.webp';
 
-const FounderSection = () => {
+const ContributorsSection = () => {
+    const contributors = [
+        {
+            id: 1,
+            name: "Muhammad Mujtaba",
+            image: Mujtaba,
+            description: "Muhammad Mujtaba's coding expertise and experience played a crucial role in building the robust foundation of Campus+.",
+            profileUrl: "https://mmujtabah.vercel.app/"
+        },
+        {
+            id: 2,
+            name: "Taha Iqbal",
+            image: Taha,
+            description: "Taha Iqbal's sharp coding skills and strong foundation in logic were essential in building the core features of Campus+.",
+            profileUrl: "https://tahaiqbal31.github.io/Personal-Portfolio/"
+        },
+        {
+            id: 3,
+            name: "Ammar Zia",
+            image: Ammar,
+            description: "Ammar's creativity, combined with his technical skills, brought fresh ideas that greatly contributed to the development of Campus+.",
+            profileUrl: "https://ammarnoorzia.github.io/aammarofficial.github.io/"
+        },
+        {
+            id: 4,
+            name: "Harris Tabassum",
+            image: Harris,
+            description: "Harris's adaptability and deep understanding of tasks, combined with his skills, were key in effectively executing Campus+ features.",
+            profileUrl: "https://mharrist.github.io/MyPortfolio/"
+        },
+        {
+            id: 5,
+            name: "Ehan Ayaz",
+            useIcon: true,
+            icon: faUserGraduate,
+            description: "Ehan's expertise in backend and user research was instrumental in creating the intuitive and user-friendly interface.",
+            profileUrl: "#"
+        },
+        {
+            id: 6,
+            name: "Mahdi Jaffery",
+            useIcon: true,
+            icon: faUser,
+            description: "Mahdi's backend development skills and database expertise ensured Campus+ had a reliable and scalable infrastructure.",
+            profileUrl: "#"
+        }
+    ];
+
     return (
         <section id="contributors" className="bg-light">
             <div className="container">
@@ -10,98 +63,40 @@ const FounderSection = () => {
                         <div className="divider"></div>
                     </div>
                 </div>
-                <div className="row g-4 justify-content-center">
-                    {/* Contributor 1 */}
-                    <div className="col-md-4 col-lg-3" data-aos="fade-up">
-                        <div className="service shadow-lg p-4 rounded text-center">
-                            <img
-                                src="../assets/images/mujtaba.webp"
-                                className="imageround1"
-                                alt="Muhammad Mujtaba"
-                            />
-                            <div className="mt-4">
-                                <h5 className="mt-2 mb-2">
-                                    <a href="#">Muhammad Mujtaba</a>
-                                </h5>
-                                <p>
-                                    Muhammad Mujtaba's coding expertise and experience played a crucial role in building the robust foundation of Campus+.
-                                </p>
-                                <a href="https://mmujtabah.vercel.app/" className="visit-profile-link">
-                                    Visit Profile
-                                </a>
-                            </div>
-                        </div>
-                    </div>
 
-                    {/* Contributor 2 */}
-                    <div className="col-md-4 col-lg-3" data-aos="fade-up">
-                        <div className="service shadow-lg p-4 rounded text-center">
-                            <img
-                                src="../assets/images/taha.webp"
-                                className="imageround1"
-                                alt="Taha Iqbal"
-                            />
-                            <div className="mt-4">
-                                <h5 className="mt-2 mb-2">
-                                    <a href="#">Taha Iqbal</a>
-                                </h5>
-                                <p>
-                                    Taha Iqbal’s sharp coding skills and strong foundation in logic were essential in building the core features of Campus+.
-                                </p>
-                                <a href="https://tahaiqbal31.github.io/Personal-Portfolio/" className="visit-profile-link">
-                                    Visit Profile
-                                </a>
+                <div className="row">
+                    {contributors.map(contributor => (
+                        <div key={contributor.id} className="col-md-6 col-lg-4 mb-4" data-aos="fade-up">
+                            <div className="service shadow-lg p-4 rounded text-center h-100">
+                                {contributor.useIcon ? (
+                                    <div className="icon-placeholder">
+                                        <FontAwesomeIcon icon={contributor.icon} className="fa-icon-placeholder" />
+                                    </div>
+                                ) : (
+                                    <img
+                                        src={contributor.image}
+                                        className="imageround1"
+                                        alt={contributor.name}
+                                    />
+                                )}
+                                <div className="mt-4">
+                                    <h5 className="mt-2 mb-2">
+                                        <a href="#">{contributor.name}</a>
+                                    </h5>
+                                    <p className="contributor-description">
+                                        {contributor.description}
+                                    </p>
+                                    <a href={contributor.profileUrl} className="visit-profile-link">
+                                        Visit Profile
+                                    </a>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    {/* Contributor 3 */}
-                    <div className="col-md-4 col-lg-3" data-aos="fade-up">
-                        <div className="service shadow-lg p-4 rounded text-center">
-                            <img
-                                src="../assets/images/Ammar Profile.webp"
-                                className="imageround1"
-                                alt="Ammar Zia"
-                            />
-                            <div className="mt-4">
-                                <h5 className="mt-2 mb-2">
-                                    <a href="#">Ammar Zia</a>
-                                </h5>
-                                <p>
-                                    Ammar’s creativity, combined with his technical skills, brought fresh ideas that greatly contributed to the development of Campus+.
-                                </p>
-                                <a href="https://ammarnoorzia.github.io/aammarofficial.github.io/" className="visit-profile-link">
-                                    Visit Profile
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Contributor 4 */}
-                    <div className="col-md-4 col-lg-3" data-aos="fade-up">
-                        <div className="service shadow-lg p-4 rounded text-center">
-                            <img
-                                src="../assets/images/Harris Profile.webp"
-                                className="imageround1"
-                                alt="Harris Tabassum"
-                            />
-                            <div className="mt-4">
-                                <h5 className="mt-2 mb-2">
-                                    <a href="#">Harris Tabassum</a>
-                                </h5>
-                                <p>
-                                    Harris’s adaptability and deep understanding of tasks, combined with his skills, were key in effectively executing Campus+ features.
-                                </p>
-                                <a href="https://mharrist.github.io/MyPortfolio/" className="visit-profile-link">
-                                    Visit Profile
-                                </a>
-                            </div>
-                        </div>
-                    </div>
+                    ))}
                 </div>
             </div>
         </section>
     );
 };
 
-export default FounderSection;
+export default ContributorsSection;
