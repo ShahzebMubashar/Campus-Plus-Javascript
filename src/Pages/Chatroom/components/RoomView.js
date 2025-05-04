@@ -3,25 +3,6 @@ import { useParams } from "react-router-dom";
 import "./RoomView.css";
 import Sidebar from "./Sidebar";
 
-// Modern blue theme color constants
-const colors = {
-  primary: "#1976d2",
-  primaryLight: "#42a5f5",
-  primaryDark: "#0d47a1",
-  secondary: "#e3f2fd",
-  accent: "#2196f3",
-  textPrimary: "#263238",
-  textSecondary: "#546e7a",
-  background: "#f5f9fc",
-  cardBg: "#ffffff",
-  border: "#e1e8ed",
-  success: "#4caf50",
-  danger: "#f44336",
-  warning: "#ff9800",
-  pending: "#78909c",
-  pinned: "#bbdefb"
-};
-
 const Comment = ({ comment, level = 0, room, fetchPosts }) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
@@ -57,41 +38,38 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
   return (
     <div
       style={{
-        padding: "14px",
-        marginBottom: "12px",
-        backgroundColor: colors.cardBg,
-        borderRadius: "8px",
+        padding: "10px",
+        marginBottom: "10px",
+        backgroundColor: "#f9f9f9",
+        borderRadius: "6px",
         marginLeft: `${level * 20}px`,
-        borderLeft: `3px solid ${colors.primaryLight}`,
-        boxShadow: "0 1px 3px rgba(0,0,0,0.05)",
+        borderLeft: "3px solid #e0e0e0",
       }}
     >
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <strong style={{ color: colors.textPrimary }}>{comment.username}</strong>
-        <span style={{ color: colors.textSecondary, fontSize: "12px" }}>
+        <strong style={{ color: "#333" }}>{comment.username}</strong>
+        <span style={{ color: "#666", fontSize: "12px" }}>
           {new Date(comment.posted_at).toLocaleString()}
         </span>
       </div>
-      <p style={{ margin: "8px 0 0", color: colors.textPrimary }}>{comment.content}</p>
-      <div style={{ marginTop: "8px" }}>
+      <p style={{ margin: "5px 0 0", color: "#555" }}>{comment.content}</p>
+      <div style={{ marginTop: "5px" }}>
         <button
           onClick={() => setShowReplyBox(!showReplyBox)}
           style={{
-            padding: "4px 10px",
-            backgroundColor: colors.secondary,
-            color: colors.primary,
-            border: "none",
+            padding: "2px 8px",
+            backgroundColor: "#f0f0f0",
+            border: "1px solid #ddd",
             borderRadius: "4px",
             cursor: "pointer",
             fontSize: "12px",
-            transition: "background-color 0.2s",
           }}
         >
           Reply
         </button>
       </div>
       {showReplyBox && (
-        <div style={{ marginTop: "12px" }}>
+        <div style={{ marginTop: "10px" }}>
           <input
             type="text"
             placeholder="Write a reply..."
@@ -99,26 +77,22 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
             onChange={(e) => setReplyText(e.target.value)}
             style={{
               width: "100%",
-              padding: "10px",
-              border: `1px solid ${colors.border}`,
+              padding: "8px",
+              border: "1px solid #ddd",
               borderRadius: "4px",
-              marginBottom: "8px",
-              outline: "none",
-              transition: "border-color 0.2s",
+              marginBottom: "5px",
             }}
           />
           <button
             onClick={handleReply}
             style={{
-              padding: "6px 12px",
-              backgroundColor: colors.primary,
+              padding: "5px 10px",
+              backgroundColor: "#28a745",
               color: "white",
               border: "none",
               borderRadius: "4px",
               cursor: "pointer",
               fontSize: "12px",
-              transition: "background-color 0.2s",
-              fontWeight: "500",
             }}
           >
             Post Reply
@@ -158,94 +132,6 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [rooms, setRooms] = useState([]);
   const [joinedRooms, setJoinedRooms] = useState([]);
 
-  // Button styles for reusability
-  const buttonStyles = {
-    primary: {
-      padding: "10px 16px",
-      backgroundColor: colors.primary,
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "14px",
-      fontWeight: "500",
-      transition: "background-color 0.2s, transform 0.1s",
-      boxShadow: "0 2px 4px rgba(25, 118, 210, 0.2)",
-    },
-    secondary: {
-      padding: "10px 16px",
-      backgroundColor: colors.secondary,
-      color: colors.primary,
-      border: `1px solid ${colors.border}`,
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "14px",
-      fontWeight: "500",
-      transition: "background-color 0.2s, transform 0.1s",
-    },
-    danger: {
-      padding: "10px 16px",
-      backgroundColor: colors.danger,
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "14px",
-      fontWeight: "500",
-      transition: "background-color 0.2s, transform 0.1s",
-      boxShadow: "0 2px 4px rgba(244, 67, 54, 0.2)",
-    },
-    success: {
-      padding: "10px 16px",
-      backgroundColor: colors.success,
-      color: "white",
-      border: "none",
-      borderRadius: "6px",
-      cursor: "pointer",
-      fontSize: "14px",
-      fontWeight: "500",
-      transition: "background-color 0.2s, transform 0.1s",
-      boxShadow: "0 2px 4px rgba(76, 175, 80, 0.2)",
-    },
-    iconBtn: {
-      padding: "8px 12px",
-      backgroundColor: "transparent",
-      color: colors.textSecondary,
-      border: `1px solid ${colors.border}`,
-      borderRadius: "6px",
-      cursor: "pointer",
-      display: "flex",
-      alignItems: "center",
-      gap: "6px",
-      fontSize: "14px",
-      transition: "background-color 0.2s, color 0.2s",
-    }
-  };
-
-  // Card container styles
-  const cardStyles = {
-    container: {
-      backgroundColor: colors.cardBg,
-      padding: "20px",
-      borderRadius: "10px",
-      boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-      marginBottom: "20px",
-      border: `1px solid ${colors.border}`,
-    }
-  };
-
-  // Input styles
-  const inputStyles = {
-    standard: {
-      width: "100%",
-      padding: "12px 14px",
-      border: `1px solid ${colors.border}`,
-      borderRadius: "6px",
-      fontSize: "15px",
-      transition: "border-color 0.2s, box-shadow 0.2s",
-      outline: "none",
-    }
-  };
 
   useEffect(() => {
     fetchUserInfo();
@@ -297,6 +183,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         return;
       }
     }
+
   };
 
   const fetchPosts = async () => {
@@ -715,7 +602,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (!query) return text;
     const regex = new RegExp(`(${query})`, 'gi');
     return text.split(regex).map((part, i) =>
-      regex.test(part) ? <mark key={i} style={{ backgroundColor: colors.primaryLight, color: colors.primaryDark, padding: '2px 0' }}>{part}</mark> : part
+      regex.test(part) ? <mark key={i}>{part}</mark> : part
     );
   };
 
@@ -723,7 +610,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     <div style={{
       display: "flex",
       minHeight: "100vh",
-      backgroundColor: colors.background,
+      backgroundColor: "#f0f2f5",
       position: "relative",
       paddingLeft: "280px"
     }}>
@@ -734,36 +621,44 @@ export default function RoomView({ room, onBack, onLeave }) {
       {/* Main content */}
       <div style={{
         flex: 1,
-        padding: "24px",
-        backgroundColor: colors.background,
+        padding: "20px",
+        backgroundColor: "#f0f2f5",
         position: "relative",
         marginLeft: "-220px"
       }}>
         {/* Room Header */}
         <div style={{
-          ...cardStyles.container,
-          borderTop: `4px solid ${colors.primary}`,
-          marginBottom: "24px"
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          marginBottom: "20px"
         }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-            <h1 style={{ margin: 0, fontSize: "26px", color: colors.primary, fontWeight: "600" }}>{room.roomname}</h1>
-            <div style={{ display: "flex", gap: "12px" }}>
+            <h1 style={{ margin: 0, fontSize: "24px", color: "#333" }}>{room.roomname}</h1>
+            <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={onBack}
                 style={{
-                  ...buttonStyles.secondary,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "6px"
+                  padding: "8px 16px",
+                  backgroundColor: "#f0f0f0",
+                  border: "1px solid #ddd",
+                  borderRadius: "4px",
+                  cursor: "pointer"
                 }}
               >
-                <span style={{ fontSize: "18px" }}>←</span> Back
+                Back to Rooms
               </button>
               {userRole === "Admin" && (
                 <button
                   onClick={() => setIsEditingRoom(true)}
                   style={{
-                    ...buttonStyles.primary
+                    padding: "8px 16px",
+                    backgroundColor: "#28a745",
+                    color: "white",
+                    border: "none",
+                    borderRadius: "4px",
+                    cursor: "pointer"
                   }}
                 >
                   Edit Room Info
@@ -772,7 +667,12 @@ export default function RoomView({ room, onBack, onLeave }) {
               <button
                 onClick={onLeave}
                 style={{
-                  ...buttonStyles.danger
+                  padding: "8px 16px",
+                  backgroundColor: "#dc3545",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "4px",
+                  cursor: "pointer"
                 }}
               >
                 Leave Room
@@ -780,10 +680,10 @@ export default function RoomView({ room, onBack, onLeave }) {
             </div>
           </div>
           {room.name && (
-            <h1 style={{ margin: "10px 0 0", color: colors.textPrimary, fontSize: "24px" }}>{room.name}</h1>
+            <h1 style={{ margin: "-20px 0 0", color: "#000" }}>{room.name}</h1>
           )}
           {room.description && (
-            <p style={{ margin: "12px 0 0", color: colors.textSecondary, lineHeight: "1.5" }}>{room.description}</p>
+            <p style={{ margin: "10px 0 0", color: "#666" }}>{room.description}</p>
           )}
         </div>
 
@@ -795,55 +695,60 @@ export default function RoomView({ room, onBack, onLeave }) {
             left: 0,
             right: 0,
             bottom: 0,
-            backgroundColor: 'rgba(0, 0, 0, 0.6)',
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            zIndex: 9999,
-            backdropFilter: 'blur(3px)'
+            zIndex: 9999
           }}>
             <div style={{
-              backgroundColor: colors.cardBg,
-              padding: '28px',
-              borderRadius: '12px',
-              boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
+              backgroundColor: 'white',
+              padding: '24px',
+              borderRadius: '8px',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
               width: '90%',
               maxWidth: '500px',
               position: 'relative',
-              zIndex: 10000,
-              border: `1px solid ${colors.border}`,
-              borderTop: `4px solid ${colors.primary}`
+              zIndex: 10000
             }}>
-              <h2 style={{ marginTop: 0, marginBottom: '24px', color: colors.primary }}>Edit Room Information</h2>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', color: colors.textPrimary, fontWeight: '500' }}>Room Name</label>
+              <h2 style={{ marginTop: 0, marginBottom: '20px' }}>Edit Room Information</h2>
+              <div style={{ marginBottom: '15px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Room Name</label>
                 <input
                   type="text"
                   value={editedRoomName}
                   onChange={(e) => setEditedRoomName(e.target.value)}
                   style={{
-                    ...inputStyles.standard,
-                    marginBottom: '8px'
+                    width: '100%',
+                    padding: '8px',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px'
                   }}
                 />
               </div>
-              <div style={{ marginBottom: '24px' }}>
-                <label style={{ display: 'block', marginBottom: '8px', color: colors.textPrimary, fontWeight: '500' }}>Description</label>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ display: 'block', marginBottom: '5px' }}>Description</label>
                 <textarea
                   value={editedRoomDescription}
                   onChange={(e) => setEditedRoomDescription(e.target.value)}
                   style={{
-                    ...inputStyles.standard,
-                    minHeight: '120px',
-                    resize: 'vertical'
+                    width: '100%',
+                    padding: '8px',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    minHeight: '100px'
                   }}
                 />
               </div>
-              <div style={{ display: 'flex', gap: '12px', justifyContent: 'flex-end' }}>
+              <div style={{ display: 'flex', gap: '10px', justifyContent: 'flex-end' }}>
                 <button
                   onClick={() => setIsEditingRoom(false)}
                   style={{
-                    ...buttonStyles.secondary
+                    padding: '8px 16px',
+                    backgroundColor: '#f0f0f0',
+                    border: '1px solid #ddd',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
                   }}
                 >
                   Cancel
@@ -851,7 +756,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                 <button
                   onClick={handleUpdateRoom}
                   style={{
-                    ...buttonStyles.primary
+                    padding: '8px 16px',
+                    backgroundColor: '#28a745',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '4px',
+                    cursor: 'pointer'
                   }}
                 >
                   Save Changes
@@ -863,18 +773,24 @@ export default function RoomView({ room, onBack, onLeave }) {
 
         {/* Search Section */}
         <div className="search-section" style={{
-          ...cardStyles.container,
-          marginBottom: "24px"
+          backgroundColor: "white",
+          padding: "20px",
+          borderRadius: "8px",
+          boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+          marginBottom: "20px"
         }}>
-          <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
             <input
               type="text"
               placeholder="Search posts..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               style={{
-                ...inputStyles.standard,
                 flex: 2,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
               }}
             />
             <input
@@ -883,8 +799,11 @@ export default function RoomView({ room, onBack, onLeave }) {
               value={searchUsername}
               onChange={(e) => setSearchUsername(e.target.value)}
               style={{
-                ...inputStyles.standard,
                 flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
               }}
             />
             <input
@@ -892,15 +811,23 @@ export default function RoomView({ room, onBack, onLeave }) {
               value={searchDate}
               onChange={(e) => setSearchDate(e.target.value)}
               style={{
-                ...inputStyles.standard,
-                padding: "11px 14px",
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px"
               }}
             />
             <button
               onClick={handleSearch}
               disabled={isSearching}
               style={{
-                ...buttonStyles.primary,
+                padding: "12px 20px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
                 opacity: isSearching ? 0.7 : 1
               }}
             >
@@ -914,7 +841,13 @@ export default function RoomView({ room, onBack, onLeave }) {
                 fetchPosts();
               }}
               style={{
-                ...buttonStyles.secondary
+                padding: "12px 20px",
+                backgroundColor: "#6c757d",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px"
               }}
             >
               Clear
@@ -923,32 +856,42 @@ export default function RoomView({ room, onBack, onLeave }) {
         </div>
 
         {/* Create Post Section */}
-        <div style={{
-          ...cardStyles.container,
-          marginBottom: "24px",
-          borderLeft: `4px solid ${colors.primary}`
-        }}>
-          <div style={{ display: "flex", gap: "12px" }}>
+        <div
+          style={{
+            backgroundColor: "white",
+            padding: "20px",
+            borderRadius: "8px",
+            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+            marginBottom: "20px",
+          }}
+        >
+          <div style={{ display: "flex", gap: "10px" }}>
             <input
               type="text"
               placeholder="What's on your mind?"
               value={newPost}
               onChange={(e) => setNewPost(e.target.value)}
               style={{
-                ...inputStyles.standard,
                 flex: 1,
+                padding: "12px",
+                border: "1px solid #ddd",
+                borderRadius: "4px",
+                fontSize: "16px",
               }}
             />
             <button
               onClick={handleCreatePost}
               style={{
-                ...buttonStyles.primary,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '6px'
+                padding: "12px 20px",
+                backgroundColor: "#28a745",
+                color: "white",
+                border: "none",
+                borderRadius: "4px",
+                cursor: "pointer",
+                fontSize: "16px",
               }}
             >
-              <span style={{ fontSize: '18px' }}>+</span> Post
+              Post
             </button>
           </div>
         </div>
@@ -960,63 +903,66 @@ export default function RoomView({ room, onBack, onLeave }) {
               <div
                 key={post.messageid}
                 style={{
-                  ...cardStyles.container,
-                  backgroundColor: post.status === "Pending" ? "#f8fafc" : colors.cardBg,
-                  marginBottom: "24px",
-                  borderLeft: post.status === "Pending" ? `4px solid ${colors.pending}` :
-                    post.is_pinned ? `4px solid ${colors.primary}` : `1px solid ${colors.border}`,
-                  position: "relative",
-                  transition: "transform 0.2s, box-shadow 0.2s",
+                  backgroundColor: post.status === "Pending" ? "#f5f5f5" : "white",
+                  padding: "20px",
+                  borderRadius: "8px",
+                  boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                  marginBottom: "20px",
+                  borderLeft: post.status === "Pending" ? "4px solid #6c757d" : "none",
+                  position: "relative"
                 }}
               >
-                <div style={{ marginBottom: "16px" }}>
+                <div style={{ marginBottom: "10px" }}>
                   <div
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
                     }}
                   >
-                    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                      <span style={{ fontWeight: "600", color: colors.primary, fontSize: "16px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      <span style={{ fontWeight: "bold", color: "#333" }}>
                         {post.username}
                       </span>
                       {post.is_pinned && (
                         <span style={{
-                          backgroundColor: colors.pinned,
-                          color: colors.primaryDark,
-                          padding: "4px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          color: "#666",
+                          padding: "2px 8px",
                           borderRadius: "12px",
                           fontSize: "12px",
                           display: "flex",
                           alignItems: "center",
-                          gap: "4px",
-                          fontWeight: "500"
+                          gap: "4px"
                         }}>
                           📌 Pinned
                         </span>
                       )}
                       {post.status === "Pending" && (
                         <span style={{
-                          backgroundColor: colors.pending,
+                          backgroundColor: "#6c757d",
                           color: "white",
-                          padding: "4px 10px",
+                          padding: "2px 8px",
                           borderRadius: "12px",
                           fontSize: "12px",
-                          fontWeight: "500"
                         }}>
                           Pending
                         </span>
                       )}
                     </div>
-                    <div style={{ display: "flex", gap: "12px", alignItems: "center" }}>
+                    <div style={{ display: "flex", gap: "10px", alignItems: "center" }}>
                       {post.status === "Pending" && (userRole === "Admin" || userRole === "Moderator") && (
-                        <div style={{ display: "flex", gap: "8px" }}>
+                        <div style={{ display: "flex", gap: "5px" }}>
                           <button
                             onClick={() => handleProcessPost(post.messageid, "Approved")}
                             style={{
-                              ...buttonStyles.success,
-                              padding: "6px 12px",
-                              fontSize: "13px"
+                              padding: "5px 10px",
+                              backgroundColor: "#28a745",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "12px",
                             }}
                           >
                             Approve
@@ -1024,9 +970,13 @@ export default function RoomView({ room, onBack, onLeave }) {
                           <button
                             onClick={() => handleProcessPost(post.messageid, "Rejected")}
                             style={{
-                              ...buttonStyles.danger,
-                              padding: "6px 12px",
-                              fontSize: "13px"
+                              padding: "5px 10px",
+                              backgroundColor: "#dc3545",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                              fontSize: "12px",
                             }}
                           >
                             Reject
@@ -1037,15 +987,19 @@ export default function RoomView({ room, onBack, onLeave }) {
                         <button
                           onClick={() => handleDeletePost(post.messageid)}
                           style={{
-                            ...buttonStyles.danger,
-                            padding: "6px 12px",
-                            fontSize: "13px"
+                            padding: "5px 10px",
+                            backgroundColor: "#dc3545",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                            fontSize: "12px",
                           }}
                         >
                           Delete
                         </button>
                       )}
-                      <span style={{ color: colors.textSecondary, fontSize: "14px" }}>
+                      <span style={{ color: "#666" }}>
                         {(() => {
                           const postDate = new Date(post.posted_at);
                           const today = new Date();
@@ -1070,12 +1024,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                       </span>
                     </div>
                   </div>
-                  <div style={{
-                    marginTop: "12px",
-                    color: colors.textPrimary,
-                    fontSize: "15px",
-                    lineHeight: "1.5"
-                  }}>
+                  <div style={{ marginTop: "5px", color: "#444" }}>
                     {highlightText(post.content, searchQuery)}
                   </div>
                 </div>
@@ -1083,16 +1032,22 @@ export default function RoomView({ room, onBack, onLeave }) {
                 <div
                   style={{
                     display: "flex",
-                    gap: "12px",
-                    borderTop: `1px solid ${colors.border}`,
-                    paddingTop: "16px",
+                    gap: "10px",
+                    borderTop: "1px solid #eee",
+                    paddingTop: "15px",
                   }}
                 >
                   <button
                     onClick={() => handleLike(post.messageid)}
                     style={{
-                      ...buttonStyles.iconBtn,
-                      backgroundColor: colors.secondary,
+                      padding: "8px 15px",
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
                   >
                     👍 {post.likeCount || 0}
@@ -1104,9 +1059,14 @@ export default function RoomView({ room, onBack, onLeave }) {
                       )
                     }
                     style={{
-                      ...buttonStyles.iconBtn,
-                      backgroundColor: activePost === post.messageid ? colors.secondary : "transparent",
-                      color: activePost === post.messageid ? colors.primary : colors.textSecondary,
+                      padding: "8px 15px",
+                      backgroundColor: "#f8f9fa",
+                      border: "1px solid #ddd",
+                      borderRadius: "4px",
+                      cursor: "pointer",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "5px",
                     }}
                   >
                     💬 {post.comments?.length || 0}
@@ -1115,10 +1075,17 @@ export default function RoomView({ room, onBack, onLeave }) {
                     <button
                       onClick={() => handleSharePost(post)}
                       style={{
-                        ...buttonStyles.iconBtn,
+                        padding: "8px 15px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "5px",
                       }}
                     >
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                         <polyline points="16 6 12 2 8 6"></polyline>
                         <line x1="12" y1="2" x2="12" y2="15"></line>
@@ -1131,9 +1098,9 @@ export default function RoomView({ room, onBack, onLeave }) {
                 {activePost === post.messageid && (
                   <div
                     style={{
-                      marginTop: "16px",
-                      borderTop: `1px solid ${colors.border}`,
-                      paddingTop: "16px",
+                      marginTop: "15px",
+                      borderTop: "1px solid #eee",
+                      paddingTop: "15px",
                     }}
                   >
                     {post.comments?.length > 0 ? (
@@ -1146,12 +1113,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                         />
                       ))
                     ) : (
-                      <p style={{ color: colors.textSecondary, textAlign: "center", padding: "16px" }}>
+                      <p style={{ color: "#666", textAlign: "center" }}>
                         No comments yet
                       </p>
                     )}
                     <div
-                      style={{ display: "flex", gap: "12px", marginTop: "16px" }}
+                      style={{ display: "flex", gap: "10px", marginTop: "15px" }}
                     >
                       <input
                         type="text"
@@ -1159,14 +1126,21 @@ export default function RoomView({ room, onBack, onLeave }) {
                         value={newComment}
                         onChange={(e) => setNewComment(e.target.value)}
                         style={{
-                          ...inputStyles.standard,
                           flex: 1,
+                          padding: "10px",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
                         }}
                       />
                       <button
                         onClick={() => handleComment(post.messageid)}
                         style={{
-                          ...buttonStyles.primary
+                          padding: "10px 15px",
+                          backgroundColor: "#28a745",
+                          color: "white",
+                          border: "none",
+                          borderRadius: "4px",
+                          cursor: "pointer",
                         }}
                       >
                         Add Comment
@@ -1176,14 +1150,17 @@ export default function RoomView({ room, onBack, onLeave }) {
                 )}
 
                 {post.status === "Approved" && (
-                  <div style={{ display: "flex", gap: "10px", marginTop: "16px" }}>
+                  <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
                     {(userRole === "Admin" || post.userid === userid) && (
                       <button
                         onClick={() => handleEditPost(post.messageid, post.content)}
                         style={{
-                          ...buttonStyles.iconBtn,
-                          padding: "4px 10px",
-                          fontSize: "13px",
+                          padding: "5px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
                         }}
                       >
                         ✏️ Edit
@@ -1193,11 +1170,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                       <button
                         onClick={() => handlePinPost(post.messageid)}
                         style={{
-                          ...buttonStyles.iconBtn,
-                          padding: "4px 10px",
-                          fontSize: "13px",
-                          backgroundColor: post.is_pinned ? colors.pinned : "transparent",
-                          color: post.is_pinned ? colors.primaryDark : colors.textSecondary,
+                          padding: "5px 10px",
+                          backgroundColor: "#f8f9fa",
+                          border: "1px solid #ddd",
+                          borderRadius: "4px",
+                          cursor: "pointer",
+                          fontSize: "12px",
                         }}
                       >
                         📌 {post.is_pinned ? "Unpin" : "Pin"}
@@ -1206,9 +1184,12 @@ export default function RoomView({ room, onBack, onLeave }) {
                     <button
                       onClick={() => handleReportPost(post.messageid)}
                       style={{
-                        ...buttonStyles.iconBtn,
-                        padding: "4px 10px",
-                        fontSize: "13px",
+                        padding: "5px 10px",
+                        backgroundColor: "#f8f9fa",
+                        border: "1px solid #ddd",
+                        borderRadius: "4px",
+                        cursor: "pointer",
+                        fontSize: "12px",
                       }}
                     >
                       ⚠️ Report
@@ -1220,19 +1201,15 @@ export default function RoomView({ room, onBack, onLeave }) {
           ) : (
             <div
               style={{
-                ...cardStyles.container,
-                padding: "48px 24px",
+                backgroundColor: "white",
+                padding: "40px 20px",
+                borderRadius: "8px",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                 textAlign: "center",
-                color: colors.textSecondary,
+                color: "#666",
               }}
             >
-              {isSearching ?
-                <p style={{ fontSize: "16px" }}>No matching posts found</p> :
-                <div>
-                  <p style={{ fontSize: "18px", marginBottom: "12px", color: colors.primary }}>No posts yet</p>
-                  <p style={{ fontSize: "16px" }}>Be the first to post something!</p>
-                </div>
-              }
+              {isSearching ? "No matching posts found" : "No posts yet. Be the first to post something!"}
             </div>
           )}
         </div>
