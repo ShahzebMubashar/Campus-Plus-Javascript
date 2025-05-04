@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import templateData from '../check.json'
+import Select from 'react-select'
+
 export default function Form({ formData,setFormData,setShowForm, formTitle,handleAppGen}) {
  
 function onGenerateApplication(data){
@@ -17,7 +19,14 @@ handleAppGen();
     const { name, value } = e.target;
     setFormData((formData)=>({...formData, [name]: value }));
   };
-
+  const handleChangeSelect = (selectedOption, actionMeta) => {
+    const name = actionMeta.name; // Gets 'applicationType' from the Select's name prop
+    setFormData(prev => ({
+      ...prev,
+      [name]: selectedOption.value
+    }));
+    console.log(formData)
+  };
   const validateForm = () => {
     const newErrors = {};
     if (!formData.name) newErrors.name = "Name is required";
@@ -43,7 +52,7 @@ handleAppGen();
   let appTypes=[]
   for(let key in templateData.templates) 
   {
-    appTypes.push(key)
+    appTypes.push({value:key,label:key})
   }
   return (
     <div className="application-form">
@@ -134,20 +143,49 @@ handleAppGen();
         </div>
         <div className="form-group">
           <label>Application Type</label>
-          <select
+          <Select
+  name="applicationType" // This gets passed into actionMeta.name
+  options={appTypes} // Your list of { value, label } objects
+  value={{value:formData.applicationType,label:formData.applicationType}} // The currently selected option
+  onChange={handleChangeSelect}
+  isSearchable
+  isDisabled={false}
+  styles={{ container: base => ({ ...base, width: '100%' }) }}
+/>
+           {/* <select
             name="applicationType"
             value={formData.applicationType}
             onChange={handleChange}
-          >
-          {appTypes.map((type)=>(<option>{type} </option>)
+          >  
+           {appTypes.map((type)=>(<option>{type.value} </option>)
 
-          )}
+          )}</select> */}
             {/* <option value="">Select</option>
             <option value="Leave Application">Leave Application</option>
             <option value="Event Request">Event Request</option>
             <option value="Resource Request">Resource Request</option> */}
-          </select>
+          
           {errors.applicationType && <span className="error">{errors.applicationType}</span>}
+        </div>
+        <div
+  className="form-group"
+  style={{
+    display:
+      formData.applicationType !== "Organizational and Event Requests"
+        ? "none"
+        : "block",
+  }}
+>
+  
+          <label>Date</label>
+          <input
+            type="text"
+            name="classSection"
+            value={formData.todayDate}
+            onChange={handleChange}
+            placeholder="Enter your class section"
+          />
+          {/* //{errors.classSection && <span className="error">{errors.classSection}</span>} */}
         </div>
         <button type="submit" className="btn" onClick={handleSubmit}>Generate Application</button>
       </form>

@@ -25,9 +25,13 @@ export default function ApplicationGenerator() {
         recipientName: "",
         campusName: "",
         applicationType: "",
+        todayDate:new Date().toISOString().split('T')[0]
     });
     const [appBody, setAppBody] = useState("");
-
+    let emailTypes=[]
+    for (let key in templateData.templates){
+emailTypes.push(key);
+   }
     const Cards = [
         { title: "Academic Requests", info: "Submit applications related to academic matters, such as leave requests or exam retakes.", image: cardImage1 },
         { title: "Organizational and Event Requests", info: "Apply for permissions to organize events or change classroom settings.", image: cardImage2 },
@@ -79,7 +83,7 @@ export default function ApplicationGenerator() {
             body = body.replace("{rollNumber}", rollNumber);
             body = body.replace("{phoneNumber}", phoneNumber);
 
-            body = `${formatDate()}\n\n${recipientName}\n\n[Add Department]\n\nFAST-NUCES,\n\n${campusName}.\n\nSubject: ${subject}\n\n${greeting} ${salutation}${lastName},\n\n${body}\n\nYours sincerely,\n${name}\nSection: ${classSection}      Roll No: ${rollNumber}\nPhone No: ${phoneNumber}`;
+            body = `${formatDate()}\n\n${recipientName}\n\n[Add Department]\n\nFAST-NUCES,\n\n${campusName}.\n\nSubject: ${subject}\n\n${greeting} ${salutation}${lastName},\n\n${body}\n\nYours sincerely,\n${name}\nSection: ${classSection}     \n Roll No: ${rollNumber}\nPhone No: ${phoneNumber}`;
 
             setAppBody(body);
         }
@@ -88,6 +92,7 @@ export default function ApplicationGenerator() {
     const handleCardClick = (title) => {
         setFormTitle(title);
         setShowForm(true);
+        setFormData(prev=>({...prev,applicationType:title}))
     };
 
     const handleCloseForm = () => {
@@ -105,7 +110,7 @@ export default function ApplicationGenerator() {
                 <div className="container">
                     <div className="card-container">
                         {Cards.map((card) => (
-                            <Card data={card} handleCardClick={handleCardClick} key={card.title} />
+                            <Card data={card} handleCardClick={handleCardClick} key={card.title}/>
                         ))}
                     </div>
                 </div>

@@ -7,7 +7,21 @@
         "Organizational and Event Requests": {
             "subject": "Event Permission Request",
             "body": "I am requesting permission to organize an event on {todayDate}..."
-        }
+        },
+        "Facility and Resoucce Request": {
+            "subject": "Facility and Resource Request",
+            "body": "I would like to request the use of specific campus facilities and resources to support an upcoming activity. Please let me know the availability and any necessary procedures to follow."
+          },
+        "Job and Role Application": {
+            "subject": "Job and Role Application",
+            "body": "I am writing to formally apply for the available position or role within the organization. I believe my skills and experience align well with the responsibilities required, and I am eager to contribute effectively if given the opportunity."
+          }
+          ,
+        "Appeals and Ethical Concerns": {
+            "subject": "Appeals and Ethical Concerns Application",
+            "body": "I am submitting this application to formally raise concerns regarding a matter I believe may involve a breach of policy or ethics. I request that this issue be reviewed and addressed in a fair and transparent manner."
+          }
+          
     },
     "greeting": "Dear"
 }
