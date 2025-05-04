@@ -119,10 +119,18 @@ section {
     align-items: center;
     color: #fff;
     border-radius: 100px;
+    transition: all 0.3s ease;
 }
 
-.video-btn i {
-    font-size: 32px;
+.video-btn:hover {
+    transform: scale(1.1);
+    color: #fff;
+}
+
+.video-btn svg {
+    font-size: 24px;
+    margin-left: 3px;
+    /* Slight adjustment for visual centering */
 }
 
 .navbar {
@@ -289,6 +297,7 @@ footer a {
 .aboutcp-navbar {
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
     padding: 0px 0;
+    height: 100px;
 }
 
 .aboutcp-navbar-wrapper {
@@ -296,10 +305,12 @@ footer a {
     justify-content: space-between;
     align-items: center;
     width: 100%;
+    min-height: 50px;
+    /* Ensure minimum height for the navbar */
 }
 
 .aboutcp-navbar-brand {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 700;
     background: -webkit-linear-gradient(#00e0fe, #1107fe);
     -webkit-background-clip: text;
@@ -307,6 +318,8 @@ footer a {
     -webkit-text-fill-color: transparent;
     margin-right: 2rem;
     flex-shrink: 0;
+    margin-top: -25px;
+    /* Slight adjustment to brand logo */
 }
 
 .aboutcp-navbar-collapse {
@@ -319,6 +332,8 @@ footer a {
     display: flex;
     align-items: center;
     margin-left: auto;
+    margin-top: -25px;
+    /* Move links a bit more upward */
 }
 
 .aboutcp-nav-item {
@@ -328,8 +343,10 @@ footer a {
 .aboutcp-nav-link {
     color: #20212c !important;
     font-weight: 600;
-    padding: 8px 15px !important;
+    padding: 0px 15px !important;
     transition: all 0.3s ease;
+    display: inline-block;
+    line-height: 1;
 }
 
 .aboutcp-nav-link:hover,
@@ -343,6 +360,13 @@ footer a {
 @media (max-width: 991px) {
     .aboutcp-navbar-wrapper {
         flex-wrap: wrap;
+        min-height: 40px;
+        /* Slightly smaller height for mobile */
+    }
+
+    .aboutcp-navbar-brand {
+        margin-top: 0;
+        /* Reset margin for mobile */
     }
 
     .aboutcp-navbar-collapse {
@@ -359,6 +383,8 @@ footer a {
     .aboutcp-navbar-nav {
         flex-direction: column;
         align-items: flex-start;
+        margin-top: 0;
+        /* Reset the negative margin for mobile */
     }
 
     .aboutcp-nav-item {
@@ -369,5 +395,7 @@ footer a {
 
     .aboutcp-navbar-toggler {
         padding: 3px 6px;
+        margin-top: -2px;
+        /* Align the toggler button */
     }
 }
