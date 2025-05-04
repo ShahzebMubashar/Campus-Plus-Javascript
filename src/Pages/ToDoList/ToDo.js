@@ -31,12 +31,16 @@ function ToDo() {
       }
 
       const data = await res.json();
+      // Get completed task IDs from localStorage
+      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+
       if (data)
         setTodos(
           data.map((task) => ({
             id: task.taskid,
             text: task.content,
-            completed: task.status,
+            // Use either the server status or check if it's in our localStorage completed list
+            completed: task.status === true || completedTaskIds.includes(task.taskid),
             priority: task.priority.toLowerCase(),
             dueDate: new Date(task.duedate).toISOString().split("T")[0],
             dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
@@ -68,7 +72,7 @@ function ToDo() {
           content: newTodo.text,
           priority: newTodo.priority,
           duedate: new Date(`${newTodo.dueDate}T${newTodo.dueTime}`),
-          status: newTodo.completed,
+          status: false,
         }),
       });
 
@@ -89,26 +93,54 @@ function ToDo() {
 
   // Toggle task completion
   const toggleTodo = async (id) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, completed: !todo.completed } : todo
-    );
-
-    setTodos(updatedTodos);
-
     try {
       const todo = todos.find((t) => t.id === id);
-      await fetch(`http://localhost:4000/user/update-priority/${id}`, {
+      const newStatus = !todo.completed;
+
+      // Optimistically update UI
+      const updatedTodos = todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: newStatus } : todo
+      );
+      setTodos(updatedTodos);
+
+      // Save completed task IDs to localStorage for persistence across pages
+      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+      if (newStatus) {
+        // Add to completed tasks if not already in the list
+        if (!completedTaskIds.includes(id)) {
+          completedTaskIds.push(id);
+        }
+      } else {
+        // Remove from completed tasks
+        const index = completedTaskIds.indexOf(id);
+        if (index > -1) {
+          completedTaskIds.splice(index, 1);
+        }
+      }
+      localStorage.setItem('completedTaskIds', JSON.stringify(completedTaskIds));
+
+      // The endpoint should be for updating status specifically, but it seems the API uses update-priority for both
+      const response = await fetch(`http://localhost:4000/user/update-priority/${id}`, {
         method: "PUT",
         credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          status: !todo.completed,
+          status: newStatus,
         }),
       });
+
+      if (!response.ok) {
+        // If the API call fails, revert the optimistic update
+        setTodos(todos);
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      // Don't fetch tasks again - this is causing the completed status to reset
+      // The UI is already updated optimistically above
     } catch (error) {
-      console.error("Error:", error.message);
+      console.error("Error toggling task completion:", error.message);
     }
   };
 
@@ -294,25 +326,22 @@ function ToDo() {
                       </span>
                       <div className="priority-selector">
                         <button
-                          className={`priority-btn ${
-                            todo.priority === "low" ? "active" : ""
-                          }`}
+                          className={`priority-btn ${todo.priority === "low" ? "active" : ""
+                            }`}
                           onClick={() => updatePriority(todo.id, "low")}
                         >
                           Low
                         </button>
                         <button
-                          className={`priority-btn ${
-                            todo.priority === "medium" ? "active" : ""
-                          }`}
+                          className={`priority-btn ${todo.priority === "medium" ? "active" : ""
+                            }`}
                           onClick={() => updatePriority(todo.id, "medium")}
                         >
                           Medium
                         </button>
                         <button
-                          className={`priority-btn ${
-                            todo.priority === "high" ? "active" : ""
-                          }`}
+                          className={`priority-btn ${todo.priority === "high" ? "active" : ""
+                            }`}
                           onClick={() => updatePriority(todo.id, "high")}
                         >
                           High
