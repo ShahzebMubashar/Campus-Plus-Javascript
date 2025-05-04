@@ -399,3 +399,156 @@ footer a {
         /* Align the toggler button */
     }
 }
+
+/* AboutCampusPlus Footer Styles - Updated Two Column Layout */
+.aboutcp-footer {
+    background: linear-gradient(to right, #00e0fe, #1107fe);
+    color: #fff;
+    position: relative;
+    width: 100%;
+    padding: 50px 0 30px;
+    margin: 0 auto;
+}
+
+.aboutcp-footer-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 25px;
+    position: relative;
+    display: inline-block;
+}
+
+.aboutcp-footer-title::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background-color: #fff;
+}
+
+.aboutcp-footer-text {
+    font-size: 1rem;
+    opacity: 0.9;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    max-width: 90%;
+}
+
+.aboutcp-social-icons {
+    display: flex;
+    gap: 15px;
+    margin-top: 1.5rem;
+}
+
+.aboutcp-social-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+.aboutcp-social-icon:hover {
+    background-color: #fff;
+    color: #1107fe;
+    transform: translateY(-3px);
+}
+
+.aboutcp-contact-info {
+    margin-bottom: 1.5rem;
+}
+
+.aboutcp-contact-info p {
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    font-size: 1rem;
+}
+
+.aboutcp-footer-subtitle {
+    font-size: 1.1rem;
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.aboutcp-newsletter-form {
+    display: flex;
+    margin-top: 12px;
+}
+
+.aboutcp-form-input {
+    flex: 1;
+    padding: 12px 15px;
+    border-radius: 4px 0 0 4px;
+    border: none;
+    outline: none;
+    font-size: 0.95rem;
+}
+
+.aboutcp-form-button {
+    padding: 12px 20px;
+    background-color: #fff;
+    color: #1107fe;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.aboutcp-form-button:hover {
+    background-color: #f0f0f0;
+    transform: translateX(2px);
+}
+
+.aboutcp-footer-divider {
+    margin: 35px 0 25px;
+    border-color: rgba(255, 255, 255, 0.2);
+    opacity: 0.5;
+}
+
+.aboutcp-copyright {
+    opacity: 0.8;
+    font-size: 0.95rem;
+}
+
+.aboutcp-footer-bottom-links {
+    display: flex;
+    justify-content: flex-end;
+    gap: 25px;
+}
+
+.aboutcp-footer-bottom-links a {
+    color: #fff;
+    opacity: 0.8;
+    font-size: 0.95rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.aboutcp-footer-bottom-links a:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 767px) {
+    .aboutcp-footer {
+        padding: 40px 0 20px;
+    }
+
+    .aboutcp-footer-text {
+        max-width: 100%;
+    }
+
+    .aboutcp-footer-bottom-links {
+        justify-content: flex-start;
+        margin-top: 20px;
+        gap: 15px;
+    }
+}
