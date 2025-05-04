@@ -288,13 +288,14 @@ footer a {
 /* AboutCampusPlus Navbar Styles */
 .aboutcp-navbar {
     box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
-    padding: 10px 0;
+    padding: 0px 0;
 }
 
-.aboutcp-container {
+.aboutcp-navbar-wrapper {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
 }
 
 .aboutcp-navbar-brand {
@@ -305,15 +306,19 @@ footer a {
     background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-right: 2rem;
+    flex-shrink: 0;
 }
 
 .aboutcp-navbar-collapse {
-    flex-grow: 0;
+    display: flex;
+    justify-content: flex-end;
+    flex-basis: auto;
 }
 
 .aboutcp-navbar-nav {
     display: flex;
     align-items: center;
+    margin-left: auto;
 }
 
 .aboutcp-nav-item {
@@ -336,15 +341,33 @@ footer a {
 }
 
 @media (max-width: 991px) {
+    .aboutcp-navbar-wrapper {
+        flex-wrap: wrap;
+    }
+
     .aboutcp-navbar-collapse {
-        flex-grow: 1;
+        display: none;
+        width: 100%;
+        order: 3;
+    }
+
+    .collapse.show.aboutcp-navbar-collapse {
+        display: block !important;
+        margin-top: 10px;
     }
 
     .aboutcp-navbar-nav {
-        margin-top: 15px;
+        flex-direction: column;
+        align-items: flex-start;
     }
 
     .aboutcp-nav-item {
         margin-left: 0;
+        margin-bottom: 5px;
+        width: 100%;
+    }
+
+    .aboutcp-navbar-toggler {
+        padding: 3px 6px;
     }
 }
