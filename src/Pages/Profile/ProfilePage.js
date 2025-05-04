@@ -1,25 +1,74 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./ProfilePage.css";
-import Navbar from '../Index/components/Navbar'
+import Navbar from "../Index/components/Navbar";
 
 function ProfilePage() {
   const [user, setUser] = useState({
-    fullName: "Shahzeb Mubashar",
-    email: "l226734@lhr.nu.edu.pk",
-    rollNumber: "22L-6734",
-    program: "BS(CS)",
-    semester: "6th Semester",
-    gpa: "3.8",
-    enrolledCourses: [
-      { id: 1, name: "Data Structures", code: "CS201" },
-      { id: 2, name: "Database Systems", code: "CS202" },
-      { id: 3, name: "Web Development", code: "CS203" },
-    ],
-    notifications: [
-      { id: 1, message: "Assignment due for CS201", date: "2023-10-15" },
-      { id: 2, message: "Midterm exam schedule published", date: "2023-10-10" },
-    ],
+    fullName: "",
+    email: "",
+    rollNumber: "",
+    program: "",
+    semester: "",
+    gpa: "",
+    enrolledCourses: [],
+    notifications: [],
   });
+
+  const [currentCourses, setCurrentCourses] = useState({});
+
+  const fetchCurrentCourses = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/current-courses", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to Fetch Current Courses");
+      }
+
+      const data = await res.json();
+
+      setUser((prevUser) => ({
+        ...prevUser,
+        enrolledCourses: data,
+      }));
+    } catch (error) {
+      console.log("Error: Failed to fetch current COurses");
+    }
+  };
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/profile", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to Fetch User Information");
+      }
+
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      console.log("Error fetching User Info", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUserInfo();
+  }, []);
+
+  useEffect(() => {
+    fetchCurrentCourses();
+  }, [user?.userid]);
 
   const [showEditModal, setShowEditModal] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
@@ -33,6 +82,11 @@ function ProfilePage() {
     confirmPassword: "",
   });
 
+  // Update editForm when user data changes
+  useEffect(() => {
+    setEditForm({ ...user });
+  }, [user]);
+
   const handleEditFormChange = (e) => {
     const { name, value } = e.target;
     setEditForm({
@@ -41,10 +95,28 @@ function ProfilePage() {
     });
   };
 
-  const handleEditFormSubmit = (e) => {
+  const handleEditFormSubmit = async (e) => {
     e.preventDefault();
-    setUser({ ...editForm });
-    setShowEditModal(false);
+    try {
+      const res = await fetch("http://localhost:4000/user/profile", {
+        method: "PUT",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(editForm),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      const updatedUser = await res.json();
+      setUser(updatedUser);
+      setShowEditModal(false);
+    } catch (error) {
+      console.log("Error updating profile", error);
+    }
   };
 
   const handlePasswordFormChange = (e) => {
@@ -149,7 +221,7 @@ function ProfilePage() {
             </button>
             <button
               className="lms-btn lms-secondary"
-              onClick={() => window.location.href = '/transcript'}
+              onClick={() => (window.location.href = "/transcript")}
             >
               View Transcript
             </button>
@@ -166,60 +238,76 @@ function ProfilePage() {
           <div className="lms-profile-card lms-main-info">
             <div className="lms-profile-avatar-container">
               <div className="lms-profile-avatar">
-                {user.fullName
-                  .split(" ")
-                  .map((name) => name[0])
-                  .join("")}
+                <div className="lms-profile-avatar">
+                  {user.name
+                    ? user.name
+                        .split(" ")
+                        .filter(
+                          (_, index, array) =>
+                            index === 0 || index === array.length - 1
+                        ) // Take first and last
+                        .map((name) => name[0])
+                        .join("")
+                    : "U"}
+                </div>
               </div>
             </div>
             <div className="lms-user-details">
-              <h2>{user.fullName}</h2>
+              <h2>{user.name || "Loading..."}</h2>
               <p>
-                <span className="lms-label">Email:</span> {user.email}
+                <span className="lms-label">Email:</span> {user.email || "N/A"}
               </p>
               <p>
                 <span className="lms-label">Roll Number:</span>{" "}
-                {user.rollNumber}
+                {user.rollnumber || "N/A"}
               </p>
               <p>
-                <span className="lms-label">Program:</span> {user.program}
+                <span className="lms-label">Program:</span>{" "}
+                {user.degree || "N/A"}
               </p>
               <p>
-                <span className="lms-label">Semester:</span> {user.semester}
+                <span className="lms-label">Semester:</span>{" "}
+                {user.semester || "N/A"}
               </p>
               <p>
-                <span className="lms-label">GPA:</span> {user.gpa}
+                <span className="lms-label">GPA:</span> {user.gpa || "N/A"}
               </p>
             </div>
           </div>
 
           <div className="lms-profile-card lms-enrolled-courses">
             <h3>Enrolled Courses</h3>
-            <ul className="lms-course-list">
-              {user.enrolledCourses.map((course) => (
-                <li key={course.id} className="lms-course-item">
-                  <span className="lms-course-code">{course.code}</span>
-                  <span className="lms-course-name">{course.name}</span>
-                </li>
-              ))}
-            </ul>
+            {user.enrolledCourses && user.enrolledCourses.length > 0 ? (
+              <ul className="lms-course-list">
+                {user.enrolledCourses.map((course) => (
+                  <li key={course.id} className="lms-course-item">
+                    <span className="lms-course-code">{course.coursecode}</span>
+                    <span className="lms-course-name">{course.coursename}</span>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No courses enrolled</p>
+            )}
           </div>
 
           <div className="lms-profile-card lms-notifications">
             <h3>Notifications</h3>
-            <ul className="lms-notification-list">
-              {user.notifications.map((notification) => (
-                <li key={notification.id} className="lms-notification-item">
-                  <p className="lms-notification-message">
-                    {notification.message}
-                  </p>
-                  <p className="lms-notification-date">{notification.date}</p>
-                </li>
-              ))}
-            </ul>
+            {user.notifications && user.notifications.length > 0 ? (
+              <ul className="lms-notification-list">
+                {user.notifications.map((notification) => (
+                  <li key={notification.id} className="lms-notification-item">
+                    <p className="lms-notification-message">
+                      {notification.message}
+                    </p>
+                    <p className="lms-notification-date">{notification.date}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p>No notifications</p>
+            )}
           </div>
-
-
         </div>
 
         {/* Edit Profile Modal */}
@@ -233,7 +321,7 @@ function ProfilePage() {
                   <input
                     type="text"
                     name="fullName"
-                    value={editForm.fullName}
+                    value={editForm.name || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
@@ -242,7 +330,7 @@ function ProfilePage() {
                   <input
                     type="email"
                     name="email"
-                    value={editForm.email}
+                    value={editForm.email || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
@@ -251,7 +339,7 @@ function ProfilePage() {
                   <input
                     type="text"
                     name="program"
-                    value={editForm.program}
+                    value={editForm.program || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
@@ -260,7 +348,7 @@ function ProfilePage() {
                   <input
                     type="text"
                     name="semester"
-                    value={editForm.semester}
+                    value={editForm.semester || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
