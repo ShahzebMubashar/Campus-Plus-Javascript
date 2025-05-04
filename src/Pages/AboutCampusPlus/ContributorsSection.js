@@ -41,7 +41,7 @@ const ContributorsSection = () => {
             name: "Ehan Ayaz",
             useIcon: true,
             icon: faUserGraduate,
-            description: "Ehan's expertise in backend and user research was instrumental in creating the intuitive and user-friendly interface of Campus+.",
+            description: "Ehan's expertise in backend and user research was instrumental in creating the intuitive and user-friendly interface.",
             profileUrl: "#"
         },
         {
