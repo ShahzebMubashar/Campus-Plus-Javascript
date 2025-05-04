@@ -12,7 +12,7 @@ function SignInPage() {
     const [isSignUp, setIsSignUp] = useState(false)
     const [isAnimating, setIsAnimating] = useState(false)
     const [signInData, setSignInData] = useState({ email: "", password: "" })
-    const [signUpData, setSignUpData] = useState({ username: "", email: "", password: "", rollnumber: "" })
+    const [signUpData, setSignUpData] = useState({ username: "", fullName: "", email: "", password: "", rollnumber: "" })
     const [message, setMessage] = useState("")
     const [activeField, setActiveField] = useState(null)
     const [eyePosition, setEyePosition] = useState({ x: 50, y: 50 })
@@ -515,6 +515,19 @@ function SignInPage() {
                                             onFocus={() => handleFocus("username")}
                                             onBlur={handleBlur}
                                             placeholder="Username"
+                                            className="form-input"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="input-group">
+                                        <input
+                                            type="text"
+                                            name="fullName"
+                                            value={signUpData.fullName}
+                                            onChange={handleSignUpChange}
+                                            onFocus={() => handleFocus("fullName")}
+                                            onBlur={handleBlur}
+                                            placeholder="Full Name"
                                             className="form-input"
                                             required
                                         />

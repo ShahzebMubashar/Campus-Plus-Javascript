@@ -19,7 +19,7 @@ const from = "no-reply@campusplus.com";
 
 exports.register = async (request, response) => {
   const {
-    body: { username, email, password, rollnumber },
+    body: { username, email, password, rollnumber, fullName },
   } = request;
 
   if (!username || !email || !password || !rollnumber) {
@@ -72,11 +72,19 @@ exports.register = async (request, response) => {
       [username, email, hashedPassword, rollnumber]
     );
 
+    if (fullName) {
+      await client.query(
+        `INSERT INTO UserInfo (userid, name) VALUES ($1, $2)`,
+        [result.rows[0].userid, fullName]
+      );
+    }
+
     request.session.user = {
       userid: parseInt(result.rows[0].userid),
       username: result.rows[0].username,
       email: result.rows[0].email,
       rollnumber: result.rows[0].rollnumber,
+      fullName: fullName || null,
     };
 
     response.cookie("user", `${result.rows[0].username}`, { maxAge: 600000 });
@@ -88,6 +96,7 @@ exports.register = async (request, response) => {
       username: result.rows[0].username,
       email: result.rows[0].email,
       rollnumber: result.rows[0].rollnumber,
+      fullName: fullName || null,
     });
   } catch (error) {
     console.error("Registration error:", error.message);
@@ -106,7 +115,10 @@ exports.login = async (request, response) => {
 
   try {
     const result = await pool.query(
-      "SELECT * FROM Users WHERE email = $1 or username = $1",
+      `SELECT u.*, ui.name as fullName 
+       FROM Users u 
+       LEFT JOIN UserInfo ui ON u.userid = ui.userid 
+       WHERE u.email = $1 OR u.username = $1`,
       [email || username]
     );
 
@@ -124,6 +136,7 @@ exports.login = async (request, response) => {
       email: user.email,
       username: user.username,
       role: user.role,
+      fullName: user.fullname,
     };
 
     await new Promise((resolve, reject) => {
@@ -146,6 +159,7 @@ exports.login = async (request, response) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        fullName: user.fullname,
       },
     });
   } catch (error) {
