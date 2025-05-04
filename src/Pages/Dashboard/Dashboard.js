@@ -38,8 +38,8 @@ function Dashboard() {
 
     // Function to get user's initials from name or username
     const getUserInitials = () => {
-      // Try to use name first, then fallback to username if available
-      const displayName = User?.name || User?.username || "";
+      // Try to use fullName first, then fallback to name, then username
+      const displayName = User?.fullName || User?.name || User?.username;
 
       if (!displayName) return "U";
 
@@ -643,11 +643,6 @@ function Dashboard() {
     );
   }
 
-  return (
-    <div>
-      {AcademicDashboard()}
-    </div>
-  );
+  return <AcademicDashboard />;
 }
-
 export default Dashboard;
