@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
-import defaultAvatar from "../../Assets/images/avatar_1.jpg";
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -183,9 +182,9 @@ function TranscriptsPage() {
         semesters.map((semester) =>
           semester.id === semesterId
             ? {
-                ...semester,
-                courses: semester.courses.filter((c) => c.id !== courseId),
-              }
+              ...semester,
+              courses: semester.courses.filter((c) => c.id !== courseId),
+            }
             : semester
         )
       );
@@ -212,6 +211,21 @@ function TranscriptsPage() {
     }
   };
 
+  // Function to get user's initials from name or username
+  const getUserInitials = () => {
+    // Try to use name first, then fallback to username if available
+    const displayName = user?.name || user?.username || "";
+
+    if (!displayName) return "U";
+
+    return displayName
+      .split(" ")
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .map(name => name[0])
+      .join("")
+      .toUpperCase();
+  };
+
   if (loading) return <div className="loading">Loading transcript data...</div>;
 
   return (
@@ -219,15 +233,9 @@ function TranscriptsPage() {
       {/* Sidebar */}
       <aside className="transcripts-sidebar">
         <div className="sidebar-profile">
-          {user?.profilepic ? (
-            <img
-              src={user.profilepic}
-              alt="Profile"
-              onError={(e) => (e.target.src = defaultAvatar)}
-            />
-          ) : (
-            <div className="lms-profile-avatar">{(user?.name || "S")[0]}</div>
-          )}
+          <div className="lms-profile-avatar">
+            {getUserInitials()}
+          </div>
           <h2>{user?.name || "Student"}</h2>
         </div>
         <hr />
@@ -289,9 +297,8 @@ function TranscriptsPage() {
           semesters.map((semester) => (
             <div
               key={semester.id}
-              className={`semester-card${
-                selectedSemesterId === semester.id ? " selected" : ""
-              }`}
+              className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""
+                }`}
               ref={(el) => (semesterRefs.current[semester.id] = el)}
             >
               <div className="semester-header">

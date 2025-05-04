@@ -200,6 +200,38 @@ function ProfilePage() {
     setShowSettingsModal(false);
   };
 
+  // Function to get user's initials from name or username
+  const getUserInitials = () => {
+    // Try to use name first, then fallback to username if available
+    const displayName = user.name || user.username;
+
+    if (!displayName) return "U";
+
+    return displayName
+      .split(" ")
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .map(name => name[0])
+      .join("")
+      .toUpperCase();
+  };
+
+  // Function to generate a background color based on the name
+  const getAvatarColor = (name) => {
+    if (!name) return "#1a73e8"; // Default color
+
+    const colors = [
+      "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
+      "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff"
+    ];
+
+    // Sum the character codes to get a deterministic but unique color
+    const charSum = name
+      .split("")
+      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+    return colors[charSum % colors.length];
+  };
+
   return (
     <div className="lms-profile-root">
       <Navbar />
@@ -237,19 +269,34 @@ function ProfilePage() {
         <div className="lms-profile-content">
           <div className="lms-profile-card lms-main-info">
             <div className="lms-profile-avatar-container">
-              <div className="lms-profile-avatar">
-                <div className="lms-profile-avatar">
-                  {user.name
-                    ? user.name
-                        .split(" ")
-                        .filter(
-                          (_, index, array) =>
-                            index === 0 || index === array.length - 1
-                        ) // Take first and last
-                        .map((name) => name[0])
-                        .join("")
-                    : "U"}
-                </div>
+              <div
+                className="lms-profile-avatar"
+                style={{
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  overflow: 'hidden',
+                  fontSize: '2.5rem',
+                  fontWeight: 'bold',
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px',
+                  backgroundColor: getAvatarColor(user.name || user.username || ""),
+                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                  cursor: 'default',
+                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
+                  border: '4px solid white'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'scale(1.05)';
+                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'scale(1)';
+                  e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                }}
+              >
+                {getUserInitials()}
               </div>
             </div>
             <div className="lms-user-details">
