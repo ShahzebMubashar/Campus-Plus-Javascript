@@ -20,8 +20,12 @@ export default function Chatrooms() {
 
     const fetchUserInfo = async () => {
         try {
-            const response = await fetch("http://localhost:4000/auth/user-info", {
+            const response = await fetch("http://localhost:4000/user/profile", {
+                method:"GET",
                 credentials: "include",
+                headers: {
+                    "Content-Type":"apploication/json"
+                }
             });
             if (response.ok) {
                 const data = await response.json();

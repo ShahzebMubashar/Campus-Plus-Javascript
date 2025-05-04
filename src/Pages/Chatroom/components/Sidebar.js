@@ -2,19 +2,37 @@ import React from 'react';
 import './Sidebar.css';
 
 const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => {
+    // Function to get initials from username
+    const getInitials = (name) => {
+        console.log(userInfo);
+        if (!name) return 'U';
+        
+        const names = name.split(' ');
+        if (names.length === 1) return names[0][0];
+        
+        // Get first letter of first name and first letter of last name
+        return `${names[0][0]}${names[names.length - 1][0]}`;
+    };
+
     return (
         <div className="sidebar">
             {/* Profile Section */}
             <div className="profile-section">
                 <div className="profile-content">
                     <div className="avatar">
-                        <img
-                            src={userInfo?.profilepic || `https://ui-avatars.com/api/?name=${userInfo?.username || 'User'}&background=2196f3&color=fff`}
-                            alt="User Avatar"
-                        />
+                        {userInfo?.profilepic ? (
+                            <img
+                                src={userInfo.profilepic}
+                                alt="User Avatar"
+                            />
+                        ) : (
+                            <div className="avatar-initials">
+                                {getInitials(userInfo?.name)}
+                            </div>
+                        )}
                     </div>
                     <div className="profile-info">
-                        <h3>{userInfo?.username || 'Welcome Back'}</h3>
+                        <h3>{userInfo?.name || 'Welcome Back'}</h3>
                         <p>Campus+ Member</p>
                     </div>
                 </div>
