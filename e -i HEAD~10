@@ -1,0 +1,169 @@
+[33mc3aa7a9[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mShahzeb[m[33m, [m[1;31morigin/Shahzeb[m[33m)[m Merge branch 'main' of https://github.com/ShahzebMubashar/Campus-Plus-Javascript into Shahzeb
+[33m0627e0e[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #146 from ShahzebMubashar/Jaffery
+[33m60ff2cc[m[33m ([m[1;31morigin/Jaffery[m[33m)[m Initials in Sidebar
+[33m51a01a6[m Initials on Profile Page
+[33md57bd29[m Initials for profile at Dashboard
+[33md584e73[m Merge pull request #142 from ShahzebMubashar/Jaffery
+[33mfddb782[m Updated jsons
+[33m6449ed3[m Updated Schema
+[33m1a87488[m Merge pull request #140 from ShahzebMubashar/Jaffery
+[33m2c41c09[m Fetch Top 3 Tasks from Dashboard
+[33mac43598[m Removed excess CSS
+[33mb43ac98[m Removed Reminders from Dashboard
+[33m3d76046[m Fetch Calls for updating tasks
+[33m713bcc6[m Add and Delete Tasks
+[33m07d8041[m Merge branch 'main' of https://github.com/ShahzebMubashar/Campus-Plus-Javascript into Shahzeb
+[33m4775349[m Merge pull request #139 from ShahzebMubashar/Jaffery
+[33m4b2dc6c[m Delete Reminders from Dashboard
+[33mf263623[m Add Reminders on Dashboard
+[33m6f91d0f[m editting playlist
+[33mf7c5c42[m Merge branch 'main' of https://github.com/ShahzebMubashar/Campus-Plus-Javascript into Shahzeb
+[33m8dc6b30[m Merge pull request #138 from ShahzebMubashar/Jaffery
+[33m79ee55c[m Merge branch 'main' of https://github.com/ShahzebMubashar/Campus-Plus-Javascript into Shahzeb
+[33mb2209ba[m Limit fetched objects to 3
+[33m9119a8c[m editting chatroom FE
+[33mf08abc7[m editting chatroom FE
+[33m8b1fac9[m Merge pull request #137 from ShahzebMubashar/Jaffery
+[33m293beb4[m Fetch Current Courses
+[33m576cf90[m Merge pull request #136 from ShahzebMubashar/Shahzeb
+[33m5acc328[m editting chatroom FE
+[33m709576e[m Merge pull request #135 from ShahzebMubashar/Shahzeb
+[33m0b3d4c0[m editting chatroom FE
+[33mb528544[m Handling In-Progress Courses for GPA Calculation
+[33m0b35f02[m editting chatroom FE
+[33m468b1de[m editting chatroom FE
+[33mb48dc11[m editting chatroom FE
+[33mf80c57c[m editting chatroom FE
+[33m2d926d1[m editting chatroom FE
+[33m4c2c628[m editting chatroom FE
+[33mf947f68[m editting chatroom FE
+[33ma7c6641[m Merge pull request #134 from ShahzebMubashar/Jaffery
+[33mc7f4550[m Fixed Transcript Issue
+[33m35133e6[m Merge pull request #133 from ShahzebMubashar/Jaffery
+[33mf8cc829[m Merge pull request #132 from ShahzebMubashar/Shahzeb
+[33m34597c9[m transcripts style
+[33m22d358d[m transcripts style
+[33me8024a6[m transcripts style
+[33m01c9be8[m Merge pull request #130 from ShahzebMubashar/Shahzeb
+[33m0e761c8[m TRANSCRIPT BUG
+[33m54f10cf[m Fixed Multiple Entries for Join Room
+[33mb55e395[m User's Joined Rooms Display on Dashboard
+[33mfd2f06c[m email gen bug
+[33mdb9d4a9[m email gen bug
+[33m861feef[m calculator style
+[33m94681fc[m faculty style
+[33m68036f4[m faculty styke
+[33m2466f1c[m[33m ([m[1;31morigin/Ehan[m[33m)[m Merge pull request #118 from ShahzebMubashar/Shahzeb
+[33ma01acdf[m bugs
+[33me66a4ed[m editting timetable
+[33ma0ee916[m editting datesheet gen
+[33m690540e[m editting dashboard
+[33mfba327a[m editting login
+[33maa0c93c[m Merge pull request #117 from ShahzebMubashar/Shahzeb
+[33m230ace2[m Merge branch 'main' of https://github.com/ShahzebMubashar/Campus-Plus-Javascript into Shahzeb
+[33m8b41461[m editting login
+[33m338a7d6[m editting login
+[33m2816582[m editting login
+[33m039f6aa[m Merge pull request #116 from ShahzebMubashar/Shahzeb
+[33m585a837[m editting login
+[33m74a66fa[m editting login
+[33m6b9b2eb[m Merge pull request #115 from ShahzebMubashar/Shahzeb
+[33mb08cec4[m editting profile
+[33m557f8f6[m editting profile
+[33mbee2d8d[m Merge pull request #114 from ShahzebMubashar/Shahzeb
+[33m6b0fac0[m editting navbar
+[33mc1d0191[m editting navbar
+[33m6e9b31b[m editting navbar
+[33mc03c771[m editting navbar
+[33me6f007a[m Merge pull request #113 from ShahzebMubashar/Shahzeb
+[33m1a744ca[m Merge branch 'main' of https://github.com/ShahzebMubashar/Campus-Plus-Javascript into Shahzeb
+[33m0f13866[m editting navbar
+[33m685b20c[m editting navbar
+[33m5f9f515[m Css conflicts
+[33mc7ce7de[m editting navbar
+[33m7286d25[m added navbar icons
+[33mebcdd94[m Changing navbar
+[33m983acbf[m Changing dashboard
+[33m0824590[m Changing dashboard
+[33mee417c9[m Changing dashboard
+[33ma826558[m Changing navbar
+[33mc428a50[m Changing navbar
+[33m664b305[m Changing navbar
+[33m80282e5[m Changing navbar
+[33m30b2e81[m Changing navbar
+[33mff70766[m Changing navbar
+[33m1a5b1f9[m Changing navbar
+[33m5b670e0[m Changing navbar
+[33m8b93866[m bugs
+[33mbf25322[m bugs
+[33mb94667e[m bugs
+[33m20a95e7[m Merge pull request #112 from ShahzebMubashar/Jaffery
+[33m4a9c20f[m Duplicate Semesters not allowed
+[33m5f63350[m Merge pull request #111 from ShahzebMubashar/Jaffery
+[33mdb25ece[m Transcript Page Complete. Pending: Edit Course
+[33m6c408a1[m Remove Semester
+[33m6792721[m Remove Course From Semester
+[33m05f41e6[m Transcripts Page
+[33me8e38fa[m Merge pull request #110 from ShahzebMubashar/Jaffery
+[33mbe407eb[m OTP-Verified Reset Password Implemented
+[33ma17d1cc[m Merge pull request #109 from ShahzebMubashar/Shahzeb
+[33m98efa7e[m updated profile page
+[33mc9ff1e1[m updated profile page
+[33me77a735[m updated profile page
+[33m819d092[m updated profile page
+[33m7ca7415[m updates profile page
+[33mfe9f740[m added profile page
+[33m340f53f[m Merge pull request #108 from ShahzebMubashar/Jaffery
+[33m0f8d7e7[m Forgot and Reset Password
+[33me3e66b4[m Merge pull request #107 from ShahzebMubashar/Jaffery
+[33me5a63dd[m Forget and Reset Password
+[33m820d905[m Merge pull request #106 from ShahzebMubashar/Jaffery
+[33mc0b1e3b[m Changes to MessageReactions Schema
+[33m85434f9[m Merge pull request #105 from ShahzebMubashar/Jaffery
+[33m0b2a3d1[m Handled single like for each user per post
+[33mf443fff[m Merge pull request #104 from ShahzebMubashar/Shahzeb
+[33m5ff5736[m fixing chatroom FE
+[33m392ffb3[m Merge pull request #103 from ShahzebMubashar/Shahzeb
+[33m2752f0e[m fixing chatroom FE
+[33mdcabd67[m fixing chatroom FE
+[33mb1567fc[m fixing chatroom FE
+[33m4dbc054[m fixing chatroom FE
+[33mfdad145[m fixing chatroom FE
+[33m498349d[m fixing chatroom FE
+[33mf44c19f[m fixing chatroom FE
+[33m02937ff[m fixing chatroom FE
+[33m829e42c[m Merge pull request #102 from ShahzebMubashar/Shahzeb
+[33m9e85866[m fixing chatroom FE
+[33m7891d22[m fixing chatroom FE
+[33m09e8d6d[m fixing chatroom FE
+[33m6ecee5c[m fixing chatroom FE
+[33mf9c191b[m fixing chatroom FE
+[33m54ff0f3[m fixing chatroom FE
+[33mbc489fc[m fixing chatroom FE
+[33m0cbb88f[m fixing chatroom FE
+[33meb71919[m fixing chatroom FE
+[33m0cfa2dd[m fixing sidebar fe
+[33m1dc65ea[m Merge pull request #101 from ShahzebMubashar/Shahzeb
+[33m50842f8[m fixing sidebar fe
+[33m73f5209[m fixing sidebar fe
+[33m9e36f23[m fixd pin
+[33m6863c95[m added mygroups
+[33ma0d18f9[m Merge pull request #100 from ShahzebMubashar/Shahzeb
+[33m3449c6a[m added search
+[33m19c3655[m Merge pull request #99 from ShahzebMubashar/Shahzeb
+[33m325e59d[m fixed pin
+[33m9c3f0d0[m fixed pin
+[33meada406[m Merge pull request #98 from ShahzebMubashar/Shahzeb
+[33m38635d7[m fixed edit
+[33m5114dca[m Merge pull request #97 from ShahzebMubashar/Shahzeb
+[33me6e0354[m fixed edit
+[33m488227e[m Merge pull request #96 from ShahzebMubashar/Shahzeb
+[33mdb26dca[m added pin and report and edit
+[33mf9d3e6c[m added pin and report and edit
+[33mb3d7f1f[m added share func in chatroom
+[33m3b5830a[m Merge pull request #95 from ShahzebMubashar/Shahzeb
+[33m24be997[m adding del post feature chatroom
+[33me5bfe43[m Merge pull request #94 from ShahzebMubashar/Shahzeb
+[33mf2773fc[m Merge pull request #93 from ShahzebMubashar/Jaffery
+[33ma119fb4[m updating comments chatroom
+[33m5370142
