@@ -8,7 +8,7 @@ function ProfilePage() {
     email: "",
     rollNumber: "",
     program: "",
-    semester: "",
+    batch: "",
     gpa: "",
     enrolledCourses: [],
     notifications: [],
@@ -107,7 +107,7 @@ function ProfilePage() {
         body: JSON.stringify({
           name: editForm.name,
           degree: editForm.degree,
-          batch: editForm.semester,
+          batch: editForm.batch,
         }),
       });
 
@@ -271,8 +271,8 @@ function ProfilePage() {
                 {user.degree || "N/A"}
               </p>
               <p>
-                <span className="lms-label">Semester:</span>{" "}
-                {user.semester || "N/A"}
+                <span className="lms-label">Batch:</span>{" "}
+                {user.batch || "N/A"}
               </p>
               <p>
                 <span className="lms-label">GPA:</span> {user.gpa || "N/A"}
@@ -349,11 +349,11 @@ function ProfilePage() {
                   />
                 </div>
                 <div className="lms-form-group">
-                  <label>Semester</label>
+                  <label>Batch</label>
                   <input
                     type="text"
-                    name="semester"
-                    value={editForm.semester || ""}
+                    name="batch"
+                    value={editForm.batch || ""}
                     onChange={handleEditFormChange}
                   />
                 </div>
