@@ -4,7 +4,6 @@ import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
 
 function AcademicDashboard() {
-  // State declarations
   const [courses, setCourses] = useState([
     { name: "Course 1", credits: 3, grade: "A" },
     { name: "Course 2", credits: 4, grade: "B+" },
@@ -18,11 +17,6 @@ function AcademicDashboard() {
   const [User, setUser] = useState({});
   const [currentCourses, setCurrentCourses] = useState([]);
   const [myRooms, setMyRooms] = useState([]);
-  const [reminder, setReminder] = useState({
-    content: "",
-    deadline: "",
-  });
-  const [reminders, setReminders] = useState([]);
 
   const gradePoints = {
     "A+": 4.0,
@@ -40,70 +34,6 @@ function AcademicDashboard() {
     F: 0.0,
   };
 
-  // Fetch reminders
-  const fetchReminders = async () => {
-    try {
-      const res = await fetch("http://localhost:4000/user/my-reminders", {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!res.ok) throw new Error("Failed to fetch reminders");
-      
-      const data = await res.json();
-      setReminders(data);
-    } catch (error) {
-      console.error("Error fetching reminders:", error.message);
-    }
-  };
-
-  // Add reminder
-  const handleAddReminder = async (e) => {
-    e.preventDefault();
-    try {
-      const res = await fetch("http://localhost:4000/user/add-reminder", {
-        method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          content: reminder.content,
-          deadline: reminder.deadline,
-        }),
-      });
-
-      if (!res.ok) throw new Error("Failed to add reminder");
-
-      const data = await res.json();
-      console.log(data);
-      fetchReminders();
-      setReminder({ content: "", deadline: "" });
-    } catch (error) {
-      console.error("Error adding reminder:", error.message);
-    }
-  };
-
-  // Delete reminder
-  const handleDeleteReminder = async (reminderId) => {
-    try {
-      const res = await fetch(`http://localhost:4000/user/delete-reminder/${reminderId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-
-      if (!res.ok) throw new Error("Failed to delete reminder");
-      
-      fetchReminders();
-    } catch (error) {
-      console.error("Error deleting reminder:", error.message);
-    }
-  };
-
-  // Calculate GPA
   const calculateGPA = () => {
     if (courses.length === 0) return 0;
     let totalPoints = 0;
@@ -117,7 +47,6 @@ function AcademicDashboard() {
     return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : 0;
   };
 
-  // Add course
   const addCourse = () => {
     if (newCourse.name.trim()) {
       setCourses([...courses, { ...newCourse }]);
@@ -125,14 +54,12 @@ function AcademicDashboard() {
     }
   };
 
-  // Remove course
   const removeCourse = (index) => {
     const updatedCourses = [...courses];
     updatedCourses.splice(index, 1);
     setCourses(updatedCourses);
   };
 
-  // Fetch current courses
   const fetchCurrentCourses = async () => {
     try {
       const res = await fetch("http://localhost:4000/user/current-courses", {
@@ -154,7 +81,6 @@ function AcademicDashboard() {
     }
   };
 
-  // Fetch user info
   const fetchUserInfo = async () => {
     try {
       const res = await fetch(`http://localhost:4000/User/profile`, {
@@ -176,7 +102,50 @@ function AcademicDashboard() {
     }
   };
 
-  // Fetch joined rooms
+  const [tasks, setTodos] = useState([]);
+
+  // Fetch tasks from backend
+  const fetchTasks = async () => {
+    try {
+      const res = await fetch("http://localhost:4000/user/my-reminders", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        setTodos([]);
+        throw new Error("Failed to fetch tasks");
+      }
+
+      const data = await res.json();
+      if (data) {
+        setTodos(
+          data.map((task) => ({
+            id: task.taskid,
+            title: task.content, // Changed from 'text' to 'title' to match deadlines structure
+            completed: task.status,
+            priority: task.priority.toLowerCase(),
+            dueDate: new Date(task.duedate).toISOString().split("T")[0],
+            dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
+            course: "Task", // Added to match deadlines structure
+          }))
+        );
+        console.log(data);
+      } else {
+        setTodos([]);
+      }
+    } catch (error) {
+      console.error("Error:", error.message);
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, [User?.userid]);
+
   const fetchJoinedRooms = async () => {
     try {
       const result = await fetch(
@@ -199,16 +168,6 @@ function AcademicDashboard() {
     }
   };
 
-  // Handle input change
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewCourse({
-      ...newCourse,
-      [name]: name === "credits" ? parseInt(value) || 0 : value,
-    });
-  };
-
-  // Effects
   useEffect(() => {
     fetchUserInfo();
   }, []);
@@ -217,15 +176,21 @@ function AcademicDashboard() {
     if (User?.userid) {
       fetchCurrentCourses();
       fetchJoinedRooms();
-      fetchReminders();
     }
   }, [User?.userid]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewCourse({
+      ...newCourse,
+      [name]: name === "credits" ? parseInt(value) || 0 : value,
+    });
+  };
 
   return (
     <div className="academic-dashboard">
       <Navbar />
       <div className="dashboardcontainer">
-        {/* User Profile Section */}
         <section className="user-profile-section">
           <img src={Shahzebpic} alt="Profile" className="profile-picture" />
           <div className="user-info">
@@ -269,7 +234,6 @@ function AcademicDashboard() {
           </div>
         </section>
 
-        {/* My Courses Section */}
         <section className="courses-section">
           <div className="section-header">
             <h2>📘 My Courses</h2>
@@ -321,59 +285,6 @@ function AcademicDashboard() {
           </div>
         </section>
 
-        {/* Reminders Section */}
-        <section className="reminders-section">
-          <div className="section-header">
-            <h2>🔔 Reminders</h2>
-          </div>
-          <form onSubmit={handleAddReminder} className="reminder-form">
-            <div className="form-group">
-              <input
-                type="text"
-                value={reminder.content}
-                onChange={(e) => setReminder({...reminder, content: e.target.value})}
-                placeholder="Enter reminder content"
-                required
-              />
-            </div>
-            <div className="form-group">
-              <input
-                type="datetime-local"
-                value={reminder.deadline}
-                onChange={(e) => setReminder({...reminder, deadline: e.target.value})}
-                required
-              />
-            </div>
-            <button type="submit" className="add-reminder-btn">
-              Add Reminder
-            </button>
-          </form>
-
-          <div className="reminders-list">
-            {reminders.length > 0 ? (
-              reminders.map((reminder, index) => (
-                <div key={index} className="reminder-card">
-                  <div className="reminder-content">{reminder.content}</div>
-                  <div className="reminder-meta">
-                    <span className="reminder-date">
-                      Due: {new Date(reminder.deadline).toLocaleString()}
-                    </span>
-                    <button 
-                      className="reminder-delete"
-                      onClick={() => handleDeleteReminder(reminder.reminderid)}
-                    >
-                      ×
-                    </button>
-                  </div>
-                </div>
-              ))
-            ) : (
-              <div className="no-reminders">No reminders yet. Add one above!</div>
-            )}
-          </div>
-        </section>
-
-        {/* Deadlines Section */}
         <section className="deadlines-section">
           <div className="section-header">
             <h2>⏰ Upcoming Deadlines</h2>
@@ -382,46 +293,38 @@ function AcademicDashboard() {
             </a>
           </div>
           <div className="deadlines-list">
-            {[
-              {
-                title: "Database Systems Assignment",
-                dueDate: "2024-03-15",
-                course: "CS-301",
-                priority: "high",
-              },
-              {
-                title: "Software Engineering Project",
-                dueDate: "2024-03-20",
-                course: "CS-401",
-                priority: "medium",
-              },
-            ].map((deadline, index) => (
-              <div
-                key={index}
-                className="deadline-card"
-                onClick={() => (window.location.href = "/assignment-details")}
-              >
-                <div className="deadline-content">
-                  <h3>{deadline.title}</h3>
-                  <div className="deadline-meta">
-                    <span className="course-code">{deadline.course}</span>
-                    <span className="due-date">
-                      <span className="icon">📅</span>
-                      {new Date(deadline.dueDate).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+            {/* Replace the hardcoded deadlines with your fetched todos */}
+            {tasks.length > 0 ? (
+              tasks.slice(0, 3).map((task, index) => (
                 <div
-                  className={`priority-indicator ${deadline.priority}`}
-                ></div>
+                  key={task.id || index} // Use task.id if available, otherwise fall back to index
+                  className="deadline-card"
+                  onClick={() => console.log("Task clicked:", task.id)} // You can replace this with your navigation
+                >
+                  <div className="deadline-content">
+                    <h3>{task.title}</h3>
+                    <div className="deadline-meta">
+                      <span className="course-code">{task.course}</span>
+                      <span className="due-date">
+                        <span className="icon">📅</span>
+                        {new Date(
+                          `${task.dueDate}T${task.dueTime}`
+                        ).toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className={`priority-indicator ${task.priority}`}></div>
+                </div>
+              ))
+            ) : (
+              <div className="no-deadlines-message">
+                No upcoming deadlines found
               </div>
-            ))}
+            )}
           </div>
         </section>
 
-        {/* Bottom Sections */}
         <div className="bottom-sections">
-          {/* GPA Calculator */}
           <div className="gpa-calculator-section">
             <div className="section-header">
               <h2>🎓 GPA Calculator</h2>
@@ -506,7 +409,6 @@ function AcademicDashboard() {
             </div>
           </div>
 
-          {/* Chatrooms Section */}
           <div className="chatrooms-section">
             <div className="section-header">
               <h2>💬 Chatrooms Joined</h2>
@@ -544,7 +446,6 @@ function AcademicDashboard() {
         </div>
       </div>
 
-      {/* Quick Links Section */}
       <section className="quick-links-section">
         <div className="section-header">
           <h2>🔗 Quick Links</h2>

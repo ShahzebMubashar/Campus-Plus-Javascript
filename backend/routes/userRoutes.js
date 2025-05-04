@@ -6,6 +6,7 @@ const {
   getReminders,
   addReminder,
   deleteReminder,
+  updatePriority,
 } = require("../controllers/userController");
 const { checkAuthorisation } = require("../middlewares/authMiddleware");
 
@@ -21,5 +22,6 @@ router.delete(
   checkAuthorisation,
   deleteReminder
 );
+router.put("/update-priority/:reminderid", checkAuthorisation, updatePriority);
 
 module.exports = router;
