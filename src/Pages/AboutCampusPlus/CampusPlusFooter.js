@@ -22,9 +22,9 @@ const Footer = () => {
                     <div className="col-lg-6 col-md-6">
                         <h4 className="aboutcp-footer-title">Contact Us</h4>
                         <div className="aboutcp-contact-info">
-                            <p><FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" /> University Campus, Main Street, City</p>
-                            <p><FontAwesomeIcon icon={faPhone} className="me-2" /> +1 (123) 456-7890</p>
-                            <p><FontAwesomeIcon icon={faEnvelope} className="me-2" /> info@campusplus.com</p>
+                            <p><FontAwesomeIcon icon={faMapMarkerAlt} className="me-2" /> FAST NUCES, Lahore, Pakistan</p>
+                            <p><FontAwesomeIcon icon={faPhone} className="me-2" /> +92 000 000 000</p>
+                            <p><FontAwesomeIcon icon={faEnvelope} className="me-2" /> productionsbymultidexters@gmail.com</p>
                         </div>
                         <div className="aboutcp-newsletter mt-4">
                             <h5 className="aboutcp-footer-subtitle">Subscribe to our newsletter</h5>
@@ -36,16 +36,9 @@ const Footer = () => {
                     </div>
                 </div>
                 <hr className="aboutcp-footer-divider" />
-                <div className="row align-items-center">
-                    <div className="col-md-6">
-                        <p className="aboutcp-copyright mb-0">Copyright © {new Date().getFullYear()} Campus+. Designed By MultiDexters</p>
-                    </div>
-                    <div className="col-md-6 text-md-end">
-                        <div className="aboutcp-footer-bottom-links">
-                            <a href="#">Privacy Policy</a>
-                            <a href="#">Terms & Conditions</a>
-                            <a href="#">Cookies</a>
-                        </div>
+                <div className="row">
+                    <div className="col-12 text-center">
+                        <p className="aboutcp-copyright mb-0">Copyright © {new Date().getFullYear()} Campus+ Designed By MultiDexters</p>
                     </div>
                 </div>
             </div>
