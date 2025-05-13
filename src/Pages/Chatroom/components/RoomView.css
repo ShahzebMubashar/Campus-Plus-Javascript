@@ -235,33 +235,35 @@
 }
 
 /* Search Section Styling */
-.search-container {
-    background: white;
-    border-radius: 12px;
-    padding: 20px;
-    margin-bottom: 24px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-}
+.room-view-container {
+    .search-container {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        margin-bottom: 24px;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+    }
 
-.search-input-group {
-    display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-}
+    .search-input-group {
+        display: flex;
+        gap: 12px;
+        margin-bottom: 16px;
+    }
 
-.search-input {
-    flex: 1;
-    padding: 12px 16px;
-    border: 2px solid #e3f2fd;
-    border-radius: 8px;
-    font-size: 15px;
-    transition: all 0.2s ease;
-}
+    .search-input {
+        flex: 1;
+        padding: 12px 16px;
+        border: 2px solid #e3f2fd;
+        border-radius: 8px;
+        font-size: 15px;
+        transition: all 0.2s ease;
+    }
 
-.search-input:focus {
-    border-color: #2196f3;
-    box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
-    outline: none;
+    .search-input:focus {
+        border-color: #2196f3;
+        box-shadow: 0 0 0 4px rgba(33, 150, 243, 0.1);
+        outline: none;
+    }
 }
 
 /* Post Card Styling */
