@@ -1,366 +1,270 @@
 .pp-category-wrapper {
-    max-width: 80%;
+    max-width: 75%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 40px 20px;
     background-color: #ffffff;
-    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-    border-radius: 10px;
-    transition: box-shadow 0.3s ease;
-    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    transition: all 0.3s ease;
+}
+
+.section-title {
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #1a1a1a;
+}
+
+.section-description {
+    text-align: center;
+    color: #666;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .pp-highlighted {
     color: #3b82f6;
-    font-size: 3.4rem;
-    /* Use rem for scalability */
+    position: relative;
+    display: inline-block;
+    font-size: 2.4rem;
+    font-weight: 900;
+    letter-spacing: 1px;
 }
 
-.pp-category-wrapper:hover {
-    box-shadow: 0px 8px 30px rgba(0, 0, 0, 0.25);
-    overflow: hidden;
+.pp-highlighted::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 0;
+    width: 100%;
+    height: 0 !important;
+    background: transparent !important;
+    border: none !important;
+    display: none !important;
+    z-index: -1;
+    border-radius: 4px;
 }
 
-.category .pp-grid-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 10px;
-    margin-top: 2%;
-    overflow: hidden;
-}
-
-.category .pp-grid-list li {
-    flex: 1 1 calc(33.333% - 20px);
-    max-width: calc(33.333% - 20px);
-    overflow: hidden;
+.pp-grid-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .category-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 32px;
+    height: 190px;
+    width: 98%;
+    margin: 0 auto;
+    position: relative;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    height: 160px;
-    padding: 20px;
-    border: 1px solid #e5e7eb;
-    background-color: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
-    position: relative;
-    overflow: hidden;
+    background: linear-gradient(145deg, #ffffff, #f8fafc);
+    box-shadow: 0 6px 32px 0 rgba(59, 130, 246, 0.10), 0 1.5px 6px 0 rgba(0, 0, 0, 0.08);
+}
+
+.category-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 0 16px 48px 0 rgba(59, 130, 246, 0.18), 0 3px 12px 0 rgba(0, 0, 0, 0.12);
+    background: linear-gradient(145deg, #f0f7ff, #ffffff);
 }
 
 .icon-wrapper {
     position: absolute;
     top: 20px;
     right: 20px;
-    font-size: 2.5rem;
-    color: #0362c7;
+    font-size: 1.8rem;
+    color: #3b82f6;
     opacity: 0.8;
     transition: all 0.3s ease;
+    background: rgba(59, 130, 246, 0.1);
+    padding: 8px;
+    border-radius: 12px;
 }
 
 .category-card:hover .icon-wrapper {
-    transform: scale(1.1);
+    transform: scale(1.1) rotate(5deg);
     opacity: 1;
 }
 
 .features-content {
-    width: 100%;
-    height: 100%;
+    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
 }
 
-.features-content h3 {
-    margin: 0 0 5px 0;
-    font-size: 1.4em;
-    color: #0a1c2e;
-    text-align: left;
-    padding-right: 50px;
+.title-lg {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin: 0 0 10px 0;
+    line-height: 1.4;
+    padding-right: 40px;
+}
+
+.category-description {
+    color: #666;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    margin: 0 0 15px 0;
 }
 
 .view-papers-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 100%;
     margin-top: auto;
     padding-top: 15px;
-    border-top: 1px solid #f0f0f0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
 }
 
-.features-content .title-sm1 {
-    font-size: 1rem;
-    color: #555;
+.title-sm1 {
+    font-size: 0.95rem;
+    color: #3b82f6;
+    font-weight: 500;
     margin: 0;
-    text-align: right;
 }
 
 .stars {
     display: flex;
-    gap: 3px;
+    gap: 2px;
 }
 
 .star-filled {
-    color: #ffd700;
-    font-size: 18px;
-    transition: transform 0.3s ease;
+    color: #fbbf24;
+    font-size: 16px;
 }
 
 .star-empty {
     color: #e5e7eb;
-    font-size: 18px;
-    transition: transform 0.3s ease;
+    font-size: 16px;
 }
 
-.category-card:hover .star-filled {
-    transform: scale(1.1);
-}
-
-.category-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(3, 98, 199, 0.02) 0%, rgba(0, 68, 148, 0.02) 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.category-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-    border-color: #0362c7;
-}
-
-.category-card:hover::before {
-    opacity: 1;
-}
-
-.category-card .title-lg {
-    font-size: 1.4em;
-    font-weight: 600;
-    color: #1e3d59;
-    margin-bottom: 15px;
-    line-height: 1.4;
-}
-
-.category-card .title-sm {
-    font-size: 1.1rem;
-    color: #0362c7;
-    margin: 0;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.category-card:hover .title-sm {
-    color: #004494;
-}
-
-.category .btn {
+.btn-primary {
     display: block;
-    margin: 40px auto 0 auto;
-    padding: 15px 30px;
-    background: linear-gradient(135deg, #0362c7 0%, #004494 100%);
+    margin: 40px auto 0;
+    padding: 15px 35px;
+    background: #3b82f6;
     color: white;
-    border: none;
     border-radius: 12px;
     font-size: 1rem;
     font-weight: 500;
-    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
     text-align: center;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2);
-    position: relative;
-    overflow: hidden;
+    width: fit-content;
 }
 
-.category .btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
-    transition: opacity 0.3s ease;
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    background: #2563eb;
 }
 
-.category .btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 20px rgba(3, 98, 199, 0.3);
-}
-
-.category .btn:hover::before {
-    opacity: 0;
-}
-
-.category .btn:active {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 15px rgba(3, 98, 199, 0.2);
-}
-
-.section-title {
-    font-size: 2.5rem;
-    overflow: hidden;
-    /* Responsive for larger screens */
-}
-
-.section-title .span {
-    background-color: hsl(0, 0%, 100%);
-    border-radius: 2%;
-    padding: 0.5%;
-}
-
-/* Media Queries for responsiveness */
 @media (max-width: 1200px) {
-    .pp-highlighted {
-        font-size: 2.8rem;
-        /* Slight reduction */
-    }
-
-    .category .pp-grid-list li {
-        flex: 1 1 calc(50% - 20px);
-        max-width: calc(50% - 20px);
-    }
-
     .pp-category-wrapper {
-        padding: 15px;
+        max-width: 75%;
+        padding: 30px 15px;
+    }
+
+    .pp-grid-list {
+        grid-template-columns: 1fr 1fr;
     }
 
     .category-card {
-        padding: 15px;
-        font-size: 0.95rem;
-        /* Adjust font size for readability */
+        width: 98%;
+        padding: 28px;
     }
 
     .section-title {
-        font-size: 2.2rem;
-    }
-
-    .category-card .title-sm {
-        font-size: 1.1rem;
-    }
-
-    .category .btn {
-        font-size: 0.95rem;
-        /* Adjust button text */
+        font-size: 2.4rem;
     }
 }
 
 @media (max-width: 768px) {
-    .pp-highlighted {
-        font-size: 2rem;
-        /* Reduce for medium devices */
-    }
-
-    .category .pp-grid-list li {
-        flex: 1 1 calc(100% - 20px);
-        max-width: 100%;
-    }
-
     .pp-category-wrapper {
-        padding: 10px;
+        max-width: 85%;
+        padding: 25px 15px;
+    }
+
+    .pp-grid-list {
+        grid-template-columns: 1fr;
     }
 
     .category-card {
-        padding: 10px;
-        font-size: 0.9rem;
-        /* Adjust for smaller screens */
+        width: 100%;
+        padding: 22px;
+        height: 170px;
     }
 
     .section-title {
-        font-size: 1.8rem;
-        /* Reduce title size */
+        font-size: 2rem;
     }
 
-    .category-card .title-sm {
+    .section-description {
         font-size: 1rem;
+        margin-bottom: 2rem;
     }
 
-    .category .btn {
-        width: 100%;
-        padding: 12px 24px;
-        font-size: 0.95rem;
+    .category-description {
+        font-size: 0.9rem;
+    }
+
+    .pp-highlighted {
+        font-size: 2rem;
     }
 }
 
 @media (max-width: 480px) {
-    .pp-highlighted {
-        font-size: 2.5rem;
-        /* Further reduction for mobile */
-    }
-
     .pp-category-wrapper {
-        max-width: 100%;
-        padding: 10px;
-    }
-
-    .category .pp-grid-list li {
-        flex: 1 1 100%;
-        max-width: 100%;
-    }
-
-    .category-card {
-        padding: 8px;
-        gap: 10px;
-        font-size: 0.85rem;
-        /* Smaller font for mobile */
+        max-width: 90%;
+        padding: 20px 15px;
+        border-radius: 16px;
     }
 
     .section-title {
-        font-size: 0.9rem;
+        font-size: 1.8rem;
     }
 
-    .category-card .title-sm {
+    .section-description {
         font-size: 0.95rem;
-    }
-
-    .category .btn {
-        padding: 8px 16px;
-        font-size: 0.85rem;
-    }
-}
-
-@media (max-width: 320px) {
-    .pp-highlighted {
-        font-size: 2.2rem;
-    }
-
-    .pp-category-wrapper {
-        max-width: 100%;
-        padding: 8px;
-    }
-
-    .category .pp-grid-list li {
-        flex: 1 1 100%;
-        max-width: 100%;
+        margin-bottom: 1.5rem;
     }
 
     .category-card {
-        padding: 6px;
-        gap: 8px;
-        font-size: 0.8rem;
+        width: 100%;
+        padding: 16px;
+        height: 150px;
     }
 
-    .h3 {
-        font-size: 0.4 rem;
+    .title-lg {
+        font-size: 1.1rem;
     }
 
-    .section-title {
-        font-size: 1.2rem;
-    }
-
-    .category-card .title-sm {
+    .category-description {
         font-size: 0.85rem;
     }
 
-    .category .btn {
-        padding: 6px 12px;
-        font-size: 0.75rem;
+    .btn-primary {
+        width: 80%;
+        text-align: center;
+        padding: 12px 20px;
+        margin: 30px auto 0;
+    }
+
+    .pp-highlighted {
+        font-size: 1.4rem;
     }
 }
