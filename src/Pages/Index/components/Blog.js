@@ -23,7 +23,7 @@ const BlogSection = () => {
                             <div className="blog-arrow">
                                 <i className="fas fa-arrow-right"></i>
                             </div>
-                            <p>3 MINS</p>
+
                             <h3>Beyond the Hype: Understanding the Realities of the Crypto Crash</h3>
                             <div className="blog-footer">
                                 <span><i className="fas fa-calendar-alt"></i> Aug 25, 2023</span>
@@ -41,7 +41,7 @@ const BlogSection = () => {
                             <div className="blog-arrow">
                                 <i className="fas fa-arrow-right"></i>
                             </div>
-                            <p>2 MINS</p>
+
                             <h3>Data Science vs. Statistics: Unraveling the Mysteries of Modern Analytics</h3>
                             <div className="blog-footer">
                                 <span><i className="fas fa-calendar-alt"></i> Aug 24, 2023</span>
@@ -59,7 +59,7 @@ const BlogSection = () => {
                             <div className="blog-arrow">
                                 <i className="fas fa-arrow-right"></i>
                             </div>
-                            <p>2 MINS</p>
+
                             <h3>Will Quantum Computing Take Over? A Comprehensive Guide</h3>
                             <div className="blog-footer">
                                 <span><i className="fas fa-calendar-alt"></i> Jul 10, 2023</span>
