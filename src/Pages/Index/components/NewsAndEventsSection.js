@@ -57,7 +57,7 @@ const NewsAndEventsSection = () => {
         <section className="parent-testimonials-section" id="newsandeventspage">
             <div className="testimonials-section">
                 <h2>
-                    News &<span className="pp-highlighted" style={{ color: "#3b82f6" }}> Events</span>
+                    News & <span className="pp-highlighted" style={{ color: "#3b82f6", fontSize: "3.5rem" }}> Events</span>
                 </h2>
                 <div className="slider-container">
                     <div className="testimonials-slider">
