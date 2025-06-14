@@ -91,3 +91,9 @@
         }
     }
 }
+
+@media (max-width: 480px) {
+    .testimonials-slider {
+        animation-duration: 12s !important;
+    }
+}
