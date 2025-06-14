@@ -1,5 +1,8 @@
 import React from 'react';
 import './Blog.css';
+import Pic1 from '../../../Assets/images/blog-1.jpg';
+import Pic2 from '../../../Assets/images/blog-2.jpg';
+import Pic3 from '../../../Assets/images/blog-3.jpg';
 
 const BlogSection = () => {
     return (
@@ -14,56 +17,56 @@ const BlogSection = () => {
                 <div className="blog-section">
                     <div className="blog-card">
                         <a href="https://thebrainbytes.blogspot.com/2023/08/beyond-hype-understanding-realities-of.html">
-                            <img src="assets/images/blog-1.jpg" alt="Blog Image" style={{ height: '270px' }} />
-                            <div className="blog-content">
-                                <div className="blog-hover-arrow">
-                                    <i className="fas fa-arrow-right"></i>
-                                </div>
-                            </div>
+                            <img src={Pic1} alt="Blog Image" />
                         </a>
-                        <p>3 MINS</p>
-                        <h3>Beyond the Hype: Understanding the Realities of the Crypto Crash</h3>
-                        <div className="blog-footer">
-                            <span><i className="fas fa-calendar-alt"></i> Aug 25, 2023</span>
-                            <span><i className="fas fa-comments"></i> Com 09</span>
+                        <div className="blog-content-overlay">
+                            <div className="blog-arrow">
+                                <i className="fas fa-arrow-right"></i>
+                            </div>
+                            <p>3 MINS</p>
+                            <h3>Beyond the Hype: Understanding the Realities of the Crypto Crash</h3>
+                            <div className="blog-footer">
+                                <span><i className="fas fa-calendar-alt"></i> Aug 25, 2023</span>
+                                <span><i className="fas fa-comments"></i> Com 09</span>
+                            </div>
+                            <p className="blog-desc">In an era where digital fortunes and blockchain breakthroughs dominate...</p>
                         </div>
-                        <p style={{ padding: '10px 0' }}>In an era where digital fortunes and blockchain breakthroughs dominate...</p>
                     </div>
 
                     <div className="blog-card">
                         <a href="https://thebrainbytes.blogspot.com/2023/08/data-science-vs-statistics-unraveling.html">
-                            <img src="assets/images/blog-2.jpg" alt="Blog Image" style={{ height: '270px' }} />
-                            <div className="blog-content">
-                                <div className="blog-hover-arrow">
-                                    <i className="fas fa-arrow-right"></i>
-                                </div>
-                            </div>
+                            <img src={Pic2} alt="Blog Image" />
                         </a>
-                        <p>2 MINS</p>
-                        <h3>Data Science vs. Statistics: Unraveling the Mysteries of Modern Analytics</h3>
-                        <div className="blog-footer">
-                            <span><i className="fas fa-calendar-alt"></i> Aug 24, 2023</span>
-                            <span><i className="fas fa-comments"></i> Com 09</span>
+                        <div className="blog-content-overlay">
+                            <div className="blog-arrow">
+                                <i className="fas fa-arrow-right"></i>
+                            </div>
+                            <p>2 MINS</p>
+                            <h3>Data Science vs. Statistics: Unraveling the Mysteries of Modern Analytics</h3>
+                            <div className="blog-footer">
+                                <span><i className="fas fa-calendar-alt"></i> Aug 24, 2023</span>
+                                <span><i className="fas fa-comments"></i> Com 09</span>
+                            </div>
+                            <p className="blog-desc">Introduction: Embracing the Era of Data-Driven Insights...</p>
                         </div>
-                        <p style={{ padding: '10px 0' }}>Introduction: Embracing the Era of Data-Driven Insights...</p>
                     </div>
 
                     <div className="blog-card">
                         <a href="https://thebrainbytes.blogspot.com/2023/07/will-quantum-computing-take-over.html">
-                            <img src="assets/images/blog-3.jpg" alt="Blog Image" style={{ height: '270px' }} />
-                            <div className="blog-content">
-                                <div className="blog-hover-arrow">
-                                    <i className="fas fa-arrow-right"></i>
-                                </div>
-                            </div>
+                            <img src={Pic3} alt="Blog Image" />
                         </a>
-                        <p>2 MINS</p>
-                        <h3>Will Quantum Computing Take Over?</h3>
-                        <div className="blog-footer">
-                            <span><i className="fas fa-calendar-alt"></i> Jul 10, 2023</span>
-                            <span><i className="fas fa-comments"></i> Com 09</span>
+                        <div className="blog-content-overlay">
+                            <div className="blog-arrow">
+                                <i className="fas fa-arrow-right"></i>
+                            </div>
+                            <p>2 MINS</p>
+                            <h3>Will Quantum Computing Take Over? A Comprehensive Guide</h3>
+                            <div className="blog-footer">
+                                <span><i className="fas fa-calendar-alt"></i> Jul 10, 2023</span>
+                                <span><i className="fas fa-comments"></i> Com 09</span>
+                            </div>
+                            <p className="blog-desc">What is Quantum Computers? Quantum computers deal with the theory of quantum...</p>
                         </div>
-                        <p style={{ padding: '10px 0' }}>What is Quantum Computers? Quantum computers deal with the theory of quantum...</p>
                     </div>
                 </div>
 
