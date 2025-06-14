@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './Navbar.css';
 import Logo from '../cp_logo.png';
 import { Link, useNavigate } from 'react-router-dom';
-import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop } from 'react-icons/ai';
+import { AiOutlineDown, AiOutlineHeart, AiOutlineFileText, AiOutlineHome, AiOutlineLaptop, AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import support from "../../../Assets/images/support.png"
 import message from "../../../Assets/images/conversation.png"
 import settings from "../../../Assets/images/setting.png"
@@ -45,6 +45,7 @@ const getUserInitials = (username) => {
 function Navbar() {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
     const [userData, setUserData] = useState(null);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const navigate = useNavigate();
 
     const checkSession = async () => {
@@ -108,6 +109,9 @@ function Navbar() {
         }
     };
 
+    const toggleMobileMenu = () => {
+        setIsMobileMenuOpen(!isMobileMenuOpen);
+    };
 
     return (
         <>
@@ -120,7 +124,14 @@ function Navbar() {
                         </Link>
                     </div>
 
-                    <ul className="nav-links">
+                    <button
+                        className={`mobile-menu-button ${isMobileMenuOpen ? 'menu-open' : ''}`}
+                        onClick={toggleMobileMenu}
+                    >
+                        {isMobileMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
+                    </button>
+
+                    <ul className={`nav-links ${isMobileMenuOpen ? 'mobile-menu-open' : ''}`}>
                         <li><Link to="/past-papers">Past Papers</Link></li>
 
                         <li className="navbar-dropdown">
