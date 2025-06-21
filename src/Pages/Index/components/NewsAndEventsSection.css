@@ -211,6 +211,7 @@
         max-width: 90vw;
         min-height: 160px;
         padding: 14px 4px 10px 4px;
+        border-radius: 18px !important;
     }
 
     .news-card-content {
@@ -237,6 +238,7 @@
     .news-card-slide {
         max-width: 98vw;
         padding: 10px 2px 8px 2px;
+        border-radius: 24px !important;
     }
 
     .news-card-content {
