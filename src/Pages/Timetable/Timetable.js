@@ -3,9 +3,11 @@ import CourseList from "../Index/components/CourseList";
 import BackToTopButton from "../Index/components/BackToTop"
 import Navbar from "../Index/components/Navbar"
 import DynamicTimetable from "./DynamicTimetable";
+import Footer from "../Footer/Footer";
 import Select from "react-select"; // React-Select for searchable dropdowns
 import "./Timetable.css";
 import { Nav } from "react-bootstrap";
+
 
 const Timetable = () => {
   const [csvData, setCsvData] = useState([]);
@@ -201,7 +203,10 @@ const Timetable = () => {
         />
       </div>
       <BackToTopButton />
+      <Footer />
     </div>
+
+
   );
 };
 
