@@ -330,8 +330,8 @@
 @media (max-width: 600px) {
     .todo-app {
         background-color: #fff !important;
-        text-align: center !important;
-        align-items: center !important;
+        text-align: initial !important;
+        align-items: intial !important;
     }
 
     .todo-container {
