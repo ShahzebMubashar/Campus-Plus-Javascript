@@ -22,7 +22,7 @@
     margin-top: 40px;
 }
 
-@media (max-width: 1024px) {
+/* @media (max-width: 1024px) {
 
     .news-page .navbar,
     .news-page .nav-links,
@@ -31,4 +31,4 @@
         justify-content: flex-start !important;
         align-items: flex-start !important;
     }
-}
+} */
