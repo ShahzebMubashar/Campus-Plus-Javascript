@@ -149,7 +149,7 @@
     background: linear-gradient(135deg, #0362c7 0%, #004494 100%);
     color: white;
     border: none;
-    border-radius: 12px;
+    border-radius: 999px !important;
     font-size: 16px;
     font-weight: 500;
     cursor: pointer;
@@ -324,5 +324,49 @@
 
     .filter-group select {
         flex: 1;
+    }
+}
+
+@media (max-width: 600px) {
+    .todo-app {
+        background-color: #fff !important;
+        text-align: center !important;
+        align-items: center !important;
+    }
+
+    .todo-container {
+        background: none !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .todo-header,
+    .todo-stats,
+    .filters-section,
+    .todo-list,
+    .todo-form {
+        text-align: center !important;
+        align-items: center !important;
+        justify-content: center !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+
+    .todo-stats {
+        width: 90vw !important;
+        max-width: 95vw !important;
+        margin: 0 auto 18px auto !important;
+        justify-content: center !important;
+        gap: 10px !important;
+    }
+
+    .add-button {
+        display: block !important;
+        margin: 18px auto 0 auto !important;
+        width: 90% !important;
+        border-radius: 999px !important;
+        justify-content: center !important;
     }
 }
