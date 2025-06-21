@@ -109,3 +109,14 @@
         transform: translateY(0);
     }
 }
+
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column !important;
+        gap: 12px;
+    }
+
+    .form-group {
+        width: 100% !important;
+    }
+}
