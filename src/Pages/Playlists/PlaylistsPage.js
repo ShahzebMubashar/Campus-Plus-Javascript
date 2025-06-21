@@ -3,6 +3,7 @@ import './PlaylistsPage.css';
 import Navbar from '../Index/components/Navbar.js';
 import { FaSearch } from "react-icons/fa";
 import Footer from '../Footer/Footer.js';
+import BackToTopButton from "../Index/components/BackToTop"
 
 const PlaylistsPage = () => {
     const playlists = [
@@ -897,6 +898,7 @@ const PlaylistsPage = () => {
                     ))}
                 </div>
             </div>
+            <BackToTopButton />
             <Footer />
         </div>
     );
