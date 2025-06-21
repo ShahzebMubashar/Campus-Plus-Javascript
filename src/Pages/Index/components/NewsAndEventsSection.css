@@ -6,13 +6,13 @@
     height: auto;
 }
 
-.testimonials-section {
+.parent-testimonials-section .testimonials-section {
     text-align: center;
     padding: 50px 20px;
     background-color: #f9f9f9;
 }
 
-.testimonials-section h2 {
+.parent-testimonials-section .testimonials-section h2 {
     font-size: 40px;
     color: #003366;
     margin-bottom: 50px !important;
