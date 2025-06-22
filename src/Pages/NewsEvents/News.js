@@ -16,19 +16,6 @@ const NewsPage = () => {
                 <p>Your Gateway to Events, Updates, and All Things FAST!</p>
             </header>
 
-            {/* Search Bar */}
-            <div className="search-bar">
-                <input
-                    type="text"
-                    placeholder="Search Here"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button>
-                    <i className="fas fa-search"></i>
-                </button>
-            </div>
-
             {/* News and Events Section */}
             <div className="news-and-events">
                 <NewsAndEventsSection searchQuery={searchQuery} />

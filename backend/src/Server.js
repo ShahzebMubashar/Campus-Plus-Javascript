@@ -3,6 +3,8 @@ const session = require("express-session");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const pool = require("../config/database");
+const nodemailer = require("nodemailer");
+
 
 const {
   checkAuthorisation,
@@ -33,6 +35,33 @@ app.use(
     exposedHeaders: ["Set-Cookie"],
   })
 );
+
+app.post('/api/email/send-email', async (req, res) => {
+  const { name, email, phone, message } = req.body;
+  const transporter = nodemailer.createTransport({
+    service: 'Gmail',
+    auth: {
+      user: "productionsbymultidexters@gmail.com",
+      pass: "vnfm sfwx dluo bkez",
+    }
+  });
+
+  const mailOptions = {
+    from: email,
+    to: 'productionsbymultidexters@gmail.com',
+    subject: `New Contact Form Submission from ${name}`,
+    text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    return res.status(200).json({ message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Error sending email:', error);
+    return res.status(500).json({ message: 'Email failed to send' });
+  }
+});
+
 
 // Set CORS headers for all responses
 app.use((req, res, next) => {

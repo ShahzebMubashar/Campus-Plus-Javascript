@@ -1,7 +1,7 @@
 .news-page {
     font-family: Arial, sans-serif;
     padding: 0px;
-    text-align: center;
+    text-align: initial;
 }
 
 .support-header {
@@ -21,3 +21,14 @@
 .news-and-events {
     margin-top: 40px;
 }
+
+/* @media (max-width: 1024px) {
+
+    .news-page .navbar,
+    .news-page .nav-links,
+    .news-page .nav-links li {
+        text-align: left !important;
+        justify-content: flex-start !important;
+        align-items: flex-start !important;
+    }
+} */

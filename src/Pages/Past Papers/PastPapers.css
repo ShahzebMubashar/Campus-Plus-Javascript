@@ -1,72 +1,72 @@
 .pastpapers-app {
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 2rem;
-    background-color: #f8f9fa;
-    min-height: 100vh;
-  }
-  
-  .pastpapers-header {
-    text-align: center;
-    margin: 2rem 0 3rem;
-    color: #0a2647;
-  }
-  
-  .pastpapers-header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 0.5rem;
-    font-weight: 700;
-  }
-  
-  .pastpapers-header p {
-    color: #6c757d;
-    font-size: 1.1rem;
-    margin-bottom: 2rem;
-  }
-  
-  .search-container {
-    max-width: 600px;
-    margin: 0 auto 3rem;
-  }
-  
-  .search-wrapper {
-    position: relative;
-    width: 100%;
-  }
-  
-  .search-icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-  }
-  
-  .search-input {
-    width: 100%;
-    padding: 1rem 1rem 1rem 2.5rem;
-    border: 2px solid #e9ecef;
-    border-radius: 12px;
-    font-size: 1rem;
-    transition: all 0.3s ease;
-    background: white;
-  }
-  
-  .search-input:focus {
-    outline: none;
-    border-color: #144272;
-    box-shadow: 0 0 0 3px rgba(20, 66, 114, 0.1);
-  }
-  
-  .courses-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-    padding: 1rem;
-  }
-  
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.pastpapers-header {
+  text-align: center;
+  margin: 2rem 0 3rem;
+  color: #0a2647;
+}
+
+.pastpapers-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.pastpapers-header p {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin-bottom: 2rem;
+}
+
+.search-container {
+  max-width: 600px;
+  margin: 0 auto 3rem;
+}
+
+.search-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.search-icon {
+  position: absolute;
+  right: 0.8rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6c757d;
+}
+
+.search-input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 2.5rem;
+  border: 2px solid #e9ecef;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: white;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #144272;
+  box-shadow: 0 0 0 3px rgba(20, 66, 114, 0.1);
+}
+
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
 .pastpapers-app {
-    .course-card {
+  .course-card {
     background: white;
     border-radius: 12px;
     padding: 1.5rem;
@@ -77,41 +77,41 @@
     position: relative;
     overflow: visible;
   }
-  
+
   .course-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     border-color: #144272;
   }
-  
+
   .course-card.expanded {
     max-height: 600px;
     overflow-y: auto;
   }
-  
+
   .course-card.expanded::-webkit-scrollbar {
     width: 8px;
   }
-  
+
   .course-card.expanded::-webkit-scrollbar-track {
     background: #f1f1f1;
     border-radius: 4px;
   }
-  
+
   .course-card.expanded::-webkit-scrollbar-thumb {
     background: #c1c1c1;
     border-radius: 4px;
   }
-  
+
   .course-card.expanded::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
   }
-  
+
   .course-card.has-papers {
     border-color: #3b82f6;
     position: relative;
   }
-  
+
   .course-card.has-papers::before {
     content: "Available";
     position: absolute;
@@ -124,7 +124,7 @@
     font-size: 0.75rem;
     font-weight: 500;
   }
-  
+
   .course-header {
     display: flex;
     align-items: flex-start;
@@ -132,7 +132,7 @@
     margin-bottom: 1.5rem;
     margin-top: 0.75rem;
   }
-  
+
   .course-icon {
     background: #e3f2fd;
     color: #144272;
@@ -146,25 +146,25 @@
     padding: 0.75rem;
     flex-shrink: 0;
   }
-  
+
   .course-title {
     flex: 1;
   }
-  
+
   .course-title h3 {
     margin: 0;
     font-size: 1.25rem;
     color: #0a2647;
     font-weight: 600;
   }
-  
+
   .course-card .course-code {
     font-size: 1.1rem;
     margin-bottom: 0;
     color: #6c757d;
     font-weight: 500;
   }
-  
+
   .course-details {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -174,7 +174,7 @@
     border-radius: 8px;
     margin-top: 1rem;
   }
-  
+
   .detail-item {
     display: flex;
     flex-direction: column;
@@ -182,20 +182,20 @@
     padding: 0.75rem;
     padding-bottom: 0;
   }
-  
+
   .label {
     color: #6c757d;
     font-size: 0.85rem;
     font-weight: 600;
     letter-spacing: 0.3px;
   }
-  
+
   .value {
     color: #0a2647;
     font-weight: 600;
     font-size: 1rem;
   }
-  
+
   .difficulty-badge {
     display: inline-block;
     padding: 0.25rem 0.75rem;
@@ -205,7 +205,7 @@
     font-weight: 500;
     text-align: center;
   }
-  
+
   .detail-item:has(.rating) {
     padding: 0;
     background: transparent;
@@ -221,14 +221,14 @@
     width: 100%;
     max-width: 400px;
   }
-  
+
   .detail-item:has(.rating) .label {
     margin-bottom: 12px;
     font-size: 1.1rem;
     color: #6c757d;
     font-weight: 500;
   }
-  
+
   .rating {
     display: flex;
     flex-direction: column;
@@ -244,7 +244,7 @@
     transition: all 0.3s ease;
     border: 1px solid rgba(20, 66, 114, 0.15);
   }
-  
+
   .rating-bars {
     display: flex;
     gap: 8px;
@@ -254,7 +254,7 @@
     border-radius: 8px;
     border: 1px solid rgba(20, 66, 114, 0.08);
   }
-  
+
   .rating-bar {
     flex: 1;
     height: 12px;
@@ -266,7 +266,7 @@
     overflow: hidden;
     border: 1px solid #dee2e6;
   }
-  
+
   .average-rating {
     font-weight: 600;
     color: #333;
@@ -276,7 +276,7 @@
     border-radius: 10px;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   }
-  
+
   .fetch-papers-button {
     width: 100%;
     padding: 0.75rem;
@@ -292,42 +292,42 @@
     gap: 0.5rem;
     transition: all 0.2s ease;
   }
-  
+
   .fetch-papers-button:hover {
     background: #e9ecef;
   }
-  
+
   .chevron-icon {
     transition: transform 0.3s ease;
   }
-  
+
   .chevron-icon.rotated {
     transform: rotate(180deg);
   }
-  
+
   .papers-section {
     margin-top: 1rem;
     border-top: 1px solid #eaeaea;
     padding-top: 1rem;
   }
-  
+
   .paper-category {
     margin-bottom: 1.5rem;
   }
-  
+
   .paper-category h4 {
     color: #2c3e50;
     margin-bottom: 1rem;
     font-size: 1.1rem;
     font-weight: 600;
   }
-  
+
   .papers-list {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     gap: 0.75rem;
   }
-  
+
   .paper-item {
     background: #f8f9fa;
     padding: 0.75rem;
@@ -339,79 +339,84 @@
     transition: all 0.2s ease;
     border: 1px solid #eaeaea;
   }
-  
+
   .paper-item:hover {
     background: #e3f2fd;
     border-color: #1976d2;
   }
-  
+
   .paper-year {
     font-weight: 500;
     color: #2c3e50;
   }
-  
+
   .external-link-icon {
     color: #1976d2;
     font-size: 0.9rem;
   }
 }
-  
-  .loading-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 50vh;
-    gap: 1rem;
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  gap: 1rem;
+}
+
+.loading-spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #144272;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+.error-message {
+  text-align: center;
+  color: #dc3545;
+  padding: 2rem;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
   }
-  
-  .loading-spinner {
-    border: 3px solid #f3f3f3;
-    border-top: 3px solid #144272;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    animation: spin 1s linear infinite;
+
+  100% {
+    transform: rotate(360deg);
   }
-  
-  .error-message {
-    text-align: center;
-    color: #dc3545;
-    padding: 2rem;
+}
+
+@media (max-width: 768px) {
+  .pastpapers-app {
+    padding: 1rem;
   }
-  
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+
+  .course-details {
+    grid-template-columns: 1fr;
+    padding: 0.75rem;
+    gap: 0.75rem;
   }
-  
-  @media (max-width: 768px) {
-    .pastpapers-app {
-      padding: 1rem;
-    }
-  
-    .course-details {
-      grid-template-columns: 1fr;
-      padding: 0.75rem;
-      gap: 0.75rem;
-    }
-  
-    .detail-item {
-      padding: 0.25rem;
-    }
-  
-    .pastpapers-header h1 {
-      font-size: 2rem;
-    }
-  
-    .search-container {
-      padding: 0 1rem;
-    }
-  
-    .courses-grid {
-      grid-template-columns: 1fr;
-    }
+
+  .detail-item {
+    padding: 0.25rem;
   }
+
+  .pastpapers-header h1 {
+    font-size: 2rem;
+  }
+
+  .search-container {
+    padding: 0 1rem;
+  }
+
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+}
 
 .pastpapers-details {
   min-height: 100vh;
@@ -434,7 +439,7 @@
   top: 0;
   left: 0;
   right: 0;
-  bottom: 0;    
+  bottom: 0;
   opacity: 0.1;
 }
 
@@ -618,8 +623,13 @@
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 .error-container {
