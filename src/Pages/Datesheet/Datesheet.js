@@ -4,8 +4,8 @@ import Select from "react-select";
 import DynamicDatesheet from "./DynamicDatesheet";
 import "./Datesheet.css"; // New CSS for Datesheet
 import CourseList from "../Index/components/CourseList";
-import BackToTopButton from "../Index/components/BackToTop";
 import Navbar from "../Index/components/Navbar"
+import Footer from "../Footer/Footer"
 
 const Datesheet = () => {
   const [csvData, setCsvData] = useState([]);
@@ -66,12 +66,12 @@ const Datesheet = () => {
       if (!coursesBySection[section]) coursesBySection[section] = [];
       coursesBySection[section].push({ courseCode, course, section, type, repeat });
 
-      if (course){
-        if (!courseByName[course]) courseByName[course] = { course, sections: [] , type, repeat};
+      if (course) {
+        if (!courseByName[course]) courseByName[course] = { course, sections: [], type, repeat };
         courseByName[course].sections.push(section);
       }
     });
-    
+
     const sortedSections = Object.keys(coursesBySection)
       .filter((section) => !section.endsWith("1") && !section.endsWith("2"))
       .sort()
@@ -99,7 +99,7 @@ const Datesheet = () => {
   };
 
   const addSection = (section) => {
-    const newCourses = csvData.filter((row) => row.section === section && row.type === "Core"&& row.repeat === "False");
+    const newCourses = csvData.filter((row) => row.section === section && row.type === "Core" && row.repeat === "False");
     const unique = newCourses.filter(
       (row) => !selectedCourses.some((c) => c.courseCode === row.courseCode)
     );
@@ -116,11 +116,11 @@ const Datesheet = () => {
 
   return (
     <div>
-      <Navbar/>
+      <Navbar />
       <div className="datesheet-container">
         <h1 className="header">Datesheet Generator</h1>
         <div className="selectors">
-          <div style={{ flex: "1 1 0%"}}>
+          <div style={{ flex: "1 1 0%" }}>
             <Select
               options={Object.keys(courses).map((course) => ({ label: course, value: course }))}
               onChange={(selected) => setCurrentCourse(selected?.value)}
@@ -153,7 +153,7 @@ const Datesheet = () => {
         <CourseList courses={selectedCourses} onRemove={removeCourse} onRemoveAll={clearAllCourses} />
         <DynamicDatesheet selectedCourses={selectedCourses} datesheetData={datesheetData} />
       </div>
-      <BackToTopButton/>
+      <Footer />
     </div>
   );
 };

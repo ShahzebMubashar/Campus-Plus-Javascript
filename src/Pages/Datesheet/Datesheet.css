@@ -232,6 +232,7 @@
   .selectors {
     padding: 20px;
     gap: 15px;
+    flex-direction: column;
   }
 
   .react-select-container,
@@ -252,5 +253,22 @@
 
   .selectors {
     padding: 15px;
+  }
+}
+
+@media (min-width: 1600px) {
+  .datesheet-container {
+    max-width: 1500px;
+    font-size: 1.1rem;
+  }
+
+  .header {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 2000px) {
+  .datesheet-container {
+    max-width: 1800px;
   }
 }

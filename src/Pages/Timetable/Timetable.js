@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import CourseList from "../Index/components/CourseList";
-import BackToTopButton from "../Index/components/BackToTop"
 import Navbar from "../Index/components/Navbar"
 import DynamicTimetable from "./DynamicTimetable";
 import Footer from "../Footer/Footer";
@@ -202,7 +201,7 @@ const Timetable = () => {
           showVenue={showVenue}
         />
       </div>
-      <BackToTopButton />
+
       <Footer />
     </div>
 
