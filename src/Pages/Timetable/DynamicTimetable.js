@@ -82,17 +82,48 @@ const DynamicTimetable = ({ selectedCourses }) => {
   const timetable = generateTimetable();
 
   const exportToJpg = () => {
-    const timetableElement = document.getElementById("timetable");
+  const timetableElement = document.getElementById("timetable");
+  const clone = timetableElement.cloneNode(true);
 
-    toJpeg(timetableElement, { quality: 0.95 })
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "timetable.jpg";
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((err) => console.error("Error exporting timetable:", err));
-  };
+  const cover = document.createElement('div');
+  cover.style.position = 'fixed';
+  cover.style.top = '0';
+  cover.style.left = '0';
+  cover.style.width = '100vw';
+  cover.style.height = '100vh';
+  cover.style.background = 'white';
+  cover.style.zIndex = '-998';
+  cover.style.pointerEvents = 'none'; // user can’t click it
+  document.body.appendChild(cover);
+
+  clone.style.position = "fixed";
+  clone.style.top = "0";
+  clone.style.left = "0";
+  clone.style.zIndex = "-999";
+  clone.style.width = "1280px";
+  clone.style.height = "720px";
+  clone.style.overflow = "hidden";
+  // clone.style.background = "white";
+  clone.style.margin = "0";
+  clone.classList.add('export-mode');
+
+
+  document.body.appendChild(clone);
+
+  toJpeg(clone, { quality: 0.95, useCORS: true })
+    .then((dataUrl) => {
+      const link = document.createElement("a");
+      link.download = "timetable.jpg";
+      link.href = dataUrl;
+      link.click();
+    })
+    .catch((err) => console.error("Error exporting timetable:", err))
+    .finally(() => {
+      document.body.removeChild(clone);
+      document.body.removeChild(cover);
+    });
+};
+
 
   return (
     <div className="dynamic-timetable-container">

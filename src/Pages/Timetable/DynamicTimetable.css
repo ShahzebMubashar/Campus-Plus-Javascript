@@ -47,6 +47,12 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.timetable.export-mode table {
+  padding: 0 !important;
+  margin: 0 !important;
+  border-spacing: 0 !important;
+}
+
 .timetable th {
   background:#1B1212;
   color: white;
