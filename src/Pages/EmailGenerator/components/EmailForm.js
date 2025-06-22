@@ -1,12 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import templateData from '../emails.json'
-const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
-    let emailTypes=[]
-  for(let key in templateData.templates) 
-  {
-    emailTypes.push(key)
-  }
-    const [showEmailForm, setShowEmailForm] = useState(true);
+const EmailForm = ({ teachers, formData, setFormData, onGenEmail, setShowEmailForm }) => {
+    let emailTypes = []
+    for (let key in templateData.templates) {
+        emailTypes.push(key)
+    }
 
     const handleChange = (field, value) => {
         setFormData((prev) => ({
@@ -43,11 +41,8 @@ const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
             teacherSalutation: "",
             emailType: "select",
         });
-        //setShowEmailForm(false);
         onGenEmail();
     };
-
-    if (!showEmailForm) return null;
 
     return (
         <div className="email-form">
@@ -128,7 +123,7 @@ const EmailForm = ({ teachers,formData,setFormData,onGenEmail }) => {
                         value={formData.emailType}
                         onChange={(e) => handleChange("emailType", e.target.value)}
                     >
-                    {emailTypes.map(type=>(<option>{type}</option>))}
+                        {emailTypes.map(type => (<option>{type}</option>))}
                         {/* <option value="select">Select Email Type</option>
                         <option value="assignment">Assignment Email</option>
                         <option value="project">Project Email</option> */}
