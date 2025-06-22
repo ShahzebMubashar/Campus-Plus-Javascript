@@ -582,6 +582,7 @@
     }
 
     .calculator-header h1 {
+
         font-size: 2rem;
     }
 
@@ -592,6 +593,10 @@
     .calculator-cards-container {
         flex-direction: column;
         align-items: center;
+    }
+
+    .sgpa-cgpa-section h1 {
+        padding-top: 12% !important;
     }
 
     .calculator-card {
@@ -609,5 +614,31 @@
     .marks-row,
     .semester-row {
         flex-direction: column;
+    }
+
+    .close-button-container {
+        position: relative;
+    }
+
+    .close-btn {
+        position: absolute;
+        top: -140px;
+        right: -1.0rem;
+        font-size: 2rem;
+        z-index: 10;
+        background: none;
+        border: none;
+        color: #333;
+        padding: 0;
+    }
+
+    .sgpa-cgpa-section {
+        position: relative;
+    }
+
+    .generate-btn {
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
     }
 }
