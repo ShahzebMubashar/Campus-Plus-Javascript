@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './faculty.css';
 import Navbar from '../Index/components/Navbar';
 import facultyData from './facultyData';
+import BackToTopButton from "../Index/components/BackToTop"
 
 
 // Define the slowScrollTo function
@@ -108,7 +109,8 @@ const FacultySection = () => {
             <SearchSection searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
             <NoResultsMessage filteredFaculty={filteredFaculty} />
             <FacultyContainers filteredFaculty={filteredFaculty} />
-            <ScrollToTopButton />
+            <BackToTopButton />
+
         </main>
     );
 };
@@ -132,7 +134,7 @@ const SchoolsContainer = () => (
 
 const SearchSection = ({ searchQuery, setSearchQuery }) => (
     <section className="search-section">
-        <div className="search-bar">
+        <div className="search-bar" style={{ position: 'relative' }}>
             <input
                 type="text"
                 id="searchInput"
@@ -140,9 +142,9 @@ const SearchSection = ({ searchQuery, setSearchQuery }) => (
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
             />
-            <button type="button">
+            <span className="search-icon" style={{ position: 'absolute', right: '18px', top: '50%', transform: 'translateY(-50%)', color: '#888', fontSize: '18px', pointerEvents: 'none' }}>
                 <i className="fas fa-search"></i>
-            </button>
+            </span>
         </div>
     </section>
 );
@@ -239,9 +241,13 @@ const ScrollToTopButton = () => {
             className={`scroll-to-top-btn ${isVisible ? 'visible' : ''}`}
             onClick={scrollToTop}
         >
+
             ↑
         </button>
-    );
+
+
+    )
+
 };
 
 export default FacultySection;

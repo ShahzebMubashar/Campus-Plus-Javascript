@@ -315,7 +315,28 @@ html {
         max-width: 90%;
         margin-left: auto;
         margin-right: auto;
-        margin-top: 20px;
+        margin-bottom: 60px !important;
+        margin-top: -120px !important;
+    }
+
+    .search-section {
+        padding: 18px 0 10px 0 !important;
+        margin-top: 0 !important;
+    }
+
+    .search-bar {
+        margin-top: -30px !important;
+        max-width: 98% !important;
+    }
+
+    .search-bar input {
+        width: 98vw !important;
+        min-width: 0 !important;
+        font-size: 15px !important;
+    }
+
+    .faculty-container {
+        margin-top: 0% !important;
     }
 
     .schools-container {

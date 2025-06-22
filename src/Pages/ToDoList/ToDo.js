@@ -13,6 +13,11 @@ function ToDo() {
   });
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("date");
+  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+
+  useEffect(() => {
+    setIsLoggedIn(!!localStorage.getItem("user"));
+  }, []);
 
   // Fetch tasks from backend
   const fetchTasks = async () => {
@@ -214,6 +219,22 @@ function ToDo() {
   return (
     <div className="todo-app">
       <Navbar />
+      {!isLoggedIn && (
+        <div style={{
+          width: "100%",
+          background: "#eaf3ff",
+          color: "#0362c7",
+          fontWeight: 600,
+          textAlign: "center",
+          padding: "0px 0 8px 0",
+          marginTop: "-15px",
+          fontSize: "1.1rem",
+          borderRadius: "0 0 12px 12px",
+          marginBottom: "25px"
+        }}>
+          You need to log in to use this feature
+        </div>
+      )}
       <div className="todo-container">
         <div className="todo-header">
           <h1>📝 My Tasks</h1>

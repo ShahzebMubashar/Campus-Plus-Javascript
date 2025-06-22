@@ -6,6 +6,30 @@
     /* padding: 20px; */
 }
 
+.support-header {
+    background-color: #0362c7;
+    color: #fff;
+    padding: 24px 12px;
+    text-align: center;
+    width: 90%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+    margin-top: 40px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 20px;
+    border-radius: 5px;
+}
+
+.support-header h1 {
+    font-size: 2.5em;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.support-header p {
+    font-size: 1.2em;
+}
+
 .header {
     background-color: #0066cc;
     padding: 40px;
@@ -133,4 +157,33 @@
     border: none;
     border-radius: 50px;
     cursor: pointer;
+}
+
+@media screen and (max-width: 600px) {
+    .support-header {
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 40px !important;
+        margin-top: 0px !important;
+    }
+
+    .playlists {
+        grid-template-columns: 1fr;
+    }
+
+    .playlists-container {
+        width: 95%;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 15px 10px;
+    }
+
+    .playlist-card {
+        width: 100%;
+    }
+
+    .search-bar {
+        width: 90%;
+    }
 }
