@@ -123,6 +123,7 @@ export default function EmailGenerator() {
                         formData={formData}
                         setFormData={setFormData}
                         onGenEmail={onGenEmail}
+                        setShowEmailForm={setShowEmailForm}
                     />
                 )}
                 {showResult && (

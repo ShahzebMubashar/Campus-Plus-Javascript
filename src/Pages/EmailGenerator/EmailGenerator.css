@@ -190,3 +190,34 @@ textarea {
         width: 100%;
     }
 }
+
+@media (max-width: 600px) {
+    .email-form {
+        width: 90vw !important;
+        margin: 2rem 0 !important;
+        padding: 1.5rem 2rem !important;
+
+
+    }
+
+
+    .email-form input,
+    .email-form select,
+    .email-form textarea {
+        width: 100% !important;
+        box-sizing: border-box;
+    }
+
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.5rem;
+    }
+
+    .card {
+        width: 90% !important;
+        margin: 0 auto;
+    }
+}
