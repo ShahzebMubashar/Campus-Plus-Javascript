@@ -624,7 +624,7 @@
         position: absolute;
         top: -140px;
         right: -1.0rem;
-        font-size: 2rem;
+        font-size: 1rem !important;
         z-index: 10;
         background: none;
         border: none;
@@ -634,6 +634,23 @@
 
     .sgpa-cgpa-section {
         position: relative;
+    }
+
+    .calculator-title {
+        margin-top: 20% !important;
+    }
+
+    .aggregate-calculator .close-button-container .close-btn {
+        position: absolute;
+        top: 0px;
+        right: -1.0rem;
+        font-size: 1rem !important;
+        z-index: 10;
+        background: none;
+        background-color: #0d6efd;
+        border-radius: 100px;
+        color: white;
+        padding: 10px 30px;
     }
 
     .generate-btn {
