@@ -101,12 +101,9 @@ const DynamicTimetable = ({ selectedCourses }) => {
   clone.style.left = "0";
   clone.style.zIndex = "-999";
   clone.style.width = "1280px";
-  clone.style.height = "720px";
+  clone.style.height = "auto";
   clone.style.overflow = "hidden";
-  // clone.style.background = "white";
-  clone.style.margin = "0";
   clone.classList.add('export-mode');
-
 
   document.body.appendChild(clone);
 

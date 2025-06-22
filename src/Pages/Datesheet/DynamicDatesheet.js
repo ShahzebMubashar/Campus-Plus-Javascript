@@ -66,17 +66,46 @@ const DynamicDatesheet = ({ selectedCourses, datesheetData }) => {
 
   const processedDates = detectConflicts()
 
+  // Function to export the datesheet as a JPG image
+  // Uses html-to-image library to convert the HTML table to an image
   const exportToJpg = () => {
-    const datesheetElement = document.getElementById("datesheet-table")
-    toJpeg(datesheetElement, { quality: 0.95 })
+    const datesheetElement = document.getElementById("datesheet-table");
+    const clone = datesheetElement.cloneNode(true);
+  
+    const cover = document.createElement('div');
+    cover.style.position = 'fixed';
+    cover.style.top = '0';
+    cover.style.left = '0';
+    cover.style.width = '100vw';
+    cover.style.height = '100vh';
+    cover.style.background = 'white';
+    cover.style.zIndex = '-998';
+    cover.style.pointerEvents = 'none'; // user can’t click it
+    document.body.appendChild(cover);
+  
+    clone.style.position = "fixed";
+    clone.style.top = "0";
+    clone.style.left = "0";
+    clone.style.zIndex = "-999";
+    clone.style.width = "1280px";
+    clone.style.height = "auto";
+    clone.style.overflow = "hidden";
+  
+    document.body.appendChild(clone);
+  
+    toJpeg(clone, { quality: 0.95, useCORS: true })
       .then((dataUrl) => {
-        const link = document.createElement("a")
-        link.download = "datesheet.jpg"
-        link.href = dataUrl
-        link.click()
+        const link = document.createElement("a");
+        link.download = "datesheet.jpg";
+        link.href = dataUrl;
+        link.click();
       })
       .catch((err) => console.error("Error exporting datesheet:", err))
-  }
+      .finally(() => {
+        document.body.removeChild(clone);
+        document.body.removeChild(cover);
+      });
+  };
 
   return (
     <div className="dynamic-datesheet-container">
