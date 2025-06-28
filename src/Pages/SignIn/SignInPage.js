@@ -113,7 +113,7 @@ export default function AuthPage() {
             <Navbar />
             <div
                 className="auth-container"
-                style={isLogin ? {} : { marginTop: '5%', marginBottom: '5%' }}
+
             >
                 {/* Animated Background */}
                 <div className="background-animation">
