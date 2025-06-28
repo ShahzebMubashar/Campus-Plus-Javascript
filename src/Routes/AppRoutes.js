@@ -21,7 +21,6 @@ import Calculator from '../Pages/Calculators/Calculator.js';
 import Chatroom from '../Pages/Chatroom/Chatrooms.js'
 import PastPapersDetails from '../Pages/Past Papers/PastPaperDetails.js';
 import Datesheet from '../Pages/Datesheet/Datesheet.js';
-import TestSignin from '../Pages/testsignin/page.js'
 import Dashboard from '../Pages/Dashboard/Dashboard.js'
 import ToDo from '../Pages/ToDoList/ToDo.js'
 import Profile from '../Pages/Profile/ProfilePage.js'
@@ -72,7 +71,6 @@ function AppRoutes() {
                 <Route path="/chatroom" element={<Chatroom />} />
                 <Route path="/past-papers/:courseId" element={<PastPapersDetails />} />
                 <Route path="/datesheet" element={<Datesheet />} />
-                <Route path="/testsignin" element={<TestSignin />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/todo" element={<ToDo />} />
                 <Route path="/profile" element={<Profile />} />
