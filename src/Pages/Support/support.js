@@ -43,23 +43,27 @@ const Support = () => {
                     <div className="card">
                         <img src={image1} alt="Email Generator" className="card-img-top" />
                         <div className="card-body">
-                            <h3 className="card-title">Email Generator</h3>
-                            <p className="card-text">Create predefined email templates quickly and easily.</p>
+                            <a href="/email-generator" style={{ textDecoration: 'none', color: 'inherit', fontWeight: 'normal' }}>
+                                <h3 className="card-title">Email Generator</h3>
+                                <p className="card-text">Create predefined email templates quickly and easily.</p>
+                            </a>
                         </div>
                     </div>
                     <div className="card">
                         <img src={image2} alt="Application Generator" className="card-img-top" />
                         <div className="card-body">
-                            <h3 className="card-title">Application Generator</h3>
-                            <p className="card-text">
-                                Generate application forms and documents effortlessly.
-                            </p>
+                            <a href="/application-generator" style={{ textDecoration: 'none', color: 'inherit', fontWeight: 'normal' }}>
+                                <h3 className="card-title"> Application Generator</h3>
+                                <p className="card-text">
+                                    Generate application forms and documents effortlessly.
+                                </p>
+                            </a>
                         </div>
                     </div>
                 </div>
-            </section>
+            </section >
             <Footer />
-        </div>
+        </div >
     );
 };
 
