@@ -21,7 +21,7 @@ import Calculator from '../Pages/Calculators/Calculator.js';
 import Chatroom from '../Pages/Chatroom/Chatrooms.js'
 import PastPapersDetails from '../Pages/Past Papers/PastPaperDetails.js';
 import Datesheet from '../Pages/Datesheet/Datesheet.js';
-import TestSignin from '../Pages/testtest/page.tsx'
+import TestSignin from '../Pages/testtest/page.js'
 import Dashboard from '../Pages/Dashboard/Dashboard.js'
 import ToDo from '../Pages/ToDoList/ToDo.js'
 import Profile from '../Pages/Profile/ProfilePage.js'

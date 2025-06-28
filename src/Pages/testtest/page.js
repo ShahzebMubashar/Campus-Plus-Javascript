@@ -1,46 +1,119 @@
-import React from "react"
-import { useState } from "react"
-import "./global.css"
-import Navbar from "../Index/components/Navbar"
-import Footer from "../../Pages/Footer/Footer"
-import logo from "../Index/cp_logo.png"
+// This file will be created after deleting page.tsx. It will combine the backend logic from SignInPage.js with the design and layout from the current testtest/page.tsx. 
+
+import React, { useState, useEffect, useRef } from "react";
+import "./global.css";
+import Navbar from "../Index/components/Navbar";
+import Footer from "../../Pages/Footer/Footer";
+import logo from "../Index/cp_logo.png";
+import { useNavigate } from "react-router-dom";
 
 export default function AuthPage() {
-    const [isLogin, setIsLogin] = useState(true)
+    // Backend logic/state from SignInPage.js
+    const [isLogin, setIsLogin] = useState(true);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
         confirmPassword: "",
         firstName: "",
         lastName: "",
-    })
+    });
+    const [message, setMessage] = useState("");
+    const navigate = useNavigate();
 
-    const handleInputChange = (field: string, value: string) => {
-        setFormData((prev) => ({ ...prev, [field]: value }))
-    }
+    // For animated character (if you want to add it later)
+    // const [activeField, setActiveField] = useState(null);
+    // const [isPasswordField, setIsPasswordField] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
-        e.preventDefault()
-        console.log("Form submitted:", formData)
-    }
+    // Handle input changes
+    const handleInputChange = (field, value) => {
+        setFormData((prev) => ({ ...prev, [field]: value }));
+    };
+
+    // Backend: Sign In
+    const handleSignInSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:4000/auth/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    email: formData.email,
+                    password: formData.password,
+                }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setMessage("Sign in successful!");
+                localStorage.setItem("user", JSON.stringify(data.user));
+                setTimeout(() => navigate("/"), 2000);
+            } else {
+                setMessage(data.error || "Sign in failed. Please try again.");
+            }
+        } catch (error) {
+            setMessage("An error occurred. Please try again later.");
+        }
+    };
+
+    // Backend: Sign Up
+    const handleSignUpSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch("http://localhost:4000/auth/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: "include",
+                body: JSON.stringify({
+                    username: formData.lastName,
+                    fullName: formData.firstName,
+                    email: formData.email,
+                    password: formData.confirmPassword,
+                    rollnumber: formData.password,
+                }),
+            });
+            const data = await response.json();
+            if (response.ok) {
+                setMessage(data.message || "Sign up successful!");
+                setTimeout(() => {
+                    setIsLogin(true);
+                    setFormData({
+                        email: "",
+                        password: "",
+                        confirmPassword: "",
+                        firstName: "",
+                        lastName: "",
+                    });
+                }, 1000);
+            } else {
+                setMessage(data.error || "Sign up failed. Please try again.");
+            }
+        } catch (error) {
+            setMessage("An error occurred. Please try again later.");
+        }
+    };
 
     const toggleMode = () => {
-        setIsLogin(!isLogin)
+        setIsLogin(!isLogin);
         setFormData({
             email: "",
             password: "",
             confirmPassword: "",
             firstName: "",
             lastName: "",
-        })
-    }
+        });
+        setMessage("");
+    };
 
     return (
         <>
             <Navbar />
             <div
                 className="auth-container"
-                style={isLogin ? {} : { marginTop: '5% !important', marginBottom: '5% !important' }}
+                style={isLogin ? {} : { marginTop: '5%', marginBottom: '5%' }}
             >
                 {/* Animated Background */}
                 <div className="background-animation">
@@ -95,7 +168,7 @@ export default function AuthPage() {
 
                         {/* Form Section */}
                         <div className="form-wrapper">
-                            <form onSubmit={handleSubmit} className="auth-form">
+                            <form onSubmit={isLogin ? handleSignInSubmit : handleSignUpSubmit} className="auth-form">
                                 <div className={`form-content ${isLogin ? "login-mode" : "signup-mode"}`}>
                                     {!isLogin && (
                                         <div className="name-fields">
@@ -207,6 +280,7 @@ export default function AuthPage() {
                                         </span>
                                         <div className="button-shine"></div>
                                     </button>
+                                    {message && <div style={{ color: '#e11d48', marginTop: 12, textAlign: 'center' }}>{message}</div>}
                                 </div>
                             </form>
                         </div>
@@ -257,5 +331,5 @@ export default function AuthPage() {
             </div>
             <Footer />
         </>
-    )
-}
+    );
+} 
