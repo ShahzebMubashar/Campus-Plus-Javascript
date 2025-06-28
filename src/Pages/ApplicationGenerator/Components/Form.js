@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import templateData from '../check.json'
-export default function Form({ formData,setFormData,setShowForm, formTitle,handleAppGen}) {
- 
-function onGenerateApplication(data){
- console.log(data)
-handleAppGen();
+import Footer from "../../Footer/Footer"
+export default function Form({ formData, setFormData, setShowForm, formTitle, handleAppGen }) {
+
+  function onGenerateApplication(data) {
+    console.log(data)
+    handleAppGen();
     return true;
-}
+  }
   const [errors, setErrors] = useState({});
 
   const handleCloseForm = () => {
@@ -15,7 +16,7 @@ handleAppGen();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((formData)=>({...formData, [name]: value }));
+    setFormData((formData) => ({ ...formData, [name]: value }));
   };
 
   const validateForm = () => {
@@ -40,9 +41,8 @@ handleAppGen();
       onGenerateApplication(formData);
     }
   };
-  let appTypes=[]
-  for(let key in templateData.templates) 
-  {
+  let appTypes = []
+  for (let key in templateData.templates) {
     appTypes.push(key)
   }
   return (
@@ -139,9 +139,9 @@ handleAppGen();
             value={formData.applicationType}
             onChange={handleChange}
           >
-          {appTypes.map((type)=>(<option>{type} </option>)
+            {appTypes.map((type) => (<option>{type} </option>)
 
-          )}
+            )}
             {/* <option value="">Select</option>
             <option value="Leave Application">Leave Application</option>
             <option value="Event Request">Event Request</option>
@@ -152,5 +152,9 @@ handleAppGen();
         <button type="submit" className="btn" onClick={handleSubmit}>Generate Application</button>
       </form>
     </div>
+
+
+
   );
+
 }
