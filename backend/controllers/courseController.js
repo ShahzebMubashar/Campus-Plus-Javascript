@@ -4,11 +4,16 @@ const fetch = require('node-fetch');
 const getCourses = async (request, response) => {
   try {
     const result = await pool.query(`
-      SELECT *,
-      CASE WHEN past_papers_count > 0 THEN true ELSE false END as has_past_papers
-      FROM ViewCourseInfo
+      SELECT 
+        vci.*,
+        CASE WHEN vci.past_papers_count > 0 THEN true ELSE false END as has_past_papers,
+        CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
+        CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count
+      FROM ViewCourseInfo vci
+      LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
       ORDER BY has_past_papers DESC
     `);
+
     if (!result.rowCount) {
       return response.status(404).json({ message: "No Courses Available" });
     }
@@ -268,6 +273,7 @@ const getCourseDetails = async (req, res) => {
   try {
     const result = await pool.query(
       `SELECT vci.*, 
+      CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
       CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count,
       ci.difficulty as difficulty,
       CASE WHEN EXISTS (
