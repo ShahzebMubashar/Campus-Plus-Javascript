@@ -202,8 +202,10 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .contact-header {
-        width: 95%;
+        width: 98%;
         margin-top: -2%;
+        padding: 20px 0;
+        min-height: 120px;
     }
 
     .contact-header h1 {
@@ -239,15 +241,18 @@
     .contact-header {
         width: 100%;
         margin-top: 0;
-        padding: 0 15px;
+        padding: 20px 30px;
+        min-height: 140px;
     }
 
     .contact-header h1 {
-        font-size: 1.8rem;
+        font-size: 1.9rem;
+        margin-bottom: 10px;
     }
 
     .contact-header p {
-        font-size: 0.9rem;
+        font-size: 1rem;
+        line-height: 1.4;
     }
 
     .contact-card {
