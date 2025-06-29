@@ -165,7 +165,7 @@
     .mobile-menu-toggle {
         display: block;
         position: fixed;
-        top: 80px;
+        top: 100px !important;
         left: 16px;
         z-index: 1001;
         background: #2196f3;

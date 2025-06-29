@@ -4,6 +4,7 @@ import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from '../Index/components/Navbar.js';
 import "../Chatroom/css/Chatroom.css";
+import { AiOutlineMenu } from 'react-icons/ai';
 
 export default function Chatrooms() {
     const [rooms, setRooms] = useState([]);
@@ -20,24 +21,28 @@ export default function Chatrooms() {
         fetchJoinedRooms();
     }, []);
 
-    // Close sidebar when clicking outside on mobile
     useEffect(() => {
+        if (!isSidebarOpen) return;
+
         const handleClickOutside = (event) => {
-            if (window.innerWidth <= 768 && isSidebarOpen) {
-                const sidebar = document.querySelector('.sidebar');
-                const toggle = document.querySelector('.mobile-menu-toggle');
-                if (sidebar && !sidebar.contains(event.target) && !toggle?.contains(event.target)) {
-                    setIsSidebarOpen(false);
-                }
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            if (
+                (sidebar && sidebar.contains(event.target)) ||
+                (toggle && toggle.contains(event.target))
+            ) {
+                return;
             }
+            setIsSidebarOpen(false);
         };
 
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
     }, [isSidebarOpen]);
 
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
+    const toggleSidebar = (e) => {
+        if (e) e.stopPropagation();
+        setIsSidebarOpen((prev) => !prev);
     };
 
     const fetchUserInfo = async () => {
@@ -133,16 +138,16 @@ export default function Chatrooms() {
         <div className="chatroom-main-top">
             <div className="chatroom-app">
                 <Navbar />
-
                 {/* Mobile Menu Toggle Button */}
-                <button
-                    className="mobile-menu-toggle"
-                    onClick={toggleSidebar}
-                    style={{ display: window.innerWidth <= 768 ? 'block' : 'none' }}
-                >
-                    ☰
-                </button>
-
+                {!isSidebarOpen && (
+                    <button
+                        className="mobile-menu-toggle"
+                        onClick={toggleSidebar}
+                        aria-label="Open sidebar menu"
+                    >
+                        <AiOutlineMenu size={28} />
+                    </button>
+                )}
                 <div className="content-wrapper">
                     <Sidebar
                         userInfo={userInfo}
@@ -151,7 +156,10 @@ export default function Chatrooms() {
                         activeRoom={activeRoom}
                         onRoomSelect={handleRoomSelect}
                         isOpen={isSidebarOpen}
-                        onClose={() => setIsSidebarOpen(false)}
+                        onClose={(e) => {
+                            if (e) e.stopPropagation();
+                            setIsSidebarOpen(false);
+                        }}
                     />
                     <div className="main-content">
                         {activeRoom ? (
@@ -175,7 +183,6 @@ export default function Chatrooms() {
                         )}
                     </div>
                 </div>
-
                 {/* Login prompt overlay with blurred background */}
                 {!isAuthenticated && !loading && (
                     <div className="login-overlay">

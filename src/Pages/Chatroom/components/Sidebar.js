@@ -2,6 +2,8 @@ import React from 'react';
 import './Sidebar.css';
 
 const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect, isOpen, onClose }) => {
+    // Debug log
+    console.log('Sidebar isOpen:', isOpen);
     // Function to get initials from username
     const getInitials = (name) => {
         console.log(userInfo);
@@ -15,7 +17,7 @@ const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect, isOpe
     };
 
     return (
-        <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+        <div className={`sidebar${isOpen ? ' open' : ''}`}>
             {/* Mobile Close Button */}
             <button
                 className="mobile-close-btn"

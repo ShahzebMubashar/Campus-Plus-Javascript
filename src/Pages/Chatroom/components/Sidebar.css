@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .profile-section {
@@ -276,21 +277,26 @@
 @media (max-width: 768px) {
     .sidebar {
         position: fixed;
-        left: -280px;
-        top: 70px;
+        left: 0;
+        top: 90px;
         width: 280px;
         height: calc(100vh - 70px);
-        transition: left 0.3s ease;
+        transition: transform 0.3s ease;
         z-index: 1000;
         background: white;
         box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(-100%);
     }
 
     .sidebar.open {
-        left: 0;
+        transform: translateX(0);
     }
 
     .mobile-close-btn {
+        display: none;
+    }
+
+    .sidebar.open .mobile-close-btn {
         display: flex;
     }
 
@@ -340,8 +346,9 @@
 @media (max-width: 480px) {
     .sidebar {
         width: 100%;
-        top: 60px;
+        top: 85px !important;
         height: calc(100vh - 60px);
+        box-shadow: none;
     }
 
     .profile-section {
