@@ -384,3 +384,376 @@
     align-items: center;
     gap: 4px;
 }
+
+/* Responsive Design for RoomView */
+@media (max-width: 1024px) {
+    .room-view-container {
+        padding: 16px;
+    }
+
+    .room-view-content {
+        padding: 20px;
+        margin-left: 16px;
+    }
+
+    .room-header {
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+
+    .room-title {
+        font-size: 24px;
+    }
+
+    .room-description {
+        font-size: 14px;
+    }
+
+    .post-section {
+        padding: 16px;
+        margin-bottom: 20px;
+    }
+
+    .post-input {
+        padding: 14px;
+        font-size: 14px;
+    }
+
+    .post-button {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 768px) {
+    .room-view-container {
+        padding: 12px;
+        flex-direction: column;
+    }
+
+    .room-view-content {
+        padding: 16px;
+        margin-left: 0;
+        margin-top: 0;
+        border-radius: 12px;
+    }
+
+    .room-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .room-title {
+        font-size: 20px;
+        margin-bottom: 4px;
+    }
+
+    .room-description {
+        font-size: 13px;
+        margin-top: 0;
+    }
+
+    .leave-room-button {
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 14px;
+        text-align: center;
+    }
+
+    .post-section {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .post-input {
+        padding: 12px;
+        font-size: 14px;
+        margin-bottom: 12px;
+        min-height: 80px;
+    }
+
+    .post-button {
+        width: 100%;
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .comments-section {
+        padding: 16px;
+        margin-top: 16px;
+    }
+
+    .comment {
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+
+    .comment-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        margin-bottom: 6px;
+    }
+
+    .comment-author {
+        font-size: 14px;
+    }
+
+    .comment-timestamp {
+        font-size: 12px;
+    }
+
+    .comment-content {
+        font-size: 13px;
+        line-height: 1.4;
+    }
+
+    /* Modal Responsiveness */
+    .modal-content {
+        width: 95%;
+        max-width: 450px;
+        padding: 24px;
+        margin: 20px;
+    }
+
+    .modal-header h2 {
+        font-size: 20px;
+    }
+
+    .modal-form-group input,
+    .modal-form-group textarea {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .modal-button {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 480px) {
+    .room-view-container {
+        padding: 8px;
+    }
+
+    .room-view-content {
+        padding: 12px;
+        border-radius: 8px;
+    }
+
+    .room-header {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .room-title {
+        font-size: 18px;
+    }
+
+    .room-description {
+        font-size: 12px;
+    }
+
+    .leave-room-button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .post-section {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+
+    .post-input {
+        padding: 10px;
+        font-size: 13px;
+        margin-bottom: 10px;
+        min-height: 70px;
+    }
+
+    .post-button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    .comments-section {
+        padding: 12px;
+        margin-top: 12px;
+    }
+
+    .comment {
+        padding: 10px;
+        margin-bottom: 8px;
+    }
+
+    .comment-author {
+        font-size: 13px;
+    }
+
+    .comment-timestamp {
+        font-size: 11px;
+    }
+
+    .comment-content {
+        font-size: 12px;
+    }
+
+    /* Modal for small screens */
+    .modal-content {
+        width: 98%;
+        padding: 16px;
+        margin: 10px;
+    }
+
+    .modal-header h2 {
+        font-size: 18px;
+        margin-bottom: 16px;
+    }
+
+    .modal-form-group {
+        margin-bottom: 16px;
+    }
+
+    .modal-form-group label {
+        font-size: 14px;
+        margin-bottom: 6px;
+    }
+
+    .modal-form-group input,
+    .modal-form-group textarea {
+        padding: 8px;
+        font-size: 13px;
+    }
+
+    .modal-button {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    /* Search container responsiveness */
+    .search-container {
+        flex-direction: column;
+        gap: 8px;
+        margin-bottom: 12px;
+    }
+
+    .search-input-group {
+        width: 100%;
+    }
+
+    .search-input {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 360px) {
+    .room-view-container {
+        padding: 6px;
+    }
+
+    .room-view-content {
+        padding: 10px;
+    }
+
+    .room-header {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .room-title {
+        font-size: 16px;
+    }
+
+    .room-description {
+        font-size: 11px;
+    }
+
+    .leave-room-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .post-section {
+        padding: 8px;
+        margin-bottom: 10px;
+    }
+
+    .post-input {
+        padding: 8px;
+        font-size: 12px;
+        margin-bottom: 8px;
+        min-height: 60px;
+    }
+
+    .post-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .comments-section {
+        padding: 10px;
+        margin-top: 10px;
+    }
+
+    .comment {
+        padding: 8px;
+        margin-bottom: 6px;
+    }
+
+    .comment-author {
+        font-size: 12px;
+    }
+
+    .comment-timestamp {
+        font-size: 10px;
+    }
+
+    .comment-content {
+        font-size: 11px;
+    }
+
+    .modal-content {
+        padding: 12px;
+        margin: 5px;
+    }
+
+    .modal-header h2 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+
+    .modal-form-group {
+        margin-bottom: 12px;
+    }
+
+    .modal-form-group label {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .modal-form-group input,
+    .modal-form-group textarea {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .modal-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+
+    .search-container {
+        gap: 6px;
+        margin-bottom: 10px;
+    }
+
+    .search-input {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}

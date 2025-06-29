@@ -1,21 +1,30 @@
 import React from 'react';
 import './Sidebar.css';
 
-const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => {
+const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect, isOpen, onClose }) => {
     // Function to get initials from username
     const getInitials = (name) => {
         console.log(userInfo);
         if (!name) return 'U';
-        
+
         const names = name.split(' ');
         if (names.length === 1) return names[0][0];
-        
+
         // Get first letter of first name and first letter of last name
         return `${names[0][0]}${names[names.length - 1][0]}`;
     };
 
     return (
-        <div className="sidebar">
+        <div className={`sidebar ${isOpen ? 'open' : ''}`}>
+            {/* Mobile Close Button */}
+            <button
+                className="mobile-close-btn"
+                onClick={onClose}
+                style={{ display: window.innerWidth <= 768 ? 'block' : 'none' }}
+            >
+                ✕
+            </button>
+
             {/* Profile Section */}
             <div className="profile-section">
                 <div className="profile-content">
@@ -59,7 +68,13 @@ const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => 
                         <button
                             key={room.roomid}
                             className={`room-button ${activeRoom?.roomid === room.roomid ? 'active' : ''}`}
-                            onClick={() => onRoomSelect(room)}
+                            onClick={() => {
+                                onRoomSelect(room);
+                                // Close sidebar on mobile after room selection
+                                if (window.innerWidth <= 768 && onClose) {
+                                    onClose();
+                                }
+                            }}
                         >
                             <span className="room-icon">💬</span>
                             {room.roomname}
@@ -67,8 +82,6 @@ const Sidebar = ({ userInfo, rooms, joinedRooms, activeRoom, onRoomSelect }) => 
                     ))}
                 </div>
             </div>
-
-
         </div>
     );
 };
