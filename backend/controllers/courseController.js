@@ -270,8 +270,11 @@ const downloadPastPapers = async (req, res) => {
 
 const getCourseDetails = async (req, res) => {
   const { courseId } = req.params;
+
+  let client = await pool.connect();
+
   try {
-    const result = await pool.query(
+    const result = await client.query(
       `SELECT vci.*, 
       CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
       CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count,
@@ -288,14 +291,23 @@ const getCourseDetails = async (req, res) => {
       [courseId, req.session?.user?.userid || 0]
     );
 
+    await client.query("BEGIN");
+
+    await client.query(`Update TrendingCourses set clicks = clicks + 1 where courseid = $1`,
+      [courseId]
+    );
+
+    await client.query("COMMIT");
+
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Course not found' });
     }
 
-    res.json(result.rows[0]);
+    return res.json(result.rows[0]);
   } catch (err) {
     console.error('Error fetching course details:', err);
-    res.status(500).json({ message: 'Server error while fetching course details' });
+    await client.query("ROLLBACK");
+    return res.status(500).json({ message: 'Server error while fetching course details' });
   }
 };
 
