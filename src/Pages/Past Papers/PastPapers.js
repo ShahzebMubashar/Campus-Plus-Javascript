@@ -7,96 +7,96 @@ import { FaBook, FaStar, FaSearch } from 'react-icons/fa';
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
 
 const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
-  const [hoveredRating, setHoveredRating] = useState(0);
-  const [selectedRating, setSelectedRating] = useState(0);
+    const [hoveredRating, setHoveredRating] = useState(0);
+    const [selectedRating, setSelectedRating] = useState(0);
 
-  useEffect(() => {
-    // Initialize with difficulty if no rating exists
-    if (!currentRating && difficulty) {
-      setSelectedRating(Number(difficulty));
-    } else if (currentRating) {
-      setSelectedRating(Number(currentRating));
-    }
-  }, [currentRating, difficulty]);
+    useEffect(() => {
+        // Initialize with difficulty if no rating exists
+        if (!currentRating && difficulty) {
+            setSelectedRating(Number(difficulty));
+        } else if (currentRating) {
+            setSelectedRating(Number(currentRating));
+        }
+    }, [currentRating, difficulty]);
 
-  const handleRatingSubmit = async (rating) => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/courses/rate-course`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          courseid: courseId,
-          rating: rating
-        }),
-      });
+    const handleRatingSubmit = async (rating) => {
+        try {
+            const response = await fetch(`${API_BASE_URL}/courses/rate-course`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    courseid: courseId,
+                    rating: rating
+                }),
+            });
 
-      if (!response.ok) {
-        const error = await response.text();
-        throw new Error(error);
-      }
+            if (!response.ok) {
+                const error = await response.text();
+                throw new Error(error);
+            }
 
-      // Handle text response instead of JSON
-      const message = await response.text();
-      console.log('Rating response:', message);
-      
-      // Fetch updated course data
-      const courseResponse = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
-        credentials: 'include'
-      });
-      
-      if (!courseResponse.ok) {
-        throw new Error('Failed to fetch updated course info');
-      }
-      
-      const courseData = await courseResponse.json();
-      setSelectedRating(rating);
-      onRate(rating);
-    } catch (error) {
-      console.error('Error submitting rating:', error);
-      alert(error.message || 'Failed to submit rating. Please try again.');
-    }
-  };
+            // Handle text response instead of JSON
+            const message = await response.text();
+            console.log('Rating response:', message);
 
-  const getBarFill = (index) => {
-    const barValue = index + 1;
-    const rating = hoveredRating || selectedRating;
-    
-    if (!rating) return 0;
-    
-    if (barValue <= Math.floor(rating)) return 1;
-    if (barValue > Math.ceil(rating)) return 0;
-    
-    return rating - Math.floor(rating);
-  };
+            // Fetch updated course data
+            const courseResponse = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
+                credentials: 'include'
+            });
 
-  return (
-    <div className="rating">
-      <div className="rating-bars">
-        {[1, 2, 3, 4, 5].map((level, index) => (
-          <div
-            key={level}
-            className="rating-bar"
-            onMouseEnter={() => setHoveredRating(level)}
-            onMouseLeave={() => setHoveredRating(0)}
-            onClick={() => handleRatingSubmit(level)}
-          >
-            <div 
-              className="rating-bar-fill"
-              style={{ transform: `scaleX(${getBarFill(index)})` }}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="rating-info">
-        <span className="average-rating">
-          {selectedRating ? Number(selectedRating).toFixed(1) : '0.0'}
-        </span>
-      </div>
-    </div>
-  );
+            if (!courseResponse.ok) {
+                throw new Error('Failed to fetch updated course info');
+            }
+
+            const courseData = await courseResponse.json();
+            setSelectedRating(rating);
+            onRate(rating);
+        } catch (error) {
+            console.error('Error submitting rating:', error);
+            alert(error.message || 'Failed to submit rating. Please try again.');
+        }
+    };
+
+    const getBarFill = (index) => {
+        const barValue = index + 1;
+        const rating = hoveredRating || selectedRating;
+
+        if (!rating) return 0;
+
+        if (barValue <= Math.floor(rating)) return 1;
+        if (barValue > Math.ceil(rating)) return 0;
+
+        return rating - Math.floor(rating);
+    };
+
+    return (
+        <div className="rating">
+            <div className="rating-bars">
+                {[1, 2, 3, 4, 5].map((level, index) => (
+                    <div
+                        key={level}
+                        className="rating-bar"
+                        onMouseEnter={() => setHoveredRating(level)}
+                        onMouseLeave={() => setHoveredRating(0)}
+                        onClick={() => handleRatingSubmit(level)}
+                    >
+                        <div
+                            className="rating-bar-fill"
+                            style={{ transform: `scaleX(${getBarFill(index)})` }}
+                        />
+                    </div>
+                ))}
+            </div>
+            <div className="rating-info">
+                <span className="average-rating">
+                    {selectedRating ? Number(selectedRating).toFixed(1) : '0.0'}
+                </span>
+            </div>
+        </div>
+    );
 };
 
 const PastPapers = () => {
@@ -140,9 +140,9 @@ const PastPapers = () => {
             const courseName = course.coursename || '';
             const courseCode = course.coursecode || '';
             const query = searchQuery.toLowerCase();
-            
+
             return courseName.toLowerCase().includes(query) ||
-                   courseCode.toLowerCase().includes(query);
+                courseCode.toLowerCase().includes(query);
         });
         setFilteredCourses(filtered);
     }, [searchQuery, courses]);
@@ -152,9 +152,9 @@ const PastPapers = () => {
     };
 
     const handleRatingUpdate = (courseId, newRating) => {
-        setCourses(prevCourses => 
-            prevCourses.map(course => 
-                course.courseid === courseId 
+        setCourses(prevCourses =>
+            prevCourses.map(course =>
+                course.courseid === courseId
                     ? { ...course, rating: newRating }
                     : course
             )
@@ -173,7 +173,7 @@ const PastPapers = () => {
     };
 
     const renderCourseCard = (course) => (
-        <div 
+        <div
             key={course.courseid}
             className="course-card"
             onClick={(e) => {
