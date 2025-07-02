@@ -564,22 +564,16 @@
         margin: 10px 0 0 0;
     }
 
-    /* 1. Center and shrink search bar */
-    .room-view-content .search-section {
-        flex-direction: column;
-        align-items: center;
-        gap: 8px;
-    }
-
+    /* 1. Center and shrink search bar even more */
     .room-view-content .search-section input {
         min-width: 0;
-        width: 80%;
-        max-width: 320px;
+        width: 50% !important;
+        max-width: 220px;
         margin: 0 auto;
         display: block;
     }
 
-    /* 2. Post header: right-align delete/date */
+    /* 2. Post header: align delete/date horizontally with username */
     .room-view-content .post-header {
         flex-direction: row;
         justify-content: space-between;
@@ -587,23 +581,24 @@
         gap: 8px;
     }
 
+    .room-view-content .post-header>div:first-child {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
     .room-view-content .post-header>div:last-child {
         margin-left: auto;
         display: flex;
         flex-direction: row;
-        align-items: center;
+        align-items: flex-start;
         gap: 8px;
+        margin-top: 0;
     }
 
-    /* 3. Like/comment/share in one row */
-    .room-view-content .post-actions {
-        flex-direction: row !important;
-        align-items: center;
-        justify-content: flex-start;
-        gap: 10px;
-        width: 100%;
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
+    .room-view-content .post-header>div:last-child>* {
+        margin-top: 0 !important;
+        vertical-align: middle;
     }
 }
 
@@ -662,8 +657,8 @@
     }
 
     .room-view-content .search-section input {
-        width: 95%;
-        max-width: 220px;
+        width: 70% !important;
+        max-width: 10px !important;
     }
 
     .room-view-content .post-header>div:last-child {
