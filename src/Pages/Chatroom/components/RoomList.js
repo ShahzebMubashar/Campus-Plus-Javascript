@@ -67,22 +67,22 @@ export default function RoomList({ rooms, onJoinRoom }) {
         <div className="room-list-container">
             {/* Header Section */}
             <div className="room-list-header">
-                <div className="room-list-header-content">
-                    <div>
+                <div className="room-list-header-stack">
+                    <div className="room-list-header-left">
                         <h1 className="room-list-title">Chat Rooms</h1>
                         <p className="room-list-subtitle">
                             Browse and join chat rooms to start discussing
                         </p>
                     </div>
-                    {userRole === "Admin" && (
-                        <button
-                            className="create-room-button"
-                            onClick={() => setShowCreateRoomForm(true)}
-                        >
-                            <span style={{ fontSize: "18px" }}>+</span> Create Room
-                        </button>
-                    )}
                 </div>
+                {userRole === "Admin" && (
+                    <button
+                        className="create-room-button"
+                        onClick={() => setShowCreateRoomForm(true)}
+                    >
+                        <span style={{ fontSize: "18px" }}>+</span> Create Room
+                    </button>
+                )}
                 <div className="room-list-search">
                     <input
                         type="text"

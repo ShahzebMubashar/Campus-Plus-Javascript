@@ -15,8 +15,11 @@
 
 .room-list-header {
     display: flex;
+    flex-direction: row;
+    align-items: flex-start;
     justify-content: space-between;
-    align-items: center;
+    flex-wrap: wrap;
+    width: 100%;
     margin-bottom: 20px;
     padding: 20px;
     background-color: white;
@@ -31,15 +34,20 @@
 }
 
 .create-room-button {
-    padding: 10px 20px;
+    margin-left: auto;
+    align-self: flex-start;
+    padding: 6px 14px;
+    font-size: 0.95rem;
+    min-width: 100px;
+    max-width: 150px;
+    height: 38px;
+    display: inline-flex;
     background-color: #2196f3;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
     transition: background-color 0.2s ease;
-    display: flex;
     align-items: center;
     gap: 8px;
 }
@@ -227,4 +235,350 @@
     bottom: 0;
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 999;
+}
+
+.room-list-header-stack {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.room-list-header-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+/* Responsive Design for RoomList */
+@media (max-width: 1024px) {
+    .room-list-container {
+        padding: 16px;
+    }
+
+    .room-list-header {
+        padding: 16px;
+        margin-bottom: 16px;
+    }
+
+    .room-list-title {
+        font-size: 24px;
+    }
+
+    .room-list-subtitle {
+        font-size: 14px;
+    }
+
+    .create-room-button {
+        padding: 8px 16px;
+        font-size: 0.9rem;
+    }
+
+    .room-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 16px;
+    }
+}
+
+@media (max-width: 768px) {
+    .room-list-container {
+        padding: 12px;
+        margin-left: 0;
+        width: 100%;
+    }
+
+    .room-list-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .room-list-header-content {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 12px;
+        width: 100%;
+    }
+
+    .room-list-title {
+        font-size: 20px;
+    }
+
+    .room-list-subtitle {
+        font-size: 13px;
+    }
+
+    .create-room-button {
+        width: 100%;
+        margin: 12px 0 0 0;
+        align-self: stretch;
+        min-width: unset;
+        max-width: unset;
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        height: auto;
+    }
+
+    .room-list-search {
+        width: 100%;
+        max-width: none;
+    }
+
+    .room-list-search input {
+        padding: 10px 16px 10px 36px;
+        font-size: 14px;
+    }
+
+    .room-list-search-icon {
+        left: 10px;
+        font-size: 16px;
+    }
+
+    .room-grid {
+        grid-template-columns: 1fr;
+        gap: 12px;
+    }
+
+    .room-card {
+        padding: 16px;
+    }
+
+    .room-card-title {
+        font-size: 1.1rem;
+    }
+
+    .room-card-description {
+        font-size: 0.85rem;
+    }
+
+    .join-room-button {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    /* Modal Responsiveness */
+    .create-room-modal {
+        width: 95%;
+        max-width: 400px;
+        padding: 20px;
+    }
+
+    .create-room-modal-title {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+
+    .create-room-input,
+    .create-room-textarea {
+        padding: 10px;
+        font-size: 14px;
+        margin-bottom: 12px;
+    }
+
+    .create-room-textarea {
+        height: 100px;
+    }
+
+    .modal-buttons {
+        gap: 8px;
+    }
+
+    .modal-button {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+
+    .room-list-header-stack {
+        flex-direction: column;
+        align-items: flex-start;
+        width: 100%;
+        gap: 8px 0;
+        justify-content: flex-start;
+    }
+
+    .room-list-title {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 0;
+    }
+
+    .room-list-subtitle {
+        width: 100%;
+        text-align: left;
+        margin-bottom: 0;
+    }
+
+    .create-room-button {
+        width: 100%;
+        margin: 12px 0 0 0;
+        align-self: stretch;
+        min-width: unset;
+        max-width: unset;
+        font-size: 0.9rem;
+        padding: 8px 12px;
+        height: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .room-list-container {
+        padding: 8px;
+
+    }
+
+    .room-list-header {
+        padding: 12px;
+        margin-bottom: 12px;
+    }
+
+    .room-list-title {
+        font-size: 18px;
+    }
+
+    .room-list-subtitle {
+        font-size: 12px;
+    }
+
+    .create-room-button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .room-list-search input {
+        padding: 8px 12px 8px 32px;
+        font-size: 13px;
+    }
+
+    .room-list-search-icon {
+        left: 8px;
+        font-size: 14px;
+    }
+
+    .room-grid {
+        gap: 8px;
+    }
+
+    .room-card {
+        padding: 12px;
+    }
+
+    .room-card-title {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+
+    .room-card-description {
+        font-size: 0.8rem;
+        margin-bottom: 12px;
+    }
+
+    .join-room-button {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+
+    /* Modal for small screens */
+    .create-room-modal {
+        width: 98%;
+        padding: 16px;
+        margin: 10px;
+    }
+
+    .create-room-modal-title {
+        font-size: 18px;
+        margin-bottom: 12px;
+    }
+
+    .create-room-input,
+    .create-room-textarea {
+        padding: 8px;
+        font-size: 13px;
+        margin-bottom: 10px;
+    }
+
+    .create-room-textarea {
+        height: 80px;
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .modal-button {
+        width: 100%;
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 360px) {
+    .room-list-container {
+        padding: 6px;
+    }
+
+    .room-list-header {
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+
+    .room-list-title {
+        font-size: 16px;
+    }
+
+    .room-list-subtitle {
+        font-size: 11px;
+    }
+
+    .create-room-button {
+        padding: 6px 10px;
+        font-size: 1.5rem;
+
+    }
+
+    .room-list-search input {
+        padding: 16px 10px 6px 28px;
+        font-size: 12px;
+    }
+
+    .room-list-search-icon {
+        left: 6px;
+        font-size: 12px;
+
+    }
+
+    .room-card {
+        padding: 10px;
+    }
+
+    .room-card-title {
+        font-size: 0.9rem;
+    }
+
+    .room-card-description {
+        font-size: 0.75rem;
+    }
+
+    .join-room-button {
+        padding: 5px 10px;
+        font-size: 0.75rem;
+    }
+
+    .create-room-modal {
+        padding: 12px;
+        margin: 5px;
+    }
+
+    .create-room-modal-title {
+        font-size: 16px;
+    }
+
+    .create-room-input,
+    .create-room-textarea {
+        padding: 6px;
+        font-size: 12px;
+    }
+
+    .modal-button {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
 }

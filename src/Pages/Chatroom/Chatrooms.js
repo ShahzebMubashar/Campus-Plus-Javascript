@@ -4,6 +4,7 @@ import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from '../Index/components/Navbar.js';
 import "../Chatroom/css/Chatroom.css";
+import { AiOutlineMenu } from 'react-icons/ai';
 
 export default function Chatrooms() {
     const [rooms, setRooms] = useState([]);
@@ -11,6 +12,8 @@ export default function Chatrooms() {
     const [activeRoom, setActiveRoom] = useState(null);
     const [userInfo, setUserInfo] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         fetchUserInfo();
@@ -18,21 +21,49 @@ export default function Chatrooms() {
         fetchJoinedRooms();
     }, []);
 
+    useEffect(() => {
+        if (!isSidebarOpen) return;
+
+        const handleClickOutside = (event) => {
+            const sidebar = document.querySelector('.sidebar');
+            const toggle = document.querySelector('.mobile-menu-toggle');
+            if (
+                (sidebar && sidebar.contains(event.target)) ||
+                (toggle && toggle.contains(event.target))
+            ) {
+                return;
+            }
+            setIsSidebarOpen(false);
+        };
+
+        document.addEventListener('click', handleClickOutside);
+        return () => document.removeEventListener('click', handleClickOutside);
+    }, [isSidebarOpen]);
+
+    const toggleSidebar = (e) => {
+        if (e) e.stopPropagation();
+        setIsSidebarOpen((prev) => !prev);
+    };
+
     const fetchUserInfo = async () => {
         try {
             const response = await fetch("http://localhost:4000/user/profile", {
-                method:"GET",
+                method: "GET",
                 credentials: "include",
                 headers: {
-                    "Content-Type":"apploication/json"
+                    "Content-Type": "apploication/json"
                 }
             });
             if (response.ok) {
                 const data = await response.json();
                 setUserInfo(data);
+                setIsAuthenticated(true);
+            } else {
+                setIsAuthenticated(false);
             }
         } catch (error) {
             console.error("Error fetching user info:", error);
+            setIsAuthenticated(false);
         }
     };
 
@@ -85,10 +116,38 @@ export default function Chatrooms() {
         setActiveRoom(room);
     };
 
+    // Login prompt component
+    const LoginPrompt = () => (
+        <div className="login-prompt">
+            <div className="login-prompt-content">
+                <div className="login-prompt-icon">🔒</div>
+                <h2>Authentication Required</h2>
+                <p>You need to log in to access the chatroom feature.</p>
+                <p>Please sign in to your account to continue.</p>
+                <button
+                    className="login-prompt-btn"
+                    onClick={() => window.location.href = '/sign-in'}
+                >
+                    Sign In
+                </button>
+            </div>
+        </div>
+    );
+
     return (
         <div className="chatroom-main-top">
             <div className="chatroom-app">
                 <Navbar />
+                {/* Mobile Menu Toggle Button */}
+                {!isSidebarOpen && (
+                    <button
+                        className="mobile-menu-toggle"
+                        onClick={toggleSidebar}
+                        aria-label="Open sidebar menu"
+                    >
+                        <AiOutlineMenu size={28} />
+                    </button>
+                )}
                 <div className="content-wrapper">
                     <Sidebar
                         userInfo={userInfo}
@@ -96,6 +155,11 @@ export default function Chatrooms() {
                         joinedRooms={joinedRooms}
                         activeRoom={activeRoom}
                         onRoomSelect={handleRoomSelect}
+                        isOpen={isSidebarOpen}
+                        onClose={(e) => {
+                            if (e) e.stopPropagation();
+                            setIsSidebarOpen(false);
+                        }}
                     />
                     <div className="main-content">
                         {activeRoom ? (
@@ -119,7 +183,13 @@ export default function Chatrooms() {
                         )}
                     </div>
                 </div>
-
+                {/* Login prompt overlay with blurred background */}
+                {!isAuthenticated && !loading && (
+                    <div className="login-overlay">
+                        <div className="blurred-background"></div>
+                        <LoginPrompt />
+                    </div>
+                )}
             </div>
         </div>
     );

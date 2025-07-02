@@ -778,12 +778,12 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   return (
     <div
+      className="room-view-container"
       style={{
         display: "flex",
         minHeight: "100vh",
         backgroundColor: colors.background,
         position: "relative",
-        paddingLeft: "280px",
       }}
     >
       <Sidebar
@@ -797,12 +797,12 @@ export default function RoomView({ room, onBack, onLeave }) {
       />
       {/* Main content */}
       <div
+        className="room-view-content"
         style={{
           flex: 1,
           padding: "24px",
           backgroundColor: colors.background,
           position: "relative",
-          marginLeft: "-220px",
         }}
       >
         {/* Room Header */}
@@ -814,6 +814,7 @@ export default function RoomView({ room, onBack, onLeave }) {
           }}
         >
           <div
+            className="room-header"
             style={{
               display: "flex",
               justifyContent: "space-between",
@@ -830,7 +831,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             >
               {room.roomname}
             </h1>
-            <div style={{ display: "flex", gap: "12px" }}>
+            <div className="header-buttons" style={{ display: "flex", gap: "12px" }}>
               <button
                 onClick={onBack}
                 style={{
@@ -1109,7 +1110,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             </div>
           )}
 
-          <div style={{ display: "flex", gap: "12px" }}>
+          <div className="create-post-section" style={{ display: "flex", gap: "12px" }}>
             <input
               type="text"
               placeholder="What's on your mind?"
@@ -1143,6 +1144,7 @@ export default function RoomView({ room, onBack, onLeave }) {
             posts.map((post) => (
               <div
                 key={post.messageid}
+                className="post-item"
                 style={{
                   ...cardStyles.container,
                   backgroundColor:
@@ -1160,6 +1162,7 @@ export default function RoomView({ room, onBack, onLeave }) {
               >
                 <div style={{ marginBottom: "10px" }}>
                   <div
+                    className="post-header"
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
@@ -1292,6 +1295,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                     </div>
                   </div>
                   <div
+                    className="post-content"
                     style={{
                       marginTop: "12px",
                       color: colors.textPrimary,
@@ -1304,6 +1308,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 </div>
 
                 <div
+                  className="post-actions"
                   style={{
                     display: "flex",
                     gap: "10px",

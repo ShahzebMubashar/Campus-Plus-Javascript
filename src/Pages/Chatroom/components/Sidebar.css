@@ -12,6 +12,7 @@
     display: flex;
     flex-direction: column;
     overflow-y: auto;
+    transition: transform 0.35s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 .profile-section {
@@ -37,8 +38,10 @@
 
 .avatar {
     width: 45px;
-    height: 45px; /* Must equal width for perfect circle */
-    border-radius: 50%; /* This makes it circular */
+    height: 45px;
+    /* Must equal width for perfect circle */
+    border-radius: 50%;
+    /* This makes it circular */
     overflow: hidden;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     margin-right: 12px;
@@ -274,12 +277,162 @@
 @media (max-width: 768px) {
     .sidebar {
         position: fixed;
-        left: -280px;
-        transition: left 0.3s ease;
+        left: 0;
+        top: 90px;
+        width: 280px;
+        height: calc(100vh - 70px);
+        transition: transform 0.3s ease;
+        z-index: 1000;
+        background: white;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+        transform: translateX(-100%);
     }
 
     .sidebar.open {
-        left: 0;
+        transform: translateX(0);
+    }
+
+    .mobile-close-btn {
+        display: none;
+    }
+
+    .sidebar.open .mobile-close-btn {
+        display: flex;
+    }
+
+    .profile-section {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .profile-content {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .avatar {
+        margin: 0 auto 12px;
+    }
+
+    .profile-info h3 {
+        font-size: 1.1rem;
+        margin-bottom: 4px;
+    }
+
+    .profile-info p {
+        font-size: 0.8rem;
+    }
+
+    .sidebar-nav-links {
+        margin-bottom: 16px;
+    }
+
+    .sidebar-nav-link {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+
+    .rooms-section h3 {
+        font-size: 0.7rem;
+        margin-bottom: 10px;
+    }
+
+    .room-button {
+        padding: 10px 14px;
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .sidebar {
+        width: 100%;
+        top: 85px !important;
+        height: calc(100vh - 60px);
+        box-shadow: none;
+    }
+
+    .profile-section {
+        padding: 12px;
+        margin-bottom: 16px;
+    }
+
+    .avatar {
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+        font-size: 14px;
+    }
+
+    .profile-info h3 {
+        font-size: 1rem;
+    }
+
+    .profile-info p {
+        font-size: 0.75rem;
+    }
+
+    .sidebar-nav-link {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .room-button {
+        padding: 8px 12px;
+        font-size: 0.8rem;
+    }
+
+    .mobile-close-btn {
+        top: 12px;
+        right: 12px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 360px) {
+    .sidebar {
+        padding: 16px;
+    }
+
+    .profile-section {
+        padding: 10px;
+        margin-bottom: 12px;
+    }
+
+    .avatar {
+        width: 36px;
+        height: 36px;
+        min-width: 36px;
+        min-height: 36px;
+        font-size: 12px;
+    }
+
+    .profile-info h3 {
+        font-size: 0.9rem;
+    }
+
+    .profile-info p {
+        font-size: 0.7rem;
+    }
+
+    .sidebar-nav-link {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .room-button {
+        padding: 6px 10px;
+        font-size: 0.75rem;
+    }
+
+    .mobile-close-btn {
+        top: 8px;
+        right: 8px;
+        width: 24px;
+        height: 24px;
+        font-size: 12px;
     }
 }
 
@@ -295,4 +448,28 @@
     font-size: 18px;
     font-weight: bold;
     text-transform: uppercase;
+}
+
+/* Mobile Close Button */
+.mobile-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 16px;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1002;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.mobile-close-btn:hover {
+    background: #ff2222;
 }
