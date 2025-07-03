@@ -435,25 +435,363 @@
     }
 
     @media (max-width: 768px) {
+        .dashboardcontainer {
+            width: 100%;
+            margin: 0;
+            padding: 0 4px;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .user-profile-section {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 12px 4px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+        }
+
+        .profile-picture {
+            width: 80px;
+            height: 80px;
+            font-size: 28px;
+            margin-right: 0;
+            margin-bottom: 12px;
+            border-width: 2px;
+        }
+
+        .user-info {
+            align-items: center;
+        }
+
+        .user-name {
+            font-size: 20px;
+        }
+
+        .user-name-username {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+
+        .user-detail-item {
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+
+        .academic-info {
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .degree-badge,
+        .cgpa-badge,
+        .semester-badge {
+            font-size: 12px;
+            padding: 7px 12px;
+            border-radius: 10px;
+        }
+
+        .profile-actions {
+            margin-left: 0;
+            justify-content: center;
+        }
+
+        .profile-action-btn {
+            font-size: 12px;
+            padding: 6px 10px;
+            border-radius: 8px;
+        }
+
+        .courses-section,
+        .deadlines-section,
+        .bottom-sections,
+        .quick-links-section {
+            padding: 10px 2px;
+        }
+
         .courses-grid {
             grid-template-columns: 1fr;
+            gap: 10px;
+            margin-top: 10px;
         }
 
-        .gpa-card {
-            flex-direction: column;
+        .course-card {
+            padding: 10px;
+            height: auto;
+            min-width: 0;
         }
 
-        .gpa-display {
-            width: 100%;
-            padding-right: 0;
-            padding-bottom: 20px;
-            border-right: none;
-            border-bottom: 1px solid rgba(30, 61, 89, 0.1);
-            margin-bottom: 20px;
+        .bottom-sections {
+            grid-template-columns: 1fr;
+            gap: 12px;
+            padding: 10px 2px;
         }
 
-        .main-content {
-            padding: 20px;
+        .gpa-card,
+        .chatroom-card {
+            padding: 12px;
+            border-radius: 10px;
+        }
+
+        .gpa-circle {
+            width: 80px;
+            height: 80px;
+            font-size: 18px;
+        }
+
+        .gpa-value {
+            font-size: 22px;
+        }
+
+        .gpa-label {
+            font-size: 12px;
+        }
+
+        .course-list {
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .course-item {
+            padding: 7px 0;
+            font-size: 12px;
+        }
+
+        .add-course-form {
+            margin-top: 8px;
+        }
+
+        .course-input,
+        .credits-select,
+        .grade-select {
+            font-size: 12px;
+            padding: 7px 8px;
+            border-radius: 6px;
+        }
+
+        .add-course-btn {
+            font-size: 12px;
+            padding: 7px 10px;
+            border-radius: 6px;
+        }
+
+        .chatrooms-list {
+            gap: 8px;
+        }
+
+        .chatroom-card {
+            padding: 10px;
+            border-radius: 10px;
+        }
+
+        .chatroom-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 16px;
+            margin-right: 8px;
+        }
+
+        .chatroom-info h3 {
+            font-size: 13px;
+        }
+
+        .chatroom-info p {
+            font-size: 11px;
+        }
+
+        .quick-links-section {
+            padding: 8px 2px;
+            margin-top: 10px;
+            border-radius: 10px;
+        }
+
+        .quick-links-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+            padding: 0;
+            max-width: 100vw;
+        }
+
+        .quick-link-card {
+            flex-direction: row;
+            align-items: center;
+            padding: 10px;
+            border-radius: 8px;
+        }
+
+        .quick-link-icon {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 0;
+            margin-right: 10px;
+        }
+
+        .quick-link-card h3 {
+            font-size: 13px;
+        }
+
+        .quick-link-card p {
+            font-size: 11px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .dashboardcontainer {
+            padding: 0 2px;
+        }
+
+        .user-profile-section {
+            padding: 6px 2px;
+            border-radius: 6px;
+            margin-bottom: 8px;
+        }
+
+        .profile-picture {
+            width: 48px;
+            height: 48px;
+            font-size: 16px;
+            border-width: 1px;
+        }
+
+        .user-name {
+            font-size: 15px;
+        }
+
+        .user-detail-item {
+            font-size: 10px;
+            padding: 4px 6px;
+        }
+
+        .degree-badge,
+        .cgpa-badge,
+        .semester-badge {
+            font-size: 9px;
+            padding: 4px 7px;
+            border-radius: 6px;
+        }
+
+        .profile-action-btn {
+            font-size: 10px;
+            padding: 4px 6px;
+            border-radius: 6px;
+        }
+
+        .courses-section,
+        .deadlines-section,
+        .bottom-sections,
+        .quick-links-section {
+            padding: 4px 1px;
+        }
+
+        .course-card,
+        .gpa-card,
+        .chatroom-card,
+        .quick-link-card {
+            padding: 6px;
+            border-radius: 6px;
+        }
+
+        .gpa-circle {
+            width: 48px;
+            height: 48px;
+            font-size: 10px;
+        }
+
+        .gpa-value {
+            font-size: 12px;
+        }
+
+        .gpa-label {
+            font-size: 8px;
+        }
+
+        .course-list {
+            gap: 3px;
+            margin-bottom: 4px;
+        }
+
+        .course-item {
+            padding: 3px 0;
+            font-size: 9px;
+        }
+
+        .add-course-form {
+            margin-top: 4px;
+        }
+
+        .course-input,
+        .credits-select,
+        .grade-select {
+            font-size: 9px;
+            padding: 4px 5px;
+            border-radius: 4px;
+        }
+
+        .add-course-btn {
+            font-size: 9px;
+            padding: 4px 5px;
+            border-radius: 4px;
+        }
+
+        .chatrooms-list {
+            gap: 4px;
+        }
+
+        .chatroom-card {
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .chatroom-icon {
+            width: 18px;
+            height: 18px;
+            font-size: 8px;
+            margin-right: 4px;
+        }
+
+        .chatroom-info h3 {
+            font-size: 8px;
+        }
+
+        .chatroom-info p {
+            font-size: 7px;
+        }
+
+        .quick-links-section {
+            padding: 4px 1px;
+            margin-top: 4px;
+            border-radius: 4px;
+        }
+
+        .quick-links-grid {
+            grid-template-columns: 1fr;
+            gap: 4px;
+            padding: 0;
+            max-width: 100vw;
+        }
+
+        .quick-link-card {
+            flex-direction: row;
+            align-items: center;
+            padding: 4px;
+            border-radius: 4px;
+        }
+
+        .quick-link-icon {
+            width: 14px;
+            height: 14px;
+            margin-bottom: 0;
+            margin-right: 4px;
+        }
+
+        .quick-link-card h3 {
+            font-size: 8px;
+        }
+
+        .quick-link-card p {
+            font-size: 7px;
         }
     }
 
