@@ -291,4 +291,10 @@
     .social-icons a {
         font-size: 1.3rem;
     }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 10px !important;
+        font-size: 0.95rem !important;
+    }
 }
