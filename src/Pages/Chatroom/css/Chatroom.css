@@ -161,10 +161,9 @@
         min-height: calc(100vh - 70px);
     }
 
-    /* Mobile menu toggle button */
     .mobile-menu-toggle {
         display: block;
-        position: fixed;
+        position: absolute;
         top: 100px !important;
         left: 16px;
         z-index: 1001;
@@ -176,6 +175,7 @@
         cursor: pointer;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
     }
+
 
     .mobile-menu-toggle:hover {
         background: #1976d2;
@@ -207,6 +207,7 @@
         left: 12px;
         padding: 6px 10px;
         font-size: 14px;
+        position: absolute;
     }
 }
 
@@ -220,6 +221,7 @@
         left: 8px;
         padding: 5px 8px;
         font-size: 12px;
+        position: absolute;
     }
 }
 

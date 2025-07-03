@@ -1166,54 +1166,82 @@ export default function RoomView({ room, onBack, onLeave }) {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
+                      alignItems: "flex-start",
                     }}
                   >
                     <div
                       style={{
                         display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
+                        flexDirection: post.status === "Pending" ? "column" : "row",
+                        alignItems: post.status === "Pending" ? "flex-start" : "center",
+                        gap: post.status === "Pending" ? "4px" : "12px",
                       }}
                     >
-                      <span
-                        style={{
-                          fontWeight: "600",
-                          color: colors.primary,
-                          fontSize: "16px",
-                        }}
-                      >
-                        {post.username}
-                      </span>
-                      {post.is_pinned && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                         <span
                           style={{
-                            backgroundColor: colors.pinned,
-                            color: colors.primaryDark,
-                            padding: "4px 10px",
-                            borderRadius: "12px",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            fontWeight: "500",
+                            fontWeight: "600",
+                            color: colors.primary,
+                            fontSize: "16px",
                           }}
                         >
-                          📌 Pinned
+                          {post.username}
                         </span>
-                      )}
-                      {post.status === "Pending" && (
-                        <span
-                          style={{
-                            backgroundColor: colors.pending,
-                            color: "white",
-                            padding: "4px 10px",
-                            borderRadius: "12px",
-                            fontSize: "12px",
-                            fontWeight: "500",
-                          }}
-                        >
-                          Pending
-                        </span>
+                        {post.is_pinned && (
+                          <span
+                            style={{
+                              backgroundColor: colors.pinned,
+                              color: colors.primaryDark,
+                              padding: "4px 10px",
+                              borderRadius: "12px",
+                              fontSize: "12px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            📌 Pinned
+                          </span>
+                        )}
+                        {post.status === "Pending" && (
+                          <span
+                            style={{
+                              backgroundColor: colors.pending,
+                              color: "white",
+                              padding: "4px 10px",
+                              borderRadius: "12px",
+                              fontSize: "12px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Pending
+                          </span>
+                        )}
+                      </div>
+                      {post.status === "Pending" && (userRole === "Admin" || userRole === "Moderator") && (
+                        <div style={{ display: "flex", gap: "8px", marginTop: "6px" }}>
+                          <button
+                            onClick={() => handleProcessPost(post.messageid, "Approved")}
+                            style={{
+                              ...buttonStyles.success,
+                              padding: "6px 12px",
+                              fontSize: "13px",
+                            }}
+                          >
+                            Approve
+                          </button>
+                          <button
+                            onClick={() => handleProcessPost(post.messageid, "Rejected")}
+                            style={{
+                              ...buttonStyles.danger,
+                              padding: "6px 12px",
+                              fontSize: "13px",
+                            }}
+                          >
+                            Reject
+                          </button>
+                        </div>
                       )}
                     </div>
                     <div
@@ -1223,35 +1251,6 @@ export default function RoomView({ room, onBack, onLeave }) {
                         alignItems: "center",
                       }}
                     >
-                      {post.status === "Pending" &&
-                        (userRole === "Admin" || userRole === "Moderator") && (
-                          <div style={{ display: "flex", gap: "8px" }}>
-                            <button
-                              onClick={() =>
-                                handleProcessPost(post.messageid, "Approved")
-                              }
-                              style={{
-                                ...buttonStyles.success,
-                                padding: "6px 12px",
-                                fontSize: "13px",
-                              }}
-                            >
-                              Approve
-                            </button>
-                            <button
-                              onClick={() =>
-                                handleProcessPost(post.messageid, "Rejected")
-                              }
-                              style={{
-                                ...buttonStyles.danger,
-                                padding: "6px 12px",
-                                fontSize: "13px",
-                              }}
-                            >
-                              Reject
-                            </button>
-                          </div>
-                        )}
                       {post.status === "Approved" && userRole === "Admin" && (
                         <button
                           onClick={() => handleDeletePost(post.messageid)}

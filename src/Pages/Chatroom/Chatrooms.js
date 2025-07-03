@@ -14,6 +14,7 @@ export default function Chatrooms() {
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [isMenuVisible, setIsMenuVisible] = useState(true);
 
     useEffect(() => {
         fetchUserInfo();
@@ -39,6 +40,23 @@ export default function Chatrooms() {
         document.addEventListener('click', handleClickOutside);
         return () => document.removeEventListener('click', handleClickOutside);
     }, [isSidebarOpen]);
+
+    useEffect(() => {
+        let lastScrollY = window.scrollY;
+        const handleScroll = () => {
+            if (window.innerWidth > 768) return;
+            if (window.scrollY <= 0) {
+                setIsMenuVisible(true);
+            } else if (window.scrollY > lastScrollY) {
+                setIsMenuVisible(false);
+            } else {
+                setIsMenuVisible(true);
+            }
+            lastScrollY = window.scrollY;
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     const toggleSidebar = (e) => {
         if (e) e.stopPropagation();
@@ -139,7 +157,7 @@ export default function Chatrooms() {
             <div className="chatroom-app">
                 <Navbar />
                 {/* Mobile Menu Toggle Button */}
-                {!isSidebarOpen && (
+                {!isSidebarOpen && isMenuVisible && (
                     <button
                         className="mobile-menu-toggle"
                         onClick={toggleSidebar}
