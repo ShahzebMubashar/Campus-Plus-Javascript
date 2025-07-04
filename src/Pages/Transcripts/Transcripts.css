@@ -37,6 +37,8 @@
   box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   z-index: 10;
   margin-top: 5%;
+  border-radius: var(--border-radius);
+  display: block;
 }
 
 .sidebar-profile {
@@ -48,63 +50,28 @@
 }
 
 .sidebar-profile h2 {
-  margin: 0;
   font-size: 18px;
-  text-align: center;
-  font-weight: 500;
 }
 
 .sidebar-cgpa-section {
-  padding: 16px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.1);
-  margin: 0 16px;
-  border-radius: var(--border-radius);
-}
-
-.sidebar-cgpa-section span:first-child {
-  font-size: 16px;
-  opacity: 0.9;
+  font-size: 1rem;
 }
 
 .sidebar-cgpa-section .cgpa-value {
   font-size: 32px;
-  font-weight: bold;
-  margin-top: 8px;
-}
-
-.sidebar-semesters-list {
-  list-style: none;
-  padding: 0;
-  margin: 24px 0 0 0;
-}
-
-.sidebar-semesters-list li {
-  padding: 12px 24px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-  border-left: 4px solid transparent;
-}
-
-.sidebar-semesters-list li:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-.sidebar-semesters-list li.selected {
-  background-color: rgba(255, 255, 255, 0.2);
-  border-left-color: white;
 }
 
 .sidebar-semester-name {
-  font-weight: 500;
-  margin-bottom: 4px;
+  font-size: 1rem;
 }
 
 .sidebar-semester-sgpa {
   font-size: 14px;
-  opacity: 0.9;
+}
+
+.sidebar-semesters-list li {
+  font-size: 1rem;
+  padding: 12px 24px;
 }
 
 hr {
@@ -120,14 +87,20 @@ hr {
   margin-left: 280px;
   padding: 32px 24px;
   max-width: 1200px;
+  margin-top: -20px !important;
 }
 
 .transcripts-container h1 {
-  color: var(--blue-dark);
-  margin-bottom: 24px;
+  color: white;
+  background: var(--blue-primary);
+  width: 80%;
+  margin: 40px auto 24px auto;
   font-size: 28px;
   margin-top: 60px;
-  /* Account for fixed navbar */
+  padding: 18px 0;
+  border-radius: 16px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.10);
 }
 
 .gpa-summary {
@@ -203,7 +176,9 @@ hr {
 
 .semester-actions {
   display: flex;
-  gap: 10px;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
 }
 
 .add-course-btn {
@@ -490,11 +465,24 @@ hr {
   }
 
   .transcripts-sidebar {
-    width: 100%;
-    position: relative;
-    height: auto;
-    min-height: auto;
-    padding: 16px 0;
+    width: 80vw;
+    min-width: 240px;
+    max-width: 900px;
+    background: var(--blue-primary);
+    color: white;
+    padding: 32px 0;
+    position: static;
+    left: auto;
+    top: auto;
+    bottom: auto;
+    overflow-y: visible;
+    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.10);
+    z-index: 10;
+    margin: 64px auto 32px auto;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .transcripts-container {
@@ -523,10 +511,12 @@ hr {
     border-bottom-color: white;
   }
 
-  .transcripts-container h1,
-  .error-banner {
-    margin-top: 0;
-    /* Remove margin for navbar since sidebar is now above */
+  .transcripts-container h1 {
+    width: 90%;
+    font-size: 22px;
+    margin-top: 24px;
+    padding: 14px 0;
+    border-radius: 12px;
   }
 
   .sidebar-profile {
@@ -550,13 +540,40 @@ hr {
   }
 
   .semester-header {
-    flex-direction: column;
-    align-items: flex-start;
+    padding: 8px 6px;
+    border-radius: 10px 10px 0 0;
+    gap: 6px;
   }
 
   .semester-actions {
-    width: 100%;
-    justify-content: space-between;
+    gap: 6px;
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .sidebar-profile h2 {
+    font-size: 2rem;
+  }
+
+  .sidebar-cgpa-section {
+    font-size: 1.3rem;
+  }
+
+  .sidebar-cgpa-section .cgpa-value {
+    font-size: 2.2rem;
+  }
+
+  .sidebar-semester-name {
+    font-size: 1.2rem;
+  }
+
+  .sidebar-semester-sgpa {
+    font-size: 1.1rem;
+  }
+
+  .sidebar-semesters-list li {
+    font-size: 1.1rem;
+    padding: 18px 32px;
   }
 }
 
@@ -599,7 +616,7 @@ hr {
   }
 
   .semester-actions {
-    gap: 8px;
+    gap: 4px;
   }
 
   .add-course-btn,
@@ -618,4 +635,395 @@ hr {
   .form-group select {
     font-size: 14px;
   }
+}
+
+@media (max-width: 600px) {
+  .transcripts-layout {
+    flex-direction: column;
+  }
+
+  .transcripts-sidebar {
+    width: 80vw;
+    margin-top: 32px;
+    border-radius: 12px;
+    padding: 16px 0;
+  }
+
+  .sidebar-profile {
+    flex-direction: row;
+    padding: 8px 10px;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+
+  .lms-profile-avatar {
+    width: 40px;
+    height: 40px;
+    font-size: 16px;
+    margin-bottom: 0;
+    margin-right: 10px;
+    border-width: 2px;
+  }
+
+  .sidebar-profile h2 {
+    font-size: 1.3rem;
+  }
+
+  .sidebar-cgpa-section {
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px 10px;
+    font-size: 1.1rem;
+    margin: 8px 0;
+  }
+
+  .sidebar-cgpa-section .cgpa-value {
+    font-size: 1.6rem;
+    margin-top: 0;
+  }
+
+  .sidebar-semesters-list {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin: 8px 0 0 0;
+    padding: 0 8px;
+  }
+
+  .sidebar-semesters-list li {
+    flex: 1 1 48%;
+    min-width: 90px;
+    padding: 12px 10px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    margin-bottom: 2px;
+    text-align: center;
+  }
+
+  .sidebar-semester-name {
+    font-size: 1rem;
+  }
+
+  .sidebar-semester-sgpa {
+    font-size: 0.95rem;
+  }
+
+  .transcripts-container {
+    margin-left: 0;
+    padding: 10px 4px;
+    max-width: 100vw;
+  }
+
+  .transcripts-container h1 {
+    width: 98vw;
+    font-size: 16px;
+    margin-top: 12px;
+    padding: 10px 0;
+    border-radius: 8px;
+  }
+
+  .gpa-summary {
+    padding: 8px;
+    font-size: 13px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    background: var(--blue-light);
+  }
+
+  .gpa-summary h3 {
+    font-size: 16px;
+  }
+
+  .add-semester-btn {
+    font-size: 13px;
+    padding: 7px 10px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+  }
+
+  .semester-card {
+    margin-bottom: 14px;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.08);
+  }
+
+  .semester-header {
+    padding: 8px 6px;
+    gap: 4px;
+  }
+
+  .semester-header h2 {
+    font-size: 15px;
+  }
+
+  .semester-gpa {
+    font-size: 13px;
+    padding: 3px 7px;
+    border-radius: 12px;
+  }
+
+  .semester-actions {
+    gap: 4px;
+    width: auto;
+    justify-content: flex-start;
+  }
+
+  .add-course-btn,
+  .remove-semester-btn {
+    font-size: 12px;
+    padding: 5px 7px;
+    border-radius: 6px;
+  }
+
+  .courses-table {
+    font-size: 12px;
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+    border-radius: 0 0 10px 10px;
+  }
+
+  .courses-table th,
+  .courses-table td {
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  .modal-content {
+    padding: 10px;
+    width: 98vw;
+    max-width: 99vw;
+    border-radius: 10px;
+  }
+
+  .modal h2 {
+    font-size: 15px;
+    padding-bottom: 6px;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 12px;
+    padding: 6px 8px;
+  }
+
+  .modal-actions button {
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 6px;
+  }
+
+  .delete-confirmation {
+    padding: 8px;
+    gap: 6px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  .error-banner {
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 360px) {
+  .sidebar-profile {
+    padding: 4px 2px;
+    gap: 4px;
+  }
+
+  .lms-profile-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 10px;
+    border-width: 1px;
+    margin-right: 4px;
+  }
+
+  .sidebar-profile h2 {
+    font-size: 1rem;
+  }
+
+  .sidebar-cgpa-section {
+    font-size: 0.9rem;
+    padding: 4px 2px;
+  }
+
+  .sidebar-cgpa-section .cgpa-value {
+    font-size: 1.2rem;
+  }
+
+  .sidebar-semesters-list li {
+    min-width: 60px;
+    font-size: 0.8rem;
+    padding: 8px 4px;
+    border-radius: 6px;
+  }
+
+  .transcripts-container h1 {
+    font-size: 14px;
+  }
+
+  .gpa-summary h3 {
+    font-size: 12px;
+  }
+
+  .semester-header h2 {
+    font-size: 11px;
+  }
+
+  .semester-gpa {
+    font-size: 10px;
+    padding: 2px 4px;
+  }
+
+  .add-course-btn,
+  .remove-semester-btn {
+    font-size: 10px;
+    padding: 3px 4px;
+    border-radius: 4px;
+  }
+
+  .courses-table th,
+  .courses-table td {
+    padding: 3px 4px;
+    font-size: 10px;
+  }
+
+  .modal-content {
+    padding: 4px;
+    border-radius: 6px;
+  }
+
+  .modal h2 {
+    font-size: 10px;
+    padding-bottom: 2px;
+  }
+
+  .form-group input,
+  .form-group select {
+    font-size: 10px;
+    padding: 3px 4px;
+  }
+
+  .modal-actions button {
+    font-size: 10px;
+    padding: 3px 5px;
+    border-radius: 4px;
+  }
+
+  .delete-confirmation {
+    padding: 4px;
+    gap: 2px;
+    font-size: 10px;
+    border-radius: 4px;
+  }
+
+  .error-banner {
+    font-size: 10px;
+    padding: 4px 5px;
+    border-radius: 4px;
+    margin-top: 10px;
+  }
+}
+
+.transcripts-hamburger {
+  display: none;
+}
+
+@media (max-width: 900px) {
+
+
+  .transcripts-hamburger {
+    display: flex;
+    position: fixed;
+    top: 100px;
+    left: 10px;
+    z-index: 1201;
+    background: var(--blue-primary);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 10px;
+    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.15);
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 22px;
+    transition: background 0.2s;
+  }
+
+  .transcripts-hamburger:active,
+  .transcripts-hamburger:focus {
+    background: var(--blue-dark);
+    outline: none;
+  }
+
+  .desktop-sidebar {
+    display: none !important;
+  }
+}
+
+.transcripts-sidebar-drawer-overlay {
+  display: flex;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 1200;
+  align-items: stretch;
+  justify-content: flex-start;
+  transition: background 0.2s;
+}
+
+.drawer-sidebar {
+  background: var(--blue-primary);
+  color: white;
+  width: 80vw;
+  max-width: 350px;
+  height: 100vh;
+  border-top-right-radius: 18px;
+  border-bottom-right-radius: 18px;
+  box-shadow: 2px 0 16px rgba(26, 115, 232, 0.18);
+  padding: 24px 0 24px 0;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  animation: slideInDrawer 0.25s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+@keyframes slideInDrawer {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.drawer-close-btn {
+  position: absolute;
+  top: 16px;
+  right: 18px;
+  background: none;
+  color: white;
+  border: none;
+  font-size: 2rem;
+  cursor: pointer;
+  z-index: 1202;
+  padding: 0 8px;
+  line-height: 1;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.drawer-close-btn:active,
+.drawer-close-btn:focus {
+  background: rgba(255, 255, 255, 0.12);
+  outline: none;
 }

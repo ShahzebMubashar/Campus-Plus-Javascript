@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
+import { FaBars } from 'react-icons/fa';
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -38,6 +39,15 @@ function TranscriptsPage() {
   const [confirmDeleteSemester, setConfirmDeleteSemester] = useState(null);
   const [selectedSemesterId, setSelectedSemesterId] = useState(null);
   const semesterRefs = useRef({});
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [isLargeScreen, setIsLargeScreen] = useState(window.matchMedia('(min-width: 901px)').matches);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(min-width: 901px)');
+    const handleResize = () => setIsLargeScreen(mediaQuery.matches);
+    mediaQuery.addEventListener('change', handleResize);
+    return () => mediaQuery.removeEventListener('change', handleResize);
+  }, []);
 
   // Fetch data on mount
   useEffect(() => {
@@ -245,36 +255,37 @@ function TranscriptsPage() {
 
   return (
     <div className="transcripts-layout">
-      {/* Sidebar */}
-      <aside className="transcripts-sidebar">
-        <div className="sidebar-profile">
-          <div className="lms-profile-avatar">
-            {getUserInitials()}
+      {/* Sidebar for large screens only */}
+      {isLargeScreen && (
+        <aside className="transcripts-sidebar desktop-sidebar">
+          <div className="sidebar-profile">
+            <div className="lms-profile-avatar">
+              {getUserInitials()}
+            </div>
+            <h2>{user?.name || "Student"}</h2>
           </div>
-          <h2>{user?.name || "Student"}</h2>
-        </div>
-        <hr />
-        <div className="sidebar-cgpa-section">
-          <span>CGPA</span>
-          <span className="cgpa-value">{calculateCGPA()}</span>
-        </div>
-        <hr />
-        <ul className="sidebar-semesters-list">
-          {semesters.map((semester) => (
-            <li
-              key={semester.id}
-              className={selectedSemesterId === semester.id ? "selected" : ""}
-              onClick={() => setSelectedSemesterId(semester.id)}
-            >
-              <div className="sidebar-semester-name">{semester.name}</div>
-              <div className="sidebar-semester-sgpa">
-                SGPA: {calculateSGPA(semester.courses)}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </aside>
-
+          <hr />
+          <div className="sidebar-cgpa-section">
+            <span>CGPA</span>
+            <span className="cgpa-value">{calculateCGPA()}</span>
+          </div>
+          <hr />
+          <ul className="sidebar-semesters-list">
+            {semesters.map((semester) => (
+              <li
+                key={semester.id}
+                className={selectedSemesterId === semester.id ? "selected" : ""}
+                onClick={() => setSelectedSemesterId(semester.id)}
+              >
+                <div className="sidebar-semester-name">{semester.name}</div>
+                <div className="sidebar-semester-sgpa">
+                  SGPA: {calculateSGPA(semester.courses)}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
       {/* Main Content */}
       <div className="transcripts-container">
         <Navbar />
@@ -315,34 +326,36 @@ function TranscriptsPage() {
               className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""}`}
               ref={(el) => (semesterRefs.current[semester.id] = el)}
             >
-              <div className="semester-header">
+              <div className="semester-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
                 <h2>{semester.name}</h2>
-                <span className="semester-gpa">
-                  SGPA: {calculateSGPA(semester.courses)}
-                </span>
-                <div className="semester-actions">
-                  <button
-                    className="add-course-btn"
-                    onClick={() => {
-                      setNewCourse({
-                        semesterId: semester.id,
-                        semesterName: semester.name,
-                        code: "",
-                        name: "",
-                        credits: 3,
-                        grade: "A",
-                      });
-                      setShowAddCourseModal(true);
-                    }}
-                  >
-                    Add Course
-                  </button>
-                  <button
-                    className="remove-semester-btn"
-                    onClick={() => setConfirmDeleteSemester(semester.id)}
-                  >
-                    Remove Semester
-                  </button>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                  <span className="semester-gpa">
+                    SGPA: {calculateSGPA(semester.courses)}
+                  </span>
+                  <div className="semester-actions" style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      className="add-course-btn"
+                      onClick={() => {
+                        setNewCourse({
+                          semesterId: semester.id,
+                          semesterName: semester.name,
+                          code: "",
+                          name: "",
+                          credits: 3,
+                          grade: "A",
+                        });
+                        setShowAddCourseModal(true);
+                      }}
+                    >
+                      Add Course
+                    </button>
+                    <button
+                      className="remove-semester-btn"
+                      onClick={() => setConfirmDeleteSemester(semester.id)}
+                    >
+                      Remove Semester
+                    </button>
+                  </div>
                 </div>
               </div>
 
