@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import './PlaylistsPage.css';
-import Navbar from '../Index/components/Navbar.js';
+import React, { useState } from "react";
+import "./PlaylistsPage.css";
+import Navbar from "../Index/components/Navbar.js";
 import { FaSearch } from "react-icons/fa";
-import Footer from '../Footer/Footer.js';
-import BackToTopButton from "../Index/components/BackToTop"
+import Footer from "../Footer/Footer.js";
+import BackToTopButton from "../Index/components/BackToTop";
 
 const PlaylistsPage = () => {
     const playlists = [
@@ -590,36 +590,40 @@ const PlaylistsPage = () => {
         }
     ];
 
-    const [searchQuery, setSearchQuery] = useState('');
-    const filteredPlaylists = playlists.filter(
-        (course) =>
-            course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-            (course.shortForm && course.shortForm.toLowerCase().includes(searchQuery.toLowerCase()))
-    );
+  const [searchQuery, setSearchQuery] = useState("");
+  const filteredPlaylists = playlists.filter(
+    (course) =>
+      course.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      (course.shortForm &&
+        course.shortForm.toLowerCase().includes(searchQuery.toLowerCase())),
+  );
 
-    const handleCardClick = (link) => {
-        window.open(link, '_blank');
-    };
+  const handleCardClick = (link) => {
+    window.open(link, "_blank");
+  };
 
-    return (
-        <div className="playlists-page">
-            <Navbar />
-            {/* Header Section */}
-            <header className="support-header">
-                <h1>Youtube Playlists</h1>
-                <p>Didn't understand the concept in class? We Got ya!</p>
-            </header>
+  return (
+    <div className="playlists-page">
+      <Navbar />
+      {/* Header Section */}
+      <header className="support-header">
+        <h1>Youtube Playlists</h1>
+        <p>Didn't understand the concept in class? We Got ya!</p>
+      </header>
 
-            {/* Search Bar */}
-            <div className="search-bar">
-                <input
-                    type="text"
-                    placeholder="Search playlist..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button> <FaSearch /> </button>
-            </div>
+      {/* Search Bar */}
+      <div className="search-bar">
+        <input
+          type="text"
+          placeholder="Search playlist..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+        />
+        <button>
+          {" "}
+          <FaSearch />{" "}
+        </button>
+      </div>
 
             {/* Playlists Section */}
             <div className="playlists-container">

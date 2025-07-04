@@ -20,7 +20,7 @@ const checkRoomMember = async (request, response, next) => {
 
     let res = await pool.query(
       `SELECT * FROM RoomMembers WHERE roomid = $1 AND userid = $2`,
-      [roomid, userid]
+      [roomid, userid],
     );
 
     if (!res.rowCount) {

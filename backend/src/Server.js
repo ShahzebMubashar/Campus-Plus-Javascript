@@ -1,10 +1,8 @@
 const express = require("express");
 const session = require("express-session");
-const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const pool = require("../config/database");
-const nodemailer = require("nodemailer");
-
+require("dotenv").config();
 
 const {
   checkAuthorisation,
@@ -17,64 +15,20 @@ const transcriptRoute = require("../routes/transcriptRoutes");
 const emailRoute = require("../routes/emailRoutes");
 const userRoutes = require("../routes/userRoutes");
 const chatroomController = require("../controllers/chatroomController");
+const errorHandler = require("../middlewares/errorHandler");
 
-const app = express();
+const app = require("../app"); // Use the secure app setup from app.js
 const PORT = process.env.PORT_BACKEND || 4000;
 
 // Basic middleware
 app.use(express.json());
 app.use(cookieParser());
 
-// CORS configuration
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    exposedHeaders: ["Set-Cookie"],
-  })
-);
-
-app.post('/api/email/send-email', async (req, res) => {
-  const { name, email, phone, message } = req.body;
-  const transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-      user: "productionsbymultidexters@gmail.com",
-      pass: "vnfm sfwx dluo bkez",
-    }
-  });
-
-  const mailOptions = {
-    from: email,
-    to: 'productionsbymultidexters@gmail.com',
-    subject: `New Contact Form Submission from ${name}`,
-    text: `Name: ${name}\nEmail: ${email}\nPhone: ${phone}\nMessage: ${message}`
-  };
-
-  try {
-    await transporter.sendMail(mailOptions);
-    return res.status(200).json({ message: 'Email sent successfully' });
-  } catch (error) {
-    console.error('Error sending email:', error);
-    return res.status(500).json({ message: 'Email failed to send' });
-  }
-});
-
-
-// Set CORS headers for all responses
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  next();
-});
-
 // Session configuration
 app.use(
   session({
     name: "connect.sid",
-    secret: "CampusPlus",
+    secret: process.env.SESSION_SECRET || "CampusPlus",
     resave: true,
     saveUninitialized: false,
     rolling: true,
@@ -86,7 +40,7 @@ app.use(
       sameSite: "lax",
     },
     proxy: true,
-  })
+  }),
 );
 
 // Routes
@@ -105,10 +59,8 @@ app.get("/Chatrooms/messages/:roomid", chatroomController.getRoomMessages); // C
 app.post("/Chatrooms/like/:messageid", chatroomController.likePost); // Like a post
 app.get("/Chatrooms/likes/:messageid", chatroomController.getLikeCount); // Get like count for a post
 
-app.use((err, req, res, next) => {
-  console.error("Error:", err.message);
-  res.status(500).send("Server Error");
-});
+// Centralized error handler
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
