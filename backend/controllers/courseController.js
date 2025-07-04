@@ -1,5 +1,5 @@
 const pool = require("../config/database.js");
-const fetch = require("node-fetch");
+const fetch = require('node-fetch');
 // Controller to fetch all courses
 const getCourses = async (request, response) => {
   try {
@@ -9,6 +9,7 @@ const getCourses = async (request, response) => {
         CASE WHEN vci.past_papers_count > 0 THEN true ELSE false END as has_past_papers,
         CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
         CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count
+      FROM ViewCourseInfo vci
       LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
       ORDER BY has_past_papers DESC
     `);
@@ -39,7 +40,7 @@ const rateCourse = async (request, response) => {
 
     let res = await client.query(
       `Select * from UserCourseRating where userid = $1 and courseid = $2`,
-      [userid, courseid],
+      [userid, courseid]
     );
 
     if (res.rowCount)
@@ -54,18 +55,18 @@ const rateCourse = async (request, response) => {
     if (!res.rowCount) {
       res = await client.query(
         `Insert into CourseRating (courseid, ratingsum, ratedcount) values ($1, $2, $3)`,
-        [courseid, rating, 1],
+        [courseid, rating, 1]
       );
     } else {
       res = await client.query(
         `Update CourseRating set ratingsum = ratingsum + $1, ratedcount = ratedcount + 1 where courseid = $2`,
-        [rating, courseid],
+        [rating, courseid]
       );
     }
 
     res = await client.query(
       `Insert into UserCourseRating (userid, courseid) values ($1, $2)`,
-      [userid, courseid],
+      [userid, courseid]
     );
 
     await client.query("COMMIT");
@@ -93,7 +94,7 @@ const reviewCourse = async (request, response) => {
 
     const res = await client.query(
       "SELECT * FROM CourseReviews WHERE userid = $1 AND courseid = $2",
-      [userid, courseid],
+      [userid, courseid]
     );
 
     if (res.rowCount)
@@ -101,7 +102,7 @@ const reviewCourse = async (request, response) => {
 
     await client.query(
       "INSERT INTO CourseReviews (userid, courseid, review) VALUES ($1, $2, $3)",
-      [userid, courseid, review],
+      [userid, courseid, review]
     );
 
     await client.query("COMMIT");
@@ -127,13 +128,11 @@ const addCourse = async (request, response) => {
     // Check if the course already exists
     let res = await pool.query(
       `SELECT * FROM Courses WHERE coursecode ILIKE $1`,
-      [coursecode],
+      [coursecode]
     );
 
     if (res.rowCount) {
-      return response
-        .status(400)
-        .json({ message: "Course already exists in the database" });
+      return response.status(400).json({ message: "Course already exists in the database" });
     }
 
     const client = await pool.connect();
@@ -144,7 +143,7 @@ const addCourse = async (request, response) => {
       // Insert into Courses table
       res = await client.query(
         `INSERT INTO Courses (coursecode) VALUES ($1) RETURNING courseid`,
-        [coursecode],
+        [coursecode]
       );
 
       const courseid = res.rows[0].courseid;
@@ -153,13 +152,11 @@ const addCourse = async (request, response) => {
       await client.query(
         `INSERT INTO CourseInfo (courseid, coursename, credits, grading, difficulty)
          VALUES ($1, $2, $3, $4, $5)`,
-        [courseid, coursename, credits, grading, difficulty],
+        [courseid, coursename, credits, grading, difficulty]
       );
 
       await client.query("COMMIT");
-      return response
-        .status(201)
-        .json({ message: "Course added successfully" });
+      return response.status(201).json({ message: "Course added successfully" });
     } catch (error) {
       await client.query("ROLLBACK");
       console.error("Error in addCourse transaction:", error);
@@ -191,27 +188,23 @@ const addCourses = async (request, response) => {
       // Validate each course
       if (!coursename || !coursecode || !credits || !grading || !difficulty) {
         await client.query("ROLLBACK");
-        return response
-          .status(400)
-          .json({ message: "All fields are required for each course" });
+        return response.status(400).json({ message: "All fields are required for each course" });
       }
 
       // Check if course exists
       const existsRes = await client.query(
         `SELECT 1 FROM viewcourseinfo WHERE coursecode ILIKE $1 and coursename ILIKE $2`,
-        [coursecode, coursename],
+        [coursecode, coursename]
       );
       if (existsRes.rowCount > 0) {
         await client.query("ROLLBACK");
-        return response.status(400).json({
-          message: `Course with code ${coursecode} and ${coursename} already exists`,
-        });
+        return response.status(400).json({ message: `Course with code ${coursecode} and ${coursename} already exists` });
       }
 
       // Insert into Courses
       const res = await client.query(
         `INSERT INTO Courses (coursecode) VALUES ($1) RETURNING courseid`,
-        [coursecode],
+        [coursecode]
       );
       const courseid = res.rows[0].courseid;
 
@@ -219,14 +212,12 @@ const addCourses = async (request, response) => {
       await client.query(
         `INSERT INTO CourseInfo (courseid, coursename, credits, grading, difficulty)
          VALUES ($1, $2, $3, $4, $5)`,
-        [courseid, coursename, credits, grading, difficulty],
+        [courseid, coursename, credits, grading, difficulty]
       );
     }
 
     await client.query("COMMIT");
-    return response
-      .status(201)
-      .json({ message: "All courses added successfully" });
+    return response.status(201).json({ message: "All courses added successfully" });
   } catch (error) {
     await client.query("ROLLBACK");
     console.error("Error in addCourses transaction:", error);
@@ -250,7 +241,6 @@ const getPastPapers = async (req, res) => {
   } catch (err) {
     console.error('Error fetching past papers:', err.message);
     res.status(500).json({ message: 'Server error while fetching past papers' });
-
   }
 };
 
@@ -258,18 +248,15 @@ const downloadPastPapers = async (req, res) => {
   const { paperId } = req.params;
   try {
     // Query the database for the file_link using paperId
-
     const result = await pool.query('SELECT file_link FROM past_papers WHERE paper_id = $1', [paperId]);
     if (result.rows.length === 0) {
       return res.status(404).send('Paper not found');
-
     }
     const fileLink = result.rows[0].file_link;
 
     // Fetch the file from the external link (e.g., Google Drive)
     const response = await fetch(fileLink);
     if (!response.ok) {
-
       return res.status(500).send('Failed to fetch file');
     }
     // Stream the file to the client
@@ -278,7 +265,6 @@ const downloadPastPapers = async (req, res) => {
   } catch (err) {
     console.error(err.message);
     res.status(500).send('Server error');
-
   }
 };
 
@@ -302,7 +288,7 @@ const getCourseDetails = async (req, res) => {
       LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
       LEFT JOIN CourseInfo ci ON vci.courseid = ci.courseid
       WHERE vci.courseid = $1`,
-      [courseId, req.session?.user?.userid || 0],
+      [courseId, req.session?.user?.userid || 0]
     );
 
     await client.query("BEGIN");
@@ -314,16 +300,14 @@ const getCourseDetails = async (req, res) => {
     await client.query("COMMIT");
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: "Course not found" });
+      return res.status(404).json({ message: 'Course not found' });
     }
 
     return res.json(result.rows[0]);
   } catch (err) {
-
     console.error('Error fetching course details:', err);
     await client.query("ROLLBACK");
     return res.status(500).json({ message: 'Server error while fetching course details' });
-
   }
 };
 
@@ -348,7 +332,7 @@ const rateCourseDifficulty = async (request, response) => {
       `UPDATE CourseInfo 
        SET difficulty = $1 
        WHERE courseid = $2`,
-      [rating, courseid],
+      [rating, courseid]
     );
 
     // Get the updated course details
@@ -366,7 +350,7 @@ const rateCourseDifficulty = async (request, response) => {
        LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
        LEFT JOIN CourseInfo ci ON vci.courseid = ci.courseid
        WHERE vci.courseid = $1`,
-      [courseid, userid],
+      [courseid, userid]
     );
 
     return response.status(200).json(result.rows[0]);
