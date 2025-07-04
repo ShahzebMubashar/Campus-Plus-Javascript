@@ -1,193 +1,192 @@
 /*=============== FEATURES ===============*/
 
 ion-icon {
-    pointer-events: none;
-    display: block;
+  pointer-events: none;
+  display: block;
 }
 
 .features-parent-services {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
-    color: #0a1c2e;
-    padding: 0;
-    line-height: 1.5;
-    overflow: hidden;
+  font-family: Arial, sans-serif;
+  background-color: #ffffff;
+  color: #0a1c2e;
+  padding: 0;
+  line-height: 1.5;
+  overflow: hidden;
 }
 
 .features-services {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 30px 30px;
-    text-align: center;
-
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 30px 30px;
+  text-align: center;
 }
 
 .features-services h1 {
-    font-size: 2.1em;
-    color: #0a1c2e;
-    margin-bottom: 50px;
-    overflow: hidden;
+  font-size: 2.1em;
+  color: #0a1c2e;
+  margin-bottom: 50px;
+  overflow: hidden;
 }
 
 .features-highlighted {
-    color: #3b82f6;
-    font-size: 50px;
+  color: #3b82f6;
+  font-size: 50px;
 }
 
 .features-services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 20px;
-    overflow: hidden;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  overflow: hidden;
 }
 
 .features-service-box {
-    display: flex;
-    flex-direction: row;
-    /* Ensures the icon appears to the left of the content */
-    align-items: center;
-    padding: 20px;
-    border: 1px solid #ddd;
-    background-color: transparent;
-    border-radius: 5px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    position: relative;
-    transition: all 0.3s ease;
-    overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  /* Ensures the icon appears to the left of the content */
+  align-items: center;
+  padding: 20px;
+  border: 1px solid #ddd;
+  background-color: transparent;
+  border-radius: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  position: relative;
+  transition: all 0.3s ease;
+  overflow: hidden;
 }
 
 .features-icon {
-    flex-shrink: 0;
-    margin-right: 20px;
-    /* Adds space between the icon and content */
-    font-size: 24px;
-    /* Adjust font size as needed */
-    color: #0056b3;
-    /* Dark blue for icons */
-    display: flex;
-    /* Ensures proper alignment */
-    justify-content: center;
-    align-items: center;
+  flex-shrink: 0;
+  margin-right: 20px;
+  /* Adds space between the icon and content */
+  font-size: 24px;
+  /* Adjust font size as needed */
+  color: #0056b3;
+  /* Dark blue for icons */
+  display: flex;
+  /* Ensures proper alignment */
+  justify-content: center;
+  align-items: center;
 }
 
 .features-content {
-    flex-grow: 1;
-    /* overflow: hidden; */
-    text-align: left;
+  flex-grow: 1;
+  /* overflow: hidden; */
+  text-align: left;
 }
 
 .features-service-box h2 {
-    font-size: 1.5em;
-    margin: 0 0 10px 0;
-    color: #111;
-    text-align: left;
-    /* overflow: hidden; */
+  font-size: 1.5em;
+  margin: 0 0 10px 0;
+  color: #111;
+  text-align: left;
+  /* overflow: hidden; */
 }
 
 .features-service-box p {
-    font-size: 0.9em;
-    color: #666;
-    margin: 0;
-    text-align: left;
+  font-size: 0.9em;
+  color: #666;
+  margin: 0;
+  text-align: left;
 }
 
 .features-service-box:hover {
-    cursor: pointer;
-    transform: scale(1.00);
-    overflow: hidden;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-    border-color: #007bff;
+  cursor: pointer;
+  transform: scale(1);
+  overflow: hidden;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  border-color: #007bff;
 }
 
 .features-service-box::after {
-    content: "";
-    position: absolute;
-    bottom: -1px;
-    left: 0;
-    width: 0;
-    height: 3px;
-    background-color: #007bff;
-    /* Brighter blue for underline */
-    transition: width 0.8s ease;
-    overflow: hidden;
+  content: "";
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 0;
+  height: 3px;
+  background-color: #007bff;
+  /* Brighter blue for underline */
+  transition: width 0.8s ease;
+  overflow: hidden;
 }
 
 .features-service-box:hover::after {
-    width: 100%;
-    overflow: hidden;
+  width: 100%;
+  overflow: hidden;
 }
 
 /* Media Queries for Mobile Screens */
 @media (max-width: 768px) {
-    .features-services h1 {
-        font-size: 2em;
-        margin-bottom: 30px;
-    }
+  .features-services h1 {
+    font-size: 2em;
+    margin-bottom: 30px;
+  }
 
-    .category .grid-list li:nth-child(n+4) {
-        display: none;
-    }
+  .category .grid-list li:nth-child(n + 4) {
+    display: none;
+  }
 
-    .features-highlighted {
-        font-size: 50px;
-    }
+  .features-highlighted {
+    font-size: 50px;
+  }
 
-    .features-service-box {
-        padding: 15px;
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .features-service-box {
+    padding: 15px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .features-service-box h2 {
-        font-size: 1.5em;
-    }
+  .features-service-box h2 {
+    font-size: 1.5em;
+  }
 
-    .features-service-box p {
-        font-size: 0.9em;
-    }
+  .features-service-box p {
+    font-size: 0.9em;
+  }
 
-    .features-icon {
-        font-size: 30px;
-        margin-bottom: 10px;
-    }
+  .features-icon {
+    font-size: 30px;
+    margin-bottom: 10px;
+  }
 
-    .features-services-grid {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-    }
+  .features-services-grid {
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+  }
 }
 
 @media (max-width: 480px) {
-    .features-services h1 {
-        font-size: 1.8em;
-        margin-bottom: 20px;
-    }
+  .features-services h1 {
+    font-size: 1.8em;
+    margin-bottom: 20px;
+  }
 
-    .features-highlighted {
-        font-size: 40px;
-    }
+  .features-highlighted {
+    font-size: 40px;
+  }
 
-    .features-service-box {
-        padding: 10px;
-        flex-direction: column;
-        align-items: flex-start;
-    }
+  .features-service-box {
+    padding: 10px;
+    flex-direction: column;
+    align-items: flex-start;
+  }
 
-    .features-service-box h2 {
-        font-size: 1.2em;
-    }
+  .features-service-box h2 {
+    font-size: 1.2em;
+  }
 
-    .features-service-box p {
-        font-size: 0.8em;
-    }
+  .features-service-box p {
+    font-size: 0.8em;
+  }
 
-    .features-icon {
-        font-size: 25px;
-        margin-bottom: 8px;
-    }
+  .features-icon {
+    font-size: 25px;
+    margin-bottom: 8px;
+  }
 
-    .features-services-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
-    }
+  .features-services-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
 }

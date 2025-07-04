@@ -2,20 +2,30 @@ import React, { useState, useEffect } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import Navbar from "../Index/components/Navbar.js";
 import "./PastPaperDetails.css";
-import { FaDownload, FaExternalLinkAlt, FaLock, FaArrowLeft, FaBook, FaStar, FaClock, FaGraduationCap, FaChalkboardTeacher } from 'react-icons/fa';
-import { BsCircleFill } from 'react-icons/bs';
+import {
+  FaDownload,
+  FaExternalLinkAlt,
+  FaLock,
+  FaArrowLeft,
+  FaBook,
+  FaStar,
+  FaClock,
+  FaGraduationCap,
+  FaChalkboardTeacher,
+} from "react-icons/fa";
+import { BsCircleFill } from "react-icons/bs";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000';
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
 const getDifficultyColor = (difficulty) => {
   const difficultyMap = {
-    '1': '#4CAF50', // Easy
-    '2': '#8BC34A', // Moderate
-    '3': '#FF9800', // Intermediate  
-    '4': '#F44336', // Hard
-    '5': '#D32F2F'  // Very Hard
+    1: "#4CAF50", // Easy
+    2: "#8BC34A", // Moderate
+    3: "#FF9800", // Intermediate
+    4: "#F44336", // Hard
+    5: "#D32F2F", // Very Hard
   };
-  return difficultyMap[difficulty] || '#757575';
+  return difficultyMap[difficulty] || "#757575";
 };
 
 const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
@@ -34,14 +44,14 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
   const handleRatingSubmit = async (rating) => {
     try {
       const response = await fetch(`${API_BASE_URL}/courses/rate-course`, {
-        method: 'POST',
-        credentials: 'include',
+        method: "POST",
+        credentials: "include",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify({
           courseid: courseId,
-          rating: rating
+          rating: rating,
         }),
       });
 
@@ -52,35 +62,38 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
 
       // Handle text response instead of JSON
       const message = await response.text();
-      console.log('Rating response:', message);
-      
+      console.log("Rating response:", message);
+
       // Fetch updated course data
-      const courseResponse = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
-        credentials: 'include'
-      });
-      
+      const courseResponse = await fetch(
+        `${API_BASE_URL}/courses/${courseId}`,
+        {
+          credentials: "include",
+        },
+      );
+
       if (!courseResponse.ok) {
-        throw new Error('Failed to fetch updated course info');
+        throw new Error("Failed to fetch updated course info");
       }
-      
+
       const courseData = await courseResponse.json();
       setSelectedRating(rating);
       onRate(rating);
     } catch (error) {
-      console.error('Error submitting rating:', error);
-      alert(error.message || 'Failed to submit rating. Please try again.');
+      console.error("Error submitting rating:", error);
+      alert(error.message || "Failed to submit rating. Please try again.");
     }
   };
 
   const getBarFill = (index) => {
     const barValue = index + 1;
     const rating = hoveredRating || selectedRating;
-    
+
     if (!rating) return 0;
-    
+
     if (barValue <= Math.floor(rating)) return 1;
     if (barValue > Math.ceil(rating)) return 0;
-    
+
     return rating - Math.floor(rating);
   };
 
@@ -95,7 +108,7 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
             onMouseLeave={() => setHoveredRating(0)}
             onClick={() => handleRatingSubmit(level)}
           >
-            <div 
+            <div
               className="rating-bar-fill"
               style={{ transform: `scaleX(${getBarFill(index)})` }}
             />
@@ -104,7 +117,7 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
       </div>
       <div className="rating-info">
         <span className="average-rating">
-          {selectedRating ? Number(selectedRating).toFixed(1) : '0.0'}
+          {selectedRating ? Number(selectedRating).toFixed(1) : "0.0"}
         </span>
       </div>
     </div>
@@ -124,7 +137,7 @@ const PastPapersDetails = () => {
     const checkAuth = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/user/profile`, {
-          credentials: 'include'
+          credentials: "include",
         });
         setIsLoggedIn(response.ok);
       } catch (err) {
@@ -142,34 +155,40 @@ const PastPapersDetails = () => {
         setError("");
 
         // Fetch course info
-        const courseResponse = await fetch(`${API_BASE_URL}/courses/${courseId}`, {
-          credentials: 'include'
-        });
-        
+        const courseResponse = await fetch(
+          `${API_BASE_URL}/courses/${courseId}`,
+          {
+            credentials: "include",
+          },
+        );
+
         if (!courseResponse.ok) {
           if (courseResponse.status === 404) {
-            throw new Error('Course not found');
+            throw new Error("Course not found");
           }
-          throw new Error('Failed to fetch course info');
+          throw new Error("Failed to fetch course info");
         }
-        
+
         const courseData = await courseResponse.json();
         setCourseInfo(courseData);
         // Fetch papers
-        const papersResponse = await fetch(`${API_BASE_URL}/courses/${courseId}/past-papers`, {
-          credentials: 'include'
-        });
+        const papersResponse = await fetch(
+          `${API_BASE_URL}/courses/${courseId}/past-papers`,
+          {
+            credentials: "include",
+          },
+        );
 
         if (!papersResponse.ok) {
           if (papersResponse.status === 404) {
             setPapers({});
             return;
           }
-          throw new Error('Failed to fetch past papers');
+          throw new Error("Failed to fetch past papers");
         }
 
         const papersData = await papersResponse.json();
-        
+
         if (!Array.isArray(papersData) || papersData.length === 0) {
           setPapers({});
           return;
@@ -177,20 +196,22 @@ const PastPapersDetails = () => {
 
         // Group papers by type
         const groupedPapers = papersData.reduce((acc, paper) => {
-          const key = paper.paper_type || 'Other';
+          const key = paper.paper_type || "Other";
           if (!acc[key]) acc[key] = [];
           acc[key].push(paper);
           return acc;
         }, {});
 
         // Sort papers by year within each type
-        Object.keys(groupedPapers).forEach(type => {
+        Object.keys(groupedPapers).forEach((type) => {
           groupedPapers[type].sort((a, b) => b.paper_year - a.paper_year);
         });
 
         setPapers(groupedPapers);
       } catch (err) {
-        setError(err.message || "Unable to load content. Please try again later.");
+        setError(
+          err.message || "Unable to load content. Please try again later.",
+        );
       } finally {
         setLoading(false);
       }
@@ -202,21 +223,24 @@ const PastPapersDetails = () => {
   }, [courseId]);
 
   const handlePaperClick = (paper) => {
-    const link = isLoggedIn && paper.file_link_down ? paper.file_link_down : paper.file_link;
+    const link =
+      isLoggedIn && paper.file_link_down
+        ? paper.file_link_down
+        : paper.file_link;
     if (link) {
-      window.open(link, '_blank');
+      window.open(link, "_blank");
     }
   };
 
   const handleBack = () => {
-    navigate('/past-papers');
+    navigate("/past-papers");
   };
 
   const handleRatingUpdate = (newRating) => {
     if (courseInfo) {
       setCourseInfo({
         ...courseInfo,
-        rating: newRating
+        rating: newRating,
       });
     }
   };
@@ -252,7 +276,7 @@ const PastPapersDetails = () => {
   return (
     <div className="pastpapers-details">
       <Navbar />
-      
+
       <div className="course-banner">
         <div className="course-info">
           <button onClick={handleBack} className="back-button">
@@ -271,7 +295,7 @@ const PastPapersDetails = () => {
             </div>
             <div className="detail-content">
               <h3>Credits</h3>
-              <p>{courseInfo?.credits || 'N/A'}</p>
+              <p>{courseInfo?.credits || "N/A"}</p>
             </div>
           </div>
           <div className="detail-card">
@@ -280,7 +304,7 @@ const PastPapersDetails = () => {
             </div>
             <div className="detail-content">
               <h3>Grading</h3>
-              <p>{courseInfo?.grading || 'N/A'}</p>
+              <p>{courseInfo?.grading || "N/A"}</p>
             </div>
           </div>
           <div className="detail-card">
@@ -303,7 +327,7 @@ const PastPapersDetails = () => {
             </div>
             <div className="detail-content">
               <h3>Instructors</h3>
-              <p>{courseInfo?.instructors || 'N/A'}</p>
+              <p>{courseInfo?.instructors || "N/A"}</p>
             </div>
           </div>
         </div>
@@ -314,8 +338,13 @@ const PastPapersDetails = () => {
           <FaLock className="lock-icon" />
           <div className="banner-content">
             <h3>Sign in to download past papers</h3>
-            <p>You can view all papers now, but sign in to access downloadable versions</p>
-            <Link to="/sign-in" className="signin-button">Sign In</Link>
+            <p>
+              You can view all papers now, but sign in to access downloadable
+              versions
+            </p>
+            <Link to="/sign-in" className="signin-button">
+              Sign In
+            </Link>
           </div>
         </div>
       )}
@@ -330,7 +359,7 @@ const PastPapersDetails = () => {
           Object.entries(papers).map(([type, typePapers]) => {
             // Group papers by year within each type
             const papersByYear = typePapers.reduce((acc, paper) => {
-              const year = paper.paper_year || 'Unknown Year';
+              const year = paper.paper_year || "Unknown Year";
               if (!acc[year]) acc[year] = [];
               acc[year].push(paper);
               return acc;
@@ -344,8 +373,8 @@ const PastPapersDetails = () => {
                     <h3 className="year-title">{year}</h3>
                     <div className="papers-grid">
                       {yearPapers.map((paper) => (
-                        <div 
-                          key={paper.paperid} 
+                        <div
+                          key={paper.paperid}
                           className="paper-card"
                           onClick={() => handlePaperClick(paper)}
                         >
@@ -374,4 +403,3 @@ const PastPapersDetails = () => {
 };
 
 export default PastPapersDetails;
-

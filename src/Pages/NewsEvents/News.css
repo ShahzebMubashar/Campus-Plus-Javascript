@@ -1,25 +1,25 @@
 .news-page {
-    font-family: Arial, sans-serif;
-    padding: 0px;
-    text-align: initial;
+  font-family: Arial, sans-serif;
+  padding: 0px;
+  text-align: initial;
 }
 
 .support-header {
-    margin-bottom: 30px;
+  margin-bottom: 30px;
 }
 
 .support-header h1 {
-    font-size: 2.5em;
-    color: #fff;
+  font-size: 2.5em;
+  color: #fff;
 }
 
 .support-header p {
-    font-size: 1.2em;
-    color: #fef8f8;
+  font-size: 1.2em;
+  color: #fef8f8;
 }
 
 .news-and-events {
-    margin-top: 40px;
+  margin-top: 40px;
 }
 
 /* @media (max-width: 1024px) {

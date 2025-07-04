@@ -37,7 +37,9 @@ function ToDo() {
 
       const data = await res.json();
       // Get completed task IDs from localStorage
-      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+      const completedTaskIds = JSON.parse(
+        localStorage.getItem("completedTaskIds") || "[]",
+      );
 
       if (data)
         setTodos(
@@ -45,11 +47,12 @@ function ToDo() {
             id: task.taskid,
             text: task.content,
             // Use either the server status or check if it's in our localStorage completed list
-            completed: task.status === true || completedTaskIds.includes(task.taskid),
+            completed:
+              task.status === true || completedTaskIds.includes(task.taskid),
             priority: task.priority.toLowerCase(),
             dueDate: new Date(task.duedate).toISOString().split("T")[0],
             dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
-          }))
+          })),
         );
       else setTodos([]);
     } catch (error) {
@@ -104,12 +107,14 @@ function ToDo() {
 
       // Optimistically update UI
       const updatedTodos = todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: newStatus } : todo
+        todo.id === id ? { ...todo, completed: newStatus } : todo,
       );
       setTodos(updatedTodos);
 
       // Save completed task IDs to localStorage for persistence across pages
-      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+      const completedTaskIds = JSON.parse(
+        localStorage.getItem("completedTaskIds") || "[]",
+      );
       if (newStatus) {
         // Add to completed tasks if not already in the list
         if (!completedTaskIds.includes(id)) {
@@ -122,19 +127,25 @@ function ToDo() {
           completedTaskIds.splice(index, 1);
         }
       }
-      localStorage.setItem('completedTaskIds', JSON.stringify(completedTaskIds));
+      localStorage.setItem(
+        "completedTaskIds",
+        JSON.stringify(completedTaskIds),
+      );
 
       // The endpoint should be for updating status specifically, but it seems the API uses update-priority for both
-      const response = await fetch(`http://localhost:4000/user/update-priority/${id}`, {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await fetch(
+        `http://localhost:4000/user/update-priority/${id}`,
+        {
+          method: "PUT",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            status: newStatus,
+          }),
         },
-        body: JSON.stringify({
-          status: newStatus,
-        }),
-      });
+      );
 
       if (!response.ok) {
         // If the API call fails, revert the optimistic update
@@ -161,7 +172,7 @@ function ToDo() {
           headers: {
             "Content-Type": "application/json",
           },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -177,7 +188,7 @@ function ToDo() {
   // Update priority
   const updatePriority = async (id, priority) => {
     const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, priority } : todo
+      todo.id === id ? { ...todo, priority } : todo,
     );
 
     setTodos(updatedTodos);
@@ -220,18 +231,20 @@ function ToDo() {
     <div className="todo-app">
       <Navbar />
       {!isLoggedIn && (
-        <div style={{
-          width: "100%",
-          background: "#eaf3ff",
-          color: "#0362c7",
-          fontWeight: 600,
-          textAlign: "center",
-          padding: "0px 0 8px 0",
-          marginTop: "-15px",
-          fontSize: "1.1rem",
-          borderRadius: "0 0 12px 12px",
-          marginBottom: "25px"
-        }}>
+        <div
+          style={{
+            width: "100%",
+            background: "#eaf3ff",
+            color: "#0362c7",
+            fontWeight: 600,
+            textAlign: "center",
+            padding: "0px 0 8px 0",
+            marginTop: "-15px",
+            fontSize: "1.1rem",
+            borderRadius: "0 0 12px 12px",
+            marginBottom: "25px",
+          }}
+        >
           You need to log in to use this feature
         </div>
       )}
@@ -342,27 +355,30 @@ function ToDo() {
                       <span className="due-date">
                         <span className="icon">📅</span>
                         {new Date(
-                          `${todo.dueDate}T${todo.dueTime}`
+                          `${todo.dueDate}T${todo.dueTime}`,
                         ).toLocaleString()}
                       </span>
                       <div className="priority-selector">
                         <button
-                          className={`priority-btn ${todo.priority === "low" ? "active" : ""
-                            }`}
+                          className={`priority-btn ${
+                            todo.priority === "low" ? "active" : ""
+                          }`}
                           onClick={() => updatePriority(todo.id, "low")}
                         >
                           Low
                         </button>
                         <button
-                          className={`priority-btn ${todo.priority === "medium" ? "active" : ""
-                            }`}
+                          className={`priority-btn ${
+                            todo.priority === "medium" ? "active" : ""
+                          }`}
                           onClick={() => updatePriority(todo.id, "medium")}
                         >
                           Medium
                         </button>
                         <button
-                          className={`priority-btn ${todo.priority === "high" ? "active" : ""
-                            }`}
+                          className={`priority-btn ${
+                            todo.priority === "high" ? "active" : ""
+                          }`}
                           onClick={() => updatePriority(todo.id, "high")}
                         >
                           High

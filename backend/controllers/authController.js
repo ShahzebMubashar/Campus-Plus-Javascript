@@ -35,7 +35,7 @@ exports.register = async (request, response) => {
       `SELECT (SELECT COUNT(*) FROM Users WHERE username = $1) AS usernameCount,
                     (SELECT COUNT(*) FROM Users WHERE email = $2) AS emailCount,
                     (SELECT COUNT(*) FROM Users WHERE rollnumber = $3) AS rollnumberCount`,
-      [username, email, rollnumber]
+      [username, email, rollnumber],
     );
 
     const { usernamecount, emailcount, rollnumbercount } = checkUser.rows[0];
@@ -55,7 +55,7 @@ exports.register = async (request, response) => {
         newUserName = `${username}${randomUserID}`;
         const userCheck = await client.query(
           "SELECT * FROM Users WHERE username = $1",
-          [newUserName]
+          [newUserName],
         );
         if (!userCheck.rowCount) break;
       }
@@ -69,13 +69,13 @@ exports.register = async (request, response) => {
 
     const result = await client.query(
       `INSERT INTO Users (username, email, password, rollnumber) VALUES ($1, $2, $3, $4) RETURNING userid, username, email, rollnumber`,
-      [username, email, hashedPassword, rollnumber]
+      [username, email, hashedPassword, rollnumber],
     );
 
     if (fullName) {
       await client.query(
         `INSERT INTO UserInfo (userid, name) VALUES ($1, $2)`,
-        [result.rows[0].userid, fullName]
+        [result.rows[0].userid, fullName],
       );
     }
 
@@ -119,7 +119,7 @@ exports.login = async (request, response) => {
        FROM Users u 
        LEFT JOIN UserInfo ui ON u.userid = ui.userid 
        WHERE u.email = $1 OR u.username = $1`,
-      [email || username]
+      [email || username],
     );
 
     if (!result.rowCount)
@@ -184,7 +184,7 @@ exports.resetPassword = async (request, response) => {
   try {
     let res = await pool.query(
       `Select * from ResetPassword where userid = $1`,
-      [userid]
+      [userid],
     );
 
     const resetToken = res.rows[0].reset_token;
@@ -202,7 +202,7 @@ exports.resetPassword = async (request, response) => {
 
     res = await client.query(
       `Update Users set password = $1, lasteditted = current_timestamp where userid = $2`,
-      [hashedNewPassword, userid]
+      [hashedNewPassword, userid],
     );
 
     await client.query("COMMIT");
@@ -247,19 +247,19 @@ exports.forgotPassword = async (request, response) => {
 
     const res = await client.query(
       `Select * from ResetPassword where userid = $1`,
-      [request.session.user.userid]
+      [request.session.user.userid],
     );
 
     if (res.rowCount)
       await client.query(
         `Delete from ResetPassword where userid = $1 or token_expiry < current_timestamp + interval '1 hour'`,
-        [request.session.user.userid]
+        [request.session.user.userid],
       );
 
     await client.query(
       `Insert into ResetPassword (userid, reset_token, token_expiry)
       Values ($1, $2, current_timestamp + Interval '1 hour')`,
-      [request.session.user.userid, signedOTP]
+      [request.session.user.userid, signedOTP],
     );
 
     await client.query("COMMIT");
@@ -308,7 +308,7 @@ exports.testLogin = async (request, response) => {
   try {
     let res = await pool.query(
       `Select * from Users where username = $1 or email = $1`,
-      [username || email]
+      [username || email],
     );
 
     if (!res.rowCount) return response.status(404).json("Invalid Credentials");

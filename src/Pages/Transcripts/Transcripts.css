@@ -20,7 +20,7 @@
   display: flex;
   min-height: 100vh;
   background-color: var(--bg-color);
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 }
 
 /* Sidebar styling */
@@ -100,7 +100,7 @@ hr {
   padding: 18px 0;
   border-radius: 16px;
   text-align: center;
-  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.10);
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.1);
 }
 
 .gpa-summary {
@@ -190,7 +190,9 @@ hr {
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
-  transition: background-color 0.3s, transform 0.2s;
+  transition:
+    background-color 0.3s,
+    transform 0.2s;
 }
 
 .add-course-btn:hover {
@@ -243,7 +245,9 @@ hr {
   border-radius: 3px;
   cursor: pointer;
   font-size: 13px;
-  transition: background-color 0.3s, opacity 0.2s;
+  transition:
+    background-color 0.3s,
+    opacity 0.2s;
 }
 
 .remove-btn:hover {
@@ -444,7 +448,9 @@ hr {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   border: 3px solid rgba(255, 255, 255, 0.2);
   margin-bottom: 12px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .lms-profile-avatar:hover {
@@ -476,7 +482,7 @@ hr {
     top: auto;
     bottom: auto;
     overflow-y: visible;
-    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.10);
+    box-shadow: 0 2px 8px rgba(26, 115, 232, 0.1);
     z-index: 10;
     margin: 64px auto 32px auto;
     border-radius: 20px;
@@ -934,8 +940,6 @@ hr {
 }
 
 @media (max-width: 900px) {
-
-
   .transcripts-hamburger {
     display: flex;
     position: fixed;

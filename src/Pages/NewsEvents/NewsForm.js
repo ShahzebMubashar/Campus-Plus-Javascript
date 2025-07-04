@@ -1,83 +1,133 @@
-import React, { useState } from 'react';
-import './NewsForm.css';
+import React, { useState } from "react";
+import { Formik, Form, Field, ErrorMessage } from "formik";
+import * as Yup from "yup";
+import "./NewsForm.css";
+
+const validationSchema = Yup.object({
+  title: Yup.string().required("News Title is required"),
+  description: Yup.string().required("Description is required"),
+  category: Yup.string().required("Category is required"),
+  // file: Yup.mixed().required('File/Image is required'), // Optional: Uncomment if file is required
+});
 
 const NewsForm = () => {
-    const [title, setTitle] = useState('');
-    const [description, setDescription] = useState('');
-    const [category, setCategory] = useState('');
-    const [file, setFile] = useState(null);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('description', description);
-        formData.append('category', category);
-        formData.append('file', file);
-
-        console.log('Form Submitted');
-    };
-
-    return (
-        <div className="news-form-container">
-            <h2>Add News</h2>
-            <form onSubmit={handleSubmit} className="news-form">
-                <div className="form-row">
-                    <div className="form-group">
-                        <label htmlFor="title">News Title</label>
-                        <input
-                            type="text"
-                            id="title"
-                            placeholder="Enter news title"
-                            value={title}
-                            onChange={(e) => setTitle(e.target.value)}
-                            required
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="category">Category</label>
-                        <select
-                            id="category"
-                            value={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                            required
-                        >
-                            <option value="">Select a category</option>
-                            <option value="event">Event</option>
-                            <option value="announcement">Announcement</option>
-                            <option value="general">General</option>
-                        </select>
-                    </div>
-                </div>
-
+  const [showTooltip, setShowTooltip] = useState(false);
+  return (
+    <div className="news-form-container">
+      <h2>Add News</h2>
+      <Formik
+        initialValues={{ title: "", description: "", category: "", file: null }}
+        validationSchema={validationSchema}
+        onSubmit={(values) => {
+          const formData = new FormData();
+          formData.append("title", values.title);
+          formData.append("description", values.description);
+          formData.append("category", values.category);
+          if (values.file) formData.append("file", values.file);
+          // Submit logic here
+          console.log("Form Submitted", values);
+        }}
+      >
+        {({ isSubmitting, isValid, dirty, setFieldValue, values }) => {
+          const isDisabled = isSubmitting || !isValid || !dirty;
+          return (
+            <Form className="news-form">
+              <div className="form-row">
                 <div className="form-group">
-                    <label htmlFor="description">Description</label>
-                    <textarea
-                        id="description"
-                        placeholder="Enter news description"
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                        rows="3"
-                        required
-                    ></textarea>
+                  <label htmlFor="title">News Title</label>
+                  <Field
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Enter news title"
+                  />
+                  <ErrorMessage
+                    name="title"
+                    component="span"
+                    className="error"
+                  />
                 </div>
-
                 <div className="form-group">
-                    <label htmlFor="file">Upload File/Image</label>
-                    <input
-                        type="file"
-                        id="file"
-                        accept="image/*,application/pdf"
-                        onChange={(e) => setFile(e.target.files[0])}
-                    />
+                  <label htmlFor="category">Category</label>
+                  <Field as="select" id="category" name="category">
+                    <option value="">Select a category</option>
+                    <option value="event">Event</option>
+                    <option value="announcement">Announcement</option>
+                    <option value="general">General</option>
+                  </Field>
+                  <ErrorMessage
+                    name="category"
+                    component="span"
+                    className="error"
+                  />
                 </div>
-
-                <button type="submit" className="submit-btn">
-                    Submit News
+              </div>
+              <div className="form-group">
+                <label htmlFor="description">Description</label>
+                <Field
+                  as="textarea"
+                  id="description"
+                  name="description"
+                  placeholder="Enter news description"
+                  rows="3"
+                />
+                <ErrorMessage
+                  name="description"
+                  component="span"
+                  className="error"
+                />
+              </div>
+              <div className="form-group">
+                <label htmlFor="file">Upload File/Image</label>
+                <input
+                  type="file"
+                  id="file"
+                  name="file"
+                  accept="image/*,application/pdf"
+                  onChange={(e) => setFieldValue("file", e.target.files[0])}
+                />
+                {/* Optionally show file error: <ErrorMessage name="file" component="span" className="error" /> */}
+              </div>
+              <div
+                style={{
+                  position: "relative",
+                  display: "inline-block",
+                  width: "100%",
+                }}
+              >
+                <button
+                  type="submit"
+                  className="submit-btn submit-btn-with-tooltip"
+                  disabled={isDisabled}
+                  style={{
+                    background: isDisabled ? "#b0b0b0" : undefined,
+                    cursor: isDisabled ? "not-allowed" : undefined,
+                  }}
+                  onMouseEnter={() => {
+                    if (isDisabled) setShowTooltip(true);
+                  }}
+                  onMouseLeave={() => setShowTooltip(false)}
+                  onClick={(e) => {
+                    if (isDisabled) {
+                      setShowTooltip(true);
+                      e.preventDefault();
+                    }
+                  }}
+                >
+                  {isSubmitting ? "Submitting..." : "Submit News"}
                 </button>
-            </form>
-        </div>
-    );
+                {isDisabled && showTooltip && (
+                  <div className="submit-tooltip">
+                    You cannot submit until you fill the form correctly.
+                  </div>
+                )}
+              </div>
+            </Form>
+          );
+        }}
+      </Formik>
+    </div>
+  );
 };
 
 export default NewsForm;

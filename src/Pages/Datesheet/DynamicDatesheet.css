@@ -1,5 +1,5 @@
 /* Main container */
-.dynamic-datesheet-container{
+.dynamic-datesheet-container {
   margin: 20px;
   overflow-x: auto;
   font-family: "Roboto", sans-serif;
@@ -91,7 +91,9 @@
 .export-button:hover {
   transform: translateY(-2px);
   background: #a50000;
-  box-shadow: 0 10px 20px rgba(139, 0, 0, 0.2), 0 6px 6px rgba(139, 0, 0, 0.1);
+  box-shadow:
+    0 10px 20px rgba(139, 0, 0, 0.2),
+    0 6px 6px rgba(139, 0, 0, 0.1);
 }
 
 .export-button:active {

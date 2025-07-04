@@ -10,7 +10,7 @@ const getTranscript = async (request, response) => {
   try {
     const res = await pool.query(
       `SELECT * FROM ViewTranscripts WHERE userid = $1`,
-      [userid]
+      [userid],
     );
 
     if (!res.rowCount)
@@ -36,7 +36,7 @@ const getTranscript = async (request, response) => {
         id: semester,
         name: semester,
         courses,
-      })
+      }),
     );
 
     return response.status(200).json(formattedTranscript);
@@ -62,7 +62,7 @@ const addCourse = async (request, response) => {
   try {
     let res = await client.query(
       "Select * from Courses where coursecode = $1",
-      [coursecode]
+      [coursecode],
     );
 
     if (!res.rowCount) return response.status(404).json(`Course Not Found!`);
@@ -79,7 +79,7 @@ const addCourse = async (request, response) => {
 
     res = await client.query(
       `Select * from Transcript where userid = $1 and courseid = $2`,
-      [userid, courseid]
+      [userid, courseid],
     );
 
     if (res.rowCount) return response.status(400).json(`Course Already Added!`);
@@ -89,7 +89,7 @@ const addCourse = async (request, response) => {
     res = await client.query(
       `Insert into Transcript (userid, courseid, credits, grade, semesterid)
         values ($1, $2, $3, $4, $5)`,
-      [userid, courseid, credits, grade, semesterid]
+      [userid, courseid, credits, grade, semesterid],
     );
 
     await client.query(`COMMIT`);
@@ -121,7 +121,7 @@ const addSemester = async (request, response) => {
   try {
     let checkResult = await client.query(
       `Select * from ViewTranscripts where semestername = $1 and userid = $2`,
-      [name, userid]
+      [name, userid],
     );
     console.log(checkResult.rows);
 
@@ -130,7 +130,7 @@ const addSemester = async (request, response) => {
 
     checkResult = await client.query(
       "SELECT * FROM semesters WHERE name = $1",
-      [name]
+      [name],
     );
 
     if (checkResult.rowCount > 0) {
@@ -143,7 +143,7 @@ const addSemester = async (request, response) => {
 
     const result = await client.query(
       "INSERT INTO semesters (name) VALUES ($1) RETURNING *",
-      [name]
+      [name],
     );
 
     return response.status(201).json({
@@ -176,7 +176,7 @@ const removeCourse = async (request, response) => {
       `DELETE FROM Transcript 
        WHERE transcriptid = $1 AND userid = $2 
        RETURNING *`,
-      [transcriptId, userid]
+      [transcriptId, userid],
     );
 
     if (res.rowCount === 0) {
@@ -218,7 +218,7 @@ const removeSemester = async (request, response) => {
 
     res = await client.query(
       `Delete from Transcript where semesterid = $1 and userid = $2`,
-      [semesterid, userid]
+      [semesterid, userid],
     );
 
     await client.query(`COMMIT`);
