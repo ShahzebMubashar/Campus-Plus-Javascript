@@ -215,7 +215,7 @@ function ProfilePage() {
     return displayName
       .split(" ")
       .filter((_, index, array) => index === 0 || index === array.length - 1)
-      .map(name => name[0])
+      .map((name) => name[0])
       .join("")
       .toUpperCase();
   };
@@ -225,8 +225,16 @@ function ProfilePage() {
     if (!name) return "#1a73e8"; // Default color
 
     const colors = [
-      "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
-      "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff"
+      "#1a73e8",
+      "#4285f4",
+      "#0d47a1",
+      "#3367d6",
+      "#4e6cef",
+      "#3742fa",
+      "#1e3799",
+      "#0077c2",
+      "#0097e6",
+      "#00a8ff",
     ];
 
     // Sum the character codes to get a deterministic but unique color
@@ -277,28 +285,32 @@ function ProfilePage() {
               <div
                 className="lms-profile-avatar"
                 style={{
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  fontSize: '2.5rem',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
-                  backgroundColor: getAvatarColor(user.name || user.username || ""),
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  cursor: 'default',
-                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                  border: '4px solid white'
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  fontSize: "2.5rem",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
+                  backgroundColor: getAvatarColor(
+                    user.name || user.username || "",
+                  ),
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  cursor: "default",
+                  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                  border: "4px solid white",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.boxShadow =
+                    "0 8px 16px rgba(0, 0, 0, 0.3)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 10px rgba(0, 0, 0, 0.2)";
                 }}
               >
                 {getUserInitials()}
@@ -318,8 +330,7 @@ function ProfilePage() {
                 {user.degree || "N/A"}
               </p>
               <p>
-                <span className="lms-label">Batch:</span>{" "}
-                {user.batch || "N/A"}
+                <span className="lms-label">Batch:</span> {user.batch || "N/A"}
               </p>
               <p>
                 <span className="lms-label">GPA:</span> {user.gpa || "N/A"}

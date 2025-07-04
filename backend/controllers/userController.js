@@ -12,7 +12,7 @@ const viewUserInfo = async (request, response) => {
   try {
     const result = await pool.query(
       "SELECT * FROM ViewUserInfo1 WHERE userid = $1",
-      [userid]
+      [userid],
     );
 
     console.log(result.rows);
@@ -50,17 +50,17 @@ const editUserInfo = async (request, response) => {
     if (!res.rowCount)
       await client.query(
         `Insert into UserInfo (userid, name, degree, batch) values ($1, $2, $3, $4)`,
-        [userid, name, degree, batch]
+        [userid, name, degree, batch],
       );
     else
       await client.query(
         "UPDATE UserInfo SET degree = COALESCE($1, degree), batch = COALESCE($2, batch), name = COALESCE($3, name) WHERE userid = $4",
-        [degree, batch, name, userid]
+        [degree, batch, name, userid],
       );
 
     await client.query(
       "UPDATE Users SET lasteditted = current_timestamp WHERE userid = $1",
-      [userid]
+      [userid],
     );
 
     await client.query("COMMIT");
@@ -83,7 +83,7 @@ const currentCourses = async (request, response) => {
   try {
     let res = await pool.query(
       `Select * from ViewTranscripts where userid = $1 and grade = 'I' limit 3`,
-      [userid]
+      [userid],
     );
 
     if (!res.rowCount)
@@ -114,7 +114,7 @@ const addReminder = async (request, response) => {
     const result = await client.query(
       `Insert into UserTasks (userid, content, priority, duedate, status)
       Values ($1, $2, $3, $4, 'Pending')`,
-      [userid, content, priority, duedate]
+      [userid, content, priority, duedate],
     );
 
     if (!result.rowCount) {
@@ -147,7 +147,7 @@ const getReminders = async (request, response) => {
       `SELECT * FROM UserTasks 
        WHERE userid = $1 
        ORDER BY priority, duedate`,
-      [userid]
+      [userid],
     );
 
     if (!result.rowCount) return response.status(404).json("No Upcoming Tasks");
@@ -176,7 +176,7 @@ const deleteReminder = async (request, response) => {
 
     const res = await client.query(
       `Delete from UserTasks where taskid = $1 and userid = $2`,
-      [reminderid, userid]
+      [reminderid, userid],
     );
 
     await client.query(`COMMIT`);
@@ -207,7 +207,7 @@ const updatePriority = async (request, response) => {
 
     let res = await client.query(
       `Update UserTasks set priority = COALESCE($1, priority), status = COALESCE($2, status) where userid = $3 and taskid = $4`,
-      [priority, status, userid, taskid]
+      [priority, status, userid, taskid],
     );
 
     await client.query("COMMIT");

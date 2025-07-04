@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
-import { FaBars } from 'react-icons/fa';
+import { FaBars } from "react-icons/fa";
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -40,13 +40,15 @@ function TranscriptsPage() {
   const [selectedSemesterId, setSelectedSemesterId] = useState(null);
   const semesterRefs = useRef({});
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [isLargeScreen, setIsLargeScreen] = useState(window.matchMedia('(min-width: 901px)').matches);
+  const [isLargeScreen, setIsLargeScreen] = useState(
+    window.matchMedia("(min-width: 901px)").matches,
+  );
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(min-width: 901px)');
+    const mediaQuery = window.matchMedia("(min-width: 901px)");
     const handleResize = () => setIsLargeScreen(mediaQuery.matches);
-    mediaQuery.addEventListener('change', handleResize);
-    return () => mediaQuery.removeEventListener('change', handleResize);
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
   }, []);
 
   // Fetch data on mount
@@ -87,8 +89,8 @@ function TranscriptsPage() {
   useEffect(() => {
     if (selectedSemesterId && semesterRefs.current[selectedSemesterId]) {
       semesterRefs.current[selectedSemesterId].scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: "smooth",
+        block: "start",
       });
     }
   }, [selectedSemesterId]);
@@ -107,7 +109,7 @@ function TranscriptsPage() {
           totalCredits: acc.totalCredits + course.credits,
         };
       },
-      { totalPoints: 0, totalCredits: 0 }
+      { totalPoints: 0, totalCredits: 0 },
     );
     return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
   };
@@ -122,17 +124,17 @@ function TranscriptsPage() {
               course.grade === "I"
                 ? sum
                 : sum + (gradePoints[course.grade] || 0) * course.credits,
-            0
+            0,
           ),
         totalCredits:
           acc.totalCredits +
           semester.courses.reduce(
             (sum, course) =>
               course.grade === "I" ? sum : sum + course.credits,
-            0
+            0,
           ),
       }),
-      { totalPoints: 0, totalCredits: 0 }
+      { totalPoints: 0, totalCredits: 0 },
     );
     return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
   };
@@ -150,7 +152,7 @@ function TranscriptsPage() {
           body: JSON.stringify({
             name: `${newSemester.name} ${newSemester.year}`,
           }),
-        }
+        },
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -201,17 +203,17 @@ function TranscriptsPage() {
         {
           method: "DELETE",
           credentials: "include",
-        }
+        },
       );
       setSemesters(
         semesters.map((semester) =>
           semester.id === semesterId
             ? {
-              ...semester,
-              courses: semester.courses.filter((c) => c.id !== courseId),
-            }
-            : semester
-        )
+                ...semester,
+                courses: semester.courses.filter((c) => c.id !== courseId),
+              }
+            : semester,
+        ),
       );
     } catch (err) {
       setError(err.message);
@@ -226,7 +228,7 @@ function TranscriptsPage() {
         {
           method: "DELETE",
           credentials: "include",
-        }
+        },
       );
       setSemesters(semesters.filter((s) => s.id !== semesterId));
       setConfirmDeleteSemester(null);
@@ -246,7 +248,7 @@ function TranscriptsPage() {
     return displayName
       .split(" ")
       .filter((_, index, array) => index === 0 || index === array.length - 1)
-      .map(name => name[0])
+      .map((name) => name[0])
       .join("")
       .toUpperCase();
   };
@@ -259,9 +261,7 @@ function TranscriptsPage() {
       {isLargeScreen && (
         <aside className="transcripts-sidebar desktop-sidebar">
           <div className="sidebar-profile">
-            <div className="lms-profile-avatar">
-              {getUserInitials()}
-            </div>
+            <div className="lms-profile-avatar">{getUserInitials()}</div>
             <h2>{user?.name || "Student"}</h2>
           </div>
           <hr />
@@ -326,13 +326,32 @@ function TranscriptsPage() {
               className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""}`}
               ref={(el) => (semesterRefs.current[semester.id] = el)}
             >
-              <div className="semester-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+              <div
+                className="semester-header"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "10px",
+                }}
+              >
                 <h2>{semester.name}</h2>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '12px', flexWrap: 'wrap' }}>
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    flexWrap: "wrap",
+                  }}
+                >
                   <span className="semester-gpa">
                     SGPA: {calculateSGPA(semester.courses)}
                   </span>
-                  <div className="semester-actions" style={{ display: 'flex', gap: '8px' }}>
+                  <div
+                    className="semester-actions"
+                    style={{ display: "flex", gap: "8px" }}
+                  >
                     <button
                       className="add-course-btn"
                       onClick={() => {

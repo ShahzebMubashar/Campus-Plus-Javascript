@@ -1,6 +1,6 @@
 .course-list-container {
   margin: 20px;
-  font-family: 'Poppins', sans-serif;
+  font-family: "Poppins", sans-serif;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -23,7 +23,7 @@
 }
 
 .course-list-title::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -12px;
   left: 50%;
@@ -61,18 +61,20 @@
 }
 
 .course-item::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg,
-      rgba(45, 52, 54, 0.15),
-      rgba(26, 26, 26, 0.15));
+  background: linear-gradient(
+    135deg,
+    rgba(45, 52, 54, 0.15),
+    rgba(26, 26, 26, 0.15)
+  );
   opacity: 0;
   transition: opacity 0.3s ease;
 }
 
 .course-item::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
@@ -110,7 +112,7 @@
 }
 
 .course-item span::before {
-  content: '•';
+  content: "•";
   position: absolute;
   left: 0;
   color: #66bb91;
@@ -121,7 +123,7 @@
 .remove-button {
   background: rgba(220, 38, 38, 0.1);
   border: none;
-  color: #DC2626;
+  color: #dc2626;
   cursor: pointer;
   width: 36px;
   height: 36px;
@@ -136,7 +138,7 @@
 }
 
 .remove-button:hover {
-  background: #DC2626;
+  background: #dc2626;
   color: white;
   transform: rotate(90deg);
 }
@@ -160,7 +162,7 @@
 }
 
 .clear-button::before {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: 0;

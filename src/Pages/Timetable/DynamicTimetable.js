@@ -6,7 +6,14 @@ const DynamicTimetable = ({ selectedCourses }) => {
   const [showInstructor, setShowInstructor] = useState(true);
   const [showVenue, setShowVenue] = useState(true);
 
-  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+  ];
 
   const detectConflicts = (lectures) => {
     // Add a flag `isConflict` to identify conflicting entries
@@ -18,7 +25,7 @@ const DynamicTimetable = ({ selectedCourses }) => {
         if (
           (a.start_time < b.start_time && a.end_time > b.start_time) ||
           (b.start_time < a.start_time && b.end_time > a.start_time) ||
-          (a.start_time === b.start_time)
+          a.start_time === b.start_time
         ) {
           a.isConflict = true;
           b.isConflict = true;
@@ -34,12 +41,14 @@ const DynamicTimetable = ({ selectedCourses }) => {
     selectedCourses.forEach((course) => {
       let lectures;
       try {
-        lectures = JSON.parse(course.lectures.replace(/'/g, '"').trim().slice(1, -1));
+        lectures = JSON.parse(
+          course.lectures.replace(/'/g, '"').trim().slice(1, -1),
+        );
       } catch (error) {
         console.error(
           "Invalid lecture format:",
           course.lectures.replace(/'/g, '"').trim().slice(1, -1),
-          error.message
+          error.message,
         );
         return;
       }
@@ -82,45 +91,44 @@ const DynamicTimetable = ({ selectedCourses }) => {
   const timetable = generateTimetable();
 
   const exportToJpg = () => {
-  const timetableElement = document.getElementById("timetable");
-  const clone = timetableElement.cloneNode(true);
+    const timetableElement = document.getElementById("timetable");
+    const clone = timetableElement.cloneNode(true);
 
-  const cover = document.createElement('div');
-  cover.style.position = 'fixed';
-  cover.style.top = '0';
-  cover.style.left = '0';
-  cover.style.width = '100vw';
-  cover.style.height = '100vh';
-  cover.style.background = 'white';
-  cover.style.zIndex = '-998';
-  cover.style.pointerEvents = 'none'; // user can’t click it
-  document.body.appendChild(cover);
+    const cover = document.createElement("div");
+    cover.style.position = "fixed";
+    cover.style.top = "0";
+    cover.style.left = "0";
+    cover.style.width = "100vw";
+    cover.style.height = "100vh";
+    cover.style.background = "white";
+    cover.style.zIndex = "-998";
+    cover.style.pointerEvents = "none"; // user can’t click it
+    document.body.appendChild(cover);
 
-  clone.style.position = "fixed";
-  clone.style.top = "0";
-  clone.style.left = "0";
-  clone.style.zIndex = "-999";
-  clone.style.width = "1280px";
-  clone.style.height = "auto";
-  clone.style.overflow = "hidden";
-  clone.classList.add('export-mode');
+    clone.style.position = "fixed";
+    clone.style.top = "0";
+    clone.style.left = "0";
+    clone.style.zIndex = "-999";
+    clone.style.width = "1280px";
+    clone.style.height = "auto";
+    clone.style.overflow = "hidden";
+    clone.classList.add("export-mode");
 
-  document.body.appendChild(clone);
+    document.body.appendChild(clone);
 
-  toJpeg(clone, { quality: 0.95, useCORS: true })
-    .then((dataUrl) => {
-      const link = document.createElement("a");
-      link.download = "timetable.jpg";
-      link.href = dataUrl;
-      link.click();
-    })
-    .catch((err) => console.error("Error exporting timetable:", err))
-    .finally(() => {
-      document.body.removeChild(clone);
-      document.body.removeChild(cover);
-    });
-};
-
+    toJpeg(clone, { quality: 0.95, useCORS: true })
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "timetable.jpg";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => console.error("Error exporting timetable:", err))
+      .finally(() => {
+        document.body.removeChild(clone);
+        document.body.removeChild(cover);
+      });
+  };
 
   return (
     <div className="dynamic-timetable-container">

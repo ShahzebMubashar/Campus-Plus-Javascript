@@ -1,6 +1,6 @@
 const checkAuthorisation = (request, response, next) => {
-  console.log('\n[AUTH] Checking session:', request.sessionID);
-  
+  console.log("\n[AUTH] Checking session:", request.sessionID);
+
   if (!request.session) {
     return response.status(401).send("No session found");
   }
@@ -9,16 +9,16 @@ const checkAuthorisation = (request, response, next) => {
     return response.status(401).send("Please log in");
   }
 
-  console.log('[AUTH] User authenticated:', request.session.user.username);
+  console.log("[AUTH] User authenticated:", request.session.user.username);
   next();
 };
 
 const checkAdmin = (request, response, next) => {
   if (!request.session.user || request.session.user.role !== "Admin") {
-    console.log('[AUTH] Admin check failed:', request.session.user?.username);
+    console.log("[AUTH] Admin check failed:", request.session.user?.username);
     return response.status(403).send("Admin access required");
   }
-  console.log('[AUTH] Admin verified:', request.session.user.username);
+  console.log("[AUTH] Admin verified:", request.session.user.username);
   next();
 };
 
@@ -41,6 +41,6 @@ const authenticateToken = (request, response, next) => {
 
       request.user = user;
       next();
-    }
+    },
   );
 };

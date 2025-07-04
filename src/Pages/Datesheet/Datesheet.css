@@ -1,6 +1,12 @@
 /* Global styling for the datesheet container */
 .datesheet-container {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
   background-color: #ffffff;
   padding: 35px;
   max-width: 1200px;
@@ -20,7 +26,11 @@
   right: 0;
   width: 200px;
   height: 200px;
-  background: linear-gradient(135deg, rgba(13, 71, 161, 0.03) 0%, rgba(25, 118, 210, 0.05) 100%);
+  background: linear-gradient(
+    135deg,
+    rgba(13, 71, 161, 0.03) 0%,
+    rgba(25, 118, 210, 0.05) 100%
+  );
   border-radius: 50%;
   z-index: -1;
   transform: translate(30%, -30%);

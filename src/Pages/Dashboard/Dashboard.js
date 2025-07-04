@@ -45,7 +45,7 @@ function Dashboard() {
       return displayName
         .split(" ")
         .filter((_, index, array) => index === 0 || index === array.length - 1)
-        .map(name => name[0])
+        .map((name) => name[0])
         .join("")
         .toUpperCase();
     };
@@ -54,9 +54,21 @@ function Dashboard() {
       if (!name) return "#4A90E2";
 
       const colors = [
-        "#4A90E2", "#5DADE2", "#2980B9", "#85C1E9", "#2874A6",
-        "#3498DB", "#2E86C1", "#1F618D", "#AED6F1", "#34495E",
-        "#7FB3D5", "#154360", "#D6EAF8", "#1A5276", "#21618C"
+        "#4A90E2",
+        "#5DADE2",
+        "#2980B9",
+        "#85C1E9",
+        "#2874A6",
+        "#3498DB",
+        "#2E86C1",
+        "#1F618D",
+        "#AED6F1",
+        "#34495E",
+        "#7FB3D5",
+        "#154360",
+        "#D6EAF8",
+        "#1A5276",
+        "#21618C",
       ];
 
       const charSum = name
@@ -170,7 +182,9 @@ function Dashboard() {
 
         const data = await res.json();
         // Get completed task IDs from localStorage
-        const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+        const completedTaskIds = JSON.parse(
+          localStorage.getItem("completedTaskIds") || "[]",
+        );
 
         if (data) {
           setTasks(
@@ -178,12 +192,13 @@ function Dashboard() {
               id: task.taskid,
               title: task.content, // Changed from 'text' to 'title' to match deadlines structure
               // Use either the server status or check if it's in our localStorage completed list
-              completed: task.status === true || completedTaskIds.includes(task.taskid),
+              completed:
+                task.status === true || completedTaskIds.includes(task.taskid),
               priority: task.priority.toLowerCase(),
               dueDate: new Date(task.duedate).toISOString().split("T")[0],
               dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
               course: "Task", // Added to match deadlines structure
-            }))
+            })),
           );
           console.log(data);
         } else {
@@ -202,7 +217,7 @@ function Dashboard() {
       try {
         const result = await fetch(
           `http://localhost:4000/Chatrooms/my-rooms/${User.userid}`,
-          { credentials: "include" }
+          { credentials: "include" },
         );
         const data = await result.json();
 
@@ -242,17 +257,19 @@ function Dashboard() {
     // Toggle task completion
     const toggleTaskCompletion = async (id) => {
       try {
-        const task = tasks.find(t => t.id === id);
+        const task = tasks.find((t) => t.id === id);
         const newStatus = !task.completed;
 
         // Optimistically update UI
-        const updatedTasks = tasks.map(task =>
-          task.id === id ? { ...task, completed: newStatus } : task
+        const updatedTasks = tasks.map((task) =>
+          task.id === id ? { ...task, completed: newStatus } : task,
         );
         setTasks(updatedTasks);
 
         // Save completed task IDs to localStorage for persistence across pages
-        const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+        const completedTaskIds = JSON.parse(
+          localStorage.getItem("completedTaskIds") || "[]",
+        );
         if (newStatus) {
           // Add to completed tasks if not already in the list
           if (!completedTaskIds.includes(id)) {
@@ -265,18 +282,24 @@ function Dashboard() {
             completedTaskIds.splice(index, 1);
           }
         }
-        localStorage.setItem('completedTaskIds', JSON.stringify(completedTaskIds));
+        localStorage.setItem(
+          "completedTaskIds",
+          JSON.stringify(completedTaskIds),
+        );
 
-        const response = await fetch(`http://localhost:4000/user/update-priority/${id}`, {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await fetch(
+          `http://localhost:4000/user/update-priority/${id}`,
+          {
+            method: "PUT",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              status: newStatus,
+            }),
           },
-          body: JSON.stringify({
-            status: newStatus,
-          }),
-        });
+        );
 
         if (!response.ok) {
           // If the API call fails, revert the optimistic update
@@ -308,13 +331,15 @@ function Dashboard() {
                 fontSize: "2.5rem",
                 fontWeight: "bold",
                 textTransform: "uppercase",
-                letterSpacing: "1px"
+                letterSpacing: "1px",
               }}
             >
               {getUserInitials()}
             </div>
             <div className="user-info">
-              <h1 className="user-name">{User?.fullName || User?.name || User.username || "Loading..."}</h1>
+              <h1 className="user-name">
+                {User?.fullName || User?.name || User.username || "Loading..."}
+              </h1>
               <h5 className="user-name-username">
                 @{User?.username || "Loading..."}
               </h5>
@@ -414,34 +439,41 @@ function Dashboard() {
             </div>
             <div className="deadlines-list">
               {/* Only show pending tasks in the dashboard */}
-              {tasks.filter(task => !task.completed).length > 0 ? (
-                tasks.filter(task => !task.completed).slice(0, 3).map((task, index) => (
-                  <div
-                    key={task.id || index}
-                    className="deadline-card"
-                    onClick={() => toggleTaskCompletion(task.id)}
-                  >
-                    <div className="deadline-content">
-                      <div className="deadline-header">
-                        <div className="deadline-course">{task.course}</div>
-                        <div className="deadline-status">
-                          <div className="status-indicator pending"></div>
-                          <span>Pending</span>
+              {tasks.filter((task) => !task.completed).length > 0 ? (
+                tasks
+                  .filter((task) => !task.completed)
+                  .slice(0, 3)
+                  .map((task, index) => (
+                    <div
+                      key={task.id || index}
+                      className="deadline-card"
+                      onClick={() => toggleTaskCompletion(task.id)}
+                    >
+                      <div className="deadline-content">
+                        <div className="deadline-header">
+                          <div className="deadline-course">{task.course}</div>
+                          <div className="deadline-status">
+                            <div className="status-indicator pending"></div>
+                            <span>Pending</span>
+                          </div>
+                        </div>
+                        <h3 className="deadline-title">{task.title}</h3>
+                        <div className="deadline-details">
+                          <span className="deadline-date">
+                            <span className="icon">📅</span>
+                            {new Date(
+                              `${task.dueDate}T${task.dueTime}`,
+                            ).toLocaleString()}
+                          </span>
+                          <span
+                            className={`deadline-priority ${task.priority}`}
+                          >
+                            {task.priority.toUpperCase()}
+                          </span>
                         </div>
                       </div>
-                      <h3 className="deadline-title">{task.title}</h3>
-                      <div className="deadline-details">
-                        <span className="deadline-date">
-                          <span className="icon">📅</span>
-                          {new Date(`${task.dueDate}T${task.dueTime}`).toLocaleString()}
-                        </span>
-                        <span className={`deadline-priority ${task.priority}`}>
-                          {task.priority.toUpperCase()}
-                        </span>
-                      </div>
                     </div>
-                  </div>
-                ))
+                  ))
               ) : (
                 <div className="no-deadlines-message">
                   No pending deadlines found
@@ -470,7 +502,9 @@ function Dashboard() {
                       <div
                         key={index}
                         className="course-item"
-                        onClick={() => (window.location.href = "/course-details")}
+                        onClick={() =>
+                          (window.location.href = "/course-details")
+                        }
                       >
                         <div className="course-details">
                           <span className="course-name">{course.name}</span>
