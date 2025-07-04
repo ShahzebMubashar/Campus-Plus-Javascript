@@ -26,6 +26,7 @@ import ToDo from '../Pages/ToDoList/ToDo.js'
 import Profile from '../Pages/Profile/ProfilePage.js'
 import Transcript from '../Pages/Transcripts/Transcripts.js'
 import Navbar from '../Pages/Index/components/Navbar.js';
+import OurEvents from '../Pages/OurEvents/OurEvents.js';
 
 
 function AppRoutes() {
@@ -76,6 +77,7 @@ function AppRoutes() {
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/transcript" element={<Transcript />} />
                 <Route path="/navbar" element={<Navbar />} />
+                <Route path="/ourevents" element={<OurEvents />} />
             </Routes>
         </>
     );
