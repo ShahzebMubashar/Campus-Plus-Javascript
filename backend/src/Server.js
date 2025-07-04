@@ -28,7 +28,9 @@ app.use(cookieParser());
 // CORS configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.NODE_ENV === "production"
+      ? [process.env.FRONTEND_URL || "https://your-frontend-app.railway.app", "http://localhost:3000"]
+      : "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
     allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
