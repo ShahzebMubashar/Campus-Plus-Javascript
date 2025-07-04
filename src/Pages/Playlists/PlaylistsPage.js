@@ -634,14 +634,16 @@ const PlaylistsPage = () => {
                             className="playlist-card stylish-card"
                             onClick={() => handleCardClick(course.playlistLink)}
                         >
-                            <img
-                                src={`https://i.ytimg.com/vi/${course.VideoId}/hqdefault.jpg`}
-                                alt={`Thumbnail for ${course.name}`}
-                                className="playlist-thumbnail"
-                            />
+                            <div className="thumbnail-container">
+                                <img
+                                    src={`https://i.ytimg.com/vi/${course.VideoId}/hqdefault.jpg`}
+                                    alt={`Thumbnail for ${course.name}`}
+                                    className="playlist-thumbnail"
+                                />
+                                <span className="short-form">{course.shortForm}</span>
+                            </div>
                             <div className="card-content">
                                 <h3>{course.name}</h3>
-                                <p className="short-form">{course.shortForm}</p>
                                 <p className="video-count">{course.videoCount} Videos</p>
                             </div>
                         </div>
