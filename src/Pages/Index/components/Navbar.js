@@ -252,7 +252,7 @@ function Navbar() {
                                 <div className="navbar-dropdown-section">
                                     <AiOutlineHome className="navbar-dropdown-icon" />
                                     <h4>About Us</h4>
-                                    <p><Link to="/our-events" onClick={handleDropdownLinkClick}>Our Events</Link></p>
+                                    <p><Link to="/ourevents" onClick={handleDropdownLinkClick}>Our Events</Link></p>
                                     <p><Link to="/about-campus-plus" onClick={handleDropdownLinkClick}>About Campus +</Link></p>
                                     <p><Link to="https://www.multidexters.live/" onClick={handleDropdownLinkClick}>About MultiDexters</Link></p>
                                     <p><Link to="/contact" onClick={handleDropdownLinkClick}>Contact Us</Link></p>
