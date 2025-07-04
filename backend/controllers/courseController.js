@@ -14,7 +14,6 @@ const getCourses = async (request, response) => {
       ORDER BY has_past_papers DESC
     `);
 
-
     if (!result.rowCount) {
       return response.status(404).json({ message: "No Courses Available" });
     }
@@ -234,11 +233,8 @@ const getPastPapers = async (req, res) => {
     const result = await pool.query(
       'SELECT paper_id, paper_type, paper_year, file_link, file_link_down, file_name FROM past_papers WHERE courseid = $1',
       [courseId]
-      'SELECT paper_id, paper_type, paper_year, file_link, file_link_down, file_name FROM past_papers WHERE courseid = $1',
-      [courseId]
     );
     if (result.rows.length === 0) {
-      return res.status(404).json({ message: 'No past papers found for this course' });
       return res.status(404).json({ message: 'No past papers found for this course' });
     }
     res.json(result.rows);
@@ -265,7 +261,6 @@ const downloadPastPapers = async (req, res) => {
     }
     // Stream the file to the client
     res.setHeader('Content-Type', 'application/pdf'); // Adjust the type if needed
-    res.setHeader('Content-Type', 'application/pdf'); // Adjust the type if needed
     response.body.pipe(res);
   } catch (err) {
     console.error(err.message);
@@ -278,14 +273,9 @@ const getCourseDetails = async (req, res) => {
 
   let client = await pool.connect();
 
-
-  let client = await pool.connect();
-
   try {
     const result = await client.query(
-    const result = await client.query(
       `SELECT vci.*, 
-      CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
       CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
       CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count,
       ci.difficulty as difficulty,
@@ -309,19 +299,10 @@ const getCourseDetails = async (req, res) => {
 
     await client.query("COMMIT");
 
-    await client.query("BEGIN");
-
-    await client.query(`Update TrendingCourses set clicks = clicks + 1 where courseid = $1`,
-      [courseId]
-    );
-
-    await client.query("COMMIT");
-
     if (result.rows.length === 0) {
       return res.status(404).json({ message: 'Course not found' });
     }
 
-    return res.json(result.rows[0]);
     return res.json(result.rows[0]);
   } catch (err) {
     console.error('Error fetching course details:', err);
