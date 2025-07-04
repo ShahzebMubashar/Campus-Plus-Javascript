@@ -1,5 +1,4 @@
 const express = require("express");
-const { body, validationResult } = require("express-validator");
 const {
   getRooms,
   createRoom,
@@ -40,91 +39,54 @@ const {
 
 const router = express.Router();
 
-// Validation for creating a room
-const createRoomValidation = [
-  body("roomName").notEmpty().withMessage("Room name is required"),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-];
-
-// Validation for sending a message
-const sendMessageValidation = [
-  body("content").notEmpty().withMessage("Message content is required"),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-];
-
-// Validation for creating a post
-const createPostValidation = [
-  body("content").notEmpty().withMessage("Post content is required"),
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
-];
-
 router.get("/:roomid?", getRooms);
-router.post("/create", checkAuthorisation, createRoomValidation, createRoom);
+router.post("/create", checkAuthorisation, createRoom);
 router.post("/join/:roomid", checkAuthorisation, validateRoom, joinRoom);
 router.post(
   "/send-message/:roomid",
   checkAuthorisation,
   checkRoomMember,
-  sendMessageValidation,
-  sendMessage,
+  sendMessage
 );
 router.post(
   "/reply1/:roomid/:parentMessage",
   checkAuthorisation,
   checkRoomMember,
-  sendReply,
+  sendReply
 );
 router.post(
   "/process/:roomid",
   checkAuthorisation,
   checkModerator,
-  processPost,
+  processPost
 );
-router.post("/:roomid/messages", createPostValidation, createPost);
+router.post("/:roomid/messages", createPost);
 router.delete(
   "/leave/:roomid",
   checkAuthorisation,
   validateRoom,
   checkRoomMember,
-  LeaveRoom,
+  LeaveRoom
 );
 router.post(
   "/change-room-name/:roomid",
   checkAuthorisation,
   checkModerator,
   validateRoom,
-  changeRoomDetails,
+  changeRoomDetails
 );
 router.delete(
   "/delete/:roomid",
   checkAuthorisation,
   checkAdmin,
   validateRoom,
-  deleteRoom,
+  deleteRoom
 );
 router.delete(
   "/:roomid/messages/:messageid",
   checkAuthorisation,
   checkRoomMember,
-  deletePost,
+  deletePost
 );
 router.get("/:roomid/messages/:messageid", getPost);
 
@@ -133,7 +95,7 @@ router.post("/:roomid/posts/:messageid/edit", checkAuthorisation, editPost);
 router.get(
   "/posts/:messageid/edit-history",
   checkAuthorisation,
-  getPostEditHistory,
+  getPostEditHistory
 );
 
 // Post pinning routes
@@ -154,7 +116,7 @@ router.get("/my-rooms/:userid", checkAuthorisation, myRooms);
 router.post(
   "/reply/:roomid/:parentReplyId",
   checkAuthorisation,
-  addnestedReply,
+  addnestedReply
 );
 
 module.exports = router;

@@ -1,4 +1,3 @@
-const { request } = require("express");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -25,7 +24,7 @@ const getRooms = async (request, response) => {
         LEFT JOIN messagereplies1 re ON re.messageid = m.messageid
         WHERE r.roomid = $1
         ORDER BY m.posted_at, re.posted_at`,
-        [roomid],
+        [roomid]
       );
 
       if (!res.rowCount) {
@@ -94,7 +93,7 @@ const getRooms = async (request, response) => {
 
       // Convert messages map to array and sort by posted_at
       roomData.messages = Array.from(messagesMap.values()).sort(
-        (a, b) => new Date(a.posted_at) - new Date(b.posted_at),
+        (a, b) => new Date(a.posted_at) - new Date(b.posted_at)
       );
 
       return response.status(200).json(roomData);
@@ -132,7 +131,7 @@ const getRoomMessages = async (req, res) => {
          ORDER BY 
            CASE WHEN pp.pinid IS NOT NULL THEN 0 ELSE 1 END,
            m.posted_at DESC`,
-        [roomid],
+        [roomid]
       );
     } else {
       messagesResult = await pool.query(
@@ -145,7 +144,7 @@ const getRoomMessages = async (req, res) => {
          ORDER BY 
            CASE WHEN pp.pinid IS NOT NULL THEN 0 ELSE 1 END,
            m.posted_at DESC`,
-        [roomid],
+        [roomid]
       );
     }
 
@@ -159,7 +158,7 @@ const getRoomMessages = async (req, res) => {
     // Fetch replies using the nested view
     const commentsResult = await pool.query(
       `SELECT * FROM MESSAGEREPLIES WHERE roomid = $1 ORDER BY posted_at`,
-      [roomid],
+      [roomid]
     );
 
     // Step 1: Group replies by messageId
@@ -214,7 +213,7 @@ const getRoomMessages = async (req, res) => {
         status: msg.status || "Approved",
         is_pinned: msg.is_pinned,
         comments: buildReplyTree(repliesByMessage[msg.messageid] || []).map(
-          cleanReply,
+          cleanReply
         ),
       })),
     };
@@ -271,7 +270,7 @@ const createRoom = async (request, response) => {
     res = await client.query(
       `Insert into Rooms (name, description, created_at, created_by)
       values ($1, $2, current_timestamp, $3)`,
-      [roomName, description, userid],
+      [roomName, description, userid]
     );
 
     await client.query("COMMIT");
@@ -303,7 +302,7 @@ const joinRoom = async (request, response) => {
   try {
     let res = await pool.query(
       `Select * from RoomMembers where userid = $1 and roomid = $2`,
-      [userid, roomid],
+      [userid, roomid]
     );
 
     if (res.rowCount)
@@ -313,7 +312,7 @@ const joinRoom = async (request, response) => {
 
     res = await client.query(
       `Insert into RoomMembers (userid, roomid) Values ($1, $2)`,
-      [userid, roomid],
+      [userid, roomid]
     );
 
     await client.query("COMMIT");
@@ -346,14 +345,14 @@ const sendMessage = async (request, response) => {
       await client.query(
         `INSERT INTO Replies (messageid, userid, content, posted_at, parent_reply_id)
          VALUES ($1, $2, $3, current_timestamp, $4)`,
-        [messageid, userid, message, parent_reply_id],
+        [messageid, userid, message, parent_reply_id]
       );
     } else {
       // It's a top-level message
       await client.query(
         `INSERT INTO Messages (roomid, userid, content, posted_at)
          VALUES ($1, $2, $3, current_timestamp)`,
-        [roomid, userid, message],
+        [roomid, userid, message]
       );
     }
 
@@ -385,7 +384,7 @@ const sendReply = async (request, response) => {
     // Validate parent message exists and belongs to the room
     const messageCheck = await client.query(
       `SELECT * FROM Messages WHERE messageid = $1 AND roomid = $2`,
-      [parentMessage, roomid],
+      [parentMessage, roomid]
     );
 
     if (!messageCheck.rowCount) {
@@ -397,7 +396,7 @@ const sendReply = async (request, response) => {
     if (parent_reply_id !== null) {
       const replyCheck = await client.query(
         `SELECT * FROM Replies WHERE replyid = $1 AND messageid = $2`,
-        [parent_reply_id, parentMessage],
+        [parent_reply_id, parentMessage]
       );
 
       if (!replyCheck.rowCount) {
@@ -412,7 +411,7 @@ const sendReply = async (request, response) => {
       `INSERT INTO Replies (messageid, userid, content, posted_at, parent_reply_id)
        VALUES ($1, $2, $3, current_timestamp, $4)
        RETURNING replyid`,
-      [parentMessage, userid, message, parent_reply_id],
+      [parentMessage, userid, message, parent_reply_id]
     );
 
     await client.query("COMMIT");
@@ -456,7 +455,7 @@ const addnestedReply = async (request, response) => {
     res = await client.query(
       `Insert into Replies (messageid, roomid, userid, content, posted_at, parent_reply_id)
       Values ($1, $2, $3, $4, current_timestamp, $5)`,
-      [parentMessageId, roomid, userid, content, parentReplyId],
+      [parentMessageId, roomid, userid, content, parentReplyId]
     );
 
     await client.query("COMMIT");
@@ -485,7 +484,7 @@ const processPost = async (request, response) => {
   try {
     let res = await client.query(
       `Select * from Messages where messageid = $1`,
-      [messageid],
+      [messageid]
     );
 
     if (!res.rowCount) return response.status(400).json("Message not found");
@@ -495,12 +494,12 @@ const processPost = async (request, response) => {
     if (status == "Rejected")
       res = await client.query(
         `Delete from Messages where messageid = $1 and roomid = $2`,
-        [messageid, roomid],
+        [messageid, roomid]
       );
     else
       res = await client.query(
         `Update Messages set status = $1 where messageid = $2 and roomid = $3`,
-        [status, messageid, roomid],
+        [status, messageid, roomid]
       );
 
     await client.query("COMMIT");
@@ -527,12 +526,12 @@ const likePost = async (req, res) => {
       on conflict
       do nothing
       returning *`,
-      [messageid, userid],
+      [messageid, userid]
     );
 
     const result = await pool.query(
       `SELECT COUNT(*) FROM messagereactions WHERE messageid = $1 AND reaction_type = 'Like'`,
-      [messageid],
+      [messageid]
     );
     const likeCount = result.rows[0].count;
 
@@ -552,7 +551,7 @@ const getLikeCount = async (req, res) => {
        FROM messagereactions 
        WHERE messageid = $1 AND reaction_type = 'Like'
        GROUP BY messageid`,
-      [messageid],
+      [messageid]
     );
 
     if (result.rows.length > 0) {
@@ -580,7 +579,7 @@ const createPost = async (req, res) => {
       `INSERT INTO messages (roomid, userid, content, posted_at, status) 
            VALUES ($1, $2, $3, NOW(), 'Pending') 
            RETURNING messageid, roomid, userid, content, posted_at, status`,
-      [roomid, req.session.user.userid, message],
+      [roomid, req.session.user.userid, message]
     );
 
     return res.status(201).json({ message: result.rows[0] });
@@ -607,7 +606,7 @@ const LeaveRoom = async (request, response) => {
 
     let res = await client.query(
       `Delete from RoomMembers where roomid = $1 and userid = $2`,
-      [roomid, userid],
+      [roomid, userid]
     );
 
     client.query(`COMMIT`);
@@ -645,7 +644,7 @@ const changeRoomDetails = async (request, response) => {
 
     res = await client.query(
       `Update Rooms set name = COALESCE($1, name), description = COALESCE($2, description) where roomid = $3`,
-      [newName, description, roomid],
+      [newName, description, roomid]
     );
 
     await client.query(`COMMIT`);
@@ -709,7 +708,7 @@ const deletePost = async (request, response) => {
     // Then delete the message
     const res = await client.query(
       `DELETE FROM messages WHERE messageid = $1 AND roomid = $2`,
-      [messageid, roomid],
+      [messageid, roomid]
     );
 
     if (!res.rowCount) {
@@ -739,7 +738,7 @@ const getPost = async (request, response) => {
        JOIN users u ON m.userid = u.userid
        JOIN rooms r ON m.roomid = r.roomid
        WHERE m.messageid = $1 AND m.roomid = $2`,
-      [messageid, roomid],
+      [messageid, roomid]
     );
 
     if (!postResult.rowCount) {
@@ -752,7 +751,7 @@ const getPost = async (request, response) => {
        JOIN users u ON r.userid = u.userid
        WHERE r.messageid = $1
        ORDER BY r.posted_at ASC`,
-      [messageid],
+      [messageid]
     );
 
     const post = {
@@ -782,7 +781,7 @@ const editPost = async (request, response) => {
     // Check if the post exists and get its details
     let res = await client.query(
       `SELECT * FROM messages WHERE messageid = $1 AND roomid = $2`,
-      [messageid, roomid],
+      [messageid, roomid]
     );
 
     if (!res.rowCount) {
@@ -802,13 +801,13 @@ const editPost = async (request, response) => {
     await client.query(
       `INSERT INTO message_edits (messageid, userid, old_content)
        VALUES ($1, $2, $3)`,
-      [messageid, userid, post.content],
+      [messageid, userid, post.content]
     );
 
     // Update the post content
     res = await client.query(
       `UPDATE messages SET content = $1 WHERE messageid = $2 AND roomid = $3`,
-      [content, messageid, roomid],
+      [content, messageid, roomid]
     );
 
     await client.query("COMMIT");
@@ -835,7 +834,7 @@ const getPostEditHistory = async (request, response) => {
        JOIN users u ON me.userid = u.userid
        WHERE me.messageid = $1
        ORDER BY me.edited_at DESC`,
-      [messageid],
+      [messageid]
     );
 
     return response.status(200).json(res.rows);
@@ -867,14 +866,14 @@ const pinPost = async (request, response) => {
     // Check if the post is already pinned
     let res = await client.query(
       `SELECT * FROM pinned_posts WHERE messageid = $1 AND roomid = $2`,
-      [messageid, roomid],
+      [messageid, roomid]
     );
 
     if (res.rowCount) {
       // Unpin the post
       await client.query(
         `DELETE FROM pinned_posts WHERE messageid = $1 AND roomid = $2`,
-        [messageid, roomid],
+        [messageid, roomid]
       );
       await client.query("COMMIT");
       return response.status(200).json("Post unpinned successfully");
@@ -884,7 +883,7 @@ const pinPost = async (request, response) => {
     await client.query(
       `INSERT INTO pinned_posts (messageid, roomid, userid)
        VALUES ($1, $2, $3)`,
-      [messageid, roomid, userid],
+      [messageid, roomid, userid]
     );
 
     await client.query("COMMIT");
@@ -912,7 +911,7 @@ const reportPost = async (request, response) => {
       `INSERT INTO post_reports (messageid, reporterid, reason)
        VALUES ($1, $2, $3)
        RETURNING reportid`,
-      [messageid, userid, reason],
+      [messageid, userid, reason]
     );
 
     return response.status(201).json({
@@ -944,7 +943,7 @@ const createPoll = async (request, response) => {
       `INSERT INTO messages (roomid, userid, content, posted_at)
        VALUES ($1, $2, $3, current_timestamp)
        RETURNING messageid`,
-      [roomid, userid, question],
+      [roomid, userid, question]
     );
 
     const messageid = postRes.rows[0].messageid;
@@ -953,7 +952,7 @@ const createPoll = async (request, response) => {
     await client.query(
       `INSERT INTO post_polls (messageid, question, options, is_multiple_choice, end_time)
        VALUES ($1, $2, $3, $4, $5)`,
-      [messageid, question, JSON.stringify(options), isMultipleChoice, endTime],
+      [messageid, question, JSON.stringify(options), isMultipleChoice, endTime]
     );
 
     await client.query("COMMIT");
@@ -988,7 +987,7 @@ const votePoll = async (request, response) => {
     // Check if the poll is still active
     const pollRes = await client.query(
       `SELECT * FROM post_polls WHERE pollid = $1 AND (end_time IS NULL OR end_time > CURRENT_TIMESTAMP)`,
-      [pollid],
+      [pollid]
     );
 
     if (!pollRes.rowCount) {
@@ -998,7 +997,7 @@ const votePoll = async (request, response) => {
     // Check if user has already voted
     const voteRes = await client.query(
       `SELECT * FROM poll_votes WHERE pollid = $1 AND userid = $2`,
-      [pollid, userid],
+      [pollid, userid]
     );
 
     if (voteRes.rowCount) {
@@ -1009,7 +1008,7 @@ const votePoll = async (request, response) => {
     await client.query(
       `INSERT INTO poll_votes (pollid, userid, selected_options)
        VALUES ($1, $2, $3)`,
-      [pollid, userid, JSON.stringify(selectedOptions)],
+      [pollid, userid, JSON.stringify(selectedOptions)]
     );
 
     await client.query("COMMIT");
@@ -1037,7 +1036,7 @@ const trackPostView = async (request, response) => {
       `INSERT INTO post_views (messageid, userid)
        VALUES ($1, $2)
        ON CONFLICT (messageid, userid) DO NOTHING`,
-      [messageid, userid],
+      [messageid, userid]
     );
 
     return response.status(200).json("View tracked successfully");
@@ -1145,7 +1144,7 @@ const getUserJoinedGroups = async (request, response) => {
        WHERE rm.userid = $1
        GROUP BY r.roomid, r.name, r.description, r.created_at, r.created_by
        ORDER BY r.name ASC`,
-      [userid],
+      [userid]
     );
 
     // Transform the response to match the expected format
@@ -1177,7 +1176,7 @@ const myRooms = async (request, response) => {
       where userid = $1
       limit 3
       `,
-      [userid],
+      [userid]
     );
 
     if (!res.rowCount)
