@@ -3,11 +3,11 @@
 .content {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
-  min-height: 100vh;
+  min-height: 85vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 80px 20px 40px;
+  padding: 60px 20px 40px;
   position: relative;
   overflow: hidden;
 
@@ -36,14 +36,14 @@
     z-index: 1;
   }
 
-  .content-container {
-    max-width: 1200px;
-    width: 100%;
-    margin: 0 auto;
-    padding: 60px 40px;
-    text-align: center;
-    position: relative;
-    z-index: 2;
+      .content-container {
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 50px 40px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
     
     /* Glassmorphic Container */
     background: rgba(255, 255, 255, 0.7);
@@ -60,10 +60,10 @@
       padding: 0;
       
       h1 {
-        font-size: 4rem;
+        font-size: 3.5rem;
         font-weight: 800;
         line-height: 1.1;
-        margin-bottom: 24px;
+        margin-bottom: 20px;
         color: #0f172a;
         letter-spacing: -0.025em;
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -75,7 +75,7 @@
         
         .highlighted {
           color: #4f46e5;
-          font-size: 4.5rem;
+          font-size: 4rem;
           font-weight: 900;
           background: linear-gradient(135deg, #4f46e5 0%, #3b82f6 100%);
           -webkit-background-clip: text;
@@ -208,27 +208,27 @@
 /* Responsive Design */
 @media (max-width: 1024px) {
   .content {
-    padding: 60px 20px 40px;
+    padding: 50px 20px 40px;
     
     .content-container {
-      padding: 40px 30px;
+      padding: 35px 30px;
       border-radius: 24px;
       
       .text h1 {
-        font-size: 3.5rem;
+        font-size: 3rem;
         
         .highlighted {
-          font-size: 4rem;
+          font-size: 3.5rem;
         }
       }
       
       .text p {
-        font-size: 1.125rem;
+        font-size: 1.1rem;
       }
       
       .button-container .get-started-btn {
-        padding: 14px 28px;
-        font-size: 1rem;
+        padding: 12px 24px;
+        font-size: 0.95rem;
       }
     }
   }

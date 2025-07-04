@@ -5,35 +5,26 @@ const playlists = [
   {
     name: "Programming Fundamentals (PF)",
     shortForm: "PF",
-    watchtime: "Apna College",
-    rating: 4.8,
-    views: "1.2M views",
     playlistLink:
       "https://youtube.com/playlist?list=PLfqMhTWNBTe0b2nM6JHVCnAkhQRGiZMSJ&feature=shared",
-    duration: "45 hours",
     VideoId: "z9bZufPHFLU",
+    videoCount: 226,
   },
   {
     name: "Applied Physics (AP)",
     shortForm: "AP",
-    watchtime: "JE CLASSES Meerut",
-    rating: 4.8,
-    views: "850K views",
     playlistLink:
       "https://youtube.com/playlist?list=PLY8pCdWSlXrT0w1Yu3jU_lTUCkfFKVOm_&feature=shared",
-    duration: "32 hours",
     VideoId: "AquETg8G0es",
+    videoCount: 86,
   },
   {
     name: "Calculus and Analytical Geometry (CAL)",
     shortForm: "CAL",
-    watchtime: "The Organic Chemistry Tutor",
-    rating: 4.8,
-    views: "2.1M views",
     playlistLink:
       "https://youtube.com/playlist?list=PL0o_zxa4K1BWYThyV4T2Allw6zY0jEumv&feature=shared",
-    duration: "68 hours",
     VideoId: "GiCojsAWRj0",
+    videoCount: 332,
   },
 ];
 
@@ -48,26 +39,23 @@ const PlaylistsSection = () => (
       </h2>
       <div className="grid-list">
         {playlists.map((playlist, index) => (
-          <div key={index} className="playlist-card stylish-card">
-            <a
-              href={playlist.playlistLink}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+          <div 
+            key={index} 
+            className="modern-playlist-card"
+            onClick={() => window.open(playlist.playlistLink, '_blank')}
+          >
+            <div className="modern-playlist-thumbnail-container">
               <img
                 src={`https://i.ytimg.com/vi/${playlist.VideoId}/hqdefault.jpg`}
                 alt={`Thumbnail for ${playlist.name}`}
-                className="playlist-thumbnail"
+                className="modern-playlist-thumbnail"
               />
-              <div className="card-content">
-                <h3>{playlist.name}</h3>
-                <p className="creator">{playlist.watchtime}</p>
-                <div className="horizontal-info">
-                  <p>⏱️ {playlist.duration}</p>
-                  <p>👥 {playlist.views}</p>
-                </div>
-              </div>
-            </a>
+              <span className="modern-playlist-badge">{playlist.shortForm}</span>
+            </div>
+            <div className="modern-playlist-content">
+              <h3 className="modern-playlist-title">{playlist.name}</h3>
+              <p className="modern-playlist-video-count">{playlist.videoCount} Videos</p>
+            </div>
           </div>
         ))}
       </div>

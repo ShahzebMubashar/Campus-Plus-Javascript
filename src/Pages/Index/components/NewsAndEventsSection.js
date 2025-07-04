@@ -123,14 +123,14 @@ const NewsAndEventsSection = () => {
             onTouchEnd={isMobile ? handleTouchEnd : undefined}
           >
             {isMobile ? (
-              <div className="news-card-slide active">
+              <div className={`news-card-slide ${newsItems[currentSlide].type.toLowerCase()}`}>
+                {/* Type Badge */}
+                <div className={`type-indicator ${newsItems[currentSlide].type.toLowerCase()}`}>
+                  {newsItems[currentSlide].type}
+                </div>
+                
                 <div className="news-title-row">
                   <h3>{newsItems[currentSlide].title}</h3>
-                </div>
-                <div className="news-category-row">
-                  <p className="news-category">
-                    {newsItems[currentSlide].type}
-                  </p>
                 </div>
                 <div className="news-card-content">
                   <p>{newsItems[currentSlide].description}</p>
@@ -138,9 +138,13 @@ const NewsAndEventsSection = () => {
               </div>
             ) : (
               newsItems.map((item, index) => (
-                <div className="testimonial" key={index}>
+                <div className={`testimonial ${item.type.toLowerCase()}`} key={index}>
+                  {/* Type Badge */}
+                  <div className={`type-indicator ${item.type.toLowerCase()}`}>
+                    {item.type}
+                  </div>
+                  
                   <h3>{item.title}</h3>
-                  <p className="news-category">{item.type}</p>
                   <p>{item.description}</p>
                 </div>
               ))
