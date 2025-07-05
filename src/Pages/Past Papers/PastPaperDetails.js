@@ -15,7 +15,7 @@ import {
 } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
 
-const API_BASE_URL = process.env.API_URL || "http://localhost:4000";
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 
 const getDifficultyColor = (difficulty) => {
   const difficultyMap = {
@@ -136,6 +136,7 @@ const PastPapersDetails = () => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log("API_BASE_URL", API_BASE_URL);
         const response = await fetch(`${API_BASE_URL}/user/profile`, {
           credentials: "include",
         });
