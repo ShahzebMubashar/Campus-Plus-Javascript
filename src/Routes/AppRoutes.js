@@ -9,6 +9,8 @@ import Error404 from "../Pages/Error404/Error404.js";
 import FacultySection from "../Pages/Faculty/Faculty.js";
 import PastPapers from "../Pages/Past Papers/PastPapers.js";
 import SignInPage from "../Pages/SignIn/SignInPage.js";
+import AuthSuccess from "../Pages/SignIn/AuthSuccess.js";
+import CompleteProfile from "../Pages/SignIn/CompleteProfile.js";
 import PlaylistsPage from "../Pages/Playlists/PlaylistsPage.js";
 import EmailGenerator from "../Pages/EmailGenerator/EmailGenerator.js";
 import ApplicationGenerator from "../Pages/ApplicationGenerator/ApplicationGenerator.js";
@@ -41,7 +43,15 @@ function AppRoutes() {
       setIsLoading(false);
     }, 500);
 
-    return () => clearTimeout(timer); // Cleanup timeout on component unmount or location change
+    // Safety cleanup - ensure loader is hidden after 2 seconds max
+    const safetyTimer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(safetyTimer);
+    };
   }, [location]);
 
   return (
@@ -59,6 +69,9 @@ function AppRoutes() {
         <Route path="/faculty" element={<FacultySection />} />
         <Route path="/past-papers" element={<PastPapers />} />
         <Route path="/sign-in" element={<SignInPage />} />
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/auth-success" element={<AuthSuccess />} />
+        <Route path="/complete-profile" element={<CompleteProfile />} />
         <Route path="/playlists" element={<PlaylistsPage />} />
         <Route path="/timetable" element={<Timetable />} />
         <Route path="/email-generator" element={<EmailGenerator />} />

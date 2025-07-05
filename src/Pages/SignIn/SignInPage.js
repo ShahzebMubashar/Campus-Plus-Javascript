@@ -1,5 +1,3 @@
-// This file will be created after deleting page.tsx. It will combine the backend logic from SignInPage.js with the design and layout from the current testtest/page.tsx.
-
 import React, { useState, useEffect, useRef } from "react";
 import "./SignInPage.css";
 import Navbar from "../Index/components/Navbar";
@@ -48,6 +46,12 @@ export default function AuthPage() {
       if (response.ok) {
         setMessage("Sign in successful!");
         localStorage.setItem("user", JSON.stringify(data.user));
+
+        // Dispatch custom event to notify navbar of authentication change
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+          detail: { isAuthenticated: true, user: data.user }
+        }));
+
         setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(data.error || "Sign in failed. Please try again.");
@@ -96,6 +100,15 @@ export default function AuthPage() {
     }
   };
 
+  // OAuth handlers
+  const handleGoogleAuth = () => {
+    window.location.href = "http://localhost:4000/auth/google";
+  };
+
+  const handleGitHubAuth = () => {
+    window.location.href = "http://localhost:4000/auth/github";
+  };
+
   const toggleMode = () => {
     setIsLogin(!isLogin);
     setFormData({
@@ -113,16 +126,7 @@ export default function AuthPage() {
       <Navbar />
       <div className="auth-container">
         {/* Animated Background */}
-        <div className="background-animation">
-          <div className="floating-orbs">
-            <div className="orb orb-1"></div>
-            <div className="orb orb-2"></div>
-            <div className="orb orb-3"></div>
-            <div className="orb orb-4"></div>
-            <div className="orb orb-5"></div>
-          </div>
-          <div className="gradient-mesh"></div>
-        </div>
+
 
         {/* Main Content */}
         <div className="auth-wrapper">
@@ -350,7 +354,7 @@ export default function AuthPage() {
                 <span className="divider-text">or</span>
               </div>
               <div className="social-buttons">
-                <button type="button" className="social-button google">
+                <button type="button" className="social-button google" onClick={handleGoogleAuth}>
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
                       fill="#4285F4"
@@ -371,7 +375,7 @@ export default function AuthPage() {
                   </svg>
                   Continue with Google
                 </button>
-                <button type="button" className="social-button github">
+                <button type="button" className="social-button github" onClick={handleGitHubAuth}>
                   <svg
                     width="20"
                     height="20"

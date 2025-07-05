@@ -143,6 +143,36 @@ function Dashboard() {
 
     const fetchUserInfo = async () => {
       try {
+        // First try to get OAuth user info
+        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (oauthRes.ok) {
+          const oauthData = await oauthRes.json();
+          if (oauthData.isAuthenticated) {
+            // OAuth user - fetch additional profile data
+            const profileRes = await fetch("http://localhost:4000/user/profile", {
+              method: "GET",
+              credentials: "include",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (profileRes.ok) {
+              const profileData = await profileRes.json();
+              setUser(profileData);
+              return;
+            }
+          }
+        }
+
+        // Fallback to regular session-based authentication
         const res = await fetch(`http://localhost:4000/User/profile`, {
           credentials: "include",
           method: "GET",

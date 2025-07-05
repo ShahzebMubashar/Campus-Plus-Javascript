@@ -58,6 +58,7 @@ function Navbar() {
 
   const checkSession = async () => {
     try {
+      // First try the regular user profile endpoint
       const response = await fetch("http://localhost:4000/user/profile", {
         credentials: "include",
       });
@@ -67,10 +68,27 @@ function Navbar() {
         const data = await response.json();
         setUserData(data);
         localStorage.setItem("user", JSON.stringify(data));
-      } else {
-        setIsLoggedIn(false);
-        localStorage.removeItem("user");
+        return;
       }
+
+      // If that fails, try the OAuth current-user endpoint
+      const oauthResponse = await fetch("http://localhost:4000/auth/current-user", {
+        credentials: "include",
+      });
+
+      if (oauthResponse.ok) {
+        const oauthData = await oauthResponse.json();
+        if (oauthData.isAuthenticated) {
+          setIsLoggedIn(true);
+          setUserData(oauthData);
+          localStorage.setItem("user", JSON.stringify(oauthData));
+          return;
+        }
+      }
+
+      // If both fail, user is not logged in
+      setIsLoggedIn(false);
+      localStorage.removeItem("user");
     } catch (error) {
       console.error("Session check failed:", error);
       setIsLoggedIn(false);
@@ -92,9 +110,26 @@ function Navbar() {
       }
     }
 
+    // Listen for authentication state changes
+    const handleAuthStateChange = (event) => {
+      if (event.detail.isAuthenticated) {
+        setIsLoggedIn(true);
+        setUserData(event.detail.user);
+      } else {
+        setIsLoggedIn(false);
+        setUserData(null);
+      }
+    };
+
+    window.addEventListener('authStateChanged', handleAuthStateChange);
+
     // Check session every 5 minutes
     const interval = setInterval(checkSession, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('authStateChanged', handleAuthStateChange);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -108,6 +143,12 @@ function Navbar() {
         localStorage.removeItem("user");
         setIsLoggedIn(false);
         setUserData(null);
+
+        // Dispatch custom event to notify other components of logout
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+          detail: { isAuthenticated: false, user: null }
+        }));
+
         navigate("/sign-in");
       } else {
         console.error("Logout failed:", response.statusText);

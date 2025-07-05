@@ -55,25 +55,61 @@ function TranscriptsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [transcriptRes, userRes] = await Promise.all([
-          fetch("http://localhost:4000/Transcripts/", {
+        // First try to get OAuth user info
+        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        let userData = null;
+        if (oauthRes.ok) {
+          const oauthData = await oauthRes.json();
+          if (oauthData.isAuthenticated) {
+            // OAuth user - fetch additional profile data
+            const profileRes = await fetch("http://localhost:4000/User/profile", {
+              credentials: "include",
+            });
+            userData = profileRes.ok ? await profileRes.json() : null;
+          }
+        }
+
+        // If not OAuth user, try regular session-based authentication
+        if (!userData) {
+          const userRes = await fetch("http://localhost:4000/User/profile", {
             credentials: "include",
-          }),
-          fetch("http://localhost:4000/User/profile", {
-            credentials: "include",
-          }),
-        ]);
+          });
+          userData = userRes.ok ? await userRes.json() : null;
+        }
+
+        // Fetch transcript data
+        const transcriptRes = await fetch("http://localhost:4000/Transcripts/", {
+          credentials: "include",
+        });
+
+        if (!transcriptRes.ok) {
+          // If transcript not found or error, set empty array
+          setSemesters([]);
+          setUser(userData);
+          return;
+        }
 
         const transcriptData = await transcriptRes.json();
-        const userData = userRes.ok ? await userRes.json() : null;
 
-        setSemesters(transcriptData);
-        setUser(userData);
-
-        // Set the first semester as selected by default if available
-        if (transcriptData.length > 0 && !selectedSemesterId) {
-          setSelectedSemesterId(transcriptData[0].id);
+        // Ensure transcriptData is an array
+        if (Array.isArray(transcriptData)) {
+          setSemesters(transcriptData);
+          // Set the first semester as selected by default if available
+          if (transcriptData.length > 0 && !selectedSemesterId) {
+            setSelectedSemesterId(transcriptData[0].id);
+          }
+        } else {
+          // If response is not an array, set empty array
+          setSemesters([]);
         }
+        setUser(userData);
       } catch (err) {
         setError(err.message);
         setShowError(true);
@@ -100,6 +136,11 @@ function TranscriptsPage() {
     grade === "I" ? "In Progress" : gradePoints[grade]?.toFixed(2) || "0.00";
 
   const calculateSGPA = (courses) => {
+    // Ensure courses is an array before using reduce
+    if (!Array.isArray(courses)) {
+      return "0.00";
+    }
+
     const { totalPoints, totalCredits } = courses.reduce(
       (acc, course) => {
         if (course.grade === "I") return acc;
@@ -115,24 +156,29 @@ function TranscriptsPage() {
   };
 
   const calculateCGPA = () => {
+    // Ensure semesters is an array before using reduce
+    if (!Array.isArray(semesters)) {
+      return "0.00";
+    }
+
     const { totalPoints, totalCredits } = semesters.reduce(
       (acc, semester) => ({
         totalPoints:
           acc.totalPoints +
-          semester.courses.reduce(
+          (Array.isArray(semester.courses) ? semester.courses.reduce(
             (sum, course) =>
               course.grade === "I"
                 ? sum
                 : sum + (gradePoints[course.grade] || 0) * course.credits,
             0,
-          ),
+          ) : 0),
         totalCredits:
           acc.totalCredits +
-          semester.courses.reduce(
+          (Array.isArray(semester.courses) ? semester.courses.reduce(
             (sum, course) =>
               course.grade === "I" ? sum : sum + course.credits,
             0,
-          ),
+          ) : 0),
       }),
       { totalPoints: 0, totalCredits: 0 },
     );
@@ -209,9 +255,9 @@ function TranscriptsPage() {
         semesters.map((semester) =>
           semester.id === semesterId
             ? {
-                ...semester,
-                courses: semester.courses.filter((c) => c.id !== courseId),
-              }
+              ...semester,
+              courses: semester.courses.filter((c) => c.id !== courseId),
+            }
             : semester,
         ),
       );
@@ -271,7 +317,7 @@ function TranscriptsPage() {
           </div>
           <hr />
           <ul className="sidebar-semesters-list">
-            {semesters.map((semester) => (
+            {Array.isArray(semesters) && semesters.map((semester) => (
               <li
                 key={semester.id}
                 className={selectedSemesterId === semester.id ? "selected" : ""}
@@ -315,7 +361,7 @@ function TranscriptsPage() {
           Add New Semester
         </button>
 
-        {semesters.length === 0 ? (
+        {!Array.isArray(semesters) || semesters.length === 0 ? (
           <p className="no-semesters">
             No semesters found. Add a semester to get started.
           </p>
@@ -390,7 +436,7 @@ function TranscriptsPage() {
                 </div>
               )}
 
-              {semester.courses.length > 0 ? (
+              {Array.isArray(semester.courses) && semester.courses.length > 0 ? (
                 <table className="courses-table">
                   <thead>
                     <tr>
