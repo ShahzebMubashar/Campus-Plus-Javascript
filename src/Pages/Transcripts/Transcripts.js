@@ -3,6 +3,7 @@ import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
 import { FaBars } from "react-icons/fa";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
+import API_BASE_URL from "../../config/api.js"; 
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -58,7 +59,7 @@ function TranscriptsPage() {
     const fetchData = async () => {
       try {
         // First try to get OAuth user info
-        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -71,7 +72,7 @@ function TranscriptsPage() {
           const oauthData = await oauthRes.json();
           if (oauthData.isAuthenticated) {
             // OAuth user - fetch additional profile data
-            const profileRes = await fetch("http://localhost:4000/User/profile", {
+            const profileRes = await fetch(`${API_BASE_URL}/User/profile`, {
               credentials: "include",
             });
             userData = profileRes.ok ? await profileRes.json() : null;
@@ -80,14 +81,14 @@ function TranscriptsPage() {
 
         // If not OAuth user, try regular session-based authentication
         if (!userData) {
-          const userRes = await fetch("http://localhost:4000/User/profile", {
+          const userRes = await fetch(`${API_BASE_URL}/User/profile`, {
             credentials: "include",
           });
           userData = userRes.ok ? await userRes.json() : null;
         }
 
         // Fetch transcript data
-        const transcriptRes = await fetch("http://localhost:4000/Transcripts/", {
+        const transcriptRes = await fetch(`${API_BASE_URL}/Transcripts/`, {
           credentials: "include",
         });
 
@@ -128,7 +129,7 @@ function TranscriptsPage() {
     const checkAuth = async () => {
       try {
         // First check OAuth authentication
-        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -145,7 +146,7 @@ function TranscriptsPage() {
         }
 
         // Check regular session authentication
-        const sessionRes = await fetch("http://localhost:4000/user/profile", {
+        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -236,7 +237,7 @@ function TranscriptsPage() {
     if (!newSemester.name || !newSemester.year) return;
     try {
       const res = await fetch(
-        "http://localhost:4000/Transcripts/add-semester",
+        `${API_BASE_URL}/Transcripts/add-semester`,
         {
           method: "POST",
           credentials: "include",
@@ -264,7 +265,7 @@ function TranscriptsPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/Transcripts/add-course", {
+      const res = await fetch(`${API_BASE_URL}/Transcripts/add-course`, {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -277,7 +278,7 @@ function TranscriptsPage() {
         }),
       });
       if (!res.ok) throw new Error((await res.json()).message);
-      const updated = await fetch("http://localhost:4000/Transcripts/", {
+      const updated = await fetch(`${API_BASE_URL}/Transcripts/`, {
         credentials: "include",
       }).then((r) => r.json());
       setSemesters(updated);
@@ -291,7 +292,7 @@ function TranscriptsPage() {
   const handleRemoveCourse = async (semesterId, courseId) => {
     try {
       await fetch(
-        `http://localhost:4000/Transcripts/remove-course/${courseId}`,
+        `${API_BASE_URL}/Transcripts/remove-course/${courseId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -316,7 +317,7 @@ function TranscriptsPage() {
   const handleRemoveSemester = async (semesterId) => {
     try {
       await fetch(
-        `http://localhost:4000/Transcripts/remove-semester/${semesterId}`,
+        `${API_BASE_URL}/Transcripts/remove-semester/${semesterId}`,
         {
           method: "DELETE",
           credentials: "include",
