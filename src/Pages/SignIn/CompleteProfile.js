@@ -105,16 +105,7 @@ const CompleteProfile = () => {
             <Navbar />
             <div className="complete-profile-container">
                 {/* Animated Background */}
-                <div className="background-animation">
-                    <div className="floating-orbs">
-                        <div className="orb orb-1"></div>
-                        <div className="orb orb-2"></div>
-                        <div className="orb orb-3"></div>
-                        <div className="orb orb-4"></div>
-                        <div className="orb orb-5"></div>
-                    </div>
-                    <div className="gradient-mesh"></div>
-                </div>
+
 
                 {/* Main Content */}
                 <div className="complete-profile-wrapper">
