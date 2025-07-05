@@ -2,6 +2,10 @@ name: campus-plus-backend
 services:
   - name: backend
     type: web
+    source:
+      type: git
+      url: .
+      workdir: backend
     build:
       type: buildpack
       buildpack: nodejs
