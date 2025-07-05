@@ -105,16 +105,7 @@ const CompleteProfile = () => {
             <Navbar />
             <div className="complete-profile-container">
                 {/* Animated Background */}
-                <div className="background-animation">
-                    <div className="floating-orbs">
-                        <div className="orb orb-1"></div>
-                        <div className="orb orb-2"></div>
-                        <div className="orb orb-3"></div>
-                        <div className="orb orb-4"></div>
-                        <div className="orb orb-5"></div>
-                    </div>
-                    <div className="gradient-mesh"></div>
-                </div>
+
 
                 {/* Main Content */}
                 <div className="complete-profile-wrapper">
@@ -133,7 +124,7 @@ const CompleteProfile = () => {
                             </div>
                             <h1>Complete Your Profile</h1>
                             <p className="welcome-text">
-                                Welcome, {userInfo.fullName}! Please provide the following information to complete your account setup.
+                                Welcome, {userInfo.email || 'User'}! Please provide the following information to complete your account setup.
                             </p>
                         </div>
 
@@ -145,10 +136,7 @@ const CompleteProfile = () => {
                                         <label>Email:</label>
                                         <span>{userInfo.email}</span>
                                     </div>
-                                    <div className="info-item">
-                                        <label>Full Name:</label>
-                                        <span>{userInfo.fullName}</span>
-                                    </div>
+
                                 </div>
 
                                 <div className="input-wrapper">
