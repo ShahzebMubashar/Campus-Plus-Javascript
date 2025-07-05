@@ -16,7 +16,27 @@ export default function AuthPage() {
     lastName: "",
   });
   const [message, setMessage] = useState("");
+  const [rollNumberError, setRollNumberError] = useState("");
   const navigate = useNavigate();
+
+  // Roll number validation function
+  const validateRollNumber = (rollNumber) => {
+    // Remove any dashes first
+    const cleanRollNumber = rollNumber.replace(/-/g, '');
+
+    // Check if it starts with 2 digits
+    if (!/^\d{2}/.test(cleanRollNumber)) {
+      return "Roll number must start with 2 digits (e.g., 22, 23, 24)";
+    }
+
+    // Check if it has the correct format: 2 digits + L/I/P/M/F + 4 digits
+    const rollNumberPattern = /^\d{2}[LIPMFliplmf]\d{4}$/;
+    if (!rollNumberPattern.test(cleanRollNumber)) {
+      return "Roll Number Format: 22L1234";
+    }
+
+    return ""; // Valid
+  };
 
   // For animated character (if you want to add it later)
   // const [activeField, setActiveField] = useState(null);
@@ -25,6 +45,12 @@ export default function AuthPage() {
   // Handle input changes
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+
+    // Validate roll number if it's the roll number field
+    if (field === "password" && !isLogin) {
+      const error = validateRollNumber(value);
+      setRollNumberError(error);
+    }
   };
 
   // Backend: Sign In
@@ -64,6 +90,14 @@ export default function AuthPage() {
   // Backend: Sign Up
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
+
+    // Validate roll number before submitting
+    const rollNumberError = validateRollNumber(formData.password);
+    if (rollNumberError) {
+      setMessage(rollNumberError);
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:4000/auth/register", {
         method: "POST",
@@ -76,7 +110,7 @@ export default function AuthPage() {
           fullName: formData.firstName,
           email: formData.email,
           password: formData.confirmPassword,
-          rollnumber: formData.password,
+          rollnumber: formData.password.replace(/-/g, ''), // Remove dashes before sending
         }),
       });
       const data = await response.json();
@@ -119,6 +153,7 @@ export default function AuthPage() {
       lastName: "",
     });
     setMessage("");
+    setRollNumberError("");
   };
 
   return (
@@ -269,8 +304,8 @@ export default function AuthPage() {
                         handleInputChange("password", e.target.value)
                       }
                       required
-                      className="modern-input"
-                      placeholder=" "
+                      className={`modern-input ${rollNumberError && !isLogin ? 'error' : ''}`}
+                      placeholder={!isLogin ? "22L1234" : " "}
                     />
                     <label
                       htmlFor={isLogin ? "password" : "rollNumber"}
@@ -279,6 +314,11 @@ export default function AuthPage() {
                       {isLogin ? "Password" : "Roll Number"}
                     </label>
                     <div className="input-border"></div>
+                    {rollNumberError && !isLogin && (
+                      <div className="error-message" style={{ color: '#e11d48', fontSize: '0.875rem', marginTop: '4px' }}>
+                        {rollNumberError}
+                      </div>
+                    )}
                   </div>
 
                   {!isLogin && (

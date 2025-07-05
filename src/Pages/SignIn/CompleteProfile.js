@@ -11,9 +11,29 @@ const CompleteProfile = () => {
         rollnumber: ''
     });
     const [message, setMessage] = useState('');
+    const [rollNumberError, setRollNumberError] = useState('');
     const [loading, setLoading] = useState(false);
     const [userInfo, setUserInfo] = useState(null);
     const navigate = useNavigate();
+
+    // Roll number validation function
+    const validateRollNumber = (rollNumber) => {
+        // Remove any dashes first
+        const cleanRollNumber = rollNumber.replace(/-/g, '');
+
+        // Check if it starts with 2 digits
+        if (!/^\d{2}/.test(cleanRollNumber)) {
+            return "Roll number must start with 2 digits (e.g., 22, 23, 24)";
+        }
+
+        // Check if it has the correct format: 2 digits + L/I/P/M/F + 4 digits
+        const rollNumberPattern = /^\d{2}[LIPMFliplmf]\d{4}$/;
+        if (!rollNumberPattern.test(cleanRollNumber)) {
+            return "Roll Number Format: 22L1234";
+        }
+
+        return ""; // Valid
+    };
 
     useEffect(() => {
         // Check if user is authenticated
@@ -49,10 +69,24 @@ const CompleteProfile = () => {
 
     const handleInputChange = (field, value) => {
         setFormData(prev => ({ ...prev, [field]: value }));
+
+        // Validate roll number if it's the roll number field
+        if (field === 'rollnumber') {
+            const error = validateRollNumber(value);
+            setRollNumberError(error);
+        }
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        // Validate roll number before submitting
+        const rollNumberError = validateRollNumber(formData.rollnumber);
+        if (rollNumberError) {
+            setMessage(rollNumberError);
+            return;
+        }
+
         setLoading(true);
         setMessage('');
 
@@ -63,7 +97,10 @@ const CompleteProfile = () => {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include',
-                body: JSON.stringify(formData),
+                body: JSON.stringify({
+                    ...formData,
+                    rollnumber: formData.rollnumber.replace(/-/g, '') // Remove dashes before sending
+                }),
             });
 
             const data = await response.json();
@@ -164,14 +201,19 @@ const CompleteProfile = () => {
                                         value={formData.rollnumber}
                                         onChange={(e) => handleInputChange("rollnumber", e.target.value)}
                                         required
-                                        className="modern-input"
-                                        placeholder=" "
-                                        maxLength={8}
+                                        className={`modern-input ${rollNumberError ? 'error' : ''}`}
+                                        placeholder="22L1234"
+                                        maxLength={9}
                                     />
                                     <label htmlFor="rollnumber" className="modern-label">
                                         Roll Number
                                     </label>
                                     <div className="input-border"></div>
+                                    {rollNumberError && (
+                                        <div className="error-message" style={{ color: '#e11d48', fontSize: '0.875rem', marginTop: '4px' }}>
+                                            {rollNumberError}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <button type="submit" className="submit-button" disabled={loading}>
