@@ -149,8 +149,7 @@ exports.login = async (request, response) => {
       });
     });
 
-    response.header("Access-Control-Allow-Credentials", "true");
-    response.header("Access-Control-Allow-Origin", [process.env.FRONTEND_URL || "https://capmus-plus-javascript.vercel.app", "http://localhost:3000"] );
+    // CORS is handled by the main middleware configuration
 
     return response.status(200).json({
       message: "Login successful",
