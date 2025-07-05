@@ -5,8 +5,6 @@ import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp"
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
 
 function Dashboard() {
-  console.log("Dashboard component rendering...");
-
   const [user, setUser] = useState({
     fullName: "",
     email: "",
@@ -17,41 +15,66 @@ function Dashboard() {
     enrolledCourses: [],
     notifications: [],
   });
+
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
-  console.log("Dashboard state - isLoading:", isLoading, "isAuthenticated:", isAuthenticated);
+  const fetchUserInfo = async () => {
+    try {
+      // First try to get OAuth user info
+      const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  // Move authentication check to main Dashboard component
-  useEffect(() => {
-    console.log("Main Dashboard useEffect running...");
-    console.log("Current state - isLoading:", isLoading, "isAuthenticated:", isAuthenticated);
-
-    const checkAuthAndFetchData = async () => {
-      console.log("Starting checkAuthAndFetchData function in main Dashboard...");
-      try {
-        console.log("Checking authentication in main Dashboard...");
-
-        // First test if server is responding
-        try {
-          console.log("Testing server connectivity...");
-          const testRes = await fetch("http://localhost:4000/auth/test", {
+      if (oauthRes.ok) {
+        const oauthData = await oauthRes.json();
+        if (oauthData.isAuthenticated) {
+          // OAuth user - fetch additional profile data
+          const profileRes = await fetch("http://localhost:4000/user/profile", {
             method: "GET",
             credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
           });
-          console.log("Server test response status:", testRes.status);
-          console.log("Server test response ok:", testRes.ok);
-        } catch (testError) {
-          console.error("Server not responding:", testError);
-          console.error("Test error details:", testError.message);
-          setIsLoading(false);
-          setIsAuthenticated(false);
-          return;
-        }
 
-        // Try to fetch user profile directly - this will work for both OAuth and session users
-        console.log("Fetching user profile...");
-        const profileRes = await fetch("http://localhost:4000/user/profile", {
+          if (profileRes.ok) {
+            const profileData = await profileRes.json();
+            setUser(profileData);
+            return;
+          }
+        }
+      }
+
+      // Fallback to regular session-based authentication
+      const res = await fetch("http://localhost:4000/user/profile", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to Fetch User Information");
+      }
+
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      console.log("Error fetching User Info", error);
+    }
+  };
+
+  useEffect(() => {
+    const checkAuthAndFetchData = async () => {
+      try {
+        // First check OAuth authentication
+        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
           method: "GET",
           credentials: "include",
           headers: {
@@ -59,52 +82,42 @@ function Dashboard() {
           },
         });
 
-        console.log("Profile response status:", profileRes.status);
-        console.log("Profile response ok:", profileRes.ok);
-        console.log("Profile response headers:", profileRes.headers);
+        if (oauthRes.ok) {
+          const oauthData = await oauthRes.json();
+          if (oauthData.isAuthenticated) {
+            setIsAuthenticated(true);
+            fetchUserInfo();
+            return;
+          }
+        }
 
-        if (profileRes.ok) {
-          console.log("User is authenticated - setting isAuthenticated to true");
-          const userData = await profileRes.json();
-          console.log("User data received:", userData);
-          setUser(userData);
+        // Check regular session authentication
+        const sessionRes = await fetch("http://localhost:4000/user/profile", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (sessionRes.ok) {
           setIsAuthenticated(true);
+          fetchUserInfo();
         } else {
-          console.log("User is not authenticated - setting isAuthenticated to false");
-          const errorText = await profileRes.text();
-          console.log("Profile error response:", errorText);
           setIsAuthenticated(false);
         }
       } catch (error) {
         console.error("Auth check error:", error);
-        console.error("Error name:", error.name);
-        console.error("Error message:", error.message);
-        console.error("Error stack:", error.stack);
         setIsAuthenticated(false);
       } finally {
-        console.log("Finally block - setting isLoading to false");
-        setIsLoading(false);
-        console.log("isLoading set to false");
+        setIsAuthLoading(false);
       }
     };
 
-    // Add a timeout to prevent infinite loading
-    const timeoutId = setTimeout(() => {
-      console.log("Auth check timeout reached (10 seconds) - setting loading to false");
-      setIsLoading(false);
-      setIsAuthenticated(false);
-    }, 10000); // 10 second timeout
-
-    console.log("Calling checkAuthAndFetchData...");
     checkAuthAndFetchData();
-
-    return () => {
-      console.log("useEffect cleanup - clearing timeout");
-      clearTimeout(timeoutId);
-    };
   }, []);
 
-  function AcademicDashboard({ isAuthenticated, userData }) {
+  function AcademicDashboard() {
     const [courses, setCourses] = useState([
       { name: "Course 1", credits: 3, grade: "A" },
       { name: "Course 2", credits: 4, grade: "B+" },
@@ -115,7 +128,6 @@ function Dashboard() {
       credits: 3,
       grade: "A",
     });
-    const [User, setUser] = useState(userData || {});
     const [currentCourses, setCurrentCourses] = useState([]);
     const [myRooms, setMyRooms] = useState([]);
 
@@ -127,7 +139,7 @@ function Dashboard() {
     // Function to get user's initials from name or username
     const getUserInitials = () => {
       // Try to use fullName first, then fallback to name, then username
-      const displayName = User?.fullName || User?.name || User?.username;
+      const displayName = user?.fullName || user?.name || user?.username;
 
       if (!displayName) return "U";
 
@@ -230,44 +242,6 @@ function Dashboard() {
       }
     };
 
-    const fetchUserInfo = async () => {
-      console.log("fetchUserInfo function called...");
-      try {
-        console.log("Making fetch request to /user/profile in fetchUserInfo...");
-
-        // Fetch user profile data
-        const res = await fetch("http://localhost:4000/user/profile", {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        console.log("fetchUserInfo response status:", res.status);
-        console.log("fetchUserInfo response ok:", res.ok);
-
-        if (!res.ok) {
-          console.log("fetchUserInfo failed with status:", res.status);
-          const errorText = await res.text();
-          console.log("fetchUserInfo error response:", errorText);
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        console.log("fetchUserInfo parsing JSON...");
-        const data = await res.json();
-        console.log("fetchUserInfo user data received:", data);
-        console.log("Setting user state with data...");
-        setUser(data);
-        console.log("User state set successfully");
-      } catch (error) {
-        console.error("Error in fetchUserInfo:", error);
-        console.error("Error name:", error.name);
-        console.error("Error message:", error.message);
-        console.error("Error stack:", error.stack);
-      }
-    };
-
     const [tasks, setTasks] = useState([]);
 
     // Fetch tasks from backend
@@ -317,12 +291,12 @@ function Dashboard() {
 
     useEffect(() => {
       fetchTasks();
-    }, [User?.userid]);
+    }, [user?.userid]);
 
     const fetchJoinedRooms = async () => {
       try {
         const result = await fetch(
-          `http://localhost:4000/Chatrooms/my-rooms/${User.userid}`,
+          `http://localhost:4000/Chatrooms/my-rooms/${user.userid}`,
           { credentials: "include" },
         );
         const data = await result.json();
@@ -341,23 +315,12 @@ function Dashboard() {
       }
     };
 
-    // Remove the authentication useEffect from AcademicDashboard since it's now in the main Dashboard component
-
     useEffect(() => {
-      if (User?.userid) {
+      if (user?.userid) {
         fetchCurrentCourses();
         fetchJoinedRooms();
       }
-    }, [User?.userid]);
-
-    // Update User state when userData prop changes
-    useEffect(() => {
-      console.log("userData prop changed:", userData);
-      if (userData) {
-        console.log("Setting User state with userData:", userData);
-        setUser(userData);
-      }
-    }, [userData]);
+    }, [user?.userid]);
 
     const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -451,19 +414,19 @@ function Dashboard() {
             </div>
             <div className="user-info">
               <h1 className="user-name">
-                {User?.fullName || User?.name || User.username || "Loading..."}
+                {user?.fullName || user?.name || user?.username || "Loading..."}
               </h1>
               <h5 className="user-name-username">
-                @{User?.username || "Loading..."}
+                @{user?.username || "Loading..."}
               </h5>
               <div className="user-details">
                 <div className="user-detail-item">
                   <span className="user-detail-icon">📧</span>
-                  <span>{User?.email || "Loading..."}</span>
+                  <span>{user?.email || "Loading..."}</span>
                 </div>
                 <div className="user-detail-item">
                   <span className="user-detail-icon">🎓</span>
-                  <span>Roll No: {User?.rollnumber || "Loading..."}</span>
+                  <span>Roll No: {user?.rollnumber || "Loading..."}</span>
                 </div>
               </div>
               <div className="academic-info">
@@ -789,15 +752,11 @@ function Dashboard() {
     );
   }
 
-  console.log("Dashboard render - isLoading:", isLoading, "isAuthenticated:", isAuthenticated);
-
-  if (isLoading) {
-    console.log("Rendering loading state...");
+  if (isAuthLoading) {
     return <div className="loading">Loading...</div>;
   }
 
   if (!isAuthenticated) {
-    console.log("Rendering BlurLoginPrompt - user not authenticated");
     return (
       <>
         <Navbar />
@@ -810,7 +769,7 @@ function Dashboard() {
     );
   }
 
-  console.log("Rendering AcademicDashboard - user is authenticated");
-  return <AcademicDashboard isAuthenticated={isAuthenticated} userData={user} />;
+  return <AcademicDashboard />;
 }
+
 export default Dashboard;
