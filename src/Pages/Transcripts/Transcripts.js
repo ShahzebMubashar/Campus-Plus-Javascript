@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
 import { FaBars } from "react-icons/fa";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -43,6 +44,7 @@ function TranscriptsPage() {
   const [isLargeScreen, setIsLargeScreen] = useState(
     window.matchMedia("(min-width: 901px)").matches,
   );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(min-width: 901px)");
@@ -120,6 +122,50 @@ function TranscriptsPage() {
     };
     fetchData();
   }, [selectedSemesterId]);
+
+  // Check authentication status
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        // First check OAuth authentication
+        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (oauthRes.ok) {
+          const oauthData = await oauthRes.json();
+          if (oauthData.isAuthenticated) {
+            setIsAuthenticated(true);
+            return;
+          }
+        }
+
+        // Check regular session authentication
+        const sessionRes = await fetch("http://localhost:4000/user/profile", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (sessionRes.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    checkAuth();
+  }, []);
 
   // When selectedSemesterId changes, scroll to that semester card
   useEffect(() => {
@@ -300,6 +346,19 @@ function TranscriptsPage() {
   };
 
   if (loading) return <div className="loading">Loading transcript data...</div>;
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <BlurLoginPrompt
+          message="Transcript Access Required"
+          subMessage="Please sign in to view and manage your academic transcript."
+          buttonText="Sign In"
+        />
+      </>
+    );
+  }
 
   return (
     <div className="transcripts-layout">

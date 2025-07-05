@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -14,8 +15,10 @@ function Dashboard() {
     enrolledCourses: [],
     notifications: [],
   });
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
 
-  function AcademicDashboard() {
+  function AcademicDashboard({ isAuthenticated }) {
     const [courses, setCourses] = useState([
       { name: "Course 1", credits: 3, grade: "A" },
       { name: "Course 2", credits: 4, grade: "B+" },
@@ -143,6 +146,7 @@ function Dashboard() {
 
     const fetchUserInfo = async () => {
       try {
+        console.log("fetchUserInfo called");
         // First try to get OAuth user info
         const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
           method: "GET",
@@ -154,6 +158,7 @@ function Dashboard() {
 
         if (oauthRes.ok) {
           const oauthData = await oauthRes.json();
+          console.log("OAuth data in fetchUserInfo:", oauthData);
           if (oauthData.isAuthenticated) {
             // OAuth user - fetch additional profile data
             const profileRes = await fetch("http://localhost:4000/user/profile", {
@@ -166,6 +171,7 @@ function Dashboard() {
 
             if (profileRes.ok) {
               const profileData = await profileRes.json();
+              console.log("Profile data:", profileData);
               setUser(profileData);
               return;
             }
@@ -186,6 +192,7 @@ function Dashboard() {
         }
 
         const data = await res.json();
+        console.log("Session user data:", data);
         setUser(data);
       } catch (error) {
         console.error("Error Fetching User Info:", error.message);
@@ -266,7 +273,55 @@ function Dashboard() {
     };
 
     useEffect(() => {
-      fetchUserInfo();
+      const checkAuthAndFetchData = async () => {
+        try {
+          console.log("Checking authentication...");
+          // First check OAuth authentication
+          const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (oauthRes.ok) {
+            const oauthData = await oauthRes.json();
+            console.log("OAuth response:", oauthData);
+            if (oauthData.isAuthenticated) {
+              console.log("OAuth user authenticated");
+              setIsAuthenticated(true);
+              return;
+            }
+          }
+
+          // Check regular session authentication
+          const sessionRes = await fetch("http://localhost:4000/user/profile", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("Session response status:", sessionRes.status);
+          if (sessionRes.ok) {
+            console.log("Session user authenticated");
+            setIsAuthenticated(true);
+          } else {
+            console.log("No authentication found");
+            setIsAuthenticated(false);
+          }
+        } catch (error) {
+          console.error("Auth check error:", error);
+          setIsAuthenticated(false);
+        } finally {
+          console.log("Setting loading to false");
+          setIsLoading(false);
+        }
+      };
+
+      checkAuthAndFetchData();
     }, []);
 
     useEffect(() => {
@@ -275,6 +330,15 @@ function Dashboard() {
         fetchJoinedRooms();
       }
     }, [User?.userid]);
+
+    // Call fetchUserInfo when authentication is confirmed
+    useEffect(() => {
+      console.log("isAuthenticated changed to:", isAuthenticated);
+      if (isAuthenticated) {
+        console.log("Calling fetchUserInfo...");
+        fetchUserInfo();
+      }
+    }, [isAuthenticated]);
 
     const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -706,6 +770,23 @@ function Dashboard() {
     );
   }
 
-  return <AcademicDashboard />;
+  if (isLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <BlurLoginPrompt
+          message="Dashboard Access Required"
+          subMessage="Please sign in to access your personalized dashboard."
+          buttonText="Sign In"
+        />
+      </>
+    );
+  }
+
+  return <AcademicDashboard isAuthenticated={isAuthenticated} />;
 }
 export default Dashboard;
