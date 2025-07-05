@@ -27,6 +27,7 @@ import transcript from "../../../Assets/images/transcript.png";
 //     setShowUserMenu(!showUserMenu);
 // };
 
+const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 // Helper function to get user initials from username
 const getUserInitials = (username) => {
   if (!username) return "U";
@@ -58,8 +59,7 @@ function Navbar() {
 
   const checkSession = async () => {
     try {
-      // First try the regular user profile endpoint
-      const response = await fetch("http://localhost:4000/user/profile", {
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
         credentials: "include",
       });
 
@@ -134,7 +134,7 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:4000/auth/logout", {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });
