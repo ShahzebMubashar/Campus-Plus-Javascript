@@ -18,6 +18,7 @@ import profile from "../../../Assets/images/user.png";
 import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
+import API_BASE_URL from "../../../config/api.js";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -27,7 +28,6 @@ import transcript from "../../../Assets/images/transcript.png";
 //     setShowUserMenu(!showUserMenu);
 // };
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
 // Helper function to get user initials from username
 const getUserInitials = (username) => {
   if (!username) return "U";
@@ -72,7 +72,7 @@ function Navbar() {
       }
 
       // If that fails, try the OAuth current-user endpoint
-      const oauthResponse = await fetch("http://localhost:4000/auth/current-user", {
+      const oauthResponse = await fetch(`${API_BASE_URL}/auth/current-user`, {
         credentials: "include",
       });
 

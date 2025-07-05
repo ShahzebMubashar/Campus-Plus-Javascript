@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./ProfilePage.css";
 import Navbar from "../Index/components/Navbar";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
+import API_BASE_URL from "../../config/api.js";
 
 function ProfilePage() {
   const [user, setUser] = useState({
@@ -19,7 +20,7 @@ function ProfilePage() {
 
   const fetchCurrentCourses = async () => {
     try {
-      const res = await fetch("http://localhost:4000/user/current-courses", {
+      const res = await fetch(`${API_BASE_URL}/user/current-courses`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -45,7 +46,7 @@ function ProfilePage() {
   const fetchUserInfo = async () => {
     try {
       // First try to get OAuth user info
-      const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+      const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -57,7 +58,7 @@ function ProfilePage() {
         const oauthData = await oauthRes.json();
         if (oauthData.isAuthenticated) {
           // OAuth user - fetch additional profile data
-          const profileRes = await fetch("http://localhost:4000/user/profile", {
+          const profileRes = await fetch(`${API_BASE_URL}/user/profile`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -74,7 +75,7 @@ function ProfilePage() {
       }
 
       // Fallback to regular session-based authentication
-      const res = await fetch("http://localhost:4000/user/profile", {
+      const res = await fetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -97,7 +98,7 @@ function ProfilePage() {
     const checkAuthAndFetchData = async () => {
       try {
         // First check OAuth authentication
-        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -115,7 +116,7 @@ function ProfilePage() {
         }
 
         // Check regular session authentication
-        const sessionRes = await fetch("http://localhost:4000/user/profile", {
+        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -174,7 +175,7 @@ function ProfilePage() {
   const handleEditFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/user/profile", {
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
         method: "PUT",
         credentials: "include",
         headers: {
@@ -211,7 +212,7 @@ function ProfilePage() {
   const triggerForgotPassword = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/forgot", {
+      const response = await fetch(`${API_BASE_URL}/auth/forgot`, {
         method: "POST",
         credentials: "include",
         headers: {
@@ -243,7 +244,7 @@ function ProfilePage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/reset", {
+        const response = await fetch(`${API_BASE_URL}/auth/reset`, {
         method: "POST",
         credentials: "include",
         headers: {

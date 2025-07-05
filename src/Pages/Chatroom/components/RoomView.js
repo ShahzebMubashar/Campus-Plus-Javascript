@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./RoomView.css";
 import Sidebar from "./Sidebar";
+import API_BASE_URL from "../../../config/api.js";
 
 // Modern blue theme color constants
 const colors = {
@@ -31,7 +32,7 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
       try {
         console.log(room.roomid, comment.messageid, comment.commentid);
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply/${room.roomid}/${comment.commentid}`,
+          `${API_BASE_URL}/Chatrooms/reply/${room.roomid}/${comment.commentid}`,
           {
             method: "POST",
             headers: {
@@ -271,7 +272,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch("http://localhost:4000/auth/user-info", {
+      const response = await fetch(`${API_BASE_URL}/auth/user-info`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -286,7 +287,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const fetchJoinedRooms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:4000/Chatrooms/user/groups",
+        `${API_BASE_URL}/Chatrooms/user/groups`,
         {
           credentials: "include",
         },
@@ -305,7 +306,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/join/${room.roomid}`,
+          `${API_BASE_URL}/Chatrooms/join/${room.roomid}`,
           {
             method: "POST",
             credentials: "include",
@@ -326,7 +327,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/messages/${room.roomid}`,
+        `${API_BASE_URL}/Chatrooms/messages/${room.roomid}`,
         {
           credentials: "include",
         },
@@ -380,7 +381,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (newPost.trim()) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/messages`,
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/messages`,
           {
             method: "POST",
             headers: {
@@ -439,7 +440,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (confirmDelete) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/delete/${room.roomid}`,
+          `${API_BASE_URL}/Chatrooms/delete/${room.roomid}`,
           {
             method: "DELETE",
             credentials: "include",
@@ -461,7 +462,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const handleUpdateRoom = async () => {
     try {
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/change-room-name/${room.roomid}`,
+        `${API_BASE_URL}/Chatrooms/change-room-name/${room.roomid}`,
         {
           method: "POST",
           headers: {
@@ -493,7 +494,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/like/${postId}`,
+        `${API_BASE_URL}/Chatrooms/like/${postId}`,
         {
           method: "POST",
           credentials: "include",
@@ -502,7 +503,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
       if (response.ok) {
         const likeCountResponse = await fetch(
-          `http://localhost:4000/Chatrooms/likes/${postId}`,
+          `${API_BASE_URL}/Chatrooms/likes/${postId}`,
           {
             credentials: "include",
           },
@@ -529,7 +530,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (newComment.trim()) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply1/${room.roomid}/${postId}`,
+          `${API_BASE_URL}/Chatrooms/reply1/${room.roomid}/${postId}`,
           {
             method: "POST",
             headers: {
@@ -561,7 +562,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     );
     if (confirmLeave) {
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/leave/${room.roomid}`,
+        `${API_BASE_URL}/Chatrooms/leave/${room.roomid}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -580,7 +581,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const handleProcessPost = async (messageid, status) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/process/${room.roomid}`,
+        `${API_BASE_URL}/Chatrooms/process/${room.roomid}`,
         {
           method: "POST",
           headers: {
@@ -605,7 +606,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/messages/${messageid}`,
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/messages/${messageid}`,
           {
             method: "DELETE",
             credentials: "include",
@@ -664,7 +665,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (newContent && newContent !== currentContent) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
           {
             method: "POST",
             headers: {
@@ -691,7 +692,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const handlePinPost = async (messageid) => {
     try {
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/pin`,
+        `${API_BASE_URL}/Chatrooms/${room.roomid}/posts/${messageid}/pin`,
         {
           method: "POST",
           credentials: "include",
@@ -715,7 +716,7 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (reason) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/posts/${messageid}/report`,
+          `${API_BASE_URL}/Chatrooms/posts/${messageid}/report`,
           {
             method: "POST",
             headers: {
@@ -753,7 +754,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       if (searchDate) params.append("date", searchDate);
 
       const response = await fetch(
-        `http://localhost:4000/Chatrooms/search/${
+          `${API_BASE_URL}/Chatrooms/search/${
           room.roomid
         }?${params.toString()}`,
         {

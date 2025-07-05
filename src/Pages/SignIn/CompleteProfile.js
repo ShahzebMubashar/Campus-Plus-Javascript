@@ -4,6 +4,7 @@ import Navbar from '../Index/components/Navbar';
 import Footer from '../Footer/Footer';
 import logo from '../Index/cp_logo.png';
 import './CompleteProfile.css';
+import API_BASE_URL from '../../config/api.js'; 
 
 const CompleteProfile = () => {
     const [formData, setFormData] = useState({
@@ -19,7 +20,7 @@ const CompleteProfile = () => {
         // Check if user is authenticated
         const checkAuth = async () => {
             try {
-                const response = await fetch('http://localhost:4000/auth/current-user', {
+                const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
                     credentials: 'include'
                 });
 
@@ -57,7 +58,7 @@ const CompleteProfile = () => {
         setMessage('');
 
         try {
-            const response = await fetch('http://localhost:4000/auth/complete-profile', {
+            const response = await fetch(`${API_BASE_URL}/auth/complete-profile`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

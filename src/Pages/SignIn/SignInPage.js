@@ -101,11 +101,11 @@ export default function AuthPage() {
 
   // OAuth handlers
   const handleGoogleAuth = () => {
-    window.location.href = "http://localhost:4000/auth/google";
+    window.location.href = `${API_BASE_URL}/auth/google`;
   };
 
   const handleGitHubAuth = () => {
-    window.location.href = "http://localhost:4000/auth/github";
+    window.location.href = `${API_BASE_URL}/auth/github`;
   };
 
   const toggleMode = () => {

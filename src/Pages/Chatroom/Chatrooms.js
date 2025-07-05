@@ -5,6 +5,8 @@ import RoomView from "./components/RoomView.js";
 import Navbar from "../Index/components/Navbar.js";
 import "../Chatroom/css/Chatroom.css";
 import { AiOutlineMenu } from "react-icons/ai";
+import API_BASE_URL from "../../config/api.js";
+
 
 export default function Chatrooms() {
   const [rooms, setRooms] = useState([]);
@@ -65,7 +67,7 @@ export default function Chatrooms() {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch("http://localhost:4000/user/profile", {
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -87,7 +89,7 @@ export default function Chatrooms() {
 
   const fetchAllRooms = async () => {
     try {
-      const response = await fetch("http://localhost:4000/Chatrooms", {
+      const response = await fetch(`${API_BASE_URL}/Chatrooms`, {
         credentials: "include",
       });
       if (response.ok) {
@@ -104,7 +106,7 @@ export default function Chatrooms() {
   const fetchJoinedRooms = async () => {
     try {
       const response = await fetch(
-        "http://localhost:4000/Chatrooms/user/groups",
+        `${API_BASE_URL}/Chatrooms/user/groups`,
         {
           credentials: "include",
         },
@@ -123,7 +125,7 @@ export default function Chatrooms() {
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
         const response = await fetch(
-          `http://localhost:4000/Chatrooms/join/${room.roomid}`,
+          `${API_BASE_URL}/Chatrooms/join/${room.roomid}`,
           {
             method: "POST",
             credentials: "include",
@@ -223,7 +225,7 @@ export default function Chatrooms() {
 async function handleLeaveRoom(roomId) {
   try {
     const response = await fetch(
-      `http://localhost:4000/Chatrooms/leave/${roomId}`,
+        `${API_BASE_URL}/Chatrooms/leave/${roomId}`,
       {
         method: "DELETE",
         credentials: "include",
