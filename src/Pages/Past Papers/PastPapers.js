@@ -6,7 +6,7 @@ import NoteBanner from "../NoteBanner";
 import { useNavigate } from "react-router-dom";
 import { FaBook, FaStar, FaSearch } from "react-icons/fa";
 
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
+const API_BASE_URL = process.env.API_URL || "http://localhost:4000";
 
 const Star = ({ fill = 1, size = 28, ...props }) => {
   // fill: 1 = full, 0.5 = half, 0.25 = quarter, 0 = empty
