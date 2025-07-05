@@ -103,11 +103,28 @@ passport.use(new GitHubStrategy({
     clientSecret: process.env.GITHUB_CLIENT_SECRET,
     callbackURL: "/auth/github/callback"
 }, async (accessToken, refreshToken, profile, done) => {
+    console.log('GitHub OAuth profile:', {
+        id: profile.id,
+        username: profile.username,
+        displayName: profile.displayName,
+        emails: profile.emails
+    });
     try {
-        // Check if user already exists
+        // GitHub might not provide email in profile, so we need to handle this
+        let userEmail = null;
+
+        // Try to get email from profile
+        if (profile.emails && profile.emails.length > 0 && profile.emails[0].value) {
+            userEmail = profile.emails[0].value;
+        } else {
+            // If no email in profile, create a temporary email using GitHub username
+            userEmail = `${profile.username}@github.temp`;
+        }
+
+        // Check if user already exists by email
         const existingUser = await pool.query(
             'SELECT * FROM Users WHERE email = $1',
-            [profile.emails[0].value]
+            [userEmail]
         );
 
         if (existingUser.rows.length > 0) {
@@ -140,13 +157,13 @@ passport.use(new GitHubStrategy({
                 `INSERT INTO Users (username, email, password, rollnumber) 
          VALUES ($1, $2, $3, $4) 
          RETURNING userid, username, email`,
-                [tempUsername, profile.emails[0].value, hashedPassword, tempRollnumber]
+                [tempUsername, userEmail, hashedPassword, tempRollnumber]
             );
 
             // Insert user info
             await client.query(
                 `INSERT INTO UserInfo (userid, name) VALUES ($1, $2)`,
-                [newUser.rows[0].userid, profile.displayName]
+                [newUser.rows[0].userid, profile.displayName || profile.username]
             );
 
             await client.query('COMMIT');
@@ -155,7 +172,7 @@ passport.use(new GitHubStrategy({
                 userid: newUser.rows[0].userid,
                 email: newUser.rows[0].email,
                 username: tempUsername,
-                fullName: profile.displayName,
+                fullName: profile.displayName || profile.username,
                 isProfileComplete: false
             });
         } catch (error) {
@@ -165,6 +182,7 @@ passport.use(new GitHubStrategy({
             client.release();
         }
     } catch (error) {
+        console.error('GitHub OAuth error:', error);
         return done(error, null);
     }
 }));

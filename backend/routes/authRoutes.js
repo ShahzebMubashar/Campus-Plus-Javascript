@@ -119,13 +119,18 @@ router.get("/google", passport.authenticate("google", { scope: ["profile", "emai
 router.get("/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
-    // Check if profile is complete
-    if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
-      // Profile is complete, redirect to success page
-      res.redirect("http://localhost:3000/auth-success");
-    } else {
-      // Profile incomplete, redirect to complete profile page
-      res.redirect("http://localhost:3000/complete-profile");
+    try {
+      // Check if profile is complete
+      if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
+        // Profile is complete, redirect to success page
+        res.redirect("http://localhost:3000/auth-success");
+      } else {
+        // Profile incomplete, redirect to complete profile page
+        res.redirect("http://localhost:3000/complete-profile");
+      }
+    } catch (error) {
+      console.error('Google callback error:', error);
+      res.redirect("http://localhost:3000/login?error=oauth_failed");
     }
   }
 );
@@ -135,13 +140,18 @@ router.get("/github", passport.authenticate("github", { scope: ["user:email"] })
 router.get("/github/callback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   (req, res) => {
-    // Check if profile is complete
-    if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
-      // Profile is complete, redirect to success page
-      res.redirect("http://localhost:3000/auth-success");
-    } else {
-      // Profile incomplete, redirect to complete profile page
-      res.redirect("http://localhost:3000/complete-profile");
+    try {
+      // Check if profile is complete
+      if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
+        // Profile is complete, redirect to success page
+        res.redirect("http://localhost:3000/auth-success");
+      } else {
+        // Profile incomplete, redirect to complete profile page
+        res.redirect("http://localhost:3000/complete-profile");
+      }
+    } catch (error) {
+      console.error('GitHub callback error:', error);
+      res.redirect("http://localhost:3000/login?error=oauth_failed");
     }
   }
 );
