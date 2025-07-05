@@ -18,6 +18,7 @@ import profile from "../../../Assets/images/user.png";
 import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
+import API_BASE_URL from "../../../config/api.js";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -58,8 +59,7 @@ function Navbar() {
 
   const checkSession = async () => {
     try {
-      // First try the regular user profile endpoint
-      const response = await fetch("http://localhost:4000/user/profile", {
+      const response = await fetch(`${API_BASE_URL}/user/profile`, {
         credentials: "include",
       });
 
@@ -72,7 +72,7 @@ function Navbar() {
       }
 
       // If that fails, try the OAuth current-user endpoint
-      const oauthResponse = await fetch("http://localhost:4000/auth/current-user", {
+      const oauthResponse = await fetch(`${API_BASE_URL}/auth/current-user`, {
         credentials: "include",
       });
 
@@ -134,7 +134,7 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:4000/auth/logout", {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
         method: "POST",
         credentials: "include",
       });

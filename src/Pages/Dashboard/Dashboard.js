@@ -3,6 +3,7 @@ import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
+import API_BASE_URL from "../../config/api.js";
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -22,7 +23,7 @@ function Dashboard() {
   const fetchUserInfo = async () => {
     try {
       // First try to get OAuth user info
-      const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+      const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -34,7 +35,7 @@ function Dashboard() {
         const oauthData = await oauthRes.json();
         if (oauthData.isAuthenticated) {
           // OAuth user - fetch additional profile data
-          const profileRes = await fetch("http://localhost:4000/user/profile", {
+          const profileRes = await fetch(`${API_BASE_URL}/user/profile`, {
             method: "GET",
             credentials: "include",
             headers: {
@@ -51,7 +52,7 @@ function Dashboard() {
       }
 
       // Fallback to regular session-based authentication
-      const res = await fetch("http://localhost:4000/user/profile", {
+      const res = await fetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
         credentials: "include",
         headers: {
@@ -74,7 +75,7 @@ function Dashboard() {
     const checkAuthAndFetchData = async () => {
       try {
         // First check OAuth authentication
-        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -92,7 +93,7 @@ function Dashboard() {
         }
 
         // Check regular session authentication
-        const sessionRes = await fetch("http://localhost:4000/user/profile", {
+        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -223,7 +224,7 @@ function Dashboard() {
 
     const fetchCurrentCourses = async () => {
       try {
-        const res = await fetch("http://localhost:4000/user/current-courses", {
+        const res = await fetch(`${API_BASE_URL}/user/current-courses`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -247,7 +248,7 @@ function Dashboard() {
     // Fetch tasks from backend
     const fetchTasks = async () => {
       try {
-        const res = await fetch("http://localhost:4000/user/my-reminders", {
+        const res = await fetch(`${API_BASE_URL}/user/my-reminders`, {
           method: "GET",
           credentials: "include",
           headers: {
@@ -296,7 +297,7 @@ function Dashboard() {
     const fetchJoinedRooms = async () => {
       try {
         const result = await fetch(
-          `http://localhost:4000/Chatrooms/my-rooms/${user.userid}`,
+          `${API_BASE_URL}/Chatrooms/my-rooms/${user.userid}`,
           { credentials: "include" },
         );
         const data = await result.json();
@@ -364,7 +365,7 @@ function Dashboard() {
         );
 
         const response = await fetch(
-          `http://localhost:4000/user/update-priority/${id}`,
+          `${API_BASE_URL}/user/update-priority/${id}`,
           {
             method: "PUT",
             credentials: "include",

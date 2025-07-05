@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthSuccess.css';
+import API_BASE_URL from '../../config/api.js';  
 
 const AuthSuccess = () => {
     const [loading, setLoading] = useState(true);
@@ -10,7 +11,7 @@ const AuthSuccess = () => {
     useEffect(() => {
         const checkAuthStatus = async () => {
             try {
-                const response = await fetch('http://localhost:4000/auth/current-user', {
+                    const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
                     credentials: 'include'
                 });
 
