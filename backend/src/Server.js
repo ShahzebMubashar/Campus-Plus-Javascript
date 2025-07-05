@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production"
-      ? [process.env.FRONTEND_URL || "https://capmus-plus-javascript.vercel.app", "http://localhost:3000"]
+      ? [process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app", "http://localhost:3000"]
       : "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -75,15 +75,7 @@ app.post('/api/email/send-email', async (req, res) => {
 });
 
 
-// Set CORS headers for all responses
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  const origin = process.env.NODE_ENV === "production" 
-    ? (process.env.FRONTEND_URL || "https://capmus-plus-javascript.vercel.app").replace(/\/$/, '')
-    : "http://localhost:3000";
-  res.header("Access-Control-Allow-Origin", origin);
-  next();
-});
+// CORS is already configured above with the cors middleware
 
 // Session configuration
 app.use(
