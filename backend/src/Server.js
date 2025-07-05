@@ -4,6 +4,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const pool = require("../config/database");
 const nodemailer = require("nodemailer");
+const passport = require("../config/passport");
 
 
 const {
@@ -90,6 +91,10 @@ app.use(
     proxy: true,
   })
 );
+
+// Initialize Passport and restore authentication state, if any, from the session
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Routes
 app.use("/auth", authRoutes);
