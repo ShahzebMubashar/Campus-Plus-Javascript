@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production"
-      ? [process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app", "http://localhost:3000"]
+      ? process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app"
       : "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
