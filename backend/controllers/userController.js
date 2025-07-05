@@ -2,12 +2,8 @@ const { request } = require("express");
 const pool = require("../config/database");
 
 const viewUserInfo = async (request, response) => {
-  const {
-    session: {
-      user: { userid },
-    },
-  } = request;
-  console.log(`[ENDPOINT HIT] GET Userinfo\n\n`);
+  const userid = request.userid; // From unifiedAuthMiddleware
+  console.log(`[ENDPOINT HIT] GET Userinfo for userid: ${userid}\n\n`);
 
   try {
     const result = await pool.query(
@@ -29,10 +25,9 @@ const viewUserInfo = async (request, response) => {
 const editUserInfo = async (request, response) => {
   const {
     body: { batch, degree, name },
-    session: {
-      user: { userid },
-    },
   } = request;
+
+  const userid = request.userid; // From unifiedAuthMiddleware
 
   if (!batch || !degree || !name)
     return response.status(400).json(`Please Enter all the fields`);
@@ -74,11 +69,7 @@ const editUserInfo = async (request, response) => {
 };
 
 const currentCourses = async (request, response) => {
-  const {
-    session: {
-      user: { userid },
-    },
-  } = request;
+  const userid = request.userid; // From unifiedAuthMiddleware
 
   try {
     let res = await pool.query(
@@ -104,10 +95,9 @@ const addReminder = async (request, response) => {
   try {
     const {
       body: { duedate, content, priority },
-      session: {
-        user: { userid },
-      },
     } = request;
+
+    const userid = request.userid; // From unifiedAuthMiddleware
 
     await client.query("BEGIN");
 
@@ -134,11 +124,7 @@ const addReminder = async (request, response) => {
 
 // Add this new endpoint to fetch reminders
 const getReminders = async (request, response) => {
-  const {
-    session: {
-      user: { userid },
-    },
-  } = request;
+  const userid = request.userid; // From unifiedAuthMiddleware
 
   const client = await pool.connect();
 
@@ -164,10 +150,9 @@ const getReminders = async (request, response) => {
 const deleteReminder = async (request, response) => {
   const {
     params: { reminderid },
-    session: {
-      user: { userid },
-    },
   } = request;
+
+  const userid = request.userid; // From unifiedAuthMiddleware
 
   const client = await pool.connect();
 
@@ -194,11 +179,10 @@ const deleteReminder = async (request, response) => {
 const updatePriority = async (request, response) => {
   const {
     params: { taskid },
-    session: {
-      user: { userid },
-    },
     body: { priority, status },
   } = request;
+
+  const userid = request.userid; // From unifiedAuthMiddleware
 
   const client = await pool.connect();
 
