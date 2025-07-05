@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -15,6 +16,107 @@ function Dashboard() {
     notifications: [],
   });
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  const fetchUserInfo = async () => {
+    try {
+      // First try to get OAuth user info
+      const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (oauthRes.ok) {
+        const oauthData = await oauthRes.json();
+        if (oauthData.isAuthenticated) {
+          // OAuth user - fetch additional profile data
+          const profileRes = await fetch("http://localhost:4000/user/profile", {
+            method: "GET",
+            credentials: "include",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (profileRes.ok) {
+            const profileData = await profileRes.json();
+            setUser(profileData);
+            return;
+          }
+        }
+      }
+
+      // Fallback to regular session-based authentication
+      const res = await fetch("http://localhost:4000/user/profile", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to Fetch User Information");
+      }
+
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      console.log("Error fetching User Info", error);
+    }
+  };
+
+  useEffect(() => {
+    const checkAuthAndFetchData = async () => {
+      try {
+        // First check OAuth authentication
+        const oauthRes = await fetch("http://localhost:4000/auth/current-user", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (oauthRes.ok) {
+          const oauthData = await oauthRes.json();
+          if (oauthData.isAuthenticated) {
+            setIsAuthenticated(true);
+            fetchUserInfo();
+            return;
+          }
+        }
+
+        // Check regular session authentication
+        const sessionRes = await fetch("http://localhost:4000/user/profile", {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (sessionRes.ok) {
+          setIsAuthenticated(true);
+          fetchUserInfo();
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    checkAuthAndFetchData();
+  }, []);
+
   function AcademicDashboard() {
     const [courses, setCourses] = useState([
       { name: "Course 1", credits: 3, grade: "A" },
@@ -26,7 +128,6 @@ function Dashboard() {
       credits: 3,
       grade: "A",
     });
-    const [User, setUser] = useState({});
     const [currentCourses, setCurrentCourses] = useState([]);
     const [myRooms, setMyRooms] = useState([]);
 
@@ -38,7 +139,7 @@ function Dashboard() {
     // Function to get user's initials from name or username
     const getUserInitials = () => {
       // Try to use fullName first, then fallback to name, then username
-      const displayName = User?.fullName || User?.name || User?.username;
+      const displayName = user?.fullName || user?.name || user?.username;
 
       if (!displayName) return "U";
 
@@ -141,27 +242,6 @@ function Dashboard() {
       }
     };
 
-    const fetchUserInfo = async () => {
-      try {
-        const res = await fetch(`http://localhost:4000/User/profile`, {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-        setUser(data);
-      } catch (error) {
-        console.error("Error Fetching User Info:", error.message);
-      }
-    };
-
     const [tasks, setTasks] = useState([]);
 
     // Fetch tasks from backend
@@ -211,12 +291,12 @@ function Dashboard() {
 
     useEffect(() => {
       fetchTasks();
-    }, [User?.userid]);
+    }, [user?.userid]);
 
     const fetchJoinedRooms = async () => {
       try {
         const result = await fetch(
-          `http://localhost:4000/Chatrooms/my-rooms/${User.userid}`,
+          `http://localhost:4000/Chatrooms/my-rooms/${user.userid}`,
           { credentials: "include" },
         );
         const data = await result.json();
@@ -236,15 +316,11 @@ function Dashboard() {
     };
 
     useEffect(() => {
-      fetchUserInfo();
-    }, []);
-
-    useEffect(() => {
-      if (User?.userid) {
+      if (user?.userid) {
         fetchCurrentCourses();
         fetchJoinedRooms();
       }
-    }, [User?.userid]);
+    }, [user?.userid]);
 
     const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -338,19 +414,19 @@ function Dashboard() {
             </div>
             <div className="user-info">
               <h1 className="user-name">
-                {User?.fullName || User?.name || User.username || "Loading..."}
+                {user?.fullName || user?.name || user?.username || "Loading..."}
               </h1>
               <h5 className="user-name-username">
-                @{User?.username || "Loading..."}
+                @{user?.username || "Loading..."}
               </h5>
               <div className="user-details">
                 <div className="user-detail-item">
                   <span className="user-detail-icon">📧</span>
-                  <span>{User?.email || "Loading..."}</span>
+                  <span>{user?.email || "Loading..."}</span>
                 </div>
                 <div className="user-detail-item">
                   <span className="user-detail-icon">🎓</span>
-                  <span>Roll No: {User?.rollnumber || "Loading..."}</span>
+                  <span>Roll No: {user?.rollnumber || "Loading..."}</span>
                 </div>
               </div>
               <div className="academic-info">
@@ -676,6 +752,24 @@ function Dashboard() {
     );
   }
 
+  if (isAuthLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <BlurLoginPrompt
+          message="Dashboard Access Required"
+          subMessage="Please sign in to access your personalized dashboard."
+          buttonText="Sign In"
+        />
+      </>
+    );
+  }
+
   return <AcademicDashboard />;
 }
+
 export default Dashboard;
