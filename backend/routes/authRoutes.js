@@ -12,6 +12,8 @@ const { checkAuthorisation } = require("../middlewares/authMiddleware");
 const passport = require("passport");
 const pool = require("../config/database");
 const router = express.Router();
+const frontendUrl = process.env.NODE_ENV === "production" ? process.env.FRONTEND_URL : "http://localhost:3000";
+      
 
 router.get("/test", (req, res) => {
   res.send("Auth routes are working!");
@@ -123,14 +125,14 @@ router.get("/google/callback",
       // Check if profile is complete
       if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
         // Profile is complete, redirect to success page
-        res.redirect("http://localhost:3000/auth-success");
+        res.redirect(`${frontendUrl}/auth-success`);
       } else {
         // Profile incomplete, redirect to complete profile page
-        res.redirect("http://localhost:3000/complete-profile");
+        res.redirect(`${frontendUrl}/complete-profile`);
       }
     } catch (error) {
       console.error('Google callback error:', error);
-      res.redirect("http://localhost:3000/login?error=oauth_failed");
+      res.redirect(`${frontendUrl}/login?error=oauth_failed`);
     }
   }
 );
@@ -144,14 +146,14 @@ router.get("/github/callback",
       // Check if profile is complete
       if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
         // Profile is complete, redirect to success page
-        res.redirect("http://localhost:3000/auth-success");
+        res.redirect(`${frontendUrl}/auth-success`);
       } else {
         // Profile incomplete, redirect to complete profile page
-        res.redirect("http://localhost:3000/complete-profile");
+        res.redirect(`${frontendUrl}/complete-profile`);
       }
     } catch (error) {
       console.error('GitHub callback error:', error);
-      res.redirect("http://localhost:3000/login?error=oauth_failed");
+      res.redirect(`${frontendUrl}/login?error=oauth_failed`);
     }
   }
 );
