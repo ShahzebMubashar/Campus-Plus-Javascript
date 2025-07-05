@@ -124,7 +124,7 @@ const CompleteProfile = () => {
                             </div>
                             <h1>Complete Your Profile</h1>
                             <p className="welcome-text">
-                                Welcome, {userInfo.fullName}! Please provide the following information to complete your account setup.
+                                Welcome, {userInfo.email || 'User'}! Please provide the following information to complete your account setup.
                             </p>
                         </div>
 
@@ -136,10 +136,7 @@ const CompleteProfile = () => {
                                         <label>Email:</label>
                                         <span>{userInfo.email}</span>
                                     </div>
-                                    <div className="info-item">
-                                        <label>Full Name:</label>
-                                        <span>{userInfo.fullName}</span>
-                                    </div>
+
                                 </div>
 
                                 <div className="input-wrapper">
