@@ -1,0 +1,26 @@
+name: campus-plus-backend
+services:
+  - name: backend
+    type: web
+    build:
+      type: buildpack
+      buildpack: nodejs
+    run_command: npm start
+    ports:
+      - port: 8080
+        protocol: http
+    env:
+      - name: NODE_ENV
+        value: production
+      - name: PORT
+        value: "8080"
+    health_check:
+      path: /health
+      port: 8080
+      initial_delay_seconds: 30
+      timeout_seconds: 5
+    scaling:
+      min: 1
+      max: 1
+    regions:
+      - fra # Frankfurt (you can change this to a region closer to you) 
