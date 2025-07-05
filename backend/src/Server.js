@@ -19,7 +19,7 @@ const userRoutes = require("../routes/userRoutes");
 const chatroomController = require("../controllers/chatroomController");
 
 const app = express();
-const PORT = process.env.PORT || 8080;
+const PORT = process.env.PORT || 4000;
 
 // Basic middleware
 app.use(express.json());
@@ -29,7 +29,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production"
-      ? [process.env.FRONTEND_URL || "http://localhost:3000", "https://campus-plus-frontend.vercel.app"]
+      ? [process.env.FRONTEND_URL || "https://capmus-plus-javascript.vercel.app", "http://localhost:3000"]
       : "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -78,7 +78,7 @@ app.post('/api/email/send-email', async (req, res) => {
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
   const origin = process.env.NODE_ENV === "production" 
-    ? process.env.FRONTEND_URL || "https://campus-plus-frontend.vercel.app"
+    ? (process.env.FRONTEND_URL || "https://capmus-plus-javascript.vercel.app").replace(/\/$/, '')
     : "http://localhost:3000";
   res.header("Access-Control-Allow-Origin", origin);
   next();

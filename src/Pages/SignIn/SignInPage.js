@@ -6,6 +6,7 @@ import Navbar from "../Index/components/Navbar";
 import Footer from "../../Pages/Footer/Footer";
 import logo from "../Index/cp_logo.png";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../../config/api";
 
 export default function AuthPage() {
   // Backend logic/state from SignInPage.js
@@ -33,16 +34,16 @@ export default function AuthPage() {
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
         }),
+        credentials: "include",
       });
       const data = await response.json();
       if (response.ok) {
@@ -61,19 +62,17 @@ export default function AuthPage() {
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/auth/register", {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({
-          username: formData.lastName,
-          fullName: formData.firstName,
           email: formData.email,
-          password: formData.confirmPassword,
-          rollnumber: formData.password,
+          password: formData.password,
+          name: formData.name,
         }),
+        credentials: "include",
       });
       const data = await response.json();
       if (response.ok) {
