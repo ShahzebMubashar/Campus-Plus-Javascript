@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import "./ContactPage.css";
 import Navbar from "../Index/components/Navbar";
 import Footer from "../Footer/Footer";
+import API_BASE_URL from "../../config/api";
 
 const validationSchema = Yup.object({
   name: Yup.string().required("Full Name is required"),
@@ -46,7 +47,7 @@ const ContactPage = () => {
               setSubmitMessage("");
               try {
                 const response = await fetch(
-                  "http://localhost:4000/api/email/send-email",
+                  `${API_BASE_URL}/api/email/send-email`,
                   {
                     method: "POST",
                     headers: {

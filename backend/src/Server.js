@@ -20,7 +20,7 @@ const userRoutes = require("../routes/userRoutes");
 const chatroomController = require("../controllers/chatroomController");
 
 const app = express();
-const PORT = process.env.PORT_BACKEND || 4000;
+const PORT = process.env.PORT || 4000;
 
 // Basic middleware
 app.use(express.json());
@@ -30,7 +30,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production"
-      ? [process.env.FRONTEND_URL || "https://your-frontend-app.railway.app", "http://localhost:3000"]
+      ? [process.env.FRONTEND_URL || "https://capmus-plus-javascript.vercel.app", "http://localhost:3000"]
       : "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE"],
@@ -39,9 +39,18 @@ app.use(
   })
 );
 
+// Health check endpoint for Koyeb
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    service: 'campus-plus-backend' 
+  });
+});
+
 app.post('/api/email/send-email', async (req, res) => {
   const { name, email, phone, message } = req.body;
-  const transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransporter({
     service: 'Gmail',
     auth: {
       user: "productionsbymultidexters@gmail.com",
@@ -69,7 +78,10 @@ app.post('/api/email/send-email', async (req, res) => {
 // Set CORS headers for all responses
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
+  const origin = process.env.NODE_ENV === "production" 
+    ? (process.env.FRONTEND_URL || "https://capmus-plus-javascript.vercel.app").replace(/\/$/, '')
+    : "http://localhost:3000";
+  res.header("Access-Control-Allow-Origin", origin);
   next();
 });
 
@@ -77,7 +89,7 @@ app.use((req, res, next) => {
 app.use(
   session({
     name: "connect.sid",
-    secret: "CampusPlus",
+    secret: process.env.SESSION_SECRET || "CampusPlus",
     resave: true,
     saveUninitialized: false,
     rolling: true,
@@ -85,8 +97,8 @@ app.use(
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       httpOnly: true,
-      secure: false,
-      sameSite: "lax",
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     },
     proxy: true,
   })
@@ -117,6 +129,6 @@ app.use((err, req, res, next) => {
   res.status(500).send("Server Error");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });
