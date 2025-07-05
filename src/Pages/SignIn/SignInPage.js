@@ -16,6 +16,7 @@ export default function AuthPage() {
     lastName: "",
   });
   const [message, setMessage] = useState("");
+  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [rollNumberError, setRollNumberError] = useState("");
   const navigate = useNavigate();
 
@@ -70,7 +71,8 @@ export default function AuthPage() {
       });
       const data = await response.json();
       if (response.ok) {
-        setMessage("Sign in successful!");
+        setMessage("Welcome back! You've successfully signed in.");
+        setIsSuccessMessage(true);
         localStorage.setItem("user", JSON.stringify(data.user));
 
         // Dispatch custom event to notify navbar of authentication change
@@ -81,9 +83,11 @@ export default function AuthPage() {
         setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(data.error || "Sign in failed. Please try again.");
+        setIsSuccessMessage(false);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
+      setIsSuccessMessage(false);
     }
   };
 
@@ -115,7 +119,8 @@ export default function AuthPage() {
       });
       const data = await response.json();
       if (response.ok) {
-        setMessage(data.message || "Sign up successful!");
+        setMessage(data.message || "Account created successfully! Welcome to Campus Plus!");
+        setIsSuccessMessage(true);
         setTimeout(() => {
           setIsLogin(true);
           setFormData({
@@ -128,9 +133,11 @@ export default function AuthPage() {
         }, 1000);
       } else {
         setMessage(data.error || "Sign up failed. Please try again.");
+        setIsSuccessMessage(false);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
+      setIsSuccessMessage(false);
     }
   };
 
@@ -153,6 +160,7 @@ export default function AuthPage() {
       lastName: "",
     });
     setMessage("");
+    setIsSuccessMessage(false);
     setRollNumberError("");
   };
 
@@ -374,14 +382,38 @@ export default function AuthPage() {
                     <div className="button-shine"></div>
                   </button>
                   {message && (
-                    <div
-                      style={{
-                        color: "#e11d48",
-                        marginTop: 12,
-                        textAlign: "center",
-                      }}
-                    >
-                      {message}
+                    <div className={`message-container ${isSuccessMessage ? 'success' : 'error'}`}>
+                      {isSuccessMessage ? (
+                        <div className="success-message">
+                          <div className="success-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                              <path
+                                d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </div>
+                          <span className="message-text">{message}</span>
+                        </div>
+                      ) : (
+                        <div className="error-message">
+                          <div className="error-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                              <path
+                                d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </div>
+                          <span className="message-text">{message}</span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
