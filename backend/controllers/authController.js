@@ -131,6 +131,18 @@ exports.login = async (request, response) => {
     if (!isMatch)
       return response.status(401).json({ error: "Invalid credentials" });
 
+    // Regenerate session for security
+    await new Promise((resolve, reject) => {
+      request.session.regenerate((err) => {
+        if (err) {
+          console.error("Session regenerate error:", err);
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+
     request.session.user = {
       userid: user.userid,
       email: user.email,
