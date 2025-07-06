@@ -127,11 +127,20 @@ app.get("/test", (req, res) => {
 
 // Debug endpoint to check session
 app.get("/debug/session", (req, res) => {
+  console.log("=== DEBUG SESSION ENDPOINT ===");
+  console.log("Session ID:", req.sessionID);
+  console.log("Full session object:", JSON.stringify(req.session, null, 2));
+  console.log("Session user:", req.session?.user);
+  console.log("req.user (Passport):", req.user);
+  console.log("isAuthenticated():", req.isAuthenticated ? req.isAuthenticated() : 'N/A');
+  console.log("=== END DEBUG ===");
+  
   res.json({
     sessionID: req.sessionID,
     session: req.session,
     isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
-    user: req.user || null
+    user: req.user || null,
+    sessionUser: req.session?.user || null
   });
 });
 
