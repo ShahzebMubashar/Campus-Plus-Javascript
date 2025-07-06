@@ -66,10 +66,7 @@ router.get("/current-user", optionalJwtAuth, (req, res) => {
 });
 
 // Complete profile route
-router.post("/complete-profile", async (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.status(401).json({ error: "Not authenticated" });
-  }
+router.post("/complete-profile", jwtAuthMiddleware, async (req, res) => {
 
   const { username, rollnumber } = req.body;
   const userid = req.user.userid;

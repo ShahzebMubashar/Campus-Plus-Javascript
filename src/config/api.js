@@ -6,7 +6,6 @@ export default API_BASE_URL;
 // Alternative export for axios configuration
 export const apiConfig = {
   baseURL: API_BASE_URL,
-  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },

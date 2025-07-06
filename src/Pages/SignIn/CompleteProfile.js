@@ -4,7 +4,8 @@ import Navbar from '../Index/components/Navbar';
 import Footer from '../Footer/Footer';
 import logo from '../Index/cp_logo.png';
 import './CompleteProfile.css';
-import API_BASE_URL from '../../config/api.js'; 
+import API_BASE_URL from '../../config/api.js';
+import { authenticatedFetch } from '../../utils/auth'; 
 
 const CompleteProfile = () => {
     const [formData, setFormData] = useState({
@@ -40,9 +41,7 @@ const CompleteProfile = () => {
         // Check if user is authenticated
         const checkAuth = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
-                    credentials: 'include'
-                });
+                const response = await authenticatedFetch(`${API_BASE_URL}/auth/current-user`);
 
                 if (response.ok) {
                     const data = await response.json();
@@ -92,12 +91,8 @@ const CompleteProfile = () => {
         setMessage('');
 
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/complete-profile`, {
+            const response = await authenticatedFetch(`${API_BASE_URL}/auth/complete-profile`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
                 body: JSON.stringify({
                     ...formData,
                     rollnumber: formData.rollnumber.replace(/-/g, '') // Remove dashes before sending
