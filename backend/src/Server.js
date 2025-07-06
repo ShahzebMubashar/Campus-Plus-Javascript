@@ -23,6 +23,9 @@ const chatroomController = require("../controllers/chatroomController");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Trust proxy - Required for secure cookies behind a proxy like Koyeb
+app.set('trust proxy', 1);
+
 // Basic middleware
 app.use(express.json());
 app.use(cookieParser());
@@ -35,32 +38,15 @@ app.use((req, res, next) => {
   next();
 });
 
-// CORS configuration
+// CORS configuration - Simplified as recommended
 app.use(
   cors({
-    origin: function (origin, callback) {
-      // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-      
-      const allowedOrigins = [
-        process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app",
-        "http://localhost:3000",
-        "https://campus-plus-javascript.vercel.app"
-      ];
-      
-      if (allowedOrigins.indexOf(origin) !== -1) {
-        callback(null, true);
-      } else {
-        console.log("CORS blocked origin:", origin);
-        callback(new Error('Not allowed by CORS'));
-      }
-    },
+    origin: process.env.NODE_ENV === "production" 
+      ? process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app"
+      : "http://localhost:3000",
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie", "X-Requested-With"],
-    exposedHeaders: ["Set-Cookie"],
-    preflightContinue: false,
-    optionsSuccessStatus: 204
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
 
@@ -125,7 +111,7 @@ app.use(
     cookie: {
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: false, // Allow JS access for debugging
+      httpOnly: true, // Secure - doesn't affect cookie sending
       secure: true, // MUST be true for sameSite: "none"
       sameSite: "none", // Required for cross-origin
     },
