@@ -3,6 +3,8 @@
  * Handles token storage, validation, and automatic refresh
  */
 
+import API_BASE_URL from '../config/api';
+
 const TOKEN_KEY = 'campus_plus_access_token';
 const REFRESH_TOKEN_KEY = 'campus_plus_refresh_token';
 const USER_KEY = 'campus_plus_user';
@@ -102,10 +104,6 @@ export const refreshAccessToken = async () => {
   }
 
   try {
-    const API_BASE_URL = process.env.NODE_ENV === 'production' 
-      ? process.env.REACT_APP_API_URL || 'https://rude-mandrill-ehanayaz-8d5ca455.koyeb.app'
-      : 'http://localhost:4000';
-
     const response = await fetch(`${API_BASE_URL}/auth/refresh-token`, {
       method: 'POST',
       headers: {
@@ -210,10 +208,6 @@ export const logout = async () => {
     // Call logout endpoint if token exists
     const token = getAccessToken();
     if (token) {
-      const API_BASE_URL = process.env.NODE_ENV === 'production' 
-        ? process.env.REACT_APP_API_URL || 'https://rude-mandrill-ehanayaz-8d5ca455.koyeb.app'
-        : 'http://localhost:4000';
-
       await fetch(`${API_BASE_URL}/auth/logout`, {
         method: 'POST',
         headers: {

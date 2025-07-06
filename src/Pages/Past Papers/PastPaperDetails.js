@@ -15,6 +15,7 @@ import {
 } from "react-icons/fa";
 import { BsCircleFill } from "react-icons/bs";
 import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 const getDifficultyColor = (difficulty) => {
   const difficultyMap = {
@@ -42,9 +43,8 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
 
   const handleRatingSubmit = async (rating) => {
     try {
-      const response = await fetch(`${API_BASE_URL}/courses/rate-course`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/courses/rate-course`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -64,10 +64,10 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
       console.log("Rating response:", message);
 
       // Fetch updated course data
-      const courseResponse = await fetch(
+      const courseResponse = await authenticatedFetch(
         `${API_BASE_URL}/courses/${courseId}`,
         {
-          credentials: "include",
+          method: "GET",
         },
       );
 
@@ -133,19 +133,11 @@ const PastPapersDetails = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        console.log("API_BASE_URL", API_BASE_URL);
-        const response = await fetch(`${API_BASE_URL}/user/profile`, {
-          credentials: "include",
-        });
-        setIsLoggedIn(response.ok);
-      } catch (err) {
-        setIsLoggedIn(false);
-      }
+    const checkAuthStatus = () => {
+      setIsLoggedIn(checkAuth());
     };
 
-    checkAuth();
+    checkAuthStatus();
   }, []);
 
   useEffect(() => {
@@ -155,10 +147,10 @@ const PastPapersDetails = () => {
         setError("");
 
         // Fetch course info
-        const courseResponse = await fetch(
+        const courseResponse = await authenticatedFetch(
           `${API_BASE_URL}/courses/${courseId}`,
           {
-            credentials: "include",
+            method: "GET",
           },
         );
 
@@ -171,11 +163,12 @@ const PastPapersDetails = () => {
 
         const courseData = await courseResponse.json();
         setCourseInfo(courseData);
+        
         // Fetch papers
-        const papersResponse = await fetch(
+        const papersResponse = await authenticatedFetch(
           `${API_BASE_URL}/courses/${courseId}/past-papers`,
           {
-            credentials: "include",
+            method: "GET",
           },
         );
 

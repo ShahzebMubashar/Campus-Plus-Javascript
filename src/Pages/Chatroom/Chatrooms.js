@@ -6,6 +6,7 @@ import Navbar from "../Index/components/Navbar.js";
 import "../Chatroom/css/Chatroom.css";
 import { AiOutlineMenu } from "react-icons/ai";
 import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 
 export default function Chatrooms() {
@@ -67,12 +68,8 @@ export default function Chatrooms() {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/user/profile`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "apploication/json",
-        },
       });
       if (response.ok) {
         const data = await response.json();
@@ -89,9 +86,7 @@ export default function Chatrooms() {
 
   const fetchAllRooms = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/Chatrooms`, {
-        credentials: "include",
-      });
+      const response = await authenticatedFetch(`${API_BASE_URL}/Chatrooms`);
       if (response.ok) {
         const data = await response.json();
         setRooms(data);
@@ -105,11 +100,8 @@ export default function Chatrooms() {
 
   const fetchJoinedRooms = async () => {
     try {
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `${API_BASE_URL}/Chatrooms/user/groups`,
-        {
-          credentials: "include",
-        },
       );
       if (response.ok) {
         const data = await response.json();
@@ -124,11 +116,10 @@ export default function Chatrooms() {
     // If room is not joined, join it first
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
-        const response = await fetch(
+        const response = await authenticatedFetch(
           `${API_BASE_URL}/Chatrooms/join/${room.roomid}`,
           {
             method: "POST",
-            credentials: "include",
           },
         );
         if (response.ok) {
@@ -223,12 +214,12 @@ export default function Chatrooms() {
 
 // Helper function for leaving a room
 async function handleLeaveRoom(roomId) {
+  const { authenticatedFetch } = await import("../../utils/auth");
   try {
-    const response = await fetch(
+    const response = await authenticatedFetch(
         `${API_BASE_URL}/Chatrooms/leave/${roomId}`,
       {
         method: "DELETE",
-        credentials: "include",
       },
     );
     return response.ok;
