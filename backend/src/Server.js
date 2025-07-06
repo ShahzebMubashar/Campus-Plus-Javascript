@@ -30,22 +30,11 @@ app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cookieParser());
 
-// Basic request logging with response headers
+// Basic request logging
 app.use((req, res, next) => {
   console.log(`\n=== ${req.method} ${req.path} ===`);
   console.log("Request cookies:", req.headers.cookie);
   console.log("Request origin:", req.headers.origin);
-  
-  // Log response headers when response is sent
-  const originalSend = res.send;
-  res.send = function(data) {
-    const setCookieHeaders = res.getHeaders()['set-cookie'];
-    if (setCookieHeaders) {
-      console.log("🍪 Response Set-Cookie headers:", setCookieHeaders);
-    }
-    return originalSend.call(this, data);
-  };
-  
   next();
 });
 
@@ -123,8 +112,9 @@ app.use(
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       httpOnly: true,
-      secure: true, // Required for HTTPS
+      secure: true, // Required for cross-origin with sameSite: none
       sameSite: "none", // Required for cross-origin
+      // Don't set domain - let browser handle it
     },
     proxy: true,
   })
@@ -187,16 +177,7 @@ app.get("/debug/set-cookie", (req, res) => {
   // Set a test cookie with same settings as session
   res.cookie('test-cookie', 'test-value', {
     maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: false, // Make it visible in DevTools
-    secure: true,
-    sameSite: 'none',
-    path: '/'
-  });
-  
-  // Set session cookie explicitly
-  res.cookie('connect.sid', req.sessionID, {
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: true,
+    httpOnly: false,
     secure: true,
     sameSite: 'none',
     path: '/'
@@ -208,8 +189,7 @@ app.get("/debug/set-cookie", (req, res) => {
   res.json({
     message: 'Test cookie and session data set',
     sessionID: req.sessionID,
-    sessionData: req.session,
-    cookieHeaders: res.getHeaders()['set-cookie']
+    sessionData: req.session
   });
 });
 
