@@ -5,9 +5,14 @@ import Footer from "../../Pages/Footer/Footer";
 import logo from "../Index/cp_logo.png";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API_BASE_URL from "../../config/api";
-import { loginWithTokens } from "../../utils/auth";
+import { loginWithTokens, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 export default function AuthPage() {
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+
   // Backend logic/state from SignInPage.js
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -20,6 +25,7 @@ export default function AuthPage() {
   const [message, setMessage] = useState("");
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [rollNumberError, setRollNumberError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
@@ -31,6 +37,125 @@ export default function AuthPage() {
       setIsSuccessMessage(false);
     }
   }, [searchParams]);
+
+  // Check authentication status on component mount (use JWT logic)
+  useEffect(() => {
+    const updateAuth = () => {
+      const auth = checkAuth();
+      setIsAuthenticated(auth);
+      setUserData(auth ? getStoredUser() : null);
+      setIsAuthLoading(false);
+    };
+    updateAuth();
+    // Listen for auth state changes (login/logout elsewhere)
+    window.addEventListener("authStateChanged", updateAuth);
+    return () => window.removeEventListener("authStateChanged", updateAuth);
+  }, []);
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("user");
+        setIsAuthenticated(false);
+        setUserData(null);
+
+        // Dispatch custom event to notify other components of logout
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+          detail: { isAuthenticated: false, user: null }
+        }));
+
+        // Refresh the page to show the sign-in form
+        window.location.reload();
+      } else {
+        console.error("Logout failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  // If still loading auth status, show loading
+  if (isAuthLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="auth-container">
+          <div className="auth-wrapper">
+            <div className="auth-card">
+              <div className="loading-spinner" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '200px'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  border: '4px solid #f3f3f3',
+                  borderTop: '4px solid #3b82f6',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite'
+                }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // If user is already authenticated, show the "already signed in" message
+  if (isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <div className="auth-container">
+          <div className="auth-wrapper">
+            <div className="auth-card">
+              <div className="already-signed-in-content">
+                <div className="already-signed-in-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <h2>You're Already Signed In</h2>
+                <p>Welcome back, {userData?.fullName || userData?.username || 'User'}!</p>
+                <p>You're currently signed in to your account. Sign out to access the sign-in page.</p>
+                <div className="already-signed-in-actions">
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="already-signed-in-btn primary"
+                  >
+                    Go to Dashboard
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="already-signed-in-btn secondary"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   // Roll number validation function
   const validateRollNumber = (rollNumber) => {
@@ -69,6 +194,7 @@ export default function AuthPage() {
   // Backend: Sign In
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
@@ -102,17 +228,20 @@ export default function AuthPage() {
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
       setIsSuccessMessage(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Backend: Sign Up
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     // Validate roll number before submitting
     const rollNumberError = validateRollNumber(formData.password);
     if (rollNumberError) {
       setMessage(rollNumberError);
+      setIsSubmitting(false);
       return;
     }
 
@@ -152,6 +281,8 @@ export default function AuthPage() {
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
       setIsSuccessMessage(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -184,6 +315,15 @@ export default function AuthPage() {
       <div className="auth-container">
         {/* Animated Background */}
 
+        {/* Loading overlay for sign-in/sign-up submission */}
+        {isSubmitting && (
+          <div className="signing-in-overlay">
+            <div className="signing-in-spinner"></div>
+            <div className="signing-in-message">
+              {isLogin ? "Signing in..." : "Creating account..."}
+            </div>
+          </div>
+        )}
 
         {/* Main Content */}
         <div className="auth-wrapper">
