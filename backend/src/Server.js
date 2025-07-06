@@ -90,7 +90,7 @@ app.post('/api/email/send-email', async (req, res) => {
   }
 });
 
-// Initialize Passport for OAuth
+// Initialize Passport for OAuth (JWT-based, no sessions)
 app.use(passport.initialize());
 
 // Routes

@@ -3,7 +3,7 @@ import "./SignInPage.css";
 import Navbar from "../Index/components/Navbar";
 import Footer from "../../Pages/Footer/Footer";
 import logo from "../Index/cp_logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import API_BASE_URL from "../../config/api";
 import { loginWithTokens } from "../../utils/auth";
 
@@ -21,6 +21,16 @@ export default function AuthPage() {
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [rollNumberError, setRollNumberError] = useState("");
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Check for OAuth errors on component mount
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error === 'oauth_failed') {
+      setMessage("OAuth authentication failed. Please try again or use email/password login.");
+      setIsSuccessMessage(false);
+    }
+  }, [searchParams]);
 
   // Roll number validation function
   const validateRollNumber = (rollNumber) => {
