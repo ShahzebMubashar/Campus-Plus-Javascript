@@ -4,7 +4,7 @@ const { randomBytes } = require("crypto");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
-const { generateTokenPair } = require("../utils/jwt.js");
+const { generateTokenPair, verifyToken } = require("../utils/jwt.js");
 
 dotenv.config();
 
@@ -166,9 +166,7 @@ exports.login = async (request, response) => {
 exports.resetPassword = async (request, response) => {
   const {
     body: { OTP, newPassword },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!OTP || !newPassword)
@@ -182,10 +180,21 @@ exports.resetPassword = async (request, response) => {
       [userid]
     );
 
-    const resetToken = res.rows[0].reset_token;
-    const isMatch = bcrypt.compare(String(resetToken), String(OTP));
+    if (!res.rowCount) {
+      return response.status(400).json(`No reset request found. Please request a new OTP.`);
+    }
 
-    if (!isMatch) return response.status(400).json(`Invalid OTP Entered!`);
+    const resetToken = res.rows[0].reset_token;
+    
+    // Verify the OTP token using JWT
+    try {
+      const decoded = verifyToken(resetToken);
+      if (decoded !== parseInt(OTP)) {
+        return response.status(400).json(`Invalid OTP Entered!`);
+      }
+    } catch (error) {
+      return response.status(400).json(`Invalid or expired OTP!`);
+    }
 
     await client.query(`BEGIN`);
 
@@ -202,25 +211,35 @@ exports.resetPassword = async (request, response) => {
 
     await client.query("COMMIT");
 
-    return response.status(200).json("OTP Verrified!");
+    return response.status(200).json("Password reset successfully!");
   } catch (error) {
     console.log(error.message);
     await client.query(`ROLLBACK`);
-    return response.jsonStatus(500);
+    return response.status(500).json("Server Error");
   } finally {
     if (client) client.release();
   }
 };
 
 exports.forgotPassword = async (request, response) => {
-  const to = request.session.user.email;
+  const { userid, email } = request.user;
 
   const OTPGenerated = Math.floor(100000 + Math.random() * 900000);
-  const signedOTP = jwt.sign(OTPGenerated, process.env.ACCESS_TOKEN_SECRET);
+  
+  // Use proper JWT signing with expiration
+  const signedOTP = jwt.sign(
+    OTPGenerated, 
+    process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET,
+    { 
+      expiresIn: '1h',
+      issuer: process.env.JWT_ISSUER || 'campus-plus-app',
+      audience: process.env.JWT_AUDIENCE || 'campus-plus-users'
+    }
+  );
 
   const mailOptions = {
     from: from,
-    to: to,
+    to: email,
     subject: "Password Change Verification – One-Time Password (OTP)",
     text: `Dear User,
   
@@ -242,26 +261,26 @@ exports.forgotPassword = async (request, response) => {
 
     const res = await client.query(
       `Select * from ResetPassword where userid = $1`,
-      [request.session.user.userid]
+      [userid]
     );
 
     if (res.rowCount)
       await client.query(
         `Delete from ResetPassword where userid = $1 or token_expiry < current_timestamp + interval '1 hour'`,
-        [request.session.user.userid]
+        [userid]
       );
 
     await client.query(
       `Insert into ResetPassword (userid, reset_token, token_expiry)
       Values ($1, $2, current_timestamp + Interval '1 hour')`,
-      [request.session.user.userid, signedOTP]
+      [userid, signedOTP]
     );
 
     await client.query("COMMIT");
   } catch (error) {
     console.log(error.message);
     await client.query("ROLLBACK");
-    return response.jsonStatus(500);
+    return response.status(500).json("Server Error");
   } finally {
     if (client) client.release();
   }
@@ -300,7 +319,10 @@ exports.testLogin = async (request, response) => {
 
   try {
     let res = await pool.query(
-      `Select * from Users where username = $1 or email = $1`,
+      `SELECT u.*, ui.name as fullName 
+       FROM Users u 
+       LEFT JOIN UserInfo ui ON u.userid = ui.userid 
+       WHERE u.username = $1 OR u.email = $1`,
       [username || email]
     );
 
@@ -312,11 +334,22 @@ exports.testLogin = async (request, response) => {
 
     if (!isMatch) return response.status(401).json("Invalid Credentials");
 
-    const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET);
+    // Generate proper JWT tokens
+    const tokens = generateTokenPair(user);
 
-    return response.status(200).json(`Login Successful! ${accessToken}`);
+    return response.status(200).json({
+      message: "Login Successful!",
+      user: {
+        userid: user.userid,
+        username: user.username,
+        email: user.email,
+        role: user.role,
+        fullName: user.fullname,
+      },
+      ...tokens
+    });
   } catch (error) {
-    console.error("Login error:", error);
+    console.error("Test login error:", error);
     return response.status(500).json({ error: "Server error" });
   }
 };

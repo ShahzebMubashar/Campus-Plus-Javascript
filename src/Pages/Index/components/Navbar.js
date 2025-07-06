@@ -102,7 +102,7 @@ function Navbar() {
     try {
       console.log("🔍 Navbar: Logging out user...");
       await authLogout();
-      navigate("/sign-in");
+        navigate("/sign-in");
     } catch (error) {
       console.error("Logout error:", error);
       // Even if logout API fails, clear local state

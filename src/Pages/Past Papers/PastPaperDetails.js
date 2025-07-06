@@ -31,6 +31,7 @@ const getDifficultyColor = (difficulty) => {
 const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   useEffect(() => {
     // Initialize with difficulty if no rating exists
@@ -42,6 +43,12 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
   }, [currentRating, difficulty]);
 
   const handleRatingSubmit = async (rating) => {
+    // Check if user is logged in
+    if (!checkAuth()) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
     try {
       const response = await authenticatedFetch(`${API_BASE_URL}/courses/rate-course`, {
         method: "POST",
@@ -64,10 +71,13 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
       console.log("Rating response:", message);
 
       // Fetch updated course data
-      const courseResponse = await authenticatedFetch(
+      const courseResponse = await fetch(
         `${API_BASE_URL}/courses/${courseId}`,
         {
           method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
       );
 
@@ -96,30 +106,53 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
     return rating - Math.floor(rating);
   };
 
-  return (
-    <div className="rating">
-      <div className="rating-bars">
-        {[1, 2, 3, 4, 5].map((level, index) => (
-          <div
-            key={level}
-            className="rating-bar"
-            onMouseEnter={() => setHoveredRating(level)}
-            onMouseLeave={() => setHoveredRating(0)}
-            onClick={() => handleRatingSubmit(level)}
+  const LoginPrompt = () => (
+    <div className="login-overlay">
+      <div className="blurred-background" onClick={() => setShowLoginPrompt(false)}></div>
+      <div className="login-prompt">
+        <div className="login-prompt-content">
+          <div className="login-prompt-icon">🔒</div>
+          <h2>Authentication Required</h2>
+          <p>You need to log in to rate this course.</p>
+          <p>Please sign in to your account to continue.</p>
+          <button
+            className="login-prompt-btn"
+            onClick={() => (window.location.href = "/sign-in")}
           >
-            <div
-              className="rating-bar-fill"
-              style={{ transform: `scaleX(${getBarFill(index)})` }}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="rating-info">
-        <span className="average-rating">
-          {selectedRating ? Number(selectedRating).toFixed(1) : "0.0"}
-        </span>
+            Sign In
+          </button>
+        </div>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      <div className="rating">
+        <div className="rating-bars">
+          {[1, 2, 3, 4, 5].map((level, index) => (
+            <div
+              key={level}
+              className="rating-bar"
+              onMouseEnter={() => setHoveredRating(level)}
+              onMouseLeave={() => setHoveredRating(0)}
+              onClick={() => handleRatingSubmit(level)}
+            >
+              <div
+                className="rating-bar-fill"
+                style={{ transform: `scaleX(${getBarFill(index)})` }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="rating-info">
+          <span className="average-rating">
+            {selectedRating ? Number(selectedRating).toFixed(1) : "0.0"}
+          </span>
+        </div>
+      </div>
+      {showLoginPrompt && <LoginPrompt />}
+    </>
   );
 };
 
@@ -146,11 +179,14 @@ const PastPapersDetails = () => {
         setLoading(true);
         setError("");
 
-        // Fetch course info
-        const courseResponse = await authenticatedFetch(
+        // Fetch course info without authentication - public access
+        const courseResponse = await fetch(
           `${API_BASE_URL}/courses/${courseId}`,
           {
             method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
         );
 
@@ -164,11 +200,14 @@ const PastPapersDetails = () => {
         const courseData = await courseResponse.json();
         setCourseInfo(courseData);
         
-        // Fetch papers
-        const papersResponse = await authenticatedFetch(
+        // Fetch papers without authentication - public access
+        const papersResponse = await fetch(
           `${API_BASE_URL}/courses/${courseId}/past-papers`,
           {
             method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
         );
 

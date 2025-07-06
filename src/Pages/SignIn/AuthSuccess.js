@@ -22,38 +22,38 @@ const AuthSuccess = () => {
                             'Authorization': `Bearer ${tokens.accessToken}`,
                             'Content-Type': 'application/json',
                         },
-                    });
+                });
 
-                    if (response.ok) {
-                        const data = await response.json();
+                if (response.ok) {
+                    const data = await response.json();
 
-                        if (data.isAuthenticated) {
+                    if (data.isAuthenticated) {
                             // Store tokens and user data
                             loginWithTokens(tokens, {
-                                userid: data.userid,
-                                email: data.email,
-                                username: data.username,
+                            userid: data.userid,
+                            email: data.email,
+                            username: data.username,
                                 fullName: data.fullName,
                                 role: data.role
                             });
 
-                            // Check if profile is complete
-                            if (data.isProfileComplete) {
-                                // Show success message briefly
-                                setTimeout(() => {
-                                    navigate('/', { replace: true });
-                                }, 2000);
-                            } else {
-                                // Profile incomplete, redirect to complete profile page
-                                setTimeout(() => {
-                                    navigate('/complete-profile', { replace: true });
-                                }, 1000);
-                            }
+                        // Check if profile is complete
+                        if (data.isProfileComplete) {
+                            // Show success message briefly
+                            setTimeout(() => {
+                                navigate('/', { replace: true });
+                            }, 2000);
                         } else {
-                            setError('Authentication failed. Please try again.');
+                            // Profile incomplete, redirect to complete profile page
+                            setTimeout(() => {
+                                navigate('/complete-profile', { replace: true });
+                            }, 1000);
                         }
                     } else {
-                        setError('Failed to verify authentication. Please try again.');
+                        setError('Authentication failed. Please try again.');
+                    }
+                } else {
+                    setError('Failed to verify authentication. Please try again.');
                     }
                 } else {
                     setError('No authentication tokens found. Please try again.');

@@ -3,7 +3,7 @@ import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
 import { FaBars } from "react-icons/fa";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
-import API_BASE_URL from "../../config/api.js";
+import API_BASE_URL from "../../config/api.js"; 
 import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth"; 
 
 const gradePoints = {

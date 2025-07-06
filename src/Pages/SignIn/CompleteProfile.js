@@ -4,7 +4,7 @@ import Navbar from '../Index/components/Navbar';
 import Footer from '../Footer/Footer';
 import logo from '../Index/cp_logo.png';
 import './CompleteProfile.css';
-import API_BASE_URL from '../../config/api.js';
+import API_BASE_URL from '../../config/api.js'; 
 import { authenticatedFetch } from '../../utils/auth'; 
 
 const CompleteProfile = () => {
