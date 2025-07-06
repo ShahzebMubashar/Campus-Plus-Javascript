@@ -106,6 +106,11 @@ exports.register = async (request, response) => {
 };
 
 exports.login = async (request, response) => {
+  console.log("=== LOGIN ENDPOINT ===");
+  console.log("Session ID:", request.sessionID);
+  console.log("Cookies received:", request.headers.cookie);
+  console.log("Existing session:", request.session);
+  
   const { email, password, username } = request.body;
 
   if (!email && !username)
