@@ -4,6 +4,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'CampusPlus_JWT_Secret_Key_2024';
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
 const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || '7d';
 
+
 /**
  * Generate access token
  */

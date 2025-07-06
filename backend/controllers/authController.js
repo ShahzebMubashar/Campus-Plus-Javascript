@@ -4,7 +4,7 @@ const { randomBytes } = require("crypto");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
-const { generateTokenPair } = require("../utils/jwt");
+const { generateTokenPair } = require("../utils/jwt.js");
 
 dotenv.config();
 
@@ -342,7 +342,7 @@ exports.refreshToken = async (request, response) => {
     }
 
     // Verify refresh token
-    const { verifyToken } = require("../utils/jwt");
+    const { verifyToken } = require("../utils/jwt.js");
     const decoded = verifyToken(refreshToken);
 
     // Get user from database
