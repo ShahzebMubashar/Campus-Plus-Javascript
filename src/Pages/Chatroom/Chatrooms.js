@@ -3,6 +3,7 @@ import Sidebar from "./components/Sidebar.js";
 import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from "../Index/components/Navbar.js";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import "../Chatroom/css/Chatroom.css";
 import { AiOutlineMenu } from "react-icons/ai";
 import API_BASE_URL from "../../config/api.js";
@@ -20,9 +21,21 @@ export default function Chatrooms() {
   const [isMenuVisible, setIsMenuVisible] = useState(true);
 
   useEffect(() => {
-    fetchUserInfo();
-    fetchAllRooms();
-    fetchJoinedRooms();
+    // Check authentication first
+    const checkAuthStatus = () => {
+      const authStatus = checkAuth();
+      setIsAuthenticated(authStatus);
+      setLoading(false);
+      
+      if (authStatus) {
+        // Only fetch data if user is authenticated
+        fetchUserInfo();
+        fetchAllRooms();
+        fetchJoinedRooms();
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
   useEffect(() => {
@@ -74,13 +87,9 @@ export default function Chatrooms() {
       if (response.ok) {
         const data = await response.json();
         setUserInfo(data);
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
-      setIsAuthenticated(false);
     }
   };
 
@@ -93,8 +102,6 @@ export default function Chatrooms() {
       }
     } catch (error) {
       console.error("Error fetching rooms:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -132,24 +139,6 @@ export default function Chatrooms() {
     }
     setActiveRoom(room);
   };
-
-  // Login prompt component
-  const LoginPrompt = () => (
-    <div className="login-prompt">
-      <div className="login-prompt-content">
-        <div className="login-prompt-icon">🔒</div>
-        <h2>Authentication Required</h2>
-        <p>You need to log in to access the chatroom feature.</p>
-        <p>Please sign in to your account to continue.</p>
-        <button
-          className="login-prompt-btn"
-          onClick={() => (window.location.href = "/sign-in")}
-        >
-          Sign In
-        </button>
-      </div>
-    </div>
-  );
 
   return (
     <div className="chatroom-main-top">
@@ -202,10 +191,11 @@ export default function Chatrooms() {
         </div>
         {/* Login prompt overlay with blurred background */}
         {!isAuthenticated && !loading && (
-          <div className="login-overlay">
-            <div className="blurred-background"></div>
-            <LoginPrompt />
-          </div>
+          <BlurLoginPrompt
+            message="Chatroom Access Required"
+            subMessage="Please sign in to access the chatroom feature and join conversations."
+            buttonText="Sign In"
+          />
         )}
       </div>
     </div>

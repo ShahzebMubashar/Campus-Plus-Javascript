@@ -112,9 +112,7 @@ const getRooms = async (request, response) => {
 const getRoomMessages = async (req, res) => {
   const {
     params: { roomid },
-    session: {
-      user: { role },
-    },
+    user: { role },
   } = req;
 
   try {
@@ -674,9 +672,7 @@ const deleteRoom = async (request, response) => {
 const deletePost = async (request, response) => {
   const {
     params: { roomid, messageid },
-    session: {
-      user: { role },
-    },
+    user: { role },
   } = request;
 
   if (role !== "Admin") {
@@ -756,9 +752,7 @@ const editPost = async (request, response) => {
   const {
     params: { roomid, messageid },
     body: { content },
-    session: {
-      user: { role, userid },
-    },
+    user: { role, userid },
   } = request;
 
   const client = await pool.connect();
@@ -833,9 +827,7 @@ const getPostEditHistory = async (request, response) => {
 const pinPost = async (request, response) => {
   const {
     params: { roomid, messageid },
-    session: {
-      user: { role, userid },
-    },
+    user: { role, userid },
   } = request;
 
   if (role !== "Admin" && role !== "Moderator") {
@@ -887,9 +879,7 @@ const reportPost = async (request, response) => {
   const {
     params: { messageid },
     body: { reason },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   try {
@@ -914,9 +904,7 @@ const createPoll = async (request, response) => {
   const {
     params: { roomid },
     body: { question, options, isMultipleChoice, endTime },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -960,9 +948,7 @@ const votePoll = async (request, response) => {
   const {
     params: { pollid },
     body: { selectedOptions },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -1012,9 +998,7 @@ const votePoll = async (request, response) => {
 const trackPostView = async (request, response) => {
   const {
     params: { messageid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   try {
@@ -1036,9 +1020,7 @@ const searchPosts = async (request, response) => {
   const {
     params: { roomid },
     query: { keyword, username, date },
-    session: {
-      user: { role },
-    },
+    user: { role },
   } = request;
 
   try {
@@ -1114,9 +1096,7 @@ const searchPosts = async (request, response) => {
 
 const getUserJoinedGroups = async (request, response) => {
   const {
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   try {

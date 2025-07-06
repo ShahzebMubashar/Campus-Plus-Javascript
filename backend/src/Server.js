@@ -1,6 +1,11 @@
 const express = require("express");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+
+// Load environment variables
+dotenv.config();
+
 const pool = require("../config/database");
 const nodemailer = require("nodemailer");
 const passport = require("../config/passport");
@@ -32,11 +37,18 @@ app.use((req, res, next) => {
 });
 
 // CORS configuration
+const corsOrigin = process.env.NODE_ENV === "production" 
+  ? process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app"
+  : "http://localhost:3000";
+
+console.log("🔧 CORS Configuration:");
+console.log("NODE_ENV:", process.env.NODE_ENV || "undefined");
+console.log("CORS Origin:", corsOrigin);
+console.log("Environment:", process.env.NODE_ENV === "production" ? "PRODUCTION" : "DEVELOPMENT");
+
 app.use(
   cors({
-    origin: process.env.NODE_ENV === "production" 
-      ? process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app"
-      : "http://localhost:3000",
+    origin: corsOrigin,
     credentials: true,
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
@@ -92,10 +104,6 @@ app.use("/api/email", emailRoute);
 app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
 });
-
-app.get("/Chatrooms/messages/:roomid", chatroomController.getRoomMessages);
-app.post("/Chatrooms/like/:messageid", chatroomController.likePost);
-app.get("/Chatrooms/likes/:messageid", chatroomController.getLikeCount);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);

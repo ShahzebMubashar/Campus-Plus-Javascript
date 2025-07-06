@@ -160,8 +160,12 @@ const PastPapers = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await authenticatedFetch(`${API_BASE_URL}/Courses`, {
+        // Fetch courses without authentication - public access
+        const response = await fetch(`${API_BASE_URL}/Courses`, {
           method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
         if (!response.ok) {
           throw new Error("Failed to fetch courses");
