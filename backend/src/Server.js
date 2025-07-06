@@ -79,13 +79,20 @@ app.post('/api/email/send-email', async (req, res) => {
 // CORS is already configured above with the cors middleware
 
 // Session configuration
+const sessionStore = new pgSession({
+  pool: pool,
+  tableName: 'user_sessions',
+  createTableIfMissing: true
+});
+
+// Add error handling for session store
+sessionStore.on('error', (err) => {
+  console.error('Session store error:', err);
+});
+
 app.use(
   session({
-    store: new pgSession({
-      pool: pool,
-      tableName: 'user_sessions',
-      createTableIfMissing: true
-    }),
+    store: sessionStore,
     name: "connect.sid",
     secret: process.env.SESSION_SECRET || "CampusPlus",
     resave: false,
@@ -116,6 +123,16 @@ app.use("/api/email", emailRoute);
 
 app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
+});
+
+// Debug endpoint to check session
+app.get("/debug/session", (req, res) => {
+  res.json({
+    sessionID: req.sessionID,
+    session: req.session,
+    isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
+    user: req.user || null
+  });
 });
 
 app.get("/Chatrooms/messages/:roomid", chatroomController.getRoomMessages); // Call controller's function
