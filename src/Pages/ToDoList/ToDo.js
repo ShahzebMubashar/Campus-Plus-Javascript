@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./ToDo.css";
 import Navbar from "../Index/components/Navbar";
 import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 function ToDo() {
   const [todos, setTodos] = useState([]);
@@ -14,21 +15,17 @@ function ToDo() {
   });
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("date");
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem("user"));
+    setIsLoggedIn(checkAuth());
   }, []);
 
   // Fetch tasks from backend
   const fetchTasks = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/user/my-reminders`, {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/my-reminders`, {
         method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
       if (!res.ok) {
@@ -71,12 +68,8 @@ function ToDo() {
     if (!newTodo.text.trim()) return;
 
     try {
-      const res = await fetch(`${API_BASE_URL}/user/add-reminder`, {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/add-reminder`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           content: newTodo.text,
           priority: newTodo.priority,
@@ -134,14 +127,10 @@ function ToDo() {
       );
 
       // The endpoint should be for updating status specifically, but it seems the API uses update-priority for both
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `${API_BASE_URL}/user/update-priority/${id}`,
         {
           method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
             status: newStatus,
           }),
@@ -165,14 +154,10 @@ function ToDo() {
   const deleteTodo = async (id) => {
     console.log("Task ID:", id);
     try {
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `${API_BASE_URL}/user/delete-reminder/${id}`,
         {
           method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
         },
       );
 
@@ -195,12 +180,8 @@ function ToDo() {
     setTodos(updatedTodos);
 
     try {
-      await fetch(`${API_BASE_URL}/user/update-priority/${id}`, {
+      await authenticatedFetch(`${API_BASE_URL}/user/update-priority/${id}`, {
         method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           priority,
         }),

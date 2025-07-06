@@ -3,8 +3,9 @@ import "./SignInPage.css";
 import Navbar from "../Index/components/Navbar";
 import Footer from "../../Pages/Footer/Footer";
 import logo from "../Index/cp_logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import API_BASE_URL from "../../config/api";
+import { loginWithTokens } from "../../utils/auth";
 
 export default function AuthPage() {
   // Authentication state
@@ -26,6 +27,16 @@ export default function AuthPage() {
   const [rollNumberError, setRollNumberError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Check for OAuth errors on component mount
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error === 'oauth_failed') {
+      setMessage("OAuth authentication failed. Please try again or use email/password login.");
+      setIsSuccessMessage(false);
+    }
+  }, [searchParams]);
 
   // Check authentication status on component mount
   useEffect(() => {
@@ -229,18 +240,20 @@ export default function AuthPage() {
           email: formData.email,
           password: formData.password,
         }),
-        credentials: "include",
       });
       const data = await response.json();
       if (response.ok) {
         setMessage("Welcome back! You've successfully signed in.");
         setIsSuccessMessage(true);
-        localStorage.setItem("user", JSON.stringify(data.user));
 
-        // Dispatch custom event to notify navbar of authentication change
-        window.dispatchEvent(new CustomEvent('authStateChanged', {
-          detail: { isAuthenticated: true, user: data.user }
-        }));
+        // Store JWT tokens and user data
+        loginWithTokens(
+          {
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+          },
+          data.user
+        );
 
         setTimeout(() => navigate("/"), 2000);
       } else {
@@ -275,26 +288,27 @@ export default function AuthPage() {
         },
         body: JSON.stringify({
           email: formData.email,
-
+          username: formData.firstName, // Use firstName as username
+          fullName: `${formData.firstName} ${formData.lastName}`,
           password: formData.confirmPassword,
           rollnumber: formData.password.replace(/-/g, ''), // Remove dashes before sending
         }),
-        credentials: "include",
       });
       const data = await response.json();
       if (response.ok) {
         setMessage(data.message || "Account created successfully! Welcome to Campus Plus!");
         setIsSuccessMessage(true);
-        setTimeout(() => {
-          setIsLogin(true);
-          setFormData({
-            email: "",
-            password: "",
-            confirmPassword: "",
-            firstName: "",
-            lastName: "",
-          });
-        }, 1000);
+
+        // Store JWT tokens and user data for new user
+        loginWithTokens(
+          {
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+          },
+          data.user
+        );
+
+        setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(data.error || "Sign up failed. Please try again.");
         setIsSuccessMessage(false);

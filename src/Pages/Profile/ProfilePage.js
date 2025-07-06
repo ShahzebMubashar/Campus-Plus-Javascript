@@ -3,6 +3,7 @@ import "./ProfilePage.css";
 import Navbar from "../Index/components/Navbar";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 function ProfilePage() {
   const [user, setUser] = useState({
@@ -20,9 +21,8 @@ function ProfilePage() {
 
   const fetchCurrentCourses = async () => {
     try {
-      const res = await fetch(`${API_BASE_URL}/user/current-courses`, {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/current-courses`, {
         method: "GET",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -45,39 +45,8 @@ function ProfilePage() {
 
   const fetchUserInfo = async () => {
     try {
-      // First try to get OAuth user info
-      const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (oauthRes.ok) {
-        const oauthData = await oauthRes.json();
-        if (oauthData.isAuthenticated) {
-          // OAuth user - fetch additional profile data
-          const profileRes = await fetch(`${API_BASE_URL}/user/profile`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (profileRes.ok) {
-            const profileData = await profileRes.json();
-            setUser(profileData);
-            return;
-          }
-        }
-      }
-
-      // Fallback to regular session-based authentication
-      const res = await fetch(`${API_BASE_URL}/user/profile`, {
-        method: "GET",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -97,34 +66,7 @@ function ProfilePage() {
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
       try {
-        // First check OAuth authentication
-        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (oauthRes.ok) {
-          const oauthData = await oauthRes.json();
-          if (oauthData.isAuthenticated) {
-            setIsAuthenticated(true);
-            fetchUserInfo();
-            return;
-          }
-        }
-
-        // Check regular session authentication
-        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (sessionRes.ok) {
+        if (checkAuth()) {
           setIsAuthenticated(true);
           fetchUserInfo();
         } else {
@@ -175,9 +117,8 @@ function ProfilePage() {
   const handleEditFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${API_BASE_URL}/user/profile`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "PUT",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -212,9 +153,8 @@ function ProfilePage() {
   const triggerForgotPassword = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/forgot`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/forgot`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -244,9 +184,8 @@ function ProfilePage() {
 
     setIsLoading(true);
     try {
-        const response = await fetch(`${API_BASE_URL}/auth/reset`, {
+        const response = await authenticatedFetch(`${API_BASE_URL}/auth/reset`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },

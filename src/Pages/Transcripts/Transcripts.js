@@ -4,6 +4,7 @@ import Navbar from "../Index/components/Navbar";
 import { FaBars } from "react-icons/fa";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import API_BASE_URL from "../../config/api.js"; 
+import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth"; 
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -58,39 +59,12 @@ function TranscriptsPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // First try to get OAuth user info
-        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        let userData = null;
-        if (oauthRes.ok) {
-          const oauthData = await oauthRes.json();
-          if (oauthData.isAuthenticated) {
-            // OAuth user - fetch additional profile data
-            const profileRes = await fetch(`${API_BASE_URL}/User/profile`, {
-              credentials: "include",
-            });
-            userData = profileRes.ok ? await profileRes.json() : null;
-          }
-        }
-
-        // If not OAuth user, try regular session-based authentication
-        if (!userData) {
-          const userRes = await fetch(`${API_BASE_URL}/User/profile`, {
-            credentials: "include",
-          });
-          userData = userRes.ok ? await userRes.json() : null;
-        }
+        // Fetch user profile data
+        const userRes = await authenticatedFetch(`${API_BASE_URL}/user/profile`);
+        const userData = userRes.ok ? await userRes.json() : null;
 
         // Fetch transcript data
-        const transcriptRes = await fetch(`${API_BASE_URL}/Transcripts/`, {
-          credentials: "include",
-        });
+        const transcriptRes = await authenticatedFetch(`${API_BASE_URL}/Transcripts/`);
 
         if (!transcriptRes.ok) {
           // If transcript not found or error, set empty array
@@ -126,46 +100,7 @@ function TranscriptsPage() {
 
   // Check authentication status
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        // First check OAuth authentication
-        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (oauthRes.ok) {
-          const oauthData = await oauthRes.json();
-          if (oauthData.isAuthenticated) {
-            setIsAuthenticated(true);
-            return;
-          }
-        }
-
-        // Check regular session authentication
-        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (sessionRes.ok) {
-          setIsAuthenticated(true);
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Auth check error:", error);
-        setIsAuthenticated(false);
-      }
-    };
-
-    checkAuth();
+    setIsAuthenticated(checkAuth());
   }, []);
 
   // When selectedSemesterId changes, scroll to that semester card
@@ -236,12 +171,10 @@ function TranscriptsPage() {
   const handleAddSemester = async () => {
     if (!newSemester.name || !newSemester.year) return;
     try {
-      const res = await fetch(
+      const res = await authenticatedFetch(
         `${API_BASE_URL}/Transcripts/add-semester`,
         {
           method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: `${newSemester.name} ${newSemester.year}`,
           }),
@@ -265,10 +198,8 @@ function TranscriptsPage() {
     }
 
     try {
-      const res = await fetch(`${API_BASE_URL}/Transcripts/add-course`, {
+      const res = await authenticatedFetch(`${API_BASE_URL}/Transcripts/add-course`, {
         method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           coursecode: newCourse.code.trim(),
           coursename: newCourse.name.trim(),
@@ -278,9 +209,7 @@ function TranscriptsPage() {
         }),
       });
       if (!res.ok) throw new Error((await res.json()).message);
-      const updated = await fetch(`${API_BASE_URL}/Transcripts/`, {
-        credentials: "include",
-      }).then((r) => r.json());
+      const updated = await authenticatedFetch(`${API_BASE_URL}/Transcripts/`).then((r) => r.json());
       setSemesters(updated);
       setShowAddCourseModal(false);
     } catch (err) {
@@ -291,11 +220,10 @@ function TranscriptsPage() {
 
   const handleRemoveCourse = async (semesterId, courseId) => {
     try {
-      await fetch(
+      await authenticatedFetch(
         `${API_BASE_URL}/Transcripts/remove-course/${courseId}`,
         {
           method: "DELETE",
-          credentials: "include",
         },
       );
       setSemesters(
@@ -316,11 +244,10 @@ function TranscriptsPage() {
 
   const handleRemoveSemester = async (semesterId) => {
     try {
-      await fetch(
+      await authenticatedFetch(
         `${API_BASE_URL}/Transcripts/remove-semester/${semesterId}`,
         {
           method: "DELETE",
-          credentials: "include",
         },
       );
       setSemesters(semesters.filter((s) => s.id !== semesterId));

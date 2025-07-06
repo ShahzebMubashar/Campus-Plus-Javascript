@@ -5,6 +5,7 @@ import Footer from '../Footer/Footer';
 import logo from '../Index/cp_logo.png';
 import './CompleteProfile.css';
 import API_BASE_URL from '../../config/api.js'; 
+import { authenticatedFetch, extractTokensFromURL, loginWithTokens } from '../../utils/auth'; 
 
 const CompleteProfile = () => {
     const [formData, setFormData] = useState({
@@ -40,24 +41,79 @@ const CompleteProfile = () => {
         // Check if user is authenticated
         const checkAuth = async () => {
             try {
-                const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
-                    credentials: 'include'
-                });
+                console.log('CompleteProfile: Starting auth check');
+                
+                // First, check if we have tokens in the URL (OAuth callback)
+                const tokens = extractTokensFromURL();
+                console.log('CompleteProfile: Tokens from URL:', tokens ? 'EXISTS' : 'NULL');
+                
+                if (tokens) {
+                    console.log('CompleteProfile: Processing OAuth tokens');
+                    
+                    // Get user info using the token from URL
+                    const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
+                        headers: {
+                            'Authorization': `Bearer ${tokens.accessToken}`,
+                            'Content-Type': 'application/json',
+                        },
+                    });
 
-                if (response.ok) {
-                    const data = await response.json();
-                    if (data.isAuthenticated) {
-                        setUserInfo(data);
-                        // If profile is already complete, redirect to dashboard
-                        if (data.isProfileComplete) {
-                            navigate('/', { replace: true });
+                    console.log('CompleteProfile: Current user response status:', response.status);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('CompleteProfile: Current user data:', data);
+
+                        if (data.isAuthenticated) {
+                            console.log('CompleteProfile: User authenticated, storing tokens');
+                            
+                            // Store tokens and user data
+                            loginWithTokens(tokens, {
+                                userid: data.userid,
+                                email: data.email,
+                                username: data.username,
+                                fullName: data.fullName,
+                                role: data.role
+                            });
+
+                            setUserInfo(data);
+                            
+                            // If profile is already complete, redirect to dashboard
+                            if (data.isProfileComplete) {
+                                console.log('CompleteProfile: Profile already complete, redirecting to home');
+                                navigate('/', { replace: true });
+                            } else {
+                                console.log('CompleteProfile: Profile incomplete, staying on complete profile page');
+                            }
+                        } else {
+                            console.log('CompleteProfile: User not authenticated');
+                            navigate('/signin', { replace: true });
                         }
                     } else {
-                        // Not authenticated, redirect to sign in
+                        console.log('CompleteProfile: Failed to get current user');
                         navigate('/signin', { replace: true });
                     }
                 } else {
-                    navigate('/signin', { replace: true });
+                    console.log('CompleteProfile: No tokens in URL, checking existing auth');
+                    
+                    // No tokens in URL, check if user is already authenticated
+                    const response = await authenticatedFetch(`${API_BASE_URL}/auth/current-user`);
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (data.isAuthenticated) {
+                            setUserInfo(data);
+                            // If profile is already complete, redirect to dashboard
+                            if (data.isProfileComplete) {
+                                navigate('/', { replace: true });
+                            }
+                        } else {
+                            // Not authenticated, redirect to sign in
+                            navigate('/signin', { replace: true });
+                        }
+                    } else {
+                        navigate('/signin', { replace: true });
+                    }
                 }
             } catch (error) {
                 console.error('Auth check error:', error);
@@ -92,12 +148,8 @@ const CompleteProfile = () => {
         setMessage('');
 
         try {
-            const response = await fetch(`${API_BASE_URL}/auth/complete-profile`, {
+            const response = await authenticatedFetch(`${API_BASE_URL}/auth/complete-profile`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include',
                 body: JSON.stringify({
                     ...formData,
                     rollnumber: formData.rollnumber.replace(/-/g, '') // Remove dashes before sending

@@ -19,6 +19,7 @@ import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
 import API_BASE_URL from "../../../config/api.js";
+import { isAuthenticated, getUser, logout as authLogout, authenticatedFetch } from "../../../utils/auth";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -57,61 +58,26 @@ function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
 
-  const checkSession = async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}/user/profile`, {
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        setIsLoggedIn(true);
-        const data = await response.json();
-        setUserData(data);
-        localStorage.setItem("user", JSON.stringify(data));
-        return;
-      }
-
-      // If that fails, try the OAuth current-user endpoint
-      const oauthResponse = await fetch(`${API_BASE_URL}/auth/current-user`, {
-        credentials: "include",
-      });
-
-      if (oauthResponse.ok) {
-        const oauthData = await oauthResponse.json();
-        if (oauthData.isAuthenticated) {
-          setIsLoggedIn(true);
-          setUserData(oauthData);
-          localStorage.setItem("user", JSON.stringify(oauthData));
-          return;
-        }
-      }
-
-      // If both fail, user is not logged in
-      setIsLoggedIn(false);
-      localStorage.removeItem("user");
-    } catch (error) {
-      console.error("Session check failed:", error);
-      setIsLoggedIn(false);
-      localStorage.removeItem("user");
-    }
+  const checkAuthStatus = () => {
+    console.log("🔍 Navbar: Checking JWT authentication status...");
+    
+    const authStatus = isAuthenticated();
+    const userData = getUser();
+    
+    console.log("🔍 Navbar: Auth status:", authStatus);
+    console.log("🔍 Navbar: User data:", userData);
+    
+    setIsLoggedIn(authStatus);
+    setUserData(userData);
   };
 
   useEffect(() => {
-    checkSession();
-
-    // Try to get user data from localStorage if available
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUserData(JSON.parse(storedUser));
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error parsing stored user data:", error);
-      }
-    }
+    // Check authentication status on component mount
+    checkAuthStatus();
 
     // Listen for authentication state changes
     const handleAuthStateChange = (event) => {
+      console.log("🔍 Navbar: Auth state changed:", event.detail);
       if (event.detail.isAuthenticated) {
         setIsLoggedIn(true);
         setUserData(event.detail.user);
@@ -123,8 +89,8 @@ function Navbar() {
 
     window.addEventListener('authStateChanged', handleAuthStateChange);
 
-    // Check session every 5 minutes
-    const interval = setInterval(checkSession, 5 * 60 * 1000);
+    // Check authentication status periodically (for token expiration)
+    const interval = setInterval(checkAuthStatus, 5 * 60 * 1000);
 
     return () => {
       clearInterval(interval);
@@ -134,27 +100,15 @@ function Navbar() {
 
   const handleLogout = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        localStorage.removeItem("user");
-        setIsLoggedIn(false);
-        setUserData(null);
-
-        // Dispatch custom event to notify other components of logout
-        window.dispatchEvent(new CustomEvent('authStateChanged', {
-          detail: { isAuthenticated: false, user: null }
-        }));
-
+      console.log("🔍 Navbar: Logging out user...");
+      await authLogout();
         navigate("/sign-in");
-      } else {
-        console.error("Logout failed:", response.statusText);
-      }
     } catch (error) {
       console.error("Logout error:", error);
+      // Even if logout API fails, clear local state
+      setIsLoggedIn(false);
+      setUserData(null);
+      navigate("/sign-in");
     }
   };
 

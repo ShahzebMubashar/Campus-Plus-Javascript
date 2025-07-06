@@ -4,6 +4,7 @@ import Navbar from "../Index/components/Navbar";
 import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -22,42 +23,8 @@ function Dashboard() {
 
   const fetchUserInfo = async () => {
     try {
-      // First try to get OAuth user info
-      const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (oauthRes.ok) {
-        const oauthData = await oauthRes.json();
-        if (oauthData.isAuthenticated) {
-          // OAuth user - fetch additional profile data
-          const profileRes = await fetch(`${API_BASE_URL}/user/profile`, {
-            method: "GET",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (profileRes.ok) {
-            const profileData = await profileRes.json();
-            setUser(profileData);
-            return;
-          }
-        }
-      }
-
-      // Fallback to regular session-based authentication
-      const res = await fetch(`${API_BASE_URL}/user/profile`, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
       if (!res.ok) {
@@ -74,34 +41,7 @@ function Dashboard() {
   useEffect(() => {
     const checkAuthAndFetchData = async () => {
       try {
-        // First check OAuth authentication
-        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (oauthRes.ok) {
-          const oauthData = await oauthRes.json();
-          if (oauthData.isAuthenticated) {
-            setIsAuthenticated(true);
-            fetchUserInfo();
-            return;
-          }
-        }
-
-        // Check regular session authentication
-        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (sessionRes.ok) {
+        if (checkAuth()) {
           setIsAuthenticated(true);
           fetchUserInfo();
         } else {
@@ -224,12 +164,8 @@ function Dashboard() {
 
     const fetchCurrentCourses = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/user/current-courses`, {
+        const res = await authenticatedFetch(`${API_BASE_URL}/user/current-courses`, {
           method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
         if (!res.ok) {
@@ -248,12 +184,8 @@ function Dashboard() {
     // Fetch tasks from backend
     const fetchTasks = async () => {
       try {
-        const res = await fetch(`${API_BASE_URL}/user/my-reminders`, {
+        const res = await authenticatedFetch(`${API_BASE_URL}/user/my-reminders`, {
           method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
         if (!res.ok) {
@@ -296,9 +228,8 @@ function Dashboard() {
 
     const fetchJoinedRooms = async () => {
       try {
-        const result = await fetch(
+        const result = await authenticatedFetch(
           `${API_BASE_URL}/Chatrooms/my-rooms/${user.userid}`,
-          { credentials: "include" },
         );
         const data = await result.json();
 
@@ -364,14 +295,10 @@ function Dashboard() {
           JSON.stringify(completedTaskIds),
         );
 
-        const response = await fetch(
+        const response = await authenticatedFetch(
           `${API_BASE_URL}/user/update-priority/${id}`,
           {
             method: "PUT",
-            credentials: "include",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({
               status: newStatus,
             }),

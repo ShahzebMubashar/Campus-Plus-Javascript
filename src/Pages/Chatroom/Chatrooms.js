@@ -3,9 +3,11 @@ import Sidebar from "./components/Sidebar.js";
 import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from "../Index/components/Navbar.js";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import "../Chatroom/css/Chatroom.css";
 import { AiOutlineMenu } from "react-icons/ai";
 import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 
 export default function Chatrooms() {
@@ -19,9 +21,21 @@ export default function Chatrooms() {
   const [isMenuVisible, setIsMenuVisible] = useState(true);
 
   useEffect(() => {
-    fetchUserInfo();
-    fetchAllRooms();
-    fetchJoinedRooms();
+    // Check authentication first
+    const checkAuthStatus = () => {
+      const authStatus = checkAuth();
+      setIsAuthenticated(authStatus);
+      setLoading(false);
+      
+      if (authStatus) {
+        // Only fetch data if user is authenticated
+        fetchUserInfo();
+        fetchAllRooms();
+        fetchJoinedRooms();
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
   useEffect(() => {
@@ -67,49 +81,34 @@ export default function Chatrooms() {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/user/profile`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "apploication/json",
-        },
       });
       if (response.ok) {
         const data = await response.json();
         setUserInfo(data);
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
-      setIsAuthenticated(false);
     }
   };
 
   const fetchAllRooms = async () => {
     try {
-      const response = await fetch(`${API_BASE_URL}/Chatrooms`, {
-        credentials: "include",
-      });
+      const response = await authenticatedFetch(`${API_BASE_URL}/Chatrooms`);
       if (response.ok) {
         const data = await response.json();
         setRooms(data);
       }
     } catch (error) {
       console.error("Error fetching rooms:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchJoinedRooms = async () => {
     try {
-      const response = await fetch(
+      const response = await authenticatedFetch(
         `${API_BASE_URL}/Chatrooms/user/groups`,
-        {
-          credentials: "include",
-        },
       );
       if (response.ok) {
         const data = await response.json();
@@ -124,11 +123,10 @@ export default function Chatrooms() {
     // If room is not joined, join it first
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
-        const response = await fetch(
+        const response = await authenticatedFetch(
           `${API_BASE_URL}/Chatrooms/join/${room.roomid}`,
           {
             method: "POST",
-            credentials: "include",
           },
         );
         if (response.ok) {
@@ -141,24 +139,6 @@ export default function Chatrooms() {
     }
     setActiveRoom(room);
   };
-
-  // Login prompt component
-  const LoginPrompt = () => (
-    <div className="login-prompt">
-      <div className="login-prompt-content">
-        <div className="login-prompt-icon">🔒</div>
-        <h2>Authentication Required</h2>
-        <p>You need to log in to access the chatroom feature.</p>
-        <p>Please sign in to your account to continue.</p>
-        <button
-          className="login-prompt-btn"
-          onClick={() => (window.location.href = "/sign-in")}
-        >
-          Sign In
-        </button>
-      </div>
-    </div>
-  );
 
   return (
     <div className="chatroom-main-top">
@@ -211,10 +191,11 @@ export default function Chatrooms() {
         </div>
         {/* Login prompt overlay with blurred background */}
         {!isAuthenticated && !loading && (
-          <div className="login-overlay">
-            <div className="blurred-background"></div>
-            <LoginPrompt />
-          </div>
+          <BlurLoginPrompt
+            message="Chatroom Access Required"
+            subMessage="Please sign in to access the chatroom feature and join conversations."
+            buttonText="Sign In"
+          />
         )}
       </div>
     </div>
@@ -223,12 +204,12 @@ export default function Chatrooms() {
 
 // Helper function for leaving a room
 async function handleLeaveRoom(roomId) {
+  const { authenticatedFetch } = await import("../../utils/auth");
   try {
-    const response = await fetch(
+    const response = await authenticatedFetch(
         `${API_BASE_URL}/Chatrooms/leave/${roomId}`,
       {
         method: "DELETE",
-        credentials: "include",
       },
     );
     return response.ok;

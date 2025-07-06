@@ -6,6 +6,7 @@ import NoteBanner from "../NoteBanner";
 import { useNavigate } from "react-router-dom";
 import { FaBook, FaStar, FaSearch } from "react-icons/fa";
 import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 const Star = ({ fill = 1, size = 28, ...props }) => {
   // fill: 1 = full, 0.5 = half, 0.25 = quarter, 0 = empty
@@ -72,14 +73,13 @@ const Rating = ({ courseId, currentRating, difficulty, onRate, onRequireLogin })
 
   const handleRatingSubmit = async (rating) => {
     // Check login state
-    if (!localStorage.getItem("user")) {
+    if (!checkAuth()) {
       if (onRequireLogin) onRequireLogin();
       return;
     }
     try {
-      const response = await fetch(`${API_BASE_URL}/courses/rate-course`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/courses/rate-course`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -99,10 +99,10 @@ const Rating = ({ courseId, currentRating, difficulty, onRate, onRequireLogin })
       console.log("Rating response:", message);
 
       // Fetch updated course data
-      const courseResponse = await fetch(
+      const courseResponse = await authenticatedFetch(
         `${API_BASE_URL}/courses/${courseId}`,
         {
-          credentials: "include",
+          method: "GET",
         },
       );
 
@@ -160,8 +160,12 @@ const PastPapers = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
+        // Fetch courses without authentication - public access
         const response = await fetch(`${API_BASE_URL}/Courses`, {
-          credentials: "include",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         });
         if (!response.ok) {
           throw new Error("Failed to fetch courses");

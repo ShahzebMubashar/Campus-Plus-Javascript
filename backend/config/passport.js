@@ -4,26 +4,8 @@ const GitHubStrategy = require('passport-github2').Strategy;
 const pool = require('./database.js');
 const bcrypt = require('bcrypt');
 
-// Serialize user for the session
-passport.serializeUser((user, done) => {
-    done(null, user.userid);
-});
-
-// Deserialize user from the session
-passport.deserializeUser(async (userid, done) => {
-    try {
-        const result = await pool.query(
-            `SELECT u.*, ui.name as fullName 
-       FROM Users u 
-       LEFT JOIN UserInfo ui ON u.userid = ui.userid 
-       WHERE u.userid = $1`,
-            [userid]
-        );
-        done(null, result.rows[0]);
-    } catch (error) {
-        done(error, null);
-    }
-});
+// No session serialization needed for JWT
+// Remove serializeUser and deserializeUser
 
 // Google OAuth Strategy
 passport.use(new GoogleStrategy({
@@ -32,20 +14,26 @@ passport.use(new GoogleStrategy({
     callbackURL: "/auth/google/callback"
 }, async (accessToken, refreshToken, profile, done) => {
     try {
+        // Validate required profile data
+        if (!profile.emails || !profile.emails[0] || !profile.emails[0].value) {
+            return done(new Error('No email provided by Google'), null);
+        }
+
         // Check if user already exists
         const existingUser = await pool.query(
-            'SELECT * FROM Users WHERE email = $1',
+            'SELECT u.*, ui.name as fullName FROM Users u LEFT JOIN UserInfo ui ON u.userid = ui.userid WHERE u.email = $1',
             [profile.emails[0].value]
         );
 
         if (existingUser.rows.length > 0) {
-            // User exists, return user data
+            // User exists, return user data for JWT
             const user = existingUser.rows[0];
             return done(null, {
                 userid: user.userid,
                 email: user.email,
                 username: user.username,
                 fullName: user.fullname || profile.displayName,
+                role: user.role || 'Student',
                 isProfileComplete: user.username && user.rollnumber && user.rollnumber !== 'PENDING'
             });
         }
@@ -65,10 +53,10 @@ passport.use(new GoogleStrategy({
 
             // Insert new user
             const newUser = await client.query(
-                `INSERT INTO Users (username, email, password, rollnumber) 
-         VALUES ($1, $2, $3, $4) 
-         RETURNING userid, username, email`,
-                [tempUsername, profile.emails[0].value, hashedPassword, tempRollnumber]
+                `INSERT INTO Users (username, email, password, rollnumber, role) 
+         VALUES ($1, $2, $3, $4, $5) 
+         RETURNING userid, username, email, role`,
+                [tempUsername, profile.emails[0].value, hashedPassword, tempRollnumber, 'Student']
             );
 
             // Insert user info
@@ -84,6 +72,7 @@ passport.use(new GoogleStrategy({
                 email: newUser.rows[0].email,
                 username: tempUsername,
                 fullName: profile.displayName,
+                role: 'Student',
                 isProfileComplete: false
             });
         } catch (error) {
@@ -93,6 +82,7 @@ passport.use(new GoogleStrategy({
             client.release();
         }
     } catch (error) {
+        console.error('Google OAuth error:', error);
         return done(error, null);
     }
 }));
@@ -123,18 +113,19 @@ passport.use(new GitHubStrategy({
 
         // Check if user already exists by email
         const existingUser = await pool.query(
-            'SELECT * FROM Users WHERE email = $1',
+            'SELECT u.*, ui.name as fullName FROM Users u LEFT JOIN UserInfo ui ON u.userid = ui.userid WHERE u.email = $1',
             [userEmail]
         );
 
         if (existingUser.rows.length > 0) {
-            // User exists, return user data
+            // User exists, return user data for JWT
             const user = existingUser.rows[0];
             return done(null, {
                 userid: user.userid,
                 email: user.email,
                 username: user.username,
                 fullName: user.fullname || profile.displayName,
+                role: user.role || 'Student',
                 isProfileComplete: user.username && user.rollnumber && user.rollnumber !== 'PENDING'
             });
         }
@@ -154,10 +145,10 @@ passport.use(new GitHubStrategy({
 
             // Insert new user
             const newUser = await client.query(
-                `INSERT INTO Users (username, email, password, rollnumber) 
-         VALUES ($1, $2, $3, $4) 
-         RETURNING userid, username, email`,
-                [tempUsername, userEmail, hashedPassword, tempRollnumber]
+                `INSERT INTO Users (username, email, password, rollnumber, role) 
+         VALUES ($1, $2, $3, $4, $5) 
+         RETURNING userid, username, email, role`,
+                [tempUsername, userEmail, hashedPassword, tempRollnumber, 'Student']
             );
 
             // Insert user info
@@ -173,6 +164,7 @@ passport.use(new GitHubStrategy({
                 email: newUser.rows[0].email,
                 username: tempUsername,
                 fullName: profile.displayName || profile.username,
+                role: 'Student',
                 isProfileComplete: false
             });
         } catch (error) {

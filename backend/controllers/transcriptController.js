@@ -1,7 +1,7 @@
 const pool = require("../config/database");
 
 const getTranscript = async (request, response) => {
-  const userid = request.userid; // From unifiedAuthMiddleware
+  const userid = request.user.userid; // From JWT middleware
 
   try {
     const res = await pool.query(
@@ -47,7 +47,7 @@ const addCourse = async (request, response) => {
     body: { coursecode, credits, grade, semester },
   } = request;
 
-  const userid = request.userid; // From unifiedAuthMiddleware
+  const userid = request.user.userid; // From JWT middleware
 
   if (!coursecode || !credits || !grade || !semester)
     return response.status(400).json(`Enter all the fields`);
@@ -104,7 +104,7 @@ const addSemester = async (request, response) => {
     body: { name },
   } = request;
 
-  const userid = request.userid; // From unifiedAuthMiddleware
+  const userid = request.user.userid; // From JWT middleware
 
   if (!name) {
     return response.status(400).json({ error: "Semester name is required" });
@@ -158,7 +158,7 @@ const removeCourse = async (request, response) => {
     params: { transcriptId },
   } = request;
 
-  const userid = request.userid; // From unifiedAuthMiddleware
+  const userid = request.user.userid; // From JWT middleware
 
   const client = await pool.connect();
 
@@ -192,7 +192,7 @@ const removeSemester = async (request, response) => {
     params: { semestername },
   } = request;
 
-  const userid = request.userid; // From unifiedAuthMiddleware
+  const userid = request.user.userid; // From JWT middleware
 
   const client = await pool.connect();
 
