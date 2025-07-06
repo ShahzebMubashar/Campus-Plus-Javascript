@@ -24,6 +24,7 @@ export default function AuthPage() {
   const [message, setMessage] = useState("");
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [rollNumberError, setRollNumberError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   // Check authentication status on component mount
@@ -217,6 +218,7 @@ export default function AuthPage() {
   // Backend: Sign In
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
       const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
@@ -248,17 +250,20 @@ export default function AuthPage() {
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
       setIsSuccessMessage(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Backend: Sign Up
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
-
+    setIsSubmitting(true);
     // Validate roll number before submitting
     const rollNumberError = validateRollNumber(formData.password);
     if (rollNumberError) {
       setMessage(rollNumberError);
+      setIsSubmitting(false);
       return;
     }
 
@@ -297,6 +302,8 @@ export default function AuthPage() {
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
       setIsSuccessMessage(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -329,6 +336,15 @@ export default function AuthPage() {
       <div className="auth-container">
         {/* Animated Background */}
 
+        {/* Loading overlay for sign-in/sign-up submission */}
+        {isSubmitting && (
+          <div className="signing-in-overlay">
+            <div className="signing-in-spinner"></div>
+            <div className="signing-in-message">
+              {isLogin ? "Signing in..." : "Creating account..."}
+            </div>
+          </div>
+        )}
 
         {/* Main Content */}
         <div className="auth-wrapper">
