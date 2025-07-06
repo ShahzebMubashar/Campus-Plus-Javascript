@@ -131,16 +131,12 @@ exports.login = async (request, response) => {
     if (!isMatch)
       return response.status(401).json({ error: "Invalid credentials" });
 
-    // Regenerate session for security
-    await new Promise((resolve, reject) => {
-      request.session.regenerate((err) => {
-        if (err) {
-          console.error("Session regenerate error:", err);
-          reject(err);
-        } else {
-          resolve();
-        }
-      });
+    console.log("Setting session user data:", {
+      userid: user.userid,
+      email: user.email,
+      username: user.username,
+      role: user.role,
+      fullName: user.fullname,
     });
 
     request.session.user = {
@@ -151,13 +147,19 @@ exports.login = async (request, response) => {
       fullName: user.fullname,
     };
 
+    console.log("Session after setting user:", request.session);
+
     await new Promise((resolve, reject) => {
       request.session.save((err) => {
         if (err) {
-          console.error("Session save error:", err);
+          console.error("❌ Session save error:", err);
           reject(err);
+        } else {
+          console.log("✅ Session saved successfully");
+          console.log("📊 Session ID:", request.sessionID);
+          console.log("📊 Session data:", JSON.stringify(request.session, null, 2));
+          resolve();
         }
-        resolve();
       });
     });
 
