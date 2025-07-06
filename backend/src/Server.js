@@ -112,9 +112,8 @@ app.use(
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
       httpOnly: true,
-      secure: true, // Required for cross-origin with sameSite: none
-      sameSite: "none", // Required for cross-origin
-      // Don't set domain - let browser handle it
+      secure: true, // Required for HTTPS
+      sameSite: "lax", // Most compatible option for cross-origin
     },
     proxy: true,
   })
