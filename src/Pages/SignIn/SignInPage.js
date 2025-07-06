@@ -7,6 +7,11 @@ import { useNavigate } from "react-router-dom";
 import API_BASE_URL from "../../config/api";
 
 export default function AuthPage() {
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+
   // Backend logic/state from SignInPage.js
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -20,6 +25,160 @@ export default function AuthPage() {
   const [isSuccessMessage, setIsSuccessMessage] = useState(false);
   const [rollNumberError, setRollNumberError] = useState("");
   const navigate = useNavigate();
+
+  // Check authentication status on component mount
+  useEffect(() => {
+    const checkAuthStatus = async () => {
+      try {
+        // First check OAuth authentication
+        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (oauthRes.ok) {
+          const oauthData = await oauthRes.json();
+          if (oauthData.isAuthenticated) {
+            setIsAuthenticated(true);
+            setUserData(oauthData);
+            return;
+          }
+        }
+
+        // Check regular session authentication
+        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
+          method: "GET",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (sessionRes.ok) {
+          const sessionData = await sessionRes.json();
+          setIsAuthenticated(true);
+          setUserData(sessionData);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    checkAuthStatus();
+  }, []);
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        localStorage.removeItem("user");
+        setIsAuthenticated(false);
+        setUserData(null);
+
+        // Dispatch custom event to notify other components of logout
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+          detail: { isAuthenticated: false, user: null }
+        }));
+
+        // Refresh the page to show the sign-in form
+        window.location.reload();
+      } else {
+        console.error("Logout failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  // If still loading auth status, show loading
+  if (isAuthLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="auth-container">
+          <div className="auth-wrapper">
+            <div className="auth-card">
+              <div className="loading-spinner" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '200px'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  border: '4px solid #f3f3f3',
+                  borderTop: '4px solid #3b82f6',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite'
+                }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // If user is already authenticated, show the "already signed in" message
+  if (isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <div className="auth-container">
+          <div className="auth-wrapper">
+            <div className="auth-card">
+              <div className="already-signed-in-content">
+                <div className="already-signed-in-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <h2>You're Already Signed In</h2>
+                <p>Welcome back, {userData?.fullName || userData?.username || 'User'}!</p>
+                <p>You're currently signed in to your account. Sign out to access the sign-in page.</p>
+                <div className="already-signed-in-actions">
+                  <button
+                    onClick={() => navigate("/")}
+                    className="already-signed-in-btn primary"
+                  >
+                    Go to Dashboard
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="already-signed-in-btn secondary"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
 
   // Roll number validation function
   const validateRollNumber = (rollNumber) => {

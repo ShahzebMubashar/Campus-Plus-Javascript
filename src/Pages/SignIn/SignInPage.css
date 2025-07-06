@@ -798,3 +798,173 @@ html {
   outline: 2px solid #3b82f6;
   outline-offset: 2px;
 }
+
+/* Loading spinner animation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Already Signed In Styles */
+.already-signed-in-content {
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 24px;
+}
+
+.already-signed-in-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 80px;
+  height: 80px;
+  background: linear-gradient(135deg, #22c55e 0%, #10b981 100%);
+  border-radius: 50%;
+  color: white;
+  box-shadow: 0 8px 24px rgba(34, 197, 94, 0.3);
+  animation: successPulse 2s ease-in-out infinite;
+}
+
+.already-signed-in-content h2 {
+  color: #1e293b;
+  font-size: 28px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.already-signed-in-content p {
+  color: #64748b;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0;
+  max-width: 400px;
+}
+
+.already-signed-in-content p:first-of-type {
+  color: #3b82f6;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.already-signed-in-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.already-signed-in-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: none;
+  min-width: 140px;
+  position: relative;
+  overflow: hidden;
+}
+
+.already-signed-in-btn.primary {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.already-signed-in-btn.primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+}
+
+.already-signed-in-btn.secondary {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+}
+
+.already-signed-in-btn.secondary:hover {
+  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+  color: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.already-signed-in-btn:active {
+  transform: translateY(0);
+}
+
+/* Responsive design for already signed in */
+@media (max-width: 768px) {
+  .already-signed-in-content {
+    padding: 32px 16px;
+    gap: 20px;
+  }
+
+  .already-signed-in-icon {
+    width: 64px;
+    height: 64px;
+  }
+
+  .already-signed-in-content h2 {
+    font-size: 24px;
+  }
+
+  .already-signed-in-content p {
+    font-size: 15px;
+  }
+
+  .already-signed-in-content p:first-of-type {
+    font-size: 16px;
+  }
+
+  .already-signed-in-actions {
+    flex-direction: column;
+    width: 100%;
+    max-width: 280px;
+  }
+
+  .already-signed-in-btn {
+    width: 100%;
+    min-width: unset;
+  }
+}
+
+@media (max-width: 480px) {
+  .already-signed-in-content {
+    padding: 24px 12px;
+    gap: 16px;
+  }
+
+  .already-signed-in-icon {
+    width: 56px;
+    height: 56px;
+  }
+
+  .already-signed-in-content h2 {
+    font-size: 20px;
+  }
+
+  .already-signed-in-content p {
+    font-size: 14px;
+  }
+
+  .already-signed-in-content p:first-of-type {
+    font-size: 15px;
+  }
+
+  .already-signed-in-btn {
+    padding: 10px 20px;
+    font-size: 14px;
+  }
+}
