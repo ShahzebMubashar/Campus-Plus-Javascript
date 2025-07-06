@@ -12,50 +12,68 @@ const AuthSuccess = () => {
     useEffect(() => {
         const handleOAuthCallback = async () => {
             try {
+                console.log('AuthSuccess: Starting OAuth callback handling');
+                
                 // Extract tokens from URL (OAuth callback)
                 const tokens = extractTokensFromURL();
+                console.log('AuthSuccess: Extracted tokens:', tokens ? 'EXISTS' : 'NULL');
                 
                 if (tokens) {
+                    console.log('AuthSuccess: Token structure:', {
+                        accessToken: tokens.accessToken ? 'EXISTS' : 'MISSING',
+                        refreshToken: tokens.refreshToken ? 'EXISTS' : 'MISSING'
+                    });
+                    
                     // Get user info using the token
                     const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
                         headers: {
                             'Authorization': `Bearer ${tokens.accessToken}`,
                             'Content-Type': 'application/json',
                         },
-                });
+                    });
 
-                if (response.ok) {
-                    const data = await response.json();
+                    console.log('AuthSuccess: Current user response status:', response.status);
+                    
+                    if (response.ok) {
+                        const data = await response.json();
+                        console.log('AuthSuccess: Current user data:', data);
 
-                    if (data.isAuthenticated) {
+                        if (data.isAuthenticated) {
+                            console.log('AuthSuccess: User is authenticated, storing tokens and user data');
+                            
                             // Store tokens and user data
                             loginWithTokens(tokens, {
-                            userid: data.userid,
-                            email: data.email,
-                            username: data.username,
+                                userid: data.userid,
+                                email: data.email,
+                                username: data.username,
                                 fullName: data.fullName,
                                 role: data.role
                             });
 
-                        // Check if profile is complete
-                        if (data.isProfileComplete) {
-                            // Show success message briefly
-                            setTimeout(() => {
-                                navigate('/', { replace: true });
-                            }, 2000);
+                            // Check if profile is complete
+                            if (data.isProfileComplete) {
+                                console.log('AuthSuccess: Profile complete, redirecting to home');
+                                // Show success message briefly
+                                setTimeout(() => {
+                                    navigate('/', { replace: true });
+                                }, 2000);
+                            } else {
+                                console.log('AuthSuccess: Profile incomplete, redirecting to complete profile');
+                                // Profile incomplete, redirect to complete profile page
+                                setTimeout(() => {
+                                    navigate('/complete-profile', { replace: true });
+                                }, 1000);
+                            }
                         } else {
-                            // Profile incomplete, redirect to complete profile page
-                            setTimeout(() => {
-                                navigate('/complete-profile', { replace: true });
-                            }, 1000);
+                            console.log('AuthSuccess: User not authenticated');
+                            setError('Authentication failed. Please try again.');
                         }
                     } else {
-                        setError('Authentication failed. Please try again.');
+                        console.log('AuthSuccess: Failed to get current user');
+                        setError('Failed to verify authentication. Please try again.');
                     }
                 } else {
-                    setError('Failed to verify authentication. Please try again.');
-                    }
-                } else {
+                    console.log('AuthSuccess: No tokens found in URL');
                     setError('No authentication tokens found. Please try again.');
                 }
             } catch (error) {
