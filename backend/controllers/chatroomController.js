@@ -151,7 +151,7 @@ const getRoomMessages = async (req, res) => {
     if (messagesResult.rowCount === 0) {
       return res.status(404).json({
         message: "No messages found for this room",
-        userRole: req.session.user.role ?? null,
+        userRole: req.user?.role ?? null,
       });
     }
 
@@ -220,7 +220,7 @@ const getRoomMessages = async (req, res) => {
 
     const returnData = {
       data: structuredResponse,
-      userRole: req.session?.user?.role ?? null,
+      userRole: req.user?.role ?? null,
     };
 
     return res.status(200).json(returnData);
@@ -249,9 +249,7 @@ function cleanReply(reply) {
 const createRoom = async (request, response) => {
   const {
     body: { roomName, description },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!roomName || !description)
@@ -288,9 +286,7 @@ const createRoom = async (request, response) => {
 const joinRoom = async (request, response) => {
   const {
     params: { roomid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!userid || !roomid) {
@@ -330,9 +326,7 @@ const sendMessage = async (request, response) => {
   const {
     body: { message, parent_reply_id = null, messageid = null },
     params: { roomid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -371,9 +365,7 @@ const sendReply = async (request, response) => {
   const {
     body: { message, parent_reply_id = null },
     params: { roomid, parentMessage }, // parentMessage is the messageid
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -434,9 +426,7 @@ const addnestedReply = async (request, response) => {
   const {
     params: { roomid, parentReplyId },
     body: { content },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -515,9 +505,7 @@ const processPost = async (request, response) => {
 const likePost = async (req, res) => {
   const {
     params: { messageid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = req;
 
   try {
@@ -579,7 +567,7 @@ const createPost = async (req, res) => {
       `INSERT INTO messages (roomid, userid, content, posted_at, status) 
            VALUES ($1, $2, $3, NOW(), 'Pending') 
            RETURNING messageid, roomid, userid, content, posted_at, status`,
-      [roomid, req.session.user.userid, message]
+      [roomid, req.user.userid, message]
     );
 
     return res.status(201).json({ message: result.rows[0] });
@@ -592,9 +580,7 @@ const createPost = async (req, res) => {
 const LeaveRoom = async (request, response) => {
   const {
     params: { roomid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!roomid) return response.status(400).json("Room ID is required");

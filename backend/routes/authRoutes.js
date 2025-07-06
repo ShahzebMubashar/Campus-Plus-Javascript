@@ -7,8 +7,11 @@ const {
   userRole,
   forgotPassword,
   resetPassword,
+  refreshToken,
+  currentUser,
 } = require("../controllers/authController");
-const { checkAuthorisation } = require("../middlewares/authMiddleware");
+const { jwtAuthMiddleware, optionalJwtAuth } = require("../middlewares/jwtAuthMiddleware");
+const { generateTokenPair } = require("../utils/jwt");
 const passport = require("passport");
 const pool = require("../config/database");
 const router = express.Router();
@@ -21,22 +24,24 @@ router.get("/test", (req, res) => {
 
 router.post("/login", login);
 router.post("/register", register);
-router.post("/logout", logout);
+router.post("/logout", jwtAuthMiddleware, logout);
 router.post("/test-login", testLogin);
+router.post("/refresh-token", refreshToken);
 
-router.get("/user-role", checkAuthorisation, userRole);
+router.get("/user-role", jwtAuthMiddleware, userRole);
 
-router.get("/user-info", checkAuthorisation, (req, res) => {
+router.get("/user-info", jwtAuthMiddleware, (req, res) => {
   res.json({
-    userid: req.session.user.userid,
-    role: req.session.user.role,
-    username: req.session.user.username,
+    userid: req.user.userid,
+    role: req.user.role,
+    username: req.user.username,
   });
 });
 
-// Get current user (for OAuth authentication)
-router.get("/current-user", (req, res) => {
-  if (req.isAuthenticated()) {
+// Get current user (works with both JWT and OAuth)
+router.get("/current-user", optionalJwtAuth, (req, res) => {
+  // First check OAuth authentication
+  if (req.isAuthenticated && req.isAuthenticated()) {
     res.json({
       userid: req.user.userid,
       email: req.user.email,
@@ -44,6 +49,16 @@ router.get("/current-user", (req, res) => {
       fullName: req.user.fullName,
       isAuthenticated: true,
       isProfileComplete: req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING'
+    });
+  } else if (req.user) {
+    // JWT authentication
+    res.json({
+      userid: req.user.userid,
+      email: req.user.email,
+      username: req.user.username,
+      fullName: req.user.fullName,
+      isAuthenticated: true,
+      isProfileComplete: true // JWT users are already authenticated
     });
   } else {
     res.json({ isAuthenticated: false });
@@ -112,8 +127,8 @@ router.post("/complete-profile", async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-router.post("/forgot", checkAuthorisation, forgotPassword);
-router.post("/reset", checkAuthorisation, resetPassword);
+router.post("/forgot", jwtAuthMiddleware, forgotPassword);
+router.post("/reset", jwtAuthMiddleware, resetPassword);
 
 // OAuth Routes
 router.get("/google", passport.authenticate("google", { scope: ["profile", "email"] }));
@@ -122,13 +137,19 @@ router.get("/google/callback",
   passport.authenticate("google", { failureRedirect: "/login" }),
   (req, res) => {
     try {
+      // Generate JWT tokens for OAuth user
+      const tokens = generateTokenPair(req.user);
+      
+      // Encode tokens in URL for frontend to extract
+      const tokenData = encodeURIComponent(JSON.stringify(tokens));
+      
       // Check if profile is complete
       if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
-        // Profile is complete, redirect to success page
-        res.redirect(`${frontendUrl}/auth-success`);
+        // Profile is complete, redirect to success page with tokens
+        res.redirect(`${frontendUrl}/auth-success?tokens=${tokenData}`);
       } else {
-        // Profile incomplete, redirect to complete profile page
-        res.redirect(`${frontendUrl}/complete-profile`);
+        // Profile incomplete, redirect to complete profile page with tokens
+        res.redirect(`${frontendUrl}/complete-profile?tokens=${tokenData}`);
       }
     } catch (error) {
       console.error('Google callback error:', error);
@@ -143,13 +164,19 @@ router.get("/github/callback",
   passport.authenticate("github", { failureRedirect: "/login" }),
   (req, res) => {
     try {
+      // Generate JWT tokens for OAuth user
+      const tokens = generateTokenPair(req.user);
+      
+      // Encode tokens in URL for frontend to extract
+      const tokenData = encodeURIComponent(JSON.stringify(tokens));
+      
       // Check if profile is complete
       if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
-        // Profile is complete, redirect to success page
-        res.redirect(`${frontendUrl}/auth-success`);
+        // Profile is complete, redirect to success page with tokens
+        res.redirect(`${frontendUrl}/auth-success?tokens=${tokenData}`);
       } else {
-        // Profile incomplete, redirect to complete profile page
-        res.redirect(`${frontendUrl}/complete-profile`);
+        // Profile incomplete, redirect to complete profile page with tokens
+        res.redirect(`${frontendUrl}/complete-profile?tokens=${tokenData}`);
       }
     } catch (error) {
       console.error('GitHub callback error:', error);
