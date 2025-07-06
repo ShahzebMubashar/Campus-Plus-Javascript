@@ -30,9 +30,9 @@ app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cookieParser());
 
-// Ensure cookies are handled properly for cross-origin requests
+// Basic request logging
 app.use((req, res, next) => {
-  // Log all cookies for debugging
+  console.log(`\n=== ${req.method} ${req.path} ===`);
   console.log("Request cookies:", req.headers.cookie);
   console.log("Request origin:", req.headers.origin);
   next();
@@ -111,13 +111,27 @@ app.use(
     cookie: {
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: true, // Secure - doesn't affect cookie sending
-      secure: true, // MUST be true for sameSite: "none"
+      httpOnly: true,
+      secure: true, // Required for cross-origin with sameSite: none
       sameSite: "none", // Required for cross-origin
+      // Don't set domain - let browser handle it
     },
     proxy: true,
   })
 );
+
+// Session debugging middleware
+app.use((req, res, next) => {
+  if (req.path.startsWith('/user') || req.path.startsWith('/auth')) {
+    console.log("📊 Session Debug:");
+    console.log("  Session ID:", req.sessionID);
+    console.log("  Session exists:", !!req.session);
+    console.log("  Session user:", req.session?.user ? "EXISTS" : "NONE");
+    console.log("  Session keys:", req.session ? Object.keys(req.session) : "N/A");
+    console.log("  Cookie header:", req.headers.cookie ? "EXISTS" : "NONE");
+  }
+  next();
+});
 
 // Initialize Passport and restore authentication state, if any, from the session
 app.use(passport.initialize());

@@ -58,12 +58,18 @@ function Navbar() {
   const navigate = useNavigate();
 
   const checkSession = async () => {
+    console.log("🔍 Navbar: Starting session check...");
     try {
+      console.log("🔍 Navbar: Checking /user/profile endpoint...");
       const response = await fetch(`${API_BASE_URL}/user/profile`, {
         credentials: "include",
       });
 
+      console.log("🔍 Navbar: /user/profile response status:", response.status);
+      console.log("🔍 Navbar: Response headers:", Object.fromEntries(response.headers.entries()));
+
       if (response.ok) {
+        console.log("✅ Navbar: /user/profile successful");
         setIsLoggedIn(true);
         const data = await response.json();
         setUserData(data);
@@ -71,14 +77,19 @@ function Navbar() {
         return;
       }
 
+      console.log("🔍 Navbar: /user/profile failed, trying OAuth endpoint...");
       // If that fails, try the OAuth current-user endpoint
       const oauthResponse = await fetch(`${API_BASE_URL}/auth/current-user`, {
         credentials: "include",
       });
 
+      console.log("🔍 Navbar: /auth/current-user response status:", oauthResponse.status);
+
       if (oauthResponse.ok) {
         const oauthData = await oauthResponse.json();
+        console.log("🔍 Navbar: OAuth data:", oauthData);
         if (oauthData.isAuthenticated) {
+          console.log("✅ Navbar: OAuth authentication successful");
           setIsLoggedIn(true);
           setUserData(oauthData);
           localStorage.setItem("user", JSON.stringify(oauthData));
@@ -86,44 +97,38 @@ function Navbar() {
         }
       }
 
-      // If both fail, user is not logged in
+      console.log("❌ Navbar: Both endpoints failed - user not authenticated");
+      // Server says user is not authenticated - respect that
       setIsLoggedIn(false);
       localStorage.removeItem("user");
     } catch (error) {
-      console.error("Session check failed:", error);
+      console.error("❌ Navbar: Session check failed:", error);
+      // On network errors, assume user is not authenticated for security
       setIsLoggedIn(false);
       localStorage.removeItem("user");
     }
   };
 
   useEffect(() => {
+    // Always check server first - server is the source of truth
     checkSession();
-
-    // Try to get user data from localStorage if available
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUserData(JSON.parse(storedUser));
-        setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error parsing stored user data:", error);
-      }
-    }
 
     // Listen for authentication state changes
     const handleAuthStateChange = (event) => {
       if (event.detail.isAuthenticated) {
         setIsLoggedIn(true);
         setUserData(event.detail.user);
+        localStorage.setItem("user", JSON.stringify(event.detail.user));
       } else {
         setIsLoggedIn(false);
         setUserData(null);
+        localStorage.removeItem("user");
       }
     };
 
     window.addEventListener('authStateChanged', handleAuthStateChange);
 
-    // Check session every 5 minutes
+    // Check session periodically
     const interval = setInterval(checkSession, 5 * 60 * 1000);
 
     return () => {
