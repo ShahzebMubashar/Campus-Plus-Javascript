@@ -27,21 +27,21 @@ const Footer = () => {
               and opportunities.
             </p>
             <div className="aboutcp-social-icons mt-4 d-flex justify-content-center justify-content-md-start">
-              <a href="#" className="aboutcp-social-icon">
+              <button className="aboutcp-social-icon">
                 <FontAwesomeIcon icon={faFacebookF} />
-              </a>
-              <a href="#" className="aboutcp-social-icon">
+              </button>
+              <button className="aboutcp-social-icon">
                 <FontAwesomeIcon icon={faTwitter} />
-              </a>
-              <a href="#" className="aboutcp-social-icon">
+              </button>
+              <button className="aboutcp-social-icon">
                 <FontAwesomeIcon icon={faInstagram} />
-              </a>
-              <a href="#" className="aboutcp-social-icon">
+              </button>
+              <button className="aboutcp-social-icon">
                 <FontAwesomeIcon icon={faLinkedinIn} />
-              </a>
-              <a href="#" className="aboutcp-social-icon">
+              </button>
+              <button className="aboutcp-social-icon">
                 <FontAwesomeIcon icon={faGithub} />
-              </a>
+              </button>
             </div>
           </div>
           <div className="col-lg-6 col-md-6 col-12 text-center text-md-start">

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import "./FeaturesSection.css";
 // Import icons from react-icons
 import {

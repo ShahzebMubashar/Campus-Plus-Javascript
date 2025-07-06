@@ -710,8 +710,7 @@ export default function RoomView({ room, onBack, onLeave }) {
       if (searchDate) params.append("date", searchDate);
 
       const response = await authenticatedFetch(
-          `${API_BASE_URL}/Chatrooms/search/${
-          room.roomid
+        `${API_BASE_URL}/Chatrooms/search/${room.roomid
         }?${params.toString()}`,
       );
 

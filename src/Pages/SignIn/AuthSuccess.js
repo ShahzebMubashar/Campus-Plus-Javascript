@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthSuccess.css';
-import { extractTokensFromURL, loginWithTokens, authenticatedFetch } from '../../utils/auth';
-import API_BASE_URL from '../../config/api.js';  
+import { extractTokensFromURL, loginWithTokens } from '../../utils/auth';
+import API_BASE_URL from '../../config/api.js';
 
 const AuthSuccess = () => {
     const [loading, setLoading] = useState(true);
@@ -13,17 +13,17 @@ const AuthSuccess = () => {
         const handleOAuthCallback = async () => {
             try {
                 console.log('AuthSuccess: Starting OAuth callback handling');
-                
+
                 // Extract tokens from URL (OAuth callback)
                 const tokens = extractTokensFromURL();
                 console.log('AuthSuccess: Extracted tokens:', tokens ? 'EXISTS' : 'NULL');
-                
+
                 if (tokens) {
                     console.log('AuthSuccess: Token structure:', {
                         accessToken: tokens.accessToken ? 'EXISTS' : 'MISSING',
                         refreshToken: tokens.refreshToken ? 'EXISTS' : 'MISSING'
                     });
-                    
+
                     // Get user info using the token
                     const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
                         headers: {
@@ -33,14 +33,14 @@ const AuthSuccess = () => {
                     });
 
                     console.log('AuthSuccess: Current user response status:', response.status);
-                    
+
                     if (response.ok) {
                         const data = await response.json();
                         console.log('AuthSuccess: Current user data:', data);
 
                         if (data.isAuthenticated) {
                             console.log('AuthSuccess: User is authenticated, storing tokens and user data');
-                            
+
                             // Store tokens and user data
                             loginWithTokens(tokens, {
                                 userid: data.userid,

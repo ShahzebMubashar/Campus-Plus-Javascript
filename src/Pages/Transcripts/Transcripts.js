@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
-import { FaBars } from "react-icons/fa";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
-import API_BASE_URL from "../../config/api.js"; 
-import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth"; 
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -42,7 +41,6 @@ function TranscriptsPage() {
   const [confirmDeleteSemester, setConfirmDeleteSemester] = useState(null);
   const [selectedSemesterId, setSelectedSemesterId] = useState(null);
   const semesterRefs = useRef({});
-  const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isLargeScreen, setIsLargeScreen] = useState(
     window.matchMedia("(min-width: 901px)").matches,
   );

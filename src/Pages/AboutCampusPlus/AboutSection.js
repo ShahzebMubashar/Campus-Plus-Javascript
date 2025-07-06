@@ -21,9 +21,9 @@ const AboutSection = () => {
               <br />
               Watch now to see our platform in action!
             </p>
-            <a href="#" className="video-btn">
+            <button className="video-btn">
               <FontAwesomeIcon icon={faPlay} />
-            </a>
+            </button>
           </div>
         </div>
       </div>

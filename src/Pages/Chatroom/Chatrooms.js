@@ -7,7 +7,7 @@ import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import "../Chatroom/css/Chatroom.css";
 import { AiOutlineMenu } from "react-icons/ai";
 import API_BASE_URL from "../../config/api.js";
-import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 
 export default function Chatrooms() {
@@ -26,7 +26,7 @@ export default function Chatrooms() {
       const authStatus = checkAuth();
       setIsAuthenticated(authStatus);
       setLoading(false);
-      
+
       if (authStatus) {
         // Only fetch data if user is authenticated
         fetchUserInfo();
@@ -207,7 +207,7 @@ async function handleLeaveRoom(roomId) {
   const { authenticatedFetch } = await import("../../utils/auth");
   try {
     const response = await authenticatedFetch(
-        `${API_BASE_URL}/Chatrooms/leave/${roomId}`,
+      `${API_BASE_URL}/Chatrooms/leave/${roomId}`,
       {
         method: "DELETE",
       },
