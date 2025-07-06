@@ -101,9 +101,9 @@ app.use(
     cookie: {
       path: "/",
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      httpOnly: false, // Allow JS access for debugging
+      secure: true, // MUST be true for sameSite: "none"
+      sameSite: "none", // Required for cross-origin
     },
     proxy: true,
   })
@@ -129,6 +129,7 @@ app.get("/test", (req, res) => {
 app.get("/debug/session", (req, res) => {
   console.log("=== DEBUG SESSION ENDPOINT ===");
   console.log("Session ID:", req.sessionID);
+  console.log("Cookies received:", req.headers.cookie);
   console.log("Full session object:", JSON.stringify(req.session, null, 2));
   console.log("Session user:", req.session?.user);
   console.log("req.user (Passport):", req.user);
@@ -140,7 +141,31 @@ app.get("/debug/session", (req, res) => {
     session: req.session,
     isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
     user: req.user || null,
-    sessionUser: req.session?.user || null
+    sessionUser: req.session?.user || null,
+    cookiesReceived: req.headers.cookie
+  });
+});
+
+// Test endpoint to manually set a cookie
+app.get("/debug/set-cookie", (req, res) => {
+  console.log("=== SETTING TEST COOKIE ===");
+  
+  // Set a test cookie with same settings as session
+  res.cookie('test-cookie', 'test-value', {
+    maxAge: 24 * 60 * 60 * 1000,
+    httpOnly: false,
+    secure: true,
+    sameSite: 'none',
+    path: '/'
+  });
+  
+  // Also manually set session data
+  req.session.testData = 'manual-test-data';
+  
+  res.json({
+    message: 'Test cookie and session data set',
+    sessionID: req.sessionID,
+    sessionData: req.session
   });
 });
 
