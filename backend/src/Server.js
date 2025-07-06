@@ -1,5 +1,6 @@
 const express = require("express");
 const session = require("express-session");
+const pgSession = require("connect-pg-simple")(session);
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const pool = require("../config/database");
@@ -80,9 +81,14 @@ app.post('/api/email/send-email', async (req, res) => {
 // Session configuration
 app.use(
   session({
+    store: new pgSession({
+      pool: pool,
+      tableName: 'user_sessions',
+      createTableIfMissing: true
+    }),
     name: "connect.sid",
     secret: process.env.SESSION_SECRET || "CampusPlus",
-    resave: true,
+    resave: false,
     saveUninitialized: false,
     rolling: true,
     cookie: {
