@@ -168,7 +168,17 @@ exports.login = async (request, response) => {
       });
     });
 
-    // CORS is handled by the main middleware configuration
+    // Explicitly set session cookie in response headers for debugging
+    console.log("🍪 Setting response headers for session cookie");
+    
+    // The session middleware should handle this, but let's be explicit
+    response.cookie('connect.sid', request.sessionID, {
+      path: "/",
+      maxAge: 24 * 60 * 60 * 1000,
+      httpOnly: true,
+      secure: true,
+      sameSite: "none"
+    });
 
     return response.status(200).json({
       message: "Login successful",
