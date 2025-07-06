@@ -5,7 +5,7 @@ import Footer from "../../Pages/Footer/Footer";
 import logo from "../Index/cp_logo.png";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API_BASE_URL from "../../config/api";
-import { loginWithTokens } from "../../utils/auth";
+import { loginWithTokens, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
 
 export default function AuthPage() {
   // Authentication state
@@ -38,53 +38,18 @@ export default function AuthPage() {
     }
   }, [searchParams]);
 
-  // Check authentication status on component mount
+  // Check authentication status on component mount (use JWT logic)
   useEffect(() => {
-    const checkAuthStatus = async () => {
-      try {
-        // First check OAuth authentication
-        const oauthRes = await fetch(`${API_BASE_URL}/auth/current-user`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (oauthRes.ok) {
-          const oauthData = await oauthRes.json();
-          if (oauthData.isAuthenticated) {
-            setIsAuthenticated(true);
-            setUserData(oauthData);
-            return;
-          }
-        }
-
-        // Check regular session authentication
-        const sessionRes = await fetch(`${API_BASE_URL}/user/profile`, {
-          method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (sessionRes.ok) {
-          const sessionData = await sessionRes.json();
-          setIsAuthenticated(true);
-          setUserData(sessionData);
-        } else {
-          setIsAuthenticated(false);
-        }
-      } catch (error) {
-        console.error("Auth check error:", error);
-        setIsAuthenticated(false);
-      } finally {
-        setIsAuthLoading(false);
-      }
+    const updateAuth = () => {
+      const auth = checkAuth();
+      setIsAuthenticated(auth);
+      setUserData(auth ? getStoredUser() : null);
+      setIsAuthLoading(false);
     };
-
-    checkAuthStatus();
+    updateAuth();
+    // Listen for auth state changes (login/logout elsewhere)
+    window.addEventListener("authStateChanged", updateAuth);
+    return () => window.removeEventListener("authStateChanged", updateAuth);
   }, []);
 
   // Handle logout
@@ -171,7 +136,7 @@ export default function AuthPage() {
                 <p>You're currently signed in to your account. Sign out to access the sign-in page.</p>
                 <div className="already-signed-in-actions">
                   <button
-                    onClick={() => navigate("/")}
+                    onClick={() => navigate("/dashboard")}
                     className="already-signed-in-btn primary"
                   >
                     Go to Dashboard
