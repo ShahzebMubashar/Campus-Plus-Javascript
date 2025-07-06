@@ -6,7 +6,7 @@ import Navbar from "../Index/components/Navbar";
 import NewsForm from "./NewsForm";
 
 const NewsPage = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery] = useState("");
 
   return (
     <div className="news-page">

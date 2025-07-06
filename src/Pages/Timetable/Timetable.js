@@ -5,7 +5,6 @@ import DynamicTimetable from "./DynamicTimetable";
 import Footer from "../Footer/Footer";
 import Select from "react-select"; // React-Select for searchable dropdowns
 import "./Timetable.css";
-import { Nav } from "react-bootstrap";
 
 const Timetable = () => {
   const [csvData, setCsvData] = useState([]);
@@ -13,8 +12,6 @@ const Timetable = () => {
   const [courses, setCourses] = useState({});
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [currentCourse, setCurrentCourse] = useState(null);
-  const [showInstructor, setShowInstructor] = useState(true);
-  const [showVenue, setShowVenue] = useState(true);
 
   useEffect(() => {
     fetch(require("../../Assets/data/courses.csv"))
@@ -261,8 +258,6 @@ const Timetable = () => {
         />
         <DynamicTimetable
           selectedCourses={selectedCourses}
-          showInstructor={showInstructor}
-          showVenue={showVenue}
         />
       </div>
 

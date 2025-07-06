@@ -8,25 +8,12 @@ import {
   FaLock,
   FaArrowLeft,
   FaBook,
-  FaStar,
   FaClock,
   FaGraduationCap,
   FaChalkboardTeacher,
 } from "react-icons/fa";
-import { BsCircleFill } from "react-icons/bs";
 import API_BASE_URL from "../../config/api.js";
-import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
-
-const getDifficultyColor = (difficulty) => {
-  const difficultyMap = {
-    1: "#4CAF50", // Easy
-    2: "#8BC34A", // Moderate
-    3: "#FF9800", // Intermediate
-    4: "#F44336", // Hard
-    5: "#D32F2F", // Very Hard
-  };
-  return difficultyMap[difficulty] || "#757575";
-};
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
   const [hoveredRating, setHoveredRating] = useState(0);
@@ -85,7 +72,6 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
         throw new Error("Failed to fetch updated course info");
       }
 
-      const courseData = await courseResponse.json();
       setSelectedRating(rating);
       onRate(rating);
     } catch (error) {
@@ -199,7 +185,7 @@ const PastPapersDetails = () => {
 
         const courseData = await courseResponse.json();
         setCourseInfo(courseData);
-        
+
         // Fetch papers without authentication - public access
         const papersResponse = await fetch(
           `${API_BASE_URL}/courses/${courseId}/past-papers`,

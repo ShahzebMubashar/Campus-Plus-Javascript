@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./SignInPage.css";
 import Navbar from "../Index/components/Navbar";
 import Footer from "../../Pages/Footer/Footer";

@@ -56,7 +56,6 @@ const NewsAndEventsSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTouching, setIsTouching] = useState(false);
   const [startX, setStartX] = useState(0);
-  const [endX, setEndX] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -83,7 +82,6 @@ const NewsAndEventsSection = () => {
   };
   const handleTouchEnd = (e) => {
     if (!isTouching) return;
-    setEndX(e.changedTouches[0].clientX);
     const swipeDistance = startX - e.changedTouches[0].clientX;
     if (swipeDistance > 50) {
       // Swipe left

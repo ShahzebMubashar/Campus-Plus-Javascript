@@ -18,8 +18,7 @@ import profile from "../../../Assets/images/user.png";
 import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
-import API_BASE_URL from "../../../config/api.js";
-import { isAuthenticated, getUser, logout as authLogout, authenticatedFetch } from "../../../utils/auth";
+import { isAuthenticated, getUser, logout as authLogout } from "../../../utils/auth";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -60,13 +59,13 @@ function Navbar() {
 
   const checkAuthStatus = () => {
     console.log("🔍 Navbar: Checking JWT authentication status...");
-    
+
     const authStatus = isAuthenticated();
     const userData = getUser();
-    
+
     console.log("🔍 Navbar: Auth status:", authStatus);
     console.log("🔍 Navbar: User data:", userData);
-    
+
     setIsLoggedIn(authStatus);
     setUserData(userData);
   };
@@ -102,7 +101,7 @@ function Navbar() {
     try {
       console.log("🔍 Navbar: Logging out user...");
       await authLogout();
-        navigate("/sign-in");
+      navigate("/sign-in");
     } catch (error) {
       console.error("Logout error:", error);
       // Even if logout API fails, clear local state

@@ -3,7 +3,7 @@ import "./ProfilePage.css";
 import Navbar from "../Index/components/Navbar";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import API_BASE_URL from "../../config/api.js";
-import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 function ProfilePage() {
   const [user, setUser] = useState({
@@ -16,8 +16,6 @@ function ProfilePage() {
     enrolledCourses: [],
     notifications: [],
   });
-
-  const [currentCourses, setCurrentCourses] = useState({});
 
   const fetchCurrentCourses = async () => {
     try {
@@ -184,7 +182,7 @@ function ProfilePage() {
 
     setIsLoading(true);
     try {
-        const response = await authenticatedFetch(`${API_BASE_URL}/auth/reset`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/reset`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
-import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
 import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import API_BASE_URL from "../../config/api.js";
-import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -71,54 +70,6 @@ function Dashboard() {
     });
     const [currentCourses, setCurrentCourses] = useState([]);
     const [myRooms, setMyRooms] = useState([]);
-
-    const handleSettingsChange = (e) => {
-      e.preventDefault();
-      alert("Settings updated successfully!");
-    };
-
-    // Function to get user's initials from name or username
-    const getUserInitials = () => {
-      // Try to use fullName first, then fallback to name, then username
-      const displayName = user?.fullName || user?.name || user?.username;
-
-      if (!displayName) return "U";
-
-      return displayName
-        .split(" ")
-        .filter((_, index, array) => index === 0 || index === array.length - 1)
-        .map((name) => name[0])
-        .join("")
-        .toUpperCase();
-    };
-
-    const getAvatarBackgroundColor = (name) => {
-      if (!name) return "#4A90E2";
-
-      const colors = [
-        "#4A90E2",
-        "#5DADE2",
-        "#2980B9",
-        "#85C1E9",
-        "#2874A6",
-        "#3498DB",
-        "#2E86C1",
-        "#1F618D",
-        "#AED6F1",
-        "#34495E",
-        "#7FB3D5",
-        "#154360",
-        "#D6EAF8",
-        "#1A5276",
-        "#21618C",
-      ];
-
-      const charSum = name
-        .split("")
-        .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-
-      return colors[charSum % colors.length];
-    };
 
     const gradePoints = {
       "A+": 4.0,
@@ -224,7 +175,7 @@ function Dashboard() {
 
     useEffect(() => {
       fetchTasks();
-    }, [user?.userid]);
+    }, []);
 
     const fetchJoinedRooms = async () => {
       try {
@@ -248,11 +199,11 @@ function Dashboard() {
     };
 
     useEffect(() => {
-      if (user?.userid) {
+      if (user.userid) {
         fetchCurrentCourses();
         fetchJoinedRooms();
       }
-    }, [user?.userid]);
+    }, []);
 
     const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -338,7 +289,7 @@ function Dashboard() {
                 letterSpacing: "1px",
               }}
             >
-              {getUserInitials()}
+              {user?.fullName?.split(" ").map((name) => name[0]).join("").toUpperCase()}
             </div>
             <div className="user-info">
               <h1 className="user-name">
@@ -386,9 +337,9 @@ function Dashboard() {
           <section className="courses-section">
             <div className="section-header">
               <h2>📘 My Courses</h2>
-              <a href="#" className="view-all">
+              <button className="view-all">
                 View all
-              </a>
+              </button>
             </div>
             <div className="courses-grid">
               {currentCourses.length > 0 ? (
@@ -437,9 +388,9 @@ function Dashboard() {
           <section className="deadlines-section">
             <div className="section-header">
               <h2>⏰ Upcoming Deadlines</h2>
-              <a href="#" className="view-all">
+              <button className="view-all">
                 View all
-              </a>
+              </button>
             </div>
             <div className="deadlines-list">
               {/* Only show pending tasks in the dashboard */}
@@ -576,9 +527,9 @@ function Dashboard() {
             <div className="chatrooms-section">
               <div className="section-header">
                 <h2>💬 Chatrooms Joined</h2>
-                <a href="#" className="view-all">
+                <button className="view-all">
                   View all
-                </a>
+                </button>
               </div>
 
               <div className="chatrooms-list">

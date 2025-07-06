@@ -4,9 +4,9 @@ import Navbar from "../Index/components/Navbar.js";
 import "../Chatroom/css/Chatroom.css";
 import NoteBanner from "../NoteBanner";
 import { useNavigate } from "react-router-dom";
-import { FaBook, FaStar, FaSearch } from "react-icons/fa";
+import { FaBook, FaSearch } from "react-icons/fa";
 import API_BASE_URL from "../../config/api.js";
-import { authenticatedFetch, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 const Star = ({ fill = 1, size = 28, ...props }) => {
   // fill: 1 = full, 0.5 = half, 0.25 = quarter, 0 = empty
@@ -110,7 +110,6 @@ const Rating = ({ courseId, currentRating, difficulty, onRate, onRequireLogin })
         throw new Error("Failed to fetch updated course info");
       }
 
-      const courseData = await courseResponse.json();
       setSelectedRating(rating);
       onRate(rating);
     } catch (error) {
@@ -215,17 +214,6 @@ const PastPapers = () => {
           : course,
       ),
     );
-  };
-
-  const getDifficultyColor = (difficulty) => {
-    const difficultyMap = {
-      1: "#4CAF50", // Easy
-      2: "#8BC34A", // Moderate
-      3: "#FF9800", // Intermediate
-      4: "#F44336", // Hard
-      5: "#D32F2F", // Very Hard
-    };
-    return difficultyMap[difficulty] || "#757575";
   };
 
   // Pass this to Rating so it can trigger the modal

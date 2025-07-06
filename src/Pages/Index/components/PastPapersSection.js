@@ -62,13 +62,10 @@ const PastPapersSection = () => {
   const [visibleCategories, setVisibleCategories] = useState(
     categories.slice(0, 3),
   );
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
     const handleResize = () => {
-      const mobile = window.innerWidth <= 768;
-      setIsMobile(mobile);
-      setVisibleCategories(mobile ? categories.slice(0, 3) : categories);
+      setVisibleCategories(window.innerWidth <= 768 ? categories.slice(0, 3) : categories);
     };
 
     window.addEventListener("resize", handleResize);
