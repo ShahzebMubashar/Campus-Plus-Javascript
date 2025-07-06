@@ -1,17 +1,10 @@
 const express = require("express");
-const session = require("express-session");
-const pgSession = require("connect-pg-simple")(session);
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const pool = require("../config/database");
 const nodemailer = require("nodemailer");
 const passport = require("../config/passport");
 
-
-const {
-  checkAuthorisation,
-  checkAdmin,
-} = require("../middlewares/authMiddleware");
 const authRoutes = require("../routes/authRoutes");
 const courseRoutes = require("../routes/courseRoutes");
 const chatroomRoute = require("../routes/chatroomRoutes");
@@ -33,12 +26,12 @@ app.use(cookieParser());
 // Basic request logging
 app.use((req, res, next) => {
   console.log(`\n=== ${req.method} ${req.path} ===`);
-  console.log("Request cookies:", req.headers.cookie);
   console.log("Request origin:", req.headers.origin);
+  console.log("Authorization header:", req.headers.authorization ? "EXISTS" : "NONE");
   next();
 });
 
-// CORS configuration - Simplified as recommended
+// CORS configuration
 app.use(
   cors({
     origin: process.env.NODE_ENV === "production" 
@@ -85,56 +78,8 @@ app.post('/api/email/send-email', async (req, res) => {
   }
 });
 
-
-// CORS is already configured above with the cors middleware
-
-// Session configuration
-const sessionStore = new pgSession({
-  pool: pool,
-  tableName: 'user_sessions',
-  createTableIfMissing: true
-});
-
-// Add error handling for session store
-sessionStore.on('error', (err) => {
-  console.error('Session store error:', err);
-});
-
-app.use(
-  session({
-    store: sessionStore,
-    name: "connect.sid",
-    secret: process.env.SESSION_SECRET || "CampusPlus",
-    resave: false,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-      path: "/",
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: true,
-      secure: true, // Required for HTTPS
-      sameSite: "lax", // Most compatible option for cross-origin
-    },
-    proxy: true,
-  })
-);
-
-// Session debugging middleware
-app.use((req, res, next) => {
-  if (req.path.startsWith('/user') || req.path.startsWith('/auth')) {
-    console.log("📊 Session Debug:");
-    console.log("  Session ID:", req.sessionID);
-    console.log("  Session exists:", !!req.session);
-    console.log("  Session user:", req.session?.user ? "EXISTS" : "NONE");
-    console.log("  Session keys:", req.session ? Object.keys(req.session) : "N/A");
-    console.log("  Cookie header:", req.headers.cookie ? "EXISTS" : "NONE");
-  }
-  next();
-});
-
-// Initialize Passport and restore authentication state, if any, from the session
+// Initialize Passport for OAuth
 app.use(passport.initialize());
-app.use(passport.session());
 
 // Routes
 app.use("/auth", authRoutes);
@@ -148,53 +93,9 @@ app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
 });
 
-// Debug endpoint to check session
-app.get("/debug/session", (req, res) => {
-  console.log("=== DEBUG SESSION ENDPOINT ===");
-  console.log("Session ID:", req.sessionID);
-  console.log("Cookies received:", req.headers.cookie);
-  console.log("Full session object:", JSON.stringify(req.session, null, 2));
-  console.log("Session user:", req.session?.user);
-  console.log("req.user (Passport):", req.user);
-  console.log("isAuthenticated():", req.isAuthenticated ? req.isAuthenticated() : 'N/A');
-  console.log("=== END DEBUG ===");
-  
-  res.json({
-    sessionID: req.sessionID,
-    session: req.session,
-    isAuthenticated: req.isAuthenticated ? req.isAuthenticated() : false,
-    user: req.user || null,
-    sessionUser: req.session?.user || null,
-    cookiesReceived: req.headers.cookie
-  });
-});
-
-// Test endpoint to manually set a cookie
-app.get("/debug/set-cookie", (req, res) => {
-  console.log("=== SETTING TEST COOKIE ===");
-  
-  // Set a test cookie with same settings as session
-  res.cookie('test-cookie', 'test-value', {
-    maxAge: 24 * 60 * 60 * 1000,
-    httpOnly: false,
-    secure: true,
-    sameSite: 'none',
-    path: '/'
-  });
-  
-  // Also manually set session data
-  req.session.testData = 'manual-test-data';
-  
-  res.json({
-    message: 'Test cookie and session data set',
-    sessionID: req.sessionID,
-    sessionData: req.session
-  });
-});
-
-app.get("/Chatrooms/messages/:roomid", chatroomController.getRoomMessages); // Call controller's function
-app.post("/Chatrooms/like/:messageid", chatroomController.likePost); // Like a post
-app.get("/Chatrooms/likes/:messageid", chatroomController.getLikeCount); // Get like count for a post
+app.get("/Chatrooms/messages/:roomid", chatroomController.getRoomMessages);
+app.post("/Chatrooms/like/:messageid", chatroomController.likePost);
+app.get("/Chatrooms/likes/:messageid", chatroomController.getLikeCount);
 
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);

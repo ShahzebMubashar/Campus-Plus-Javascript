@@ -8,21 +8,20 @@ const {
   deleteReminder,
   updatePriority,
 } = require("../controllers/userController");
-const { checkAuthorisation } = require("../middlewares/authMiddleware");
-const unifiedAuthMiddleware = require("../middlewares/unifiedAuthMiddleware");
+const { jwtAuthMiddleware } = require("../middlewares/jwtAuthMiddleware");
 
 const router = express.Router();
 
-router.get("/profile", unifiedAuthMiddleware, viewUserInfo);
-router.put("/profile", unifiedAuthMiddleware, editUserInfo);
-router.get("/current-courses", unifiedAuthMiddleware, currentCourses);
-router.get("/my-reminders", unifiedAuthMiddleware, getReminders);
-router.post("/add-reminder", unifiedAuthMiddleware, addReminder);
+router.get("/profile", jwtAuthMiddleware, viewUserInfo);
+router.put("/profile", jwtAuthMiddleware, editUserInfo);
+router.get("/current-courses", jwtAuthMiddleware, currentCourses);
+router.get("/my-reminders", jwtAuthMiddleware, getReminders);
+router.post("/add-reminder", jwtAuthMiddleware, addReminder);
 router.delete(
   "/delete-reminder/:reminderid",
-  unifiedAuthMiddleware,
+  jwtAuthMiddleware,
   deleteReminder
 );
-router.put("/update-priority/:reminderid", unifiedAuthMiddleware, updatePriority);
+router.put("/update-priority/:reminderid", jwtAuthMiddleware, updatePriority);
 
 module.exports = router;

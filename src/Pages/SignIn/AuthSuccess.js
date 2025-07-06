@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './AuthSuccess.css';
+import { extractTokensFromURL, loginWithTokens, authenticatedFetch } from '../../utils/auth';
 import API_BASE_URL from '../../config/api.js';  
 
 const AuthSuccess = () => {
@@ -9,56 +10,63 @@ const AuthSuccess = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const checkAuthStatus = async () => {
+        const handleOAuthCallback = async () => {
             try {
+                // Extract tokens from URL (OAuth callback)
+                const tokens = extractTokensFromURL();
+                
+                if (tokens) {
+                    // Get user info using the token
                     const response = await fetch(`${API_BASE_URL}/auth/current-user`, {
-                    credentials: 'include'
-                });
+                        headers: {
+                            'Authorization': `Bearer ${tokens.accessToken}`,
+                            'Content-Type': 'application/json',
+                        },
+                    });
 
-                if (response.ok) {
-                    const data = await response.json();
+                    if (response.ok) {
+                        const data = await response.json();
 
-                    if (data.isAuthenticated) {
-                        // Store user data in localStorage
-                        localStorage.setItem('user', JSON.stringify({
-                            userid: data.userid,
-                            email: data.email,
-                            username: data.username,
-                            fullName: data.fullName
-                        }));
+                        if (data.isAuthenticated) {
+                            // Store tokens and user data
+                            loginWithTokens(tokens, {
+                                userid: data.userid,
+                                email: data.email,
+                                username: data.username,
+                                fullName: data.fullName,
+                                role: data.role
+                            });
 
-                        // Dispatch custom event to notify navbar of authentication change
-                        window.dispatchEvent(new CustomEvent('authStateChanged', {
-                            detail: { isAuthenticated: true, user: data }
-                        }));
-
-                        // Check if profile is complete
-                        if (data.isProfileComplete) {
-                            // Show success message briefly
-                            setTimeout(() => {
-                                navigate('/', { replace: true });
-                            }, 2000);
+                            // Check if profile is complete
+                            if (data.isProfileComplete) {
+                                // Show success message briefly
+                                setTimeout(() => {
+                                    navigate('/', { replace: true });
+                                }, 2000);
+                            } else {
+                                // Profile incomplete, redirect to complete profile page
+                                setTimeout(() => {
+                                    navigate('/complete-profile', { replace: true });
+                                }, 1000);
+                            }
                         } else {
-                            // Profile incomplete, redirect to complete profile page
-                            setTimeout(() => {
-                                navigate('/complete-profile', { replace: true });
-                            }, 1000);
+                            setError('Authentication failed. Please try again.');
                         }
                     } else {
-                        setError('Authentication failed. Please try again.');
+                        setError('Failed to verify authentication. Please try again.');
                     }
                 } else {
-                    setError('Failed to verify authentication. Please try again.');
+                    setError('No authentication tokens found. Please try again.');
                 }
             } catch (error) {
-                console.error('Auth check error:', error);
+                console.error('OAuth callback error:', error);
                 setError('Network error. Please check your connection and try again.');
             } finally {
                 setLoading(false);
             }
         };
 
-        checkAuthStatus();
+        handleOAuthCallback();
     }, [navigate]);
 
     if (loading) {

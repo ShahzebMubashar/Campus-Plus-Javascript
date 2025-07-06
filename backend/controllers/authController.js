@@ -4,6 +4,7 @@ const { randomBytes } = require("crypto");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
+const { generateTokenPair } = require("../utils/jwt");
 
 dotenv.config();
 
@@ -79,24 +80,31 @@ exports.register = async (request, response) => {
       );
     }
 
-    request.session.user = {
+    await client.query("COMMIT");
+
+    const user = {
       userid: parseInt(result.rows[0].userid),
       username: result.rows[0].username,
       email: result.rows[0].email,
       rollnumber: result.rows[0].rollnumber,
       fullName: fullName || null,
+      role: 'Student' // Default role for new users
     };
 
-    response.cookie("user", `${result.rows[0].username}`, { maxAge: 600000 });
-    await client.query("COMMIT");
+    // Generate JWT tokens
+    const tokens = generateTokenPair(user);
 
     return response.status(201).json({
       message: `User ${result.rows[0].username} registered successfully`,
-      userid: result.rows[0].userid,
-      username: result.rows[0].username,
-      email: result.rows[0].email,
-      rollnumber: result.rows[0].rollnumber,
-      fullName: fullName || null,
+      user: {
+        userid: user.userid,
+        username: user.username,
+        email: user.email,
+        rollnumber: user.rollnumber,
+        fullName: user.fullName,
+        role: user.role
+      },
+      ...tokens
     });
   } catch (error) {
     console.error("Registration error:", error.message);
@@ -106,17 +114,14 @@ exports.register = async (request, response) => {
 };
 
 exports.login = async (request, response) => {
-  console.log("=== LOGIN ENDPOINT ===");
-  console.log("Session ID:", request.sessionID);
-  console.log("Cookies received:", request.headers.cookie);
-  console.log("Existing session:", request.session);
+  console.log("=== JWT LOGIN ENDPOINT ===");
   
   const { email, password, username } = request.body;
 
   if (!email && !username)
-    return response.status(400).json("Please provide Email or Username");
+    return response.status(400).json({ error: "Please provide Email or Username" });
 
-  if (!password) return response.status(400).json("Please provide Password");
+  if (!password) return response.status(400).json({ error: "Please provide Password" });
 
   try {
     const result = await pool.query(
@@ -136,39 +141,10 @@ exports.login = async (request, response) => {
     if (!isMatch)
       return response.status(401).json({ error: "Invalid credentials" });
 
-    console.log("Setting session user data:", {
-      userid: user.userid,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-      fullName: user.fullname,
-    });
+    console.log("✅ Login successful for user:", user.username);
 
-    request.session.user = {
-      userid: user.userid,
-      email: user.email,
-      username: user.username,
-      role: user.role,
-      fullName: user.fullname,
-    };
-
-    console.log("Session after setting user:", request.session);
-
-    await new Promise((resolve, reject) => {
-      request.session.save((err) => {
-        if (err) {
-          console.error("❌ Session save error:", err);
-          reject(err);
-        } else {
-          console.log("✅ Session saved successfully");
-          console.log("📊 Session ID:", request.sessionID);
-          console.log("📊 Session data:", JSON.stringify(request.session, null, 2));
-          resolve();
-        }
-      });
-    });
-
-    // CORS is handled by the main middleware configuration
+    // Generate JWT tokens
+    const tokens = generateTokenPair(user);
 
     return response.status(200).json({
       message: "Login successful",
@@ -179,6 +155,7 @@ exports.login = async (request, response) => {
         role: user.role,
         fullName: user.fullname,
       },
+      ...tokens
     });
   } catch (error) {
     console.error("Login error:", error);
@@ -298,18 +275,16 @@ exports.forgotPassword = async (request, response) => {
 
 exports.logout = async (request, response) => {
   try {
-    request.session.destroy((error) => {
-      if (error) {
-        console.error("Logout error:", error);
-        return response.status(500).json("Server Error");
-      }
-
-      response.clearCookie("connect.sid");
-      return response.status(200).json("Logged Out Successfully");
+    // With JWT, logout is handled client-side by removing the token
+    // We could implement a token blacklist here if needed
+    console.log("✅ Logout successful for user:", request.user?.username || "unknown");
+    return response.status(200).json({ 
+      message: "Logged out successfully",
+      success: true
     });
   } catch (error) {
     console.error("Logout error:", error);
-    return response.status(500).json("Server Error");
+    return response.status(500).json({ error: "Server Error" });
   }
 };
 
@@ -350,9 +325,70 @@ exports.userRole = async (request, response) => {
   try {
     return response
       .status(200)
-      .json({ userRole: request.session.user.role ?? null });
+      .json({ userRole: request.user?.role ?? null });
   } catch (error) {
     console.log(error.message);
-    return response.jsonStatus(500);
+    return response.status(500).json({ error: "Server Error" });
+  }
+};
+
+// Add token refresh endpoint
+exports.refreshToken = async (request, response) => {
+  try {
+    const { refreshToken } = request.body;
+
+    if (!refreshToken) {
+      return response.status(400).json({ error: "Refresh token required" });
+    }
+
+    // Verify refresh token
+    const { verifyToken } = require("../utils/jwt");
+    const decoded = verifyToken(refreshToken);
+
+    // Get user from database
+    const result = await pool.query(
+      `SELECT u.*, ui.name as fullName 
+       FROM Users u 
+       LEFT JOIN UserInfo ui ON u.userid = ui.userid 
+       WHERE u.userid = $1`,
+      [decoded.userid]
+    );
+
+    if (!result.rowCount) {
+      return response.status(404).json({ error: "User not found" });
+    }
+
+    const user = result.rows[0];
+    const tokens = generateTokenPair(user);
+
+    return response.status(200).json({
+      message: "Token refreshed successfully",
+      ...tokens
+    });
+
+  } catch (error) {
+    console.error("Token refresh error:", error);
+    return response.status(401).json({ error: "Invalid refresh token" });
+  }
+};
+
+// Add current user endpoint for JWT
+exports.currentUser = async (request, response) => {
+  try {
+    if (!request.user) {
+      return response.status(200).json({ isAuthenticated: false });
+    }
+
+    return response.status(200).json({
+      isAuthenticated: true,
+      userid: request.user.userid,
+      email: request.user.email,
+      username: request.user.username,
+      fullName: request.user.fullName,
+      role: request.user.role
+    });
+  } catch (error) {
+    console.error("Current user error:", error);
+    return response.status(500).json({ error: "Server Error" });
   }
 };

@@ -7,15 +7,14 @@ const {
   removeCourse,
   removeSemester,
 } = require("../controllers/transcriptController");
-const { checkAuthorisation } = require("../middlewares/authMiddleware");
-const unifiedAuthMiddleware = require("../middlewares/unifiedAuthMiddleware");
+const { jwtAuthMiddleware } = require("../middlewares/jwtAuthMiddleware");
 
 const router = express.Router();
 
-router.get("/", unifiedAuthMiddleware, getTranscript);
-router.post("/add-course", unifiedAuthMiddleware, addCourse);
-router.post("/add-semester", unifiedAuthMiddleware, addSemester);
-router.delete("/remove-course/:transcriptId", unifiedAuthMiddleware, removeCourse);
-router.delete("/remove-semester/:semestername", unifiedAuthMiddleware, removeSemester);
+router.get("/", jwtAuthMiddleware, getTranscript);
+router.post("/add-course", jwtAuthMiddleware, addCourse);
+router.post("/add-semester", jwtAuthMiddleware, addSemester);
+router.delete("/remove-course/:transcriptId", jwtAuthMiddleware, removeCourse);
+router.delete("/remove-semester/:semestername", jwtAuthMiddleware, removeSemester);
 
 module.exports = router;
