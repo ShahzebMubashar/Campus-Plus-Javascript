@@ -1,6 +1,9 @@
 const express = require("express")
 const router = express.Router()
 const nodemailer = require("nodemailer")
+
+const { batchMailer } = require("../controllers/Mailer")
+
 require("dotenv").config()
 
 // Create a transporter using SMTP
@@ -65,5 +68,7 @@ router.get("/test-email", async (req, res) => {
         res.status(500).json({ message: "Email service is not working", error: error.message })
     }
 })
+
+router.get("/batch-mailer", batchMailer);
 
 module.exports = router
