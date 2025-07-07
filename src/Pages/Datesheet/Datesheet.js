@@ -4,8 +4,8 @@ import Select from "react-select";
 import DynamicDatesheet from "./DynamicDatesheet";
 import "./Datesheet.css"; // New CSS for Datesheet
 import CourseList from "../Index/components/CourseList";
-import Navbar from "../Index/components/Navbar"
-import Footer from "../Footer/Footer"
+import Navbar from "../Index/components/Navbar";
+import Footer from "../Footer/Footer";
 
 const Datesheet = () => {
   const [csvData, setCsvData] = useState([]);
@@ -18,33 +18,27 @@ const Datesheet = () => {
   useEffect(() => {
     Promise.all([
       fetch(require("../../Assets/data/courses.csv")).then((res) => res.text()),
-      fetch(require("../../Assets/data/datesheet.csv")).then((res) => res.text()),
-    ])
-      .then(([coursesRaw, datesheetRaw]) => {
-        const parsedCourses = parseCourses(coursesRaw);
-        const parsedDatesheet = parseDatesheet(datesheetRaw);
-        processCsv(parsedCourses);
-        setDatesheetData(parsedDatesheet);
-        setCsvData(parsedCourses);
-      });
+      fetch(require("../../Assets/data/datesheet.csv")).then((res) =>
+        res.text(),
+      ),
+    ]).then(([coursesRaw, datesheetRaw]) => {
+      const parsedCourses = parseCourses(coursesRaw);
+      const parsedDatesheet = parseDatesheet(datesheetRaw);
+      processCsv(parsedCourses);
+      setDatesheetData(parsedDatesheet);
+      setCsvData(parsedCourses);
+    });
   }, []);
 
   const parseCourses = (data) => {
     const rows = data.split("\n").slice(1);
     return rows.map((row) => {
       const [
-        id,
         course,
         courseCode,
         section,
-        instructor,
-        credit_hours,
-        program,
-        target_dept,
-        parent_dept,
         type,
         repeat,
-        ...lectures2
       ] = row.split(",");
       return { course, courseCode, section, type, repeat };
     });
@@ -64,10 +58,17 @@ const Datesheet = () => {
 
     data.forEach(({ courseCode, course, section, type, repeat }) => {
       if (!coursesBySection[section]) coursesBySection[section] = [];
-      coursesBySection[section].push({ courseCode, course, section, type, repeat });
+      coursesBySection[section].push({
+        courseCode,
+        course,
+        section,
+        type,
+        repeat,
+      });
 
       if (course) {
-        if (!courseByName[course]) courseByName[course] = { course, sections: [], type, repeat };
+        if (!courseByName[course])
+          courseByName[course] = { course, sections: [], type, repeat };
         courseByName[course].sections.push(section);
       }
     });
@@ -92,22 +93,37 @@ const Datesheet = () => {
   };
 
   const addCourse = (courseName, section) => {
-    const courseDetails = csvData.find((row) => row.course === courseName && row.section === section);
-    if (courseDetails && !selectedCourses.some((c) => c.courseCode === courseDetails.courseCode && c.section === section)) {
+    const courseDetails = csvData.find(
+      (row) => row.course === courseName && row.section === section,
+    );
+    if (
+      courseDetails &&
+      !selectedCourses.some(
+        (c) =>
+          c.courseCode === courseDetails.courseCode && c.section === section,
+      )
+    ) {
       setSelectedCourses([...selectedCourses, courseDetails]);
     }
   };
 
   const addSection = (section) => {
-    const newCourses = csvData.filter((row) => row.section === section && row.type === "Core" && row.repeat === "False");
+    const newCourses = csvData.filter(
+      (row) =>
+        row.section === section &&
+        row.type === "Core" &&
+        row.repeat === "False",
+    );
     const unique = newCourses.filter(
-      (row) => !selectedCourses.some((c) => c.courseCode === row.courseCode)
+      (row) => !selectedCourses.some((c) => c.courseCode === row.courseCode),
     );
     setSelectedCourses([...selectedCourses, ...unique]);
   };
 
   const removeCourse = (courseCode) => {
-    setSelectedCourses(selectedCourses.filter((c) => c.courseCode !== courseCode));
+    setSelectedCourses(
+      selectedCourses.filter((c) => c.courseCode !== courseCode),
+    );
   };
 
   const clearAllCourses = () => {
@@ -122,7 +138,10 @@ const Datesheet = () => {
         <div className="selectors">
           <div style={{ flex: "1 1 0%" }}>
             <Select
-              options={Object.keys(courses).map((course) => ({ label: course, value: course }))}
+              options={Object.keys(courses).map((course) => ({
+                label: course,
+                value: course,
+              }))}
               onChange={(selected) => setCurrentCourse(selected?.value)}
               placeholder="Add a Course"
               isSearchable
@@ -132,8 +151,12 @@ const Datesheet = () => {
           {currentCourse && (
             <div style={{ flex: "1 1 0%" }}>
               <Select
-                options={courses[currentCourse]?.sections?.sort().map((sec) => ({ label: sec, value: sec }))}
-                onChange={(selected) => addCourse(currentCourse, selected?.value)}
+                options={courses[currentCourse]?.sections
+                  ?.sort()
+                  .map((sec) => ({ label: sec, value: sec }))}
+                onChange={(selected) =>
+                  addCourse(currentCourse, selected?.value)
+                }
                 placeholder={`Select section for ${currentCourse}`}
                 isSearchable
                 styles={customstyles}
@@ -142,7 +165,10 @@ const Datesheet = () => {
           )}
           <div style={{ flex: "1 1 100%", marginTop: "15px" }}>
             <Select
-              options={Object.keys(sections).map((sec) => ({ label: sec, value: sec }))}
+              options={Object.keys(sections).map((sec) => ({
+                label: sec,
+                value: sec,
+              }))}
               onChange={(selected) => addSection(selected?.value)}
               placeholder="Add entire section"
               isSearchable
@@ -150,8 +176,15 @@ const Datesheet = () => {
             />
           </div>
         </div>
-        <CourseList courses={selectedCourses} onRemove={removeCourse} onRemoveAll={clearAllCourses} />
-        <DynamicDatesheet selectedCourses={selectedCourses} datesheetData={datesheetData} />
+        <CourseList
+          courses={selectedCourses}
+          onRemove={removeCourse}
+          onRemoveAll={clearAllCourses}
+        />
+        <DynamicDatesheet
+          selectedCourses={selectedCourses}
+          datesheetData={datesheetData}
+        />
       </div>
       <Footer />
     </div>
@@ -163,16 +196,16 @@ export default Datesheet;
 const customstyles = {
   placeholder: (base) => ({
     ...base,
-    color: '#333',
-    fontWeight: 'bold',
-    fontSize: '16px',
+    color: "#333",
+    fontWeight: "bold",
+    fontSize: "16px",
   }),
   control: (base, state) => ({
     ...base,
-    borderColor: state.isFocused ? '#66bb91' : '#ddd',
-    boxShadow: state.isFocused ? '0 0 0 3px rgba(102, 187, 145, 0.2)' : 'none',
-    '&:hover': {
-      borderColor: '#66bb91',
+    borderColor: state.isFocused ? "#66bb91" : "#ddd",
+    boxShadow: state.isFocused ? "0 0 0 3px rgba(102, 187, 145, 0.2)" : "none",
+    "&:hover": {
+      borderColor: "#66bb91",
     },
   }),
   menu: (base) => ({

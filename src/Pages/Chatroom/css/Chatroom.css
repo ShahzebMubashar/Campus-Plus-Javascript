@@ -1,692 +1,719 @@
 :root {
-    --primary-color: #3b82f6;
-    --primary-light: #60a5fa;
-    --primary-dark: #2563eb;
-    --background-color: #f3f4f6;
-    --text-color: #1f2937;
-    --text-light: #6b7280;
-    --sidebar-bg: #ffffff;
-    --header-bg: #ffffff;
-    --card-bg: #ffffff;
-    --border-color: #e5e7eb;
-    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --primary-color: #3b82f6;
+  --primary-light: #60a5fa;
+  --primary-dark: #2563eb;
+  --background-color: #f3f4f6;
+  --text-color: #1f2937;
+  --text-light: #6b7280;
+  --sidebar-bg: #ffffff;
+  --header-bg: #ffffff;
+  --card-bg: #ffffff;
+  --border-color: #e5e7eb;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
 }
 
 .chatroom-main-top {
-    font-family: "Arial", sans-serif;
-    margin: 0;
-    margin-top: -8%;
-    padding: 0;
-    background-color: var(--background-color);
-    color: var(--text-color);
-    background: #f4f8fb;
-    min-height: 100vh;
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  margin-top: -8%;
+  padding: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  background: #f4f8fb;
+  min-height: 100vh;
 }
 
 .chatroom-app {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 .content-wrapper {
-    display: flex;
-    flex: 1;
-    margin-top: 80px;
-    flex: 1;
-    display: flex;
-    margin-top: 90px;
+  display: flex;
+  flex: 1;
+  margin-top: 80px;
+  flex: 1;
+  display: flex;
+  margin-top: 90px;
 }
 
 .sidebar {
-    width: 280px;
-    background-color: var(--sidebar-bg);
-    border-right: 1px solid #e5e7eb;
-    padding: 20px;
-    position: fixed;
-    height: calc(100vh - 80px);
-    overflow-y: auto;
+  width: 280px;
+  background-color: var(--sidebar-bg);
+  border-right: 1px solid #e5e7eb;
+  padding: 20px;
+  position: fixed;
+  height: calc(100vh - 80px);
+  overflow-y: auto;
 }
 
 .main-content {
-    flex: 1;
-    padding: 20px;
-    background-color: var(--background-color);
-    overflow-y: auto;
-    margin-left: 280px;
-    width: calc(100% - 280px);
-    flex: 1;
-    margin-left: 280px;
-    padding: 24px;
-    min-height: calc(100vh - 90px);
-    background: #f4f8fb;
+  flex: 1;
+  padding: 20px;
+  background-color: var(--background-color);
+  overflow-y: auto;
+  margin-left: 280px;
+  width: calc(100% - 280px);
+  flex: 1;
+  margin-left: 280px;
+  padding: 24px;
+  min-height: calc(100vh - 90px);
+  background: #f4f8fb;
 }
 
 .chatroom-header {
-    padding: 20px;
-    background-color: var(--header-bg) !important;
-    border-bottom: 1px solid #e5e7eb;
-    position: sticky;
-    top: 0;
-    z-index: 10;
+  padding: 20px;
+  background-color: var(--header-bg) !important;
+  border-bottom: 1px solid #e5e7eb;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .chatroom-header h1 {
-    margin: 0;
-    font-size: 24px;
-    color: var(--text-color);
+  margin: 0;
+  font-size: 24px;
+  color: var(--text-color);
 }
 
 /* Update RoomList styles */
 .room-list {
-    display: grid;
-    gap: 20px;
-    padding: 20px 0;
+  display: grid;
+  gap: 20px;
+  padding: 20px 0;
 }
 
 .room-card {
-    background: white;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: box-shadow 0.3s ease;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease;
 }
 
 .room-card:hover {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 .join-button {
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
 }
 
 .join-button:hover {
-    background-color: #2563eb;
+  background-color: #2563eb;
 }
 
 /* Responsive design */
 @media (max-width: 1024px) {
-    .content-wrapper {
-        margin-top: 80px;
-    }
+  .content-wrapper {
+    margin-top: 80px;
+  }
 
-    .sidebar {
-        width: 260px;
-    }
+  .sidebar {
+    width: 260px;
+  }
 
-    .main-content {
-        margin-left: 260px;
-        width: calc(100% - 260px);
-    }
+  .main-content {
+    margin-left: 260px;
+    width: calc(100% - 260px);
+  }
 }
 
 @media (max-width: 768px) {
-    .chatroom-main-top {
-        margin-top: -4%;
-    }
+  .chatroom-main-top {
+    margin-top: -4%;
+  }
 
-    .content-wrapper {
-        flex-direction: column;
-        margin-top: 70px;
-    }
+  .content-wrapper {
+    flex-direction: column;
+    margin-top: 70px;
+  }
 
-    .sidebar {
-        position: fixed;
-        left: -280px;
-        top: 70px;
-        width: 280px;
-        height: calc(100vh - 70px);
-        transition: left 0.3s ease;
-        z-index: 1000;
-        background: white;
-    }
+  .sidebar {
+    position: fixed;
+    left: -280px;
+    top: 70px;
+    width: 280px;
+    height: calc(100vh - 70px);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    background: white;
+  }
 
-    .sidebar.open {
-        left: 0;
-    }
+  .sidebar.open {
+    left: 0;
+  }
 
-    .main-content {
-        margin-left: 0;
-        width: 100%;
-        padding: 16px;
-        min-height: calc(100vh - 70px);
-    }
+  .main-content {
+    margin-left: 0;
+    width: 100%;
+    padding: 16px;
+    min-height: calc(100vh - 70px);
+  }
 
-    /* Mobile menu toggle button */
-    .mobile-menu-toggle {
-        display: block;
-        position: fixed;
-        top: 100px !important;
-        left: 16px;
-        z-index: 1001;
-        background: #2196f3;
-        color: white;
-        border: none;
-        border-radius: 8px;
-        padding: 8px 12px;
-        cursor: pointer;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-    }
+  .mobile-menu-toggle {
+    display: block;
+    position: absolute;
+    top: 100px !important;
+    left: 16px;
+    z-index: 1001;
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
 
-    .mobile-menu-toggle:hover {
-        background: #1976d2;
-    }
+  .mobile-menu-toggle:hover {
+    background: #1976d2;
+  }
 }
 
 @media (max-width: 480px) {
-    .chatroom-main-top {
-        margin-top: -2%;
-    }
+  .chatroom-main-top {
+    margin-top: -2%;
+  }
 
-    .content-wrapper {
-        margin-top: 60px;
-    }
+  .content-wrapper {
+    margin-top: 60px;
+  }
 
-    .sidebar {
-        top: 60px;
-        width: 100%;
-        height: calc(100vh - 60px);
-    }
+  .sidebar {
+    top: 60px;
+    width: 100%;
+    height: calc(100vh - 60px);
+  }
 
-    .main-content {
-        padding: 12px;
-        min-height: calc(100vh - 60px);
-    }
+  .main-content {
+    padding: 12px;
+    min-height: calc(100vh - 60px);
+  }
 
-    .mobile-menu-toggle {
-        top: 70px;
-        left: 12px;
-        padding: 6px 10px;
-        font-size: 14px;
-    }
+  .mobile-menu-toggle {
+    top: 70px;
+    left: 12px;
+    padding: 6px 10px;
+    font-size: 14px;
+    position: absolute;
+  }
 }
 
 @media (max-width: 360px) {
-    .main-content {
-        padding: 8px;
-    }
+  .main-content {
+    padding: 8px;
+  }
 
-    .mobile-menu-toggle {
-        top: 65px;
-        left: 8px;
-        padding: 5px 8px;
-        font-size: 12px;
-    }
+  .mobile-menu-toggle {
+    top: 65px;
+    left: 8px;
+    padding: 5px 8px;
+    font-size: 12px;
+    position: absolute;
+  }
 }
 
 /* RoomList Styles */
 .room-list-container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: transparent;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family:
+    "Inter",
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    sans-serif;
+  background: transparent;
 }
 
 .room-list-header {
-    background-color: var(--header-bg);
-    padding: 32px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-md);
-    margin-bottom: 32px;
+  background-color: var(--header-bg);
+  padding: 32px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-md);
+  margin-bottom: 32px;
 }
 
 .room-list-title {
-    margin: 0;
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--text-color);
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+  color: var(--text-color);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-dark)
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .room-list-subtitle {
-    margin: 8px 0 0;
-    color: var(--text-light);
-    font-size: 16px;
+  margin: 8px 0 0;
+  color: var(--text-light);
+  font-size: 16px;
 }
 
 .room-list-header-content {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
 }
 
 .room-list-search {
-    position: relative;
-    max-width: 500px;
+  position: relative;
+  max-width: 500px;
 }
 
 .room-list-search input {
-    width: 100%;
-    padding: 12px 16px 12px 40px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.2s ease;
-    background-color: var(--background-color);
+  width: 100%;
+  padding: 12px 16px 12px 40px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background-color: var(--background-color);
 }
 
 .room-list-search input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .room-list-search-icon {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-light);
-    font-size: 18px;
+  position: absolute;
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-light);
+  font-size: 18px;
 }
 
 .create-room-button {
-    padding: 12px 24px;
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    transition: all 0.2s ease;
+  padding: 12px 24px;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-dark)
+  );
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
 }
 
 .create-room-button:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-lg);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-lg);
 }
 
 .room-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 24px;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
-    padding: 20px 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 0;
 }
 
 .room-card {
-    background-color: var(--card-bg);
-    padding: 24px;
-    border-radius: 12px;
-    box-shadow: var(--shadow-sm);
-    transition: all 0.2s ease;
-    display: flex;
-    flex-direction: column;
-    border: 1px solid var(--border-color);
-    background: white;
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  background-color: var(--card-bg);
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: var(--shadow-sm);
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .room-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
-    border-color: var(--primary-light);
-    transform: translateY(-4px);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary-light);
+  transform: translateY(-4px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .room-card-content {
-    flex: 1;
-    margin-bottom: 15px;
+  flex: 1;
+  margin-bottom: 15px;
 }
 
 .room-card-title {
-    margin: 0 0 12px;
-    font-size: 18px;
-    font-weight: 600;
-    color: var(--text-color);
-    font-size: 1.2rem;
-    font-weight: 600;
-    color: #1a2236;
-    margin: 0 0 8px 0;
+  margin: 0 0 12px;
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1a2236;
+  margin: 0 0 8px 0;
 }
 
 .room-card-description {
-    color: var(--text-light);
-    margin: 0 0 20px;
-    line-height: 1.5;
-    color: #64748b;
-    font-size: 0.9rem;
-    margin: 0;
-    line-height: 1.5;
+  color: var(--text-light);
+  margin: 0 0 20px;
+  line-height: 1.5;
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.5;
 }
 
 .join-room-button {
-    padding: 10px 20px;
-    background-color: var(--primary-color);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 14px;
-    font-weight: 500;
-    align-self: flex-end;
-    transition: all 0.2s ease;
-    width: 100%;
-    padding: 12px;
-    background: #2196f3;
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-size: 0.9rem;
-    font-weight: 500;
-    transition: background 0.2s ease;
+  padding: 10px 20px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  align-self: flex-end;
+  transition: all 0.2s ease;
+  width: 100%;
+  padding: 12px;
+  background: #2196f3;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.2s ease;
 }
 
 .join-room-button:hover {
-    background-color: var(--primary-dark);
-    transform: translateY(-1px);
-    background: #1976d2;
+  background-color: var(--primary-dark);
+  transform: translateY(-1px);
+  background: #1976d2;
 }
 
 /* Create Room Modal */
 .create-room-modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
 }
 
 .create-room-modal-content {
-    background-color: var(--card-bg);
-    padding: 32px;
-    border-radius: 12px;
-    width: 450px;
-    max-width: 90%;
-    box-shadow: var(--shadow-lg);
+  background-color: var(--card-bg);
+  padding: 32px;
+  border-radius: 12px;
+  width: 450px;
+  max-width: 90%;
+  box-shadow: var(--shadow-lg);
 }
 
 .create-room-modal-title {
-    margin: 0 0 24px;
-    font-size: 24px;
-    font-weight: 600;
-    color: var(--text-color);
+  margin: 0 0 24px;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-color);
 }
 
 .create-room-input {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 16px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.2s ease;
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 16px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
 }
 
 .create-room-input:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .create-room-textarea {
-    width: 100%;
-    height: 120px;
-    padding: 12px;
-    margin-bottom: 24px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 16px;
-    resize: vertical;
-    transition: all 0.2s ease;
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  margin-bottom: 24px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  font-size: 16px;
+  resize: vertical;
+  transition: all 0.2s ease;
 }
 
 .create-room-textarea:focus {
-    outline: none;
-    border-color: var(--primary-color);
-    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .modal-buttons {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .modal-button {
-    padding: 10px 20px;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 500;
-    transition: all 0.2s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 .modal-button-cancel {
-    background-color: var(--background-color);
-    color: var(--text-color);
+  background-color: var(--background-color);
+  color: var(--text-color);
 }
 
 .modal-button-cancel:hover {
-    background-color: var(--border-color);
+  background-color: var(--border-color);
 }
 
 .modal-button-create {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-dark)
+  );
+  color: white;
 }
 
 .modal-button-create:hover {
-    transform: translateY(-1px);
-    box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
 }
 
 /* Room View Content Styling */
 .room-view-content {
-    background: white;
-    border-radius: 16px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
-    padding: 24px;
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  padding: 24px;
 }
 
 /* Login Prompt Styles */
 .login-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 1000;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 .blurred-background {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .login-prompt {
-    position: relative;
-    z-index: 1001;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    max-width: 400px;
+  position: relative;
+  z-index: 1001;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
 }
 
 .login-prompt-content {
-    background: white;
-    padding: 40px;
-    border-radius: 16px;
-    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    text-align: center;
-    width: 100%;
-    animation: fadeInUp 0.6s ease-out;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+  background: white;
+  padding: 40px;
+  border-radius: 16px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  text-align: center;
+  width: 100%;
+  animation: fadeInUp 0.6s ease-out;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .login-prompt-icon {
-    font-size: 48px;
-    margin-bottom: 20px;
-    display: block;
+  font-size: 48px;
+  margin-bottom: 20px;
+  display: block;
 }
 
 .login-prompt-content h2 {
-    color: var(--text-color);
-    font-size: 24px;
-    font-weight: 600;
-    margin: 0 0 16px 0;
+  color: var(--text-color);
+  font-size: 24px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
 }
 
 .login-prompt-content p {
-    color: var(--text-light);
-    font-size: 16px;
-    line-height: 1.5;
-    margin: 0 0 12px 0;
+  color: var(--text-light);
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0 0 12px 0;
 }
 
 .login-prompt-content p:last-of-type {
-    margin-bottom: 24px;
+  margin-bottom: 24px;
 }
 
 .login-prompt-btn {
-    background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
-    color: white;
-    border: none;
-    padding: 12px 32px;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
+  background: linear-gradient(
+    135deg,
+    var(--primary-color),
+    var(--primary-dark)
+  );
+  color: white;
+  border: none;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(59, 130, 246, 0.2);
 }
 
 .login-prompt-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px rgba(59, 130, 246, 0.3);
 }
 
 .login-prompt-btn:active {
-    transform: translateY(0);
+  transform: translateY(0);
 }
 
 @keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(30px);
-    }
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Responsive design for login prompt */
 @media (max-width: 768px) {
-    .login-overlay {
-        padding: 16px;
-    }
+  .login-overlay {
+    padding: 16px;
+  }
 
-    .login-prompt {
-        max-width: 350px;
-    }
+  .login-prompt {
+    max-width: 350px;
+  }
 
-    .login-prompt-content {
-        padding: 32px 24px;
-    }
+  .login-prompt-content {
+    padding: 32px 24px;
+  }
 
-    .login-prompt-icon {
-        font-size: 40px;
-        margin-bottom: 16px;
-    }
+  .login-prompt-icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+  }
 
-    .login-prompt-content h2 {
-        font-size: 20px;
-        margin-bottom: 12px;
-    }
+  .login-prompt-content h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+  }
 
-    .login-prompt-content p {
-        font-size: 14px;
-        margin-bottom: 10px;
-    }
+  .login-prompt-content p {
+    font-size: 14px;
+    margin-bottom: 10px;
+  }
 
-    .login-prompt-content p:last-of-type {
-        margin-bottom: 20px;
-    }
+  .login-prompt-content p:last-of-type {
+    margin-bottom: 20px;
+  }
 
-    .login-prompt-btn {
-        padding: 10px 28px;
-        font-size: 14px;
-    }
+  .login-prompt-btn {
+    padding: 10px 28px;
+    font-size: 14px;
+  }
 }
 
 @media (max-width: 480px) {
-    .login-overlay {
-        padding: 12px;
-    }
+  .login-overlay {
+    padding: 12px;
+  }
 
-    .login-prompt {
-        max-width: 300px;
-    }
+  .login-prompt {
+    max-width: 300px;
+  }
 
-    .login-prompt-content {
-        padding: 24px 20px;
-    }
+  .login-prompt-content {
+    padding: 24px 20px;
+  }
 
-    .login-prompt-icon {
-        font-size: 36px;
-        margin-bottom: 12px;
-    }
+  .login-prompt-icon {
+    font-size: 36px;
+    margin-bottom: 12px;
+  }
 
-    .login-prompt-content h2 {
-        font-size: 18px;
-        margin-bottom: 10px;
-    }
+  .login-prompt-content h2 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
 
-    .login-prompt-content p {
-        font-size: 13px;
-        margin-bottom: 8px;
-    }
+  .login-prompt-content p {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
 
-    .login-prompt-content p:last-of-type {
-        margin-bottom: 16px;
-    }
+  .login-prompt-content p:last-of-type {
+    margin-bottom: 16px;
+  }
 
-    .login-prompt-btn {
-        padding: 8px 24px;
-        font-size: 13px;
-    }
+  .login-prompt-btn {
+    padding: 8px 24px;
+    font-size: 13px;
+  }
 }

@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 import Navbar from "../Index/components/Navbar";
-import Shahzebpic from "../../Assets/images/Shahzeb Mubashar (lesser size).webp";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 function Dashboard() {
   const [user, setUser] = useState({
@@ -15,6 +17,46 @@ function Dashboard() {
     notifications: [],
   });
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  const fetchUserInfo = async () => {
+    try {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
+        method: "GET",
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to Fetch User Information");
+      }
+
+      const data = await res.json();
+      setUser(data);
+    } catch (error) {
+      console.log("Error fetching User Info", error);
+    }
+  };
+
+  useEffect(() => {
+    const checkAuthAndFetchData = async () => {
+      try {
+        if (checkAuth()) {
+          setIsAuthenticated(true);
+          fetchUserInfo();
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    checkAuthAndFetchData();
+  }, []);
+
   function AcademicDashboard() {
     const [courses, setCourses] = useState([
       { name: "Course 1", credits: 3, grade: "A" },
@@ -26,45 +68,8 @@ function Dashboard() {
       credits: 3,
       grade: "A",
     });
-    const [User, setUser] = useState({});
     const [currentCourses, setCurrentCourses] = useState([]);
     const [myRooms, setMyRooms] = useState([]);
-
-    const handleSettingsChange = (e) => {
-      e.preventDefault();
-      alert("Settings updated successfully!");
-    };
-
-    // Function to get user's initials from name or username
-    const getUserInitials = () => {
-      // Try to use fullName first, then fallback to name, then username
-      const displayName = User?.fullName || User?.name || User?.username;
-
-      if (!displayName) return "U";
-
-      return displayName
-        .split(" ")
-        .filter((_, index, array) => index === 0 || index === array.length - 1)
-        .map(name => name[0])
-        .join("")
-        .toUpperCase();
-    };
-
-    const getAvatarBackgroundColor = (name) => {
-      if (!name) return "#4A90E2";
-
-      const colors = [
-        "#4A90E2", "#5DADE2", "#2980B9", "#85C1E9", "#2874A6",
-        "#3498DB", "#2E86C1", "#1F618D", "#AED6F1", "#34495E",
-        "#7FB3D5", "#154360", "#D6EAF8", "#1A5276", "#21618C"
-      ];
-
-      const charSum = name
-        .split("")
-        .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-
-      return colors[charSum % colors.length];
-    };
 
     const gradePoints = {
       "A+": 4.0,
@@ -110,12 +115,8 @@ function Dashboard() {
 
     const fetchCurrentCourses = async () => {
       try {
-        const res = await fetch("http://localhost:4000/user/current-courses", {
+        const res = await authenticatedFetch(`${API_BASE_URL}/user/current-courses`, {
           method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
         if (!res.ok) {
@@ -129,38 +130,13 @@ function Dashboard() {
       }
     };
 
-    const fetchUserInfo = async () => {
-      try {
-        const res = await fetch(`http://localhost:4000/User/profile`, {
-          credentials: "include",
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (!res.ok) {
-          throw new Error(`HTTP error! status: ${res.status}`);
-        }
-
-        const data = await res.json();
-        setUser(data);
-      } catch (error) {
-        console.error("Error Fetching User Info:", error.message);
-      }
-    };
-
     const [tasks, setTasks] = useState([]);
 
     // Fetch tasks from backend
     const fetchTasks = async () => {
       try {
-        const res = await fetch("http://localhost:4000/user/my-reminders", {
+        const res = await authenticatedFetch(`${API_BASE_URL}/user/my-reminders`, {
           method: "GET",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
         });
 
         if (!res.ok) {
@@ -170,7 +146,9 @@ function Dashboard() {
 
         const data = await res.json();
         // Get completed task IDs from localStorage
-        const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+        const completedTaskIds = JSON.parse(
+          localStorage.getItem("completedTaskIds") || "[]",
+        );
 
         if (data) {
           setTasks(
@@ -178,12 +156,13 @@ function Dashboard() {
               id: task.taskid,
               title: task.content, // Changed from 'text' to 'title' to match deadlines structure
               // Use either the server status or check if it's in our localStorage completed list
-              completed: task.status === true || completedTaskIds.includes(task.taskid),
+              completed:
+                task.status === true || completedTaskIds.includes(task.taskid),
               priority: task.priority.toLowerCase(),
               dueDate: new Date(task.duedate).toISOString().split("T")[0],
               dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
               course: "Task", // Added to match deadlines structure
-            }))
+            })),
           );
           console.log(data);
         } else {
@@ -196,13 +175,12 @@ function Dashboard() {
 
     useEffect(() => {
       fetchTasks();
-    }, [User?.userid]);
+    }, []);
 
     const fetchJoinedRooms = async () => {
       try {
-        const result = await fetch(
-          `http://localhost:4000/Chatrooms/my-rooms/${User.userid}`,
-          { credentials: "include" }
+        const result = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/my-rooms/${user.userid}`,
         );
         const data = await result.json();
 
@@ -221,15 +199,11 @@ function Dashboard() {
     };
 
     useEffect(() => {
-      fetchUserInfo();
-    }, []);
-
-    useEffect(() => {
-      if (User?.userid) {
+      if (user.userid) {
         fetchCurrentCourses();
         fetchJoinedRooms();
       }
-    }, [User?.userid]);
+    }, []);
 
     const handleInputChange = (e) => {
       const { name, value } = e.target;
@@ -242,17 +216,19 @@ function Dashboard() {
     // Toggle task completion
     const toggleTaskCompletion = async (id) => {
       try {
-        const task = tasks.find(t => t.id === id);
+        const task = tasks.find((t) => t.id === id);
         const newStatus = !task.completed;
 
         // Optimistically update UI
-        const updatedTasks = tasks.map(task =>
-          task.id === id ? { ...task, completed: newStatus } : task
+        const updatedTasks = tasks.map((task) =>
+          task.id === id ? { ...task, completed: newStatus } : task,
         );
         setTasks(updatedTasks);
 
         // Save completed task IDs to localStorage for persistence across pages
-        const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+        const completedTaskIds = JSON.parse(
+          localStorage.getItem("completedTaskIds") || "[]",
+        );
         if (newStatus) {
           // Add to completed tasks if not already in the list
           if (!completedTaskIds.includes(id)) {
@@ -265,18 +241,20 @@ function Dashboard() {
             completedTaskIds.splice(index, 1);
           }
         }
-        localStorage.setItem('completedTaskIds', JSON.stringify(completedTaskIds));
+        localStorage.setItem(
+          "completedTaskIds",
+          JSON.stringify(completedTaskIds),
+        );
 
-        const response = await fetch(`http://localhost:4000/user/update-priority/${id}`, {
-          method: "PUT",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/user/update-priority/${id}`,
+          {
+            method: "PUT",
+            body: JSON.stringify({
+              status: newStatus,
+            }),
           },
-          body: JSON.stringify({
-            status: newStatus,
-          }),
-        });
+        );
 
         if (!response.ok) {
           // If the API call fails, revert the optimistic update
@@ -308,24 +286,26 @@ function Dashboard() {
                 fontSize: "2.5rem",
                 fontWeight: "bold",
                 textTransform: "uppercase",
-                letterSpacing: "1px"
+                letterSpacing: "1px",
               }}
             >
-              {getUserInitials()}
+              {user?.fullName?.split(" ").map((name) => name[0]).join("").toUpperCase()}
             </div>
             <div className="user-info">
-              <h1 className="user-name">{User?.fullName || User?.name || User.username || "Loading..."}</h1>
+              <h1 className="user-name">
+                {user?.fullName || user?.name || user?.username || "Loading..."}
+              </h1>
               <h5 className="user-name-username">
-                @{User?.username || "Loading..."}
+                @{user?.username || "Loading..."}
               </h5>
               <div className="user-details">
                 <div className="user-detail-item">
                   <span className="user-detail-icon">📧</span>
-                  <span>{User?.email || "Loading..."}</span>
+                  <span>{user?.email || "Loading..."}</span>
                 </div>
                 <div className="user-detail-item">
                   <span className="user-detail-icon">🎓</span>
-                  <span>Roll No: {User?.rollnumber || "Loading..."}</span>
+                  <span>Roll No: {user?.rollnumber || "Loading..."}</span>
                 </div>
               </div>
               <div className="academic-info">
@@ -357,9 +337,9 @@ function Dashboard() {
           <section className="courses-section">
             <div className="section-header">
               <h2>📘 My Courses</h2>
-              <a href="#" className="view-all">
+              <button className="view-all">
                 View all
-              </a>
+              </button>
             </div>
             <div className="courses-grid">
               {currentCourses.length > 0 ? (
@@ -408,40 +388,47 @@ function Dashboard() {
           <section className="deadlines-section">
             <div className="section-header">
               <h2>⏰ Upcoming Deadlines</h2>
-              <a href="#" className="view-all">
+              <button className="view-all">
                 View all
-              </a>
+              </button>
             </div>
             <div className="deadlines-list">
               {/* Only show pending tasks in the dashboard */}
-              {tasks.filter(task => !task.completed).length > 0 ? (
-                tasks.filter(task => !task.completed).slice(0, 3).map((task, index) => (
-                  <div
-                    key={task.id || index}
-                    className="deadline-card"
-                    onClick={() => toggleTaskCompletion(task.id)}
-                  >
-                    <div className="deadline-content">
-                      <div className="deadline-header">
-                        <div className="deadline-course">{task.course}</div>
-                        <div className="deadline-status">
-                          <div className="status-indicator pending"></div>
-                          <span>Pending</span>
+              {tasks.filter((task) => !task.completed).length > 0 ? (
+                tasks
+                  .filter((task) => !task.completed)
+                  .slice(0, 3)
+                  .map((task, index) => (
+                    <div
+                      key={task.id || index}
+                      className="deadline-card"
+                      onClick={() => toggleTaskCompletion(task.id)}
+                    >
+                      <div className="deadline-content">
+                        <div className="deadline-header">
+                          <div className="deadline-course">{task.course}</div>
+                          <div className="deadline-status">
+                            <div className="status-indicator pending"></div>
+                            <span>Pending</span>
+                          </div>
+                        </div>
+                        <h3 className="deadline-title">{task.title}</h3>
+                        <div className="deadline-details">
+                          <span className="deadline-date">
+                            <span className="icon">📅</span>
+                            {new Date(
+                              `${task.dueDate}T${task.dueTime}`,
+                            ).toLocaleString()}
+                          </span>
+                          <span
+                            className={`deadline-priority ${task.priority}`}
+                          >
+                            {task.priority.toUpperCase()}
+                          </span>
                         </div>
                       </div>
-                      <h3 className="deadline-title">{task.title}</h3>
-                      <div className="deadline-details">
-                        <span className="deadline-date">
-                          <span className="icon">📅</span>
-                          {new Date(`${task.dueDate}T${task.dueTime}`).toLocaleString()}
-                        </span>
-                        <span className={`deadline-priority ${task.priority}`}>
-                          {task.priority.toUpperCase()}
-                        </span>
-                      </div>
                     </div>
-                  </div>
-                ))
+                  ))
               ) : (
                 <div className="no-deadlines-message">
                   No pending deadlines found
@@ -470,7 +457,9 @@ function Dashboard() {
                       <div
                         key={index}
                         className="course-item"
-                        onClick={() => (window.location.href = "/course-details")}
+                        onClick={() =>
+                          (window.location.href = "/course-details")
+                        }
                       >
                         <div className="course-details">
                           <span className="course-name">{course.name}</span>
@@ -538,9 +527,9 @@ function Dashboard() {
             <div className="chatrooms-section">
               <div className="section-header">
                 <h2>💬 Chatrooms Joined</h2>
-                <a href="#" className="view-all">
+                <button className="view-all">
                   View all
-                </a>
+                </button>
               </div>
 
               <div className="chatrooms-list">
@@ -642,6 +631,24 @@ function Dashboard() {
     );
   }
 
+  if (isAuthLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <BlurLoginPrompt
+          message="Dashboard Access Required"
+          subMessage="Please sign in to access your personalized dashboard."
+          buttonText="Sign In"
+        />
+      </>
+    );
+  }
+
   return <AcademicDashboard />;
 }
+
 export default Dashboard;

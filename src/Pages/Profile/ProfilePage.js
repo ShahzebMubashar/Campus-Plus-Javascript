@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./ProfilePage.css";
 import Navbar from "../Index/components/Navbar";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 function ProfilePage() {
   const [user, setUser] = useState({
@@ -14,13 +17,10 @@ function ProfilePage() {
     notifications: [],
   });
 
-  const [currentCourses, setCurrentCourses] = useState({});
-
   const fetchCurrentCourses = async () => {
     try {
-      const res = await fetch("http://localhost:4000/user/current-courses", {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/current-courses`, {
         method: "GET",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,9 +43,8 @@ function ProfilePage() {
 
   const fetchUserInfo = async () => {
     try {
-      const res = await fetch("http://localhost:4000/user/profile", {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -63,7 +62,23 @@ function ProfilePage() {
   };
 
   useEffect(() => {
-    fetchUserInfo();
+    const checkAuthAndFetchData = async () => {
+      try {
+        if (checkAuth()) {
+          setIsAuthenticated(true);
+          fetchUserInfo();
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    checkAuthAndFetchData();
   }, []);
 
   useEffect(() => {
@@ -74,6 +89,8 @@ function ProfilePage() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [editForm, setEditForm] = useState({ ...user });
   const [passwordForm, setPasswordForm] = useState({
@@ -98,9 +115,8 @@ function ProfilePage() {
   const handleEditFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/user/profile", {
+      const response = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "PUT",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -135,9 +151,8 @@ function ProfilePage() {
   const triggerForgotPassword = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/forgot", {
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/forgot`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -167,9 +182,8 @@ function ProfilePage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/reset", {
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/reset`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -215,7 +229,7 @@ function ProfilePage() {
     return displayName
       .split(" ")
       .filter((_, index, array) => index === 0 || index === array.length - 1)
-      .map(name => name[0])
+      .map((name) => name[0])
       .join("")
       .toUpperCase();
   };
@@ -225,8 +239,16 @@ function ProfilePage() {
     if (!name) return "#1a73e8"; // Default color
 
     const colors = [
-      "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
-      "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff"
+      "#1a73e8",
+      "#4285f4",
+      "#0d47a1",
+      "#3367d6",
+      "#4e6cef",
+      "#3742fa",
+      "#1e3799",
+      "#0077c2",
+      "#0097e6",
+      "#00a8ff",
     ];
 
     // Sum the character codes to get a deterministic but unique color
@@ -236,6 +258,23 @@ function ProfilePage() {
 
     return colors[charSum % colors.length];
   };
+
+  if (isAuthLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <BlurLoginPrompt
+          message="Profile Access Required"
+          subMessage="Please sign in to view and manage your profile."
+          buttonText="Sign In"
+        />
+      </>
+    );
+  }
 
   return (
     <div className="lms-profile-root">
@@ -277,28 +316,32 @@ function ProfilePage() {
               <div
                 className="lms-profile-avatar"
                 style={{
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  overflow: 'hidden',
-                  fontSize: '2.5rem',
-                  fontWeight: 'bold',
-                  textTransform: 'uppercase',
-                  letterSpacing: '1px',
-                  backgroundColor: getAvatarColor(user.name || user.username || ""),
-                  transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                  cursor: 'default',
-                  boxShadow: '0 4px 10px rgba(0, 0, 0, 0.2)',
-                  border: '4px solid white'
+                  borderRadius: "50%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  fontSize: "2.5rem",
+                  fontWeight: "bold",
+                  textTransform: "uppercase",
+                  letterSpacing: "1px",
+                  backgroundColor: getAvatarColor(
+                    user.name || user.username || "",
+                  ),
+                  transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                  cursor: "default",
+                  boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+                  border: "4px solid white",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = 'scale(1.05)';
-                  e.currentTarget.style.boxShadow = '0 8px 16px rgba(0, 0, 0, 0.3)';
+                  e.currentTarget.style.transform = "scale(1.05)";
+                  e.currentTarget.style.boxShadow =
+                    "0 8px 16px rgba(0, 0, 0, 0.3)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = 'scale(1)';
-                  e.currentTarget.style.boxShadow = '0 4px 10px rgba(0, 0, 0, 0.2)';
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow =
+                    "0 4px 10px rgba(0, 0, 0, 0.2)";
                 }}
               >
                 {getUserInitials()}
@@ -318,8 +361,7 @@ function ProfilePage() {
                 {user.degree || "N/A"}
               </p>
               <p>
-                <span className="lms-label">Batch:</span>{" "}
-                {user.batch || "N/A"}
+                <span className="lms-label">Batch:</span> {user.batch || "N/A"}
               </p>
               <p>
                 <span className="lms-label">GPA:</span> {user.gpa || "N/A"}

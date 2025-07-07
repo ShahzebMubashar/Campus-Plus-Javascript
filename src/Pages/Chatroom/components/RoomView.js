@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./RoomView.css";
 import Sidebar from "./Sidebar";
+import API_BASE_URL from "../../../config/api.js";
+import { authenticatedFetch } from "../../../utils/auth";
 
 // Modern blue theme color constants
 const colors = {
@@ -30,16 +32,12 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
     if (replyText.trim()) {
       try {
         console.log(room.roomid, comment.messageid, comment.commentid);
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply/${room.roomid}/${comment.commentid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/reply/${room.roomid}/${comment.commentid}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ content: replyText }),
-            credentials: "include",
-          }
+          },
         );
 
         if (response.ok) {
@@ -131,9 +129,12 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
         </div>
       )}
       {comment.replies?.map((reply) => (
-        <div key={reply.commentid} style={{
-          marginTop: '10px'
-        }}>
+        <div
+          key={reply.commentid}
+          style={{
+            marginTop: "10px",
+          }}
+        >
           <Comment
             comment={reply}
             level={level + 1}
@@ -154,7 +155,7 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [isEditingRoom, setIsEditingRoom] = useState(false);
   const [editedRoomName, setEditedRoomName] = useState(room.name);
   const [editedRoomDescription, setEditedRoomDescription] = useState(
-    room.description
+    room.description,
   );
   const [userRole, setUserRole] = useState("");
   const [userid, setUserid] = useState(null);
@@ -165,7 +166,11 @@ export default function RoomView({ room, onBack, onLeave }) {
   const [userInfo, setUserInfo] = useState(null);
   const [rooms, setRooms] = useState([]);
   const [joinedRooms, setJoinedRooms] = useState([]);
-  const [postMessage, setPostMessage] = useState({ show: false, message: "", type: "" });
+  const [postMessage, setPostMessage] = useState({
+    show: false,
+    message: "",
+    type: "",
+  });
 
   // Button styles for reusability
   const buttonStyles = {
@@ -264,9 +269,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch("http://localhost:4000/auth/user-info", {
-        credentials: "include",
-      });
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/user-info`);
       if (response.ok) {
         const data = await response.json();
         setUserInfo(data);
@@ -278,11 +281,8 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const fetchJoinedRooms = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:4000/Chatrooms/user/groups",
-        {
-          credentials: "include",
-        }
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/user/groups`,
       );
       if (response.ok) {
         const data = await response.json();
@@ -297,12 +297,11 @@ export default function RoomView({ room, onBack, onLeave }) {
     // If room is not joined, join it first
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/join/${room.roomid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/join/${room.roomid}`,
           {
             method: "POST",
-            credentials: "include",
-          }
+          },
         );
         if (response.ok) {
           await fetchJoinedRooms(); // Refresh joined rooms list
@@ -312,18 +311,14 @@ export default function RoomView({ room, onBack, onLeave }) {
         return;
       }
     }
-
   };
 
   const fetchPosts = async () => {
     console.log(`Fetching Posts...`);
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/messages/${room.roomid}`,
-        {
-          credentials: "include",
-        }
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/messages/${room.roomid}`,
       );
 
       if (response.ok) {
@@ -373,21 +368,21 @@ export default function RoomView({ room, onBack, onLeave }) {
   const handleCreatePost = async () => {
     if (newPost.trim()) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/messages`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/messages`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ message: newPost }),
-            credentials: "include",
-          }
+          },
         );
         if (response.ok) {
           setNewPost("");
           fetchPosts();
-          setPostMessage({ show: true, message: "Post submitted for approval", type: "success" });
+          setPostMessage({
+            show: true,
+            message: "Post submitted for approval",
+            type: "success",
+          });
 
           // Auto-hide the message after 5 seconds
           setTimeout(() => {
@@ -395,7 +390,11 @@ export default function RoomView({ room, onBack, onLeave }) {
           }, 5000);
         } else {
           console.error("Failed to create post");
-          setPostMessage({ show: true, message: "Failed to create post", type: "error" });
+          setPostMessage({
+            show: true,
+            message: "Failed to create post",
+            type: "error",
+          });
 
           // Auto-hide the error message after 5 seconds
           setTimeout(() => {
@@ -404,7 +403,11 @@ export default function RoomView({ room, onBack, onLeave }) {
         }
       } catch (error) {
         console.error("Error creating post:", error);
-        setPostMessage({ show: true, message: "Error creating post", type: "error" });
+        setPostMessage({
+          show: true,
+          message: "Error creating post",
+          type: "error",
+        });
 
         // Auto-hide the error message after 5 seconds
         setTimeout(() => {
@@ -416,16 +419,15 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handleDeleteRoom = async () => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this room? This action cannot be undone."
+      "Are you sure you want to delete this room? This action cannot be undone.",
     );
     if (confirmDelete) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/delete/${room.roomid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/delete/${room.roomid}`,
           {
             method: "DELETE",
-            credentials: "include",
-          }
+          },
         );
 
         if (response.ok) {
@@ -442,19 +444,15 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handleUpdateRoom = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/change-room-name/${room.roomid}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/change-room-name/${room.roomid}`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
             newName: editedRoomName,
             description: editedRoomDescription,
           }),
-          credentials: "include",
-        }
+        },
       );
 
       if (response.ok) {
@@ -474,20 +472,16 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (!postId) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/like/${postId}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/like/${postId}`,
         {
           method: "POST",
-          credentials: "include",
-        }
+        },
       );
 
       if (response.ok) {
-        const likeCountResponse = await fetch(
-          `http://localhost:4000/Chatrooms/likes/${postId}`,
-          {
-            credentials: "include",
-          }
+        const likeCountResponse = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/likes/${postId}`,
         );
 
         if (likeCountResponse.ok) {
@@ -496,8 +490,8 @@ export default function RoomView({ room, onBack, onLeave }) {
             prev.map((post) =>
               post.messageid === postId
                 ? { ...post, likeCount: data.likeCount }
-                : post
-            )
+                : post,
+            ),
           );
         }
       }
@@ -510,19 +504,15 @@ export default function RoomView({ room, onBack, onLeave }) {
     console.log(postId);
     if (newComment.trim()) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply1/${room.roomid}/${postId}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/reply1/${room.roomid}/${postId}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({
               message: newComment,
               parentReplyId: parentReplyId, // can be null or an integer
             }),
-            credentials: "include",
-          }
+          },
         );
 
         if (response.ok) {
@@ -539,15 +529,14 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handleLeaveRoom = async () => {
     const confirmLeave = window.confirm(
-      "Are you sure you want to leave this room?"
+      "Are you sure you want to leave this room?",
     );
     if (confirmLeave) {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/leave/${room.roomid}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/leave/${room.roomid}`,
         {
           method: "DELETE",
-          credentials: "include",
-        }
+        },
       );
 
       if (response.ok) {
@@ -561,16 +550,12 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handleProcessPost = async (messageid, status) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/process/${room.roomid}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/process/${room.roomid}`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({ messageid, status }),
-          credentials: "include",
-        }
+        },
       );
 
       if (response.ok) {
@@ -586,12 +571,11 @@ export default function RoomView({ room, onBack, onLeave }) {
   const handleDeletePost = async (messageid) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/messages/${messageid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/messages/${messageid}`,
           {
             method: "DELETE",
-            credentials: "include",
-          }
+          },
         );
 
         if (response.ok) {
@@ -645,16 +629,12 @@ export default function RoomView({ room, onBack, onLeave }) {
     const newContent = prompt("Edit your post:", currentContent);
     if (newContent && newContent !== currentContent) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ content: newContent }),
-            credentials: "include",
-          }
+          },
         );
 
         if (response.ok) {
@@ -672,12 +652,11 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handlePinPost = async (messageid) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/pin`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/${room.roomid}/posts/${messageid}/pin`,
         {
           method: "POST",
-          credentials: "include",
-        }
+        },
       );
 
       if (response.ok) {
@@ -696,16 +675,12 @@ export default function RoomView({ room, onBack, onLeave }) {
     const reason = prompt("Please enter the reason for reporting this post:");
     if (reason) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/posts/${messageid}/report`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/posts/${messageid}/report`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ reason }),
-            credentials: "include",
-          }
+          },
         );
 
         if (response.ok) {
@@ -734,12 +709,9 @@ export default function RoomView({ room, onBack, onLeave }) {
       if (searchUsername) params.append("username", searchUsername);
       if (searchDate) params.append("date", searchDate);
 
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/search/${room.roomid
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/search/${room.roomid
         }?${params.toString()}`,
-        {
-          credentials: "include",
-        }
       );
 
       if (response.ok) {
@@ -772,7 +744,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         </mark>
       ) : (
         part
-      )
+      ),
     );
   };
 
@@ -831,7 +803,10 @@ export default function RoomView({ room, onBack, onLeave }) {
             >
               {room.roomname}
             </h1>
-            <div className="header-buttons" style={{ display: "flex", gap: "12px" }}>
+            <div
+              className="header-buttons"
+              style={{ display: "flex", gap: "12px" }}
+            >
               <button
                 onClick={onBack}
                 style={{
@@ -1017,7 +992,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 padding: "12px",
                 border: "1px solid #ddd",
                 borderRadius: "4px",
-                fontSize: "16px"
+                fontSize: "16px",
               }}
             />
             <input
@@ -1030,7 +1005,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 padding: "12px",
                 border: "1px solid #ddd",
                 borderRadius: "4px",
-                fontSize: "16px"
+                fontSize: "16px",
               }}
             />
             <input
@@ -1041,7 +1016,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 padding: "12px",
                 border: "1px solid #ddd",
                 borderRadius: "4px",
-                fontSize: "16px"
+                fontSize: "16px",
               }}
             />
             <button
@@ -1084,19 +1059,23 @@ export default function RoomView({ room, onBack, onLeave }) {
                 padding: "10px 15px",
                 marginBottom: "15px",
                 borderRadius: "6px",
-                backgroundColor: postMessage.type === "success" ? "#e6f7ee" : "#ffebee",
+                backgroundColor:
+                  postMessage.type === "success" ? "#e6f7ee" : "#ffebee",
                 color: postMessage.type === "success" ? "#1e8e3e" : "#d32f2f",
                 border: `1px solid ${postMessage.type === "success" ? "#b7dfca" : "#f5c2c7"}`,
                 display: "flex",
                 alignItems: "center",
-                justifyContent: "space-between"
+                justifyContent: "space-between",
               }}
             >
               <span>
-                {postMessage.type === "success" ? "✅" : "⚠️"} {postMessage.message}
+                {postMessage.type === "success" ? "✅" : "⚠️"}{" "}
+                {postMessage.message}
               </span>
               <button
-                onClick={() => setPostMessage({ show: false, message: "", type: "" })}
+                onClick={() =>
+                  setPostMessage({ show: false, message: "", type: "" })
+                }
                 style={{
                   background: "none",
                   border: "none",
@@ -1110,7 +1089,10 @@ export default function RoomView({ room, onBack, onLeave }) {
             </div>
           )}
 
-          <div className="create-post-section" style={{ display: "flex", gap: "12px" }}>
+          <div
+            className="create-post-section"
+            style={{ display: "flex", gap: "12px" }}
+          >
             <input
               type="text"
               placeholder="What's on your mind?"
@@ -1166,66 +1148,76 @@ export default function RoomView({ room, onBack, onLeave }) {
                     style={{
                       display: "flex",
                       justifyContent: "space-between",
+                      alignItems: "flex-start",
                     }}
                   >
                     <div
                       style={{
                         display: "flex",
-                        alignItems: "center",
-                        gap: "12px",
+                        flexDirection:
+                          post.status === "Pending" ? "column" : "row",
+                        alignItems:
+                          post.status === "Pending" ? "flex-start" : "center",
+                        gap: post.status === "Pending" ? "4px" : "12px",
                       }}
                     >
-                      <span
+                      <div
                         style={{
-                          fontWeight: "600",
-                          color: colors.primary,
-                          fontSize: "16px",
+                          display: "flex",
+                          alignItems: "center",
+                          gap: "12px",
                         }}
                       >
-                        {post.username}
-                      </span>
-                      {post.is_pinned && (
                         <span
                           style={{
-                            backgroundColor: colors.pinned,
-                            color: colors.primaryDark,
-                            padding: "4px 10px",
-                            borderRadius: "12px",
-                            fontSize: "12px",
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "4px",
-                            fontWeight: "500",
+                            fontWeight: "600",
+                            color: colors.primary,
+                            fontSize: "16px",
                           }}
                         >
-                          📌 Pinned
+                          {post.username}
                         </span>
-                      )}
-                      {post.status === "Pending" && (
-                        <span
-                          style={{
-                            backgroundColor: colors.pending,
-                            color: "white",
-                            padding: "4px 10px",
-                            borderRadius: "12px",
-                            fontSize: "12px",
-                            fontWeight: "500",
-                          }}
-                        >
-                          Pending
-                        </span>
-                      )}
-                    </div>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "12px",
-                        alignItems: "center",
-                      }}
-                    >
+                        {post.is_pinned && (
+                          <span
+                            style={{
+                              backgroundColor: colors.pinned,
+                              color: colors.primaryDark,
+                              padding: "4px 10px",
+                              borderRadius: "12px",
+                              fontSize: "12px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            📌 Pinned
+                          </span>
+                        )}
+                        {post.status === "Pending" && (
+                          <span
+                            style={{
+                              backgroundColor: colors.pending,
+                              color: "white",
+                              padding: "4px 10px",
+                              borderRadius: "12px",
+                              fontSize: "12px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Pending
+                          </span>
+                        )}
+                      </div>
                       {post.status === "Pending" &&
                         (userRole === "Admin" || userRole === "Moderator") && (
-                          <div style={{ display: "flex", gap: "8px" }}>
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "8px",
+                              marginTop: "6px",
+                            }}
+                          >
                             <button
                               onClick={() =>
                                 handleProcessPost(post.messageid, "Approved")
@@ -1252,6 +1244,14 @@ export default function RoomView({ room, onBack, onLeave }) {
                             </button>
                           </div>
                         )}
+                    </div>
+                    <div
+                      style={{
+                        display: "flex",
+                        gap: "12px",
+                        alignItems: "center",
+                      }}
+                    >
                       {post.status === "Approved" && userRole === "Admin" && (
                         <button
                           onClick={() => handleDeletePost(post.messageid)}
@@ -1334,7 +1334,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                   <button
                     onClick={() =>
                       setActivePost(
-                        activePost === post.messageid ? null : post.messageid
+                        activePost === post.messageid ? null : post.messageid,
                       )
                     }
                     style={{

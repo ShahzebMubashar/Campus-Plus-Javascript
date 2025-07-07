@@ -10,52 +10,51 @@
 } */
 
 .container1 {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    width: 80%;
-    max-width: 1200px;
-    color: #343434;
-    padding: 20px;
-
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  width: 80%;
+  max-width: 1200px;
+  color: #343434;
+  padding: 20px;
 }
 
 .text-container1 {
-    flex: 1 1 100%;
-    text-align: center;
-    margin-bottom: 30px;
+  flex: 1 1 100%;
+  text-align: center;
+  margin-bottom: 30px;
 }
 
 .text-container1 h2 {
-    font-size: 40px;
-    margin: 0;
-    font-weight: 900;
-    letter-spacing: 2px;
-    color: #343434;
+  font-size: 40px;
+  margin: 0;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #343434;
 }
 
 .text-container1 p {
-    font-size: 20px;
-    margin-top: 10px;
-    color: #555;
+  font-size: 20px;
+  margin-top: 10px;
+  color: #555;
 }
 
 .text-container1 a {
-    text-decoration: none;
-    background: #1769aa;
-    color: #ffffff;
-    padding: 15px 25px;
-    margin-top: 20px;
-    display: inline-block;
-    border-radius: 10px;
-    font-size: 14px;
-    text-transform: uppercase;
-    transition: 0.4s;
+  text-decoration: none;
+  background: #1769aa;
+  color: #ffffff;
+  padding: 15px 25px;
+  margin-top: 20px;
+  display: inline-block;
+  border-radius: 10px;
+  font-size: 14px;
+  text-transform: uppercase;
+  transition: 0.4s;
 }
 
 .text-container1 a:hover {
-    background: #7abdf8;
+  background: #7abdf8;
 }
 
 /* 
@@ -76,46 +75,46 @@
 } */
 
 @keyframes imageFadeIn {
-    to {
-        opacity: 1;
-        transform: scale(1);
-    }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .fade-in {
-    font-size: 50px;
-    opacity: 0;
-    animation: fadeIn 2s forwards;
+  font-size: 50px;
+  opacity: 0;
+  animation: fadeIn 2s forwards;
 }
 
 .fade-in-delay {
-    width: 100%;
-    font-size: 18px;
-    opacity: 0;
-    animation: fadeIn 2.5s forwards;
+  width: 100%;
+  font-size: 18px;
+  opacity: 0;
+  animation: fadeIn 2.5s forwards;
 }
 
 @keyframes fadeIn {
-    to {
-        opacity: 1;
-    }
+  to {
+    opacity: 1;
+  }
 }
 
 @keyframes slideIn {
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* Responsive Styles */
 @media (min-width: 768px) {
-    .text-container1 {
-        text-align: left;
-        flex: 1 1 50%;
-    }
+  .text-container1 {
+    text-align: left;
+    flex: 1 1 50%;
+  }
 
-    /* .svg-container {
+  /* .svg-container {
         flex: 1 1 50%;
     }
 
@@ -123,33 +122,32 @@
         width: 100%;
     } */
 
-    .text-container1 h2 {
-        font-size: 50px;
-    }
+  .text-container1 h2 {
+    font-size: 50px;
+  }
 
-    .text-container1 p {
-        font-size: 22px;
-    }
+  .text-container1 p {
+    font-size: 22px;
+  }
 }
 
 @media (min-width: 1024px) {
-    .container1 {
-        flex-wrap: nowrap;
-    }
+  .container1 {
+    flex-wrap: nowrap;
+  }
 
-    .text-container1 h2 {
-        font-size: 60px;
-    }
+  .text-container1 h2 {
+    font-size: 60px;
+  }
 
-    .text-container1 p {
-        font-size: 24px;
-    }
+  .text-container1 p {
+    font-size: 24px;
+  }
 }
 
 /* Add this to your CSS file */
 
-
 .container1 {
-    flex: 1;
-    /* Make sure the container takes up available space */
+  flex: 1;
+  /* Make sure the container takes up available space */
 }

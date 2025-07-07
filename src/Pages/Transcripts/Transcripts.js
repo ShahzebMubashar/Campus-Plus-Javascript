@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import "./Transcripts.css";
 import Navbar from "../Index/components/Navbar";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 const gradePoints = {
   I: null, // In-progress courses (excluded from GPA)
@@ -38,30 +41,50 @@ function TranscriptsPage() {
   const [confirmDeleteSemester, setConfirmDeleteSemester] = useState(null);
   const [selectedSemesterId, setSelectedSemesterId] = useState(null);
   const semesterRefs = useRef({});
+  const [isLargeScreen, setIsLargeScreen] = useState(
+    window.matchMedia("(min-width: 901px)").matches,
+  );
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 901px)");
+    const handleResize = () => setIsLargeScreen(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
 
   // Fetch data on mount
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [transcriptRes, userRes] = await Promise.all([
-          fetch("http://localhost:4000/Transcripts/", {
-            credentials: "include",
-          }),
-          fetch("http://localhost:4000/User/profile", {
-            credentials: "include",
-          }),
-        ]);
-
-        const transcriptData = await transcriptRes.json();
+        // Fetch user profile data
+        const userRes = await authenticatedFetch(`${API_BASE_URL}/user/profile`);
         const userData = userRes.ok ? await userRes.json() : null;
 
-        setSemesters(transcriptData);
-        setUser(userData);
+        // Fetch transcript data
+        const transcriptRes = await authenticatedFetch(`${API_BASE_URL}/Transcripts/`);
 
-        // Set the first semester as selected by default if available
-        if (transcriptData.length > 0 && !selectedSemesterId) {
-          setSelectedSemesterId(transcriptData[0].id);
+        if (!transcriptRes.ok) {
+          // If transcript not found or error, set empty array
+          setSemesters([]);
+          setUser(userData);
+          return;
         }
+
+        const transcriptData = await transcriptRes.json();
+
+        // Ensure transcriptData is an array
+        if (Array.isArray(transcriptData)) {
+          setSemesters(transcriptData);
+          // Set the first semester as selected by default if available
+          if (transcriptData.length > 0 && !selectedSemesterId) {
+            setSelectedSemesterId(transcriptData[0].id);
+          }
+        } else {
+          // If response is not an array, set empty array
+          setSemesters([]);
+        }
+        setUser(userData);
       } catch (err) {
         setError(err.message);
         setShowError(true);
@@ -73,12 +96,17 @@ function TranscriptsPage() {
     fetchData();
   }, [selectedSemesterId]);
 
+  // Check authentication status
+  useEffect(() => {
+    setIsAuthenticated(checkAuth());
+  }, []);
+
   // When selectedSemesterId changes, scroll to that semester card
   useEffect(() => {
     if (selectedSemesterId && semesterRefs.current[selectedSemesterId]) {
       semesterRefs.current[selectedSemesterId].scrollIntoView({
-        behavior: 'smooth',
-        block: 'start'
+        behavior: "smooth",
+        block: "start",
       });
     }
   }, [selectedSemesterId]);
@@ -88,6 +116,11 @@ function TranscriptsPage() {
     grade === "I" ? "In Progress" : gradePoints[grade]?.toFixed(2) || "0.00";
 
   const calculateSGPA = (courses) => {
+    // Ensure courses is an array before using reduce
+    if (!Array.isArray(courses)) {
+      return "0.00";
+    }
+
     const { totalPoints, totalCredits } = courses.reduce(
       (acc, course) => {
         if (course.grade === "I") return acc;
@@ -97,32 +130,37 @@ function TranscriptsPage() {
           totalCredits: acc.totalCredits + course.credits,
         };
       },
-      { totalPoints: 0, totalCredits: 0 }
+      { totalPoints: 0, totalCredits: 0 },
     );
     return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
   };
 
   const calculateCGPA = () => {
+    // Ensure semesters is an array before using reduce
+    if (!Array.isArray(semesters)) {
+      return "0.00";
+    }
+
     const { totalPoints, totalCredits } = semesters.reduce(
       (acc, semester) => ({
         totalPoints:
           acc.totalPoints +
-          semester.courses.reduce(
+          (Array.isArray(semester.courses) ? semester.courses.reduce(
             (sum, course) =>
               course.grade === "I"
                 ? sum
                 : sum + (gradePoints[course.grade] || 0) * course.credits,
-            0
-          ),
+            0,
+          ) : 0),
         totalCredits:
           acc.totalCredits +
-          semester.courses.reduce(
+          (Array.isArray(semester.courses) ? semester.courses.reduce(
             (sum, course) =>
               course.grade === "I" ? sum : sum + course.credits,
-            0
-          ),
+            0,
+          ) : 0),
       }),
-      { totalPoints: 0, totalCredits: 0 }
+      { totalPoints: 0, totalCredits: 0 },
     );
     return totalCredits > 0 ? (totalPoints / totalCredits).toFixed(2) : "0.00";
   };
@@ -131,16 +169,14 @@ function TranscriptsPage() {
   const handleAddSemester = async () => {
     if (!newSemester.name || !newSemester.year) return;
     try {
-      const res = await fetch(
-        "http://localhost:4000/Transcripts/add-semester",
+      const res = await authenticatedFetch(
+        `${API_BASE_URL}/Transcripts/add-semester`,
         {
           method: "POST",
-          credentials: "include",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             name: `${newSemester.name} ${newSemester.year}`,
           }),
-        }
+        },
       );
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
@@ -160,10 +196,8 @@ function TranscriptsPage() {
     }
 
     try {
-      const res = await fetch("http://localhost:4000/Transcripts/add-course", {
+      const res = await authenticatedFetch(`${API_BASE_URL}/Transcripts/add-course`, {
         method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           coursecode: newCourse.code.trim(),
           coursename: newCourse.name.trim(),
@@ -173,9 +207,7 @@ function TranscriptsPage() {
         }),
       });
       if (!res.ok) throw new Error((await res.json()).message);
-      const updated = await fetch("http://localhost:4000/Transcripts/", {
-        credentials: "include",
-      }).then((r) => r.json());
+      const updated = await authenticatedFetch(`${API_BASE_URL}/Transcripts/`).then((r) => r.json());
       setSemesters(updated);
       setShowAddCourseModal(false);
     } catch (err) {
@@ -186,12 +218,11 @@ function TranscriptsPage() {
 
   const handleRemoveCourse = async (semesterId, courseId) => {
     try {
-      await fetch(
-        `http://localhost:4000/Transcripts/remove-course/${courseId}`,
+      await authenticatedFetch(
+        `${API_BASE_URL}/Transcripts/remove-course/${courseId}`,
         {
           method: "DELETE",
-          credentials: "include",
-        }
+        },
       );
       setSemesters(
         semesters.map((semester) =>
@@ -200,8 +231,8 @@ function TranscriptsPage() {
               ...semester,
               courses: semester.courses.filter((c) => c.id !== courseId),
             }
-            : semester
-        )
+            : semester,
+        ),
       );
     } catch (err) {
       setError(err.message);
@@ -211,12 +242,11 @@ function TranscriptsPage() {
 
   const handleRemoveSemester = async (semesterId) => {
     try {
-      await fetch(
-        `http://localhost:4000/Transcripts/remove-semester/${semesterId}`,
+      await authenticatedFetch(
+        `${API_BASE_URL}/Transcripts/remove-semester/${semesterId}`,
         {
           method: "DELETE",
-          credentials: "include",
-        }
+        },
       );
       setSemesters(semesters.filter((s) => s.id !== semesterId));
       setConfirmDeleteSemester(null);
@@ -236,45 +266,57 @@ function TranscriptsPage() {
     return displayName
       .split(" ")
       .filter((_, index, array) => index === 0 || index === array.length - 1)
-      .map(name => name[0])
+      .map((name) => name[0])
       .join("")
       .toUpperCase();
   };
 
   if (loading) return <div className="loading">Loading transcript data...</div>;
 
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <BlurLoginPrompt
+          message="Transcript Access Required"
+          subMessage="Please sign in to view and manage your academic transcript."
+          buttonText="Sign In"
+        />
+      </>
+    );
+  }
+
   return (
     <div className="transcripts-layout">
-      {/* Sidebar */}
-      <aside className="transcripts-sidebar">
-        <div className="sidebar-profile">
-          <div className="lms-profile-avatar">
-            {getUserInitials()}
+      {/* Sidebar for large screens only */}
+      {isLargeScreen && (
+        <aside className="transcripts-sidebar desktop-sidebar">
+          <div className="sidebar-profile">
+            <div className="lms-profile-avatar">{getUserInitials()}</div>
+            <h2>{user?.name || "Student"}</h2>
           </div>
-          <h2>{user?.name || "Student"}</h2>
-        </div>
-        <hr />
-        <div className="sidebar-cgpa-section">
-          <span>CGPA</span>
-          <span className="cgpa-value">{calculateCGPA()}</span>
-        </div>
-        <hr />
-        <ul className="sidebar-semesters-list">
-          {semesters.map((semester) => (
-            <li
-              key={semester.id}
-              className={selectedSemesterId === semester.id ? "selected" : ""}
-              onClick={() => setSelectedSemesterId(semester.id)}
-            >
-              <div className="sidebar-semester-name">{semester.name}</div>
-              <div className="sidebar-semester-sgpa">
-                SGPA: {calculateSGPA(semester.courses)}
-              </div>
-            </li>
-          ))}
-        </ul>
-      </aside>
-
+          <hr />
+          <div className="sidebar-cgpa-section">
+            <span>CGPA</span>
+            <span className="cgpa-value">{calculateCGPA()}</span>
+          </div>
+          <hr />
+          <ul className="sidebar-semesters-list">
+            {Array.isArray(semesters) && semesters.map((semester) => (
+              <li
+                key={semester.id}
+                className={selectedSemesterId === semester.id ? "selected" : ""}
+                onClick={() => setSelectedSemesterId(semester.id)}
+              >
+                <div className="sidebar-semester-name">{semester.name}</div>
+                <div className="sidebar-semester-sgpa">
+                  SGPA: {calculateSGPA(semester.courses)}
+                </div>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
       {/* Main Content */}
       <div className="transcripts-container">
         <Navbar />
@@ -304,7 +346,7 @@ function TranscriptsPage() {
           Add New Semester
         </button>
 
-        {semesters.length === 0 ? (
+        {!Array.isArray(semesters) || semesters.length === 0 ? (
           <p className="no-semesters">
             No semesters found. Add a semester to get started.
           </p>
@@ -315,34 +357,55 @@ function TranscriptsPage() {
               className={`semester-card${selectedSemesterId === semester.id ? " selected" : ""}`}
               ref={(el) => (semesterRefs.current[semester.id] = el)}
             >
-              <div className="semester-header">
+              <div
+                className="semester-header"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  flexWrap: "wrap",
+                  gap: "10px",
+                }}
+              >
                 <h2>{semester.name}</h2>
-                <span className="semester-gpa">
-                  SGPA: {calculateSGPA(semester.courses)}
-                </span>
-                <div className="semester-actions">
-                  <button
-                    className="add-course-btn"
-                    onClick={() => {
-                      setNewCourse({
-                        semesterId: semester.id,
-                        semesterName: semester.name,
-                        code: "",
-                        name: "",
-                        credits: 3,
-                        grade: "A",
-                      });
-                      setShowAddCourseModal(true);
-                    }}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  <span className="semester-gpa">
+                    SGPA: {calculateSGPA(semester.courses)}
+                  </span>
+                  <div
+                    className="semester-actions"
+                    style={{ display: "flex", gap: "8px" }}
                   >
-                    Add Course
-                  </button>
-                  <button
-                    className="remove-semester-btn"
-                    onClick={() => setConfirmDeleteSemester(semester.id)}
-                  >
-                    Remove Semester
-                  </button>
+                    <button
+                      className="add-course-btn"
+                      onClick={() => {
+                        setNewCourse({
+                          semesterId: semester.id,
+                          semesterName: semester.name,
+                          code: "",
+                          name: "",
+                          credits: 3,
+                          grade: "A",
+                        });
+                        setShowAddCourseModal(true);
+                      }}
+                    >
+                      Add Course
+                    </button>
+                    <button
+                      className="remove-semester-btn"
+                      onClick={() => setConfirmDeleteSemester(semester.id)}
+                    >
+                      Remove Semester
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -358,7 +421,7 @@ function TranscriptsPage() {
                 </div>
               )}
 
-              {semester.courses.length > 0 ? (
+              {Array.isArray(semester.courses) && semester.courses.length > 0 ? (
                 <table className="courses-table">
                   <thead>
                     <tr>

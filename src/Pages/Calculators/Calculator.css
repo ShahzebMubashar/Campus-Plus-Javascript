@@ -1,661 +1,652 @@
 .calculator-header {
-    background-color: #0d6efd;
-    width: 90%;
-    margin: -2rem auto 8rem;
-    color: white;
-    text-align: center;
-    padding: 2rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  background-color: #0d6efd;
+  width: 90%;
+  margin: -2rem auto 8rem;
+  color: white;
+  text-align: center;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
 }
 
 .calculator-header h1 {
-    font-size: 2.5rem;
-    font-weight: 600;
-    margin-bottom: 0.5rem;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
 }
 
 .calculator-header p {
-    font-size: 1.25rem;
-    opacity: 0.9;
+  font-size: 1.25rem;
+  opacity: 0.9;
 }
 
-
-
 .calculator-cards-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    margin-bottom: 5%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-bottom: 5%;
 }
 
 .calculator-card {
-    position: relative;
-    width: 400px;
-    background: #fff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
-        box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
-    cursor: pointer;
+  position: relative;
+  width: 400px;
+  background: #fff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition:
+    transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1),
+    box-shadow 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  cursor: pointer;
 }
 
 .calculator-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
 }
 
 .calculator-card-image {
-    width: 100%;
-    overflow: hidden;
-    height: 300px;
+  width: 100%;
+  overflow: hidden;
+  height: 300px;
 }
 
 .calculator-card-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s cubic-bezier(0.25, 0.1, 0.25, 1);
 }
 
 .calculator-card:hover .calculator-card-image img {
-    transform: scale(1.03);
+  transform: scale(1.03);
 }
 
 .calculator-card-content {
-    padding: 20px;
-    background-color: #e0e0e0;
+  padding: 20px;
+  background-color: #e0e0e0;
 }
 
 .calculator-card-content h2 {
-    margin: 0;
-    font-size: 1.4em;
-    font-weight: 500;
-    text-align: center;
+  margin: 0;
+  font-size: 1.4em;
+  font-weight: 500;
+  text-align: center;
 }
 
 .calculator-card-content p {
-    margin: 10px 0 0;
-    color: #666;
-    text-align: center;
+  margin: 10px 0 0;
+  color: #666;
+  text-align: center;
 }
 
 .calculator-container {
-    max-width: 95%;
-    margin: 0 auto;
-    margin-bottom: 5%;
-    background: white;
-    border-radius: 8px;
-    padding: 2rem;
-    position: relative;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 95%;
+  margin: 0 auto;
+  margin-bottom: 5%;
+  background: white;
+  border-radius: 8px;
+  padding: 2rem;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .calculator-container h2 {
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
-    color: #0d6efd;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+  color: #0d6efd;
 }
 
 .input-group {
-    margin-bottom: 1.5rem;
-    margin-left: 30%;
-    display: block;
+  margin-bottom: 1.5rem;
+  margin-left: 30%;
+  display: block;
 }
 
 .input-group label {
-    display: block;
-    color: #0d6efd;
-    font-size: 1rem;
-    margin: 3% 0 0 15%;
-    font-weight: 500;
+  display: block;
+  color: #0d6efd;
+  font-size: 1rem;
+  margin: 3% 0 0 15%;
+  font-weight: 500;
 }
 
 .generate-group {
-    display: block;
+  display: block;
 }
 
 .generate-group input {
-    display: block;
-    width: 30%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin: 3% 0 0 5%;
-
+  display: block;
+  width: 30%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin: 3% 0 0 5%;
 }
 
 .generate-btn {
-    padding: 0.5rem 2rem;
-    background: #0d6efd;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    width: 20%;
-    margin: 3% 0 0 0;
+  padding: 0.5rem 2rem;
+  background: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  width: 20%;
+  margin: 3% 0 0 0;
 }
 
-
-
 .course-row {
-    margin-top: 5%;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
-    gap: 1rem;
-    margin-bottom: 1rem;
+  margin-top: 5%;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1rem;
 }
 
 .course-input label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #0d6efd;
-    font-size: 0.875rem;
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #0d6efd;
+  font-size: 0.875rem;
 }
 
 .course-input input,
 .course-input select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 .semester-row {
-    margin-top: 5%;
-    margin-bottom: 1.5rem;
-    margin-left: 3%;
-    display: flex;
-    align-items: center;
-
+  margin-top: 5%;
+  margin-bottom: 1.5rem;
+  margin-left: 3%;
+  display: flex;
+  align-items: center;
 }
 
 .semester-label {
-    color: #0d6efd;
-    font-weight: 600;
-    margin-right: 1rem;
-    font-size: 1.3rem;
+  color: #0d6efd;
+  font-weight: 600;
+  margin-right: 1rem;
+  font-size: 1.3rem;
 }
 
 .semester-inputs {
-    display: flex;
-    flex: 1;
+  display: flex;
+  flex: 1;
 }
 
 .semester-input {
-    flex: 1;
+  flex: 1;
 }
 
 .semester-input label {
-    display: block;
-    color: #0d6efd;
-    font-size: 0.875rem;
-    margin-bottom: 0.5rem;
-    margin-left: 15%;
+  display: block;
+  color: #0d6efd;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  margin-left: 15%;
 }
 
 .semester-input input {
-    width: 70%;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin: 0 0 0 15%;
+  width: 70%;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin: 0 0 0 15%;
 }
 
-
 .aggregate-form {
-    padding: 1rem;
+  padding: 1rem;
 }
 
 .aggregate-form h2 {
-    color: #0d6efd;
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    margin-bottom: 2rem;
+  color: #0d6efd;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
 }
 
 .test-type-select {
-    width: 100%;
-    max-width: 200px;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin: 0 auto;
-    display: block;
-    background-color: #0d6efd;
-    color: white;
-    cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin: 0 auto;
+  display: block;
+  background-color: #0d6efd;
+  color: white;
+  cursor: pointer;
 }
 
 .marks-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .marks-input label {
-    display: block;
-    color: #0d6efd;
-    font-size: 1rem;
-    margin-bottom: 0.5rem;
+  display: block;
+  color: #0d6efd;
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .marks-input input {
-    width: 600px;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
+  width: 600px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
 }
 
 .marks-input input::placeholder {
-    color: #999;
+  color: #999;
 }
 
 .calculateaggregate-btn {
-    width: 100%;
-    max-width: 200px;
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 1rem;
-    margin: 0 auto;
-    display: block;
-    background-color: #0d6efd;
-    color: white;
-    cursor: pointer;
+  width: 100%;
+  max-width: 200px;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  margin: 0 auto;
+  display: block;
+  background-color: #0d6efd;
+  color: white;
+  cursor: pointer;
 }
 
 .inputaggregate-group label {
-    margin-bottom: 1.5rem;
-    display: block;
-    margin-left: 47%;
-    color: #1074e7;
+  margin-bottom: 1.5rem;
+  display: block;
+  margin-left: 47%;
+  color: #1074e7;
 }
 
 .inputaggregate-group {
-    margin-bottom: 1.5rem;
-    display: block;
+  margin-bottom: 1.5rem;
+  display: block;
 }
 
 .choose {
-    background-color: #0d6efd;
+  background-color: #0d6efd;
 }
 
 .calculator-toggle-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
 }
 
 .calculator-toggle-buttons button {
-    padding: 10px 20px;
-    background-color: #eee;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
+  padding: 10px 20px;
+  background-color: #eee;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }
 
 .calculator-toggle-buttons button.active {
-    background-color: #007bff;
-    color: white;
+  background-color: #007bff;
+  color: white;
 }
 
 .sgpa-cgpa-section {
-    max-width: 90%;
-    margin: 0 auto;
-    margin-bottom: 2%;
-    padding: 2rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  margin: 0 auto;
+  margin-bottom: 2%;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 .sgpa-cgpa-section h1 {
-    color: #0d6efd;
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 1.5rem;
+  color: #0d6efd;
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .sgpa-cgpa-section input[type="number"] {
-    width: 100%;
-    padding: 0.75rem 1rem;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 1rem;
-    text-align: center;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-size: 1rem;
+  text-align: center;
 }
 
 .sgpa-cgpa-section input[type="number"]::placeholder {
-    color: #999;
+  color: #999;
 }
 
 .sgpa-cgpa-section button {
-    background-color: #0d6efd;
-    color: white;
-    border: none;
-    border-radius: 9999px;
-    padding: 0.5rem 2rem;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background-color 0.2s;
+  background-color: #0d6efd;
+  color: white;
+  border: none;
+  border-radius: 9999px;
+  padding: 0.5rem 2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
 .sgpa-cgpa-section button:hover {
-    background-color: #0b5ed7;
+  background-color: #0b5ed7;
 }
-
 
 /* Calculator title */
 .calculator-title {
-    color: #0056d6;
-    text-align: center;
-    font-size: 1.8rem;
-    font-weight: 600;
-    margin-bottom: 1.5rem;
+  color: #0056d6;
+  text-align: center;
+  font-size: 1.8rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
 }
 
 /* Test type section */
 .test-type-title {
-    color: #0056d6;
-    text-align: center;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+  color: #0056d6;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .test-type-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .test-type-select {
-    width: 150px;
-    padding: 0.5rem;
-    border: none;
-    border-radius: 9999px;
-    background-color: #0056d6;
-    color: white;
-    font-size: 1rem;
-    text-align: center;
-    cursor: pointer;
+  width: 150px;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 9999px;
+  background-color: #0056d6;
+  color: white;
+  font-size: 1rem;
+  text-align: center;
+  cursor: pointer;
 }
 
 /* Marks input section */
 .marks-container {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .marks-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 2rem;
-    margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 1.5rem;
 }
 
 .marks-field {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .marks-field label {
-    color: #0056d6;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
+  color: #0056d6;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
 }
 
 .marks-field input {
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 9999px;
-    font-size: 0.9rem;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 9999px;
+  font-size: 0.9rem;
 }
 
-
 .calculate-btn {
-    background-color: #0056d6;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 0.75rem;
-    font-size: 1rem;
-    cursor: pointer;
-    width: 100%;
-    margin-top: 1rem;
+  background-color: #0056d6;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 0.75rem;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 1rem;
 }
 
 .calculate-btn:hover {
-    background-color: #0b5ed7;
+  background-color: #0b5ed7;
 }
 
 /* Result display */
 .result {
-    text-align: center;
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #0056d6;
-    margin-top: 1.5rem;
+  text-align: center;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #0056d6;
+  margin-top: 1.5rem;
 }
 
 /* SGPA/CGPA Calculator styles */
 .toggle-buttons {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 2rem;
 }
 
 .toggle-btn {
-    padding: 0.5rem 2rem;
-    border: none;
-    border-radius: 9999px;
-    background-color: #f0f0f0;
-    cursor: pointer;
-    font-size: 1rem;
-    min-width: 100px;
+  padding: 0.5rem 2rem;
+  border: none;
+  border-radius: 9999px;
+  background-color: #f0f0f0;
+  cursor: pointer;
+  font-size: 1rem;
+  min-width: 100px;
 }
 
 .toggle-btn.active {
-    background-color: #0056d6;
-    color: white;
+  background-color: #0056d6;
+  color: white;
 }
 
 .courses-title {
-    color: #0056d6;
-    text-align: center;
-    font-size: 1.2rem;
-    margin-bottom: 1rem;
+  color: #0056d6;
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
 }
 
 .input-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
 .courses-input {
-    width: 100%;
-    max-width: 350px;
-    padding: 0.75rem;
-    border: 1px solid #ddd;
-    border-radius: 9999px;
-    text-align: center;
-    font-size: 1rem;
+  width: 100%;
+  max-width: 350px;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 9999px;
+  text-align: center;
+  font-size: 1rem;
 }
 
 .generate-button-container {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 2rem;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 2rem;
 }
 
 .courses-container,
 .semesters-container {
-    margin-top: 2rem;
+  margin-top: 2rem;
 }
 
 .course-row,
 .semester-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 1rem;
-    margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .course-field,
 .semester-field {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .course-field label,
 .semester-field label {
-    color: #0056d6;
-    margin-bottom: 0.5rem;
-    font-size: 1rem;
+  color: #0056d6;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
 }
 
 .course-field input,
 .course-field select,
 .semester-field input,
 .semester-field select {
-    padding: 0.5rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-size: 0.9rem;
+  padding: 0.5rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
 }
 
 .close-button-container {
-    position: relative;
+  position: relative;
 }
 
 .close-btn {
-    position: absolute;
-    top: 1rem;
-    right: 1.5rem;
-    background: none;
-    border: none;
-    font-size: 2rem;
-    font-weight: bold;
-    cursor: pointer;
-    color: #333;
-    z-index: 10;
-    transition: color 0.3s ease;
+  position: absolute;
+  top: 1rem;
+  right: 1.5rem;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  font-weight: bold;
+  cursor: pointer;
+  color: #333;
+  z-index: 10;
+  transition: color 0.3s ease;
 }
 
 .close-btn:hover {
-    color: #ff4d4f;
+  color: #ff4d4f;
 }
 
 .aggregate-calculator {
-    max-width: 90%;
-    margin: 0 auto;
-    margin-bottom: 2%;
-    padding: 2rem;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+  max-width: 90%;
+  margin: 0 auto;
+  margin-bottom: 2%;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
 }
 
 @media (max-width: 600px) {
-    .calculator-header {
-        width: 90%;
-        padding: 1.5rem;
-        margin: 0rem auto 4rem;
-    }
+  .calculator-header {
+    width: 90%;
+    padding: 1.5rem;
+    margin: 0rem auto 4rem;
+  }
 
-    .calculator-header h1 {
+  .calculator-header h1 {
+    font-size: 2rem;
+  }
 
-        font-size: 2rem;
-    }
+  .calculator-header p {
+    font-size: 1rem;
+  }
 
-    .calculator-header p {
-        font-size: 1rem;
-    }
+  .calculator-cards-container {
+    flex-direction: column;
+    align-items: center;
+  }
 
-    .calculator-cards-container {
-        flex-direction: column;
-        align-items: center;
-    }
+  .sgpa-cgpa-section h1 {
+    padding-top: 12% !important;
+  }
 
-    .sgpa-cgpa-section h1 {
-        padding-top: 12% !important;
-    }
+  .calculator-card {
+    width: 80%;
+    max-width: 300px;
+  }
 
-    .calculator-card {
-        width: 80%;
-        max-width: 300px;
-    }
+  .sgpa-cgpa-section,
+  .aggregate-calculator {
+    width: 95%;
+    padding: 1.5rem;
+  }
 
-    .sgpa-cgpa-section,
-    .aggregate-calculator {
-        width: 95%;
-        padding: 1.5rem;
-    }
+  .course-row,
+  .marks-row,
+  .semester-row {
+    flex-direction: column;
+  }
 
-    .course-row,
-    .marks-row,
-    .semester-row {
-        flex-direction: column;
-    }
+  .close-button-container {
+    position: relative;
+  }
 
-    .close-button-container {
-        position: relative;
-    }
+  .close-btn {
+    position: absolute;
+    top: -140px;
+    right: -1rem;
+    font-size: 1rem !important;
+    z-index: 10;
+    background: none;
+    border: none;
+    color: #333;
+    padding: 0;
+  }
 
-    .close-btn {
-        position: absolute;
-        top: -140px;
-        right: -1.0rem;
-        font-size: 1rem !important;
-        z-index: 10;
-        background: none;
-        border: none;
-        color: #333;
-        padding: 0;
-    }
+  .sgpa-cgpa-section {
+    position: relative;
+  }
 
-    .sgpa-cgpa-section {
-        position: relative;
-    }
+  .calculator-title {
+    margin-top: 20% !important;
+  }
 
-    .calculator-title {
-        margin-top: 20% !important;
-    }
+  .aggregate-calculator .close-button-container .close-btn {
+    position: absolute;
+    top: 0px;
+    right: -1rem;
+    font-size: 1rem !important;
+    z-index: 10;
+    background: none;
+    background-color: #0d6efd;
+    border-radius: 100px;
+    color: white;
+    padding: 10px 30px;
+  }
 
-    .aggregate-calculator .close-button-container .close-btn {
-        position: absolute;
-        top: 0px;
-        right: -1.0rem;
-        font-size: 1rem !important;
-        z-index: 10;
-        background: none;
-        background-color: #0d6efd;
-        border-radius: 100px;
-        color: white;
-        padding: 10px 30px;
-    }
-
-    .generate-btn {
-        width: 100%;
-        min-width: 0;
-        margin-left: 0;
-    }
+  .generate-btn {
+    width: 100%;
+    min-width: 0;
+    margin-left: 0;
+  }
 }

@@ -1,121 +1,120 @@
 .video {
-    background-size: cover;
-    background-position: center top;
-    background-repeat: no-repeat;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    /* Ensure the section takes the full viewport height */
-    padding: 20px;
-    /* Add some padding for smaller screens */
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  /* Ensure the section takes the full viewport height */
+  padding: 20px;
+  /* Add some padding for smaller screens */
 }
 
 .video-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    /* Make the container take full width */
-    max-width: 1200px;
-    /* Limit the width for large screens */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  /* Make the container take full width */
+  max-width: 1200px;
+  /* Limit the width for large screens */
 }
 
 .video-card {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
-    width: 100%;
-    max-width: 900px;
-    /* Set a maximum width */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  /* Set a maximum width */
 }
 
 .video-banner {
-    position: relative;
-    border-top-right-radius: 80px;
-    border-bottom-left-radius: 120px;
-    margin-left: 8%;
-    z-index: 10;
-    width: 100%;
-    max-width: 900px;
-    /* Ensure the banner is responsive */
+  position: relative;
+  border-top-right-radius: 80px;
+  border-bottom-left-radius: 120px;
+  margin-left: 8%;
+  z-index: 10;
+  width: 100%;
+  max-width: 900px;
+  /* Ensure the banner is responsive */
 }
 
 .img-cover {
-    border-top-right-radius: 80px;
-    border-bottom-left-radius: 120px;
-    width: 100%;
-    height: auto;
-    /* Ensure the image is responsive */
+  border-top-right-radius: 80px;
+  border-bottom-left-radius: 120px;
+  width: 100%;
+  height: auto;
+  /* Ensure the image is responsive */
 }
 
 .video .play-btn {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: hsl(351, 83%, 61%);
-    font-size: 30px;
-    padding: 16px;
-    color: hsl(0, 0%, 100%);
-    border-radius: 50%;
-    box-shadow: 0 0 0 0 hsla(0, 0%, 100%, 0.5);
-    z-index: 1;
-    animation: pulse 3s ease infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: hsl(351, 83%, 61%);
+  font-size: 30px;
+  padding: 16px;
+  color: hsl(0, 0%, 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 hsla(0, 0%, 100%, 0.5);
+  z-index: 1;
+  animation: pulse 3s ease infinite;
 }
 
 @keyframes pulse {
-    0% {
-        box-shadow: 0 0 0 0 hsla(0, 0%, 100%, 0.5);
-    }
+  0% {
+    box-shadow: 0 0 0 0 hsla(0, 0%, 100%, 0.5);
+  }
 
-    100% {
-        box-shadow: 0 0 0 20px transparent;
-    }
+  100% {
+    box-shadow: 0 0 0 20px transparent;
+  }
 }
 
 .video-banner::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-color: hsla(0, 0%, 0%, 0.3);
-    border-top-right-radius: 80px;
-    border-bottom-left-radius: 120px;
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: hsla(0, 0%, 0%, 0.3);
+  border-top-right-radius: 80px;
+  border-bottom-left-radius: 120px;
 }
 
 .video-shape-1 {
-    position: absolute;
-    left: -10%;
-    top: 0;
-    width: 100%;
-    /* Make the shape responsive */
-    max-width: 1089px;
-    /* Ensure the shape doesn't exceed its original size */
-    height: auto;
+  position: absolute;
+  left: -10%;
+  top: 0;
+  width: 100%;
+  /* Make the shape responsive */
+  max-width: 1089px;
+  /* Ensure the shape doesn't exceed its original size */
+  height: auto;
 }
 
 .video-shape-2 {
-    position: absolute;
-    bottom: 83%;
-    left: 88%;
-    width: 100%;
-    /* Make the shape responsive */
-    max-width: 158px;
-    /* Ensure the shape doesn't exceed its original size */
-    height: auto;
+  position: absolute;
+  bottom: 83%;
+  left: 88%;
+  width: 100%;
+  /* Make the shape responsive */
+  max-width: 158px;
+  /* Ensure the shape doesn't exceed its original size */
+  height: auto;
 }
 
 /* Media queries for responsiveness */
 @media screen and (max-width: 768px) {
-
-    .video {
-        display: none;
-    }
+  .video {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 480px) {
-    .video {
-        display: none;
-    }
+  .video {
+    display: none;
+  }
 }

@@ -1,8 +1,8 @@
 * {
-    margin: 0;
-    padding: 0;
-    font-family: 'Oswald', sans-serif;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: "Oswald", sans-serif;
+  box-sizing: border-box;
 }
 
 /* body {
@@ -12,147 +12,147 @@
 } */
 
 @keyframes bg-animation {
-    0% {
-        background: linear-gradient(120deg, #f0f4f8, #e0f7fa);
-    }
+  0% {
+    background: linear-gradient(120deg, #f0f4f8, #e0f7fa);
+  }
 
-    100% {
-        background: linear-gradient(120deg, #dcecff, #f0f4f8);
-    }
+  100% {
+    background: linear-gradient(120deg, #dcecff, #f0f4f8);
+  }
 }
 
 .coming-soon {
-    width: 100vw;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-    flex-direction: column;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+  flex-direction: column;
 }
 
 .logo {
-    width: 15vw;
-    height: auto;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: logo-animation 2s ease-in-out forwards;
+  width: 15vw;
+  height: auto;
+  margin-bottom: 20px;
+  opacity: 0;
+  animation: logo-animation 2s ease-in-out forwards;
 }
 
 @keyframes logo-animation {
-    0% {
-        transform: scale(0.8);
-        opacity: 0;
-    }
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
 
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .coming-soon-inner {
-    position: relative;
+  position: relative;
 }
 
 .heading {
-    font-size: 8vw;
-    text-transform: uppercase;
-    padding: 20px;
-    background: #002366;
-    color: #fff;
-    transform: skewY(-10deg);
-    font-weight: 700;
-    line-height: 1.1;
-    animation: slide-in 2s ease-out;
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+  font-size: 8vw;
+  text-transform: uppercase;
+  padding: 20px;
+  background: #002366;
+  color: #fff;
+  transform: skewY(-10deg);
+  font-weight: 700;
+  line-height: 1.1;
+  animation: slide-in 2s ease-out;
+  box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
 }
 
 @keyframes slide-in {
-    0% {
-        transform: translateX(-100%) skewY(-10deg);
-        opacity: 0;
-    }
+  0% {
+    transform: translateX(-100%) skewY(-10deg);
+    opacity: 0;
+  }
 
-    100% {
-        transform: translateX(0) skewY(-10deg);
-        opacity: 1;
-    }
+  100% {
+    transform: translateX(0) skewY(-10deg);
+    opacity: 1;
+  }
 }
 
 .small-heading {
-    font-size: 3vw;
-    text-transform: uppercase;
-    padding: 20px;
-    background: #fff;
-    color: #000;
-    transform: skewY(-10deg);
-    font-weight: 500;
-    line-height: 1.2;
-    box-shadow: 10px 10px 20px rgb(0 0 0 / .3);
-    position: absolute;
-    right: 0;
-    bottom: -44px;
-    animation: bounce-in 3s ease-out;
+  font-size: 3vw;
+  text-transform: uppercase;
+  padding: 20px;
+  background: #fff;
+  color: #000;
+  transform: skewY(-10deg);
+  font-weight: 500;
+  line-height: 1.2;
+  box-shadow: 10px 10px 20px rgb(0 0 0 / 0.3);
+  position: absolute;
+  right: 0;
+  bottom: -44px;
+  animation: bounce-in 3s ease-out;
 }
 
 @keyframes bounce-in {
-    0% {
-        transform: translateY(50px) skewY(-10deg);
-        opacity: 0;
-    }
+  0% {
+    transform: translateY(50px) skewY(-10deg);
+    opacity: 0;
+  }
 
-    60% {
-        transform: translateY(-10px) skewY(-10deg);
-    }
+  60% {
+    transform: translateY(-10px) skewY(-10deg);
+  }
 
-    100% {
-        transform: translateY(0) skewY(-10deg);
-        opacity: 1;
-    }
+  100% {
+    transform: translateY(0) skewY(-10deg);
+    opacity: 1;
+  }
 }
 
 /* Media Queries for responsiveness */
 
 @media (max-width: 1200px) {
-    .heading {
-        font-size: 7vw;
-    }
+  .heading {
+    font-size: 7vw;
+  }
 
-    .small-heading {
-        font-size: 2.5vw;
-    }
+  .small-heading {
+    font-size: 2.5vw;
+  }
 
-    .logo {
-        width: 18vw;
-    }
+  .logo {
+    width: 18vw;
+  }
 }
 
 @media (max-width: 768px) {
-    .heading {
-        font-size: 10vw;
-    }
+  .heading {
+    font-size: 10vw;
+  }
 
-    .small-heading {
-        font-size: 4vw;
-    }
+  .small-heading {
+    font-size: 4vw;
+  }
 
-    .logo {
-        width: 25vw;
-    }
+  .logo {
+    width: 25vw;
+  }
 }
 
 @media (max-width: 480px) {
-    .heading {
-        font-size: 12vw;
-    }
+  .heading {
+    font-size: 12vw;
+  }
 
-    .small-heading {
-        font-size: 5vw;
-    }
+  .small-heading {
+    font-size: 5vw;
+  }
 
-    .logo {
-        width: 35vw;
-    }
+  .logo {
+    width: 35vw;
+  }
 }

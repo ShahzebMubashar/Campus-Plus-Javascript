@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./ToDo.css";
 import Navbar from "../Index/components/Navbar";
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 function ToDo() {
   const [todos, setTodos] = useState([]);
@@ -13,21 +15,17 @@ function ToDo() {
   });
   const [filter, setFilter] = useState("all");
   const [sortBy, setSortBy] = useState("date");
-  const [isLoggedIn, setIsLoggedIn] = useState(!!localStorage.getItem("user"));
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    setIsLoggedIn(!!localStorage.getItem("user"));
+    setIsLoggedIn(checkAuth());
   }, []);
 
   // Fetch tasks from backend
   const fetchTasks = async () => {
     try {
-      const res = await fetch("http://localhost:4000/user/my-reminders", {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/my-reminders`, {
         method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
       });
 
       if (!res.ok) {
@@ -37,7 +35,9 @@ function ToDo() {
 
       const data = await res.json();
       // Get completed task IDs from localStorage
-      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+      const completedTaskIds = JSON.parse(
+        localStorage.getItem("completedTaskIds") || "[]",
+      );
 
       if (data)
         setTodos(
@@ -45,11 +45,12 @@ function ToDo() {
             id: task.taskid,
             text: task.content,
             // Use either the server status or check if it's in our localStorage completed list
-            completed: task.status === true || completedTaskIds.includes(task.taskid),
+            completed:
+              task.status === true || completedTaskIds.includes(task.taskid),
             priority: task.priority.toLowerCase(),
             dueDate: new Date(task.duedate).toISOString().split("T")[0],
             dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
-          }))
+          })),
         );
       else setTodos([]);
     } catch (error) {
@@ -67,12 +68,8 @@ function ToDo() {
     if (!newTodo.text.trim()) return;
 
     try {
-      const res = await fetch("http://localhost:4000/user/add-reminder", {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/add-reminder`, {
         method: "POST",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           content: newTodo.text,
           priority: newTodo.priority,
@@ -104,12 +101,14 @@ function ToDo() {
 
       // Optimistically update UI
       const updatedTodos = todos.map((todo) =>
-        todo.id === id ? { ...todo, completed: newStatus } : todo
+        todo.id === id ? { ...todo, completed: newStatus } : todo,
       );
       setTodos(updatedTodos);
 
       // Save completed task IDs to localStorage for persistence across pages
-      const completedTaskIds = JSON.parse(localStorage.getItem('completedTaskIds') || '[]');
+      const completedTaskIds = JSON.parse(
+        localStorage.getItem("completedTaskIds") || "[]",
+      );
       if (newStatus) {
         // Add to completed tasks if not already in the list
         if (!completedTaskIds.includes(id)) {
@@ -122,19 +121,21 @@ function ToDo() {
           completedTaskIds.splice(index, 1);
         }
       }
-      localStorage.setItem('completedTaskIds', JSON.stringify(completedTaskIds));
+      localStorage.setItem(
+        "completedTaskIds",
+        JSON.stringify(completedTaskIds),
+      );
 
       // The endpoint should be for updating status specifically, but it seems the API uses update-priority for both
-      const response = await fetch(`http://localhost:4000/user/update-priority/${id}`, {
-        method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/user/update-priority/${id}`,
+        {
+          method: "PUT",
+          body: JSON.stringify({
+            status: newStatus,
+          }),
         },
-        body: JSON.stringify({
-          status: newStatus,
-        }),
-      });
+      );
 
       if (!response.ok) {
         // If the API call fails, revert the optimistic update
@@ -153,15 +154,11 @@ function ToDo() {
   const deleteTodo = async (id) => {
     console.log("Task ID:", id);
     try {
-      const response = await fetch(
-        `http://localhost:4000/user/delete-reminder/${id}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/user/delete-reminder/${id}`,
         {
           method: "DELETE",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
+        },
       );
 
       if (!response.ok) {
@@ -177,18 +174,14 @@ function ToDo() {
   // Update priority
   const updatePriority = async (id, priority) => {
     const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, priority } : todo
+      todo.id === id ? { ...todo, priority } : todo,
     );
 
     setTodos(updatedTodos);
 
     try {
-      await fetch(`http://localhost:4000/user/update-priority/${id}`, {
+      await authenticatedFetch(`${API_BASE_URL}/user/update-priority/${id}`, {
         method: "PUT",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({
           priority,
         }),
@@ -220,18 +213,20 @@ function ToDo() {
     <div className="todo-app">
       <Navbar />
       {!isLoggedIn && (
-        <div style={{
-          width: "100%",
-          background: "#eaf3ff",
-          color: "#0362c7",
-          fontWeight: 600,
-          textAlign: "center",
-          padding: "0px 0 8px 0",
-          marginTop: "-15px",
-          fontSize: "1.1rem",
-          borderRadius: "0 0 12px 12px",
-          marginBottom: "25px"
-        }}>
+        <div
+          style={{
+            width: "100%",
+            background: "#eaf3ff",
+            color: "#0362c7",
+            fontWeight: 600,
+            textAlign: "center",
+            padding: "0px 0 8px 0",
+            marginTop: "-15px",
+            fontSize: "1.1rem",
+            borderRadius: "0 0 12px 12px",
+            marginBottom: "25px",
+          }}
+        >
           You need to log in to use this feature
         </div>
       )}
@@ -342,27 +337,30 @@ function ToDo() {
                       <span className="due-date">
                         <span className="icon">📅</span>
                         {new Date(
-                          `${todo.dueDate}T${todo.dueTime}`
+                          `${todo.dueDate}T${todo.dueTime}`,
                         ).toLocaleString()}
                       </span>
                       <div className="priority-selector">
                         <button
-                          className={`priority-btn ${todo.priority === "low" ? "active" : ""
-                            }`}
+                          className={`priority-btn ${
+                            todo.priority === "low" ? "active" : ""
+                          }`}
                           onClick={() => updatePriority(todo.id, "low")}
                         >
                           Low
                         </button>
                         <button
-                          className={`priority-btn ${todo.priority === "medium" ? "active" : ""
-                            }`}
+                          className={`priority-btn ${
+                            todo.priority === "medium" ? "active" : ""
+                          }`}
                           onClick={() => updatePriority(todo.id, "medium")}
                         >
                           Medium
                         </button>
                         <button
-                          className={`priority-btn ${todo.priority === "high" ? "active" : ""
-                            }`}
+                          className={`priority-btn ${
+                            todo.priority === "high" ? "active" : ""
+                          }`}
                           onClick={() => updatePriority(todo.id, "high")}
                         >
                           High

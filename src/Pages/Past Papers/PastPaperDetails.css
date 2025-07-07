@@ -36,7 +36,7 @@
   max-width: 1200px;
   margin: 0 auto;
   padding: 1rem 1.5rem;
-  display: block; 
+  display: block;
   column-count: 3; /* Display paper sections in 2 columns */
   column-gap: 1.5rem;
 }
@@ -58,16 +58,15 @@
   padding: 1rem;
   margin-bottom: 1rem;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* subtle shadow for depth */
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .paper-section:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
-
-
-
 
 /* Hover effect - modern lift and highlight */
 .paper-section:hover {
@@ -513,5 +512,3 @@
     width: 100%;
   }
 }
-
-

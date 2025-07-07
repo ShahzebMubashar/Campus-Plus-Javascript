@@ -1,13 +1,13 @@
 {
-    "templates": {
-        "Academic Requests": {
-            "subject": "Leave Request",
-            "body": "I would like to request a leave for {todayDate}..."
-        },
-        "Organizational and Event Requests": {
-            "subject": "Event Permission Request",
-            "body": "I am requesting permission to organize an event on {todayDate}..."
-        }
+  "templates": {
+    "Academic Requests": {
+      "subject": "Leave Request",
+      "body": "I would like to request a leave for {todayDate}..."
     },
-    "greeting": "Dear"
+    "Organizational and Event Requests": {
+      "subject": "Event Permission Request",
+      "body": "I am requesting permission to organize an event on {todayDate}..."
+    }
+  },
+  "greeting": "Dear"
 }

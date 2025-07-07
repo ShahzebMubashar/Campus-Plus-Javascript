@@ -1,15 +1,15 @@
 const express = require("express");
-const session = require("express-session");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const dotenv = require("dotenv");
+
+// Load environment variables
+dotenv.config();
+
 const pool = require("../config/database");
 const nodemailer = require("nodemailer");
+const passport = require("../config/passport");
 
-
-const {
-  checkAuthorisation,
-  checkAdmin,
-} = require("../middlewares/authMiddleware");
 const authRoutes = require("../routes/authRoutes");
 const courseRoutes = require("../routes/courseRoutes");
 const chatroomRoute = require("../routes/chatroomRoutes");
@@ -19,26 +19,54 @@ const userRoutes = require("../routes/userRoutes");
 const chatroomController = require("../controllers/chatroomController");
 
 const app = express();
-const PORT = process.env.PORT_BACKEND || 4000;
+const PORT = process.env.PORT || 4000;
+
+// Trust proxy - Required for secure cookies behind a proxy like Koyeb
+app.set('trust proxy', 1);
 
 // Basic middleware
 app.use(express.json());
 app.use(cookieParser());
 
+// Basic request logging
+app.use((req, res, next) => {
+  console.log(`\n=== ${req.method} ${req.path} ===`);
+  console.log("Request origin:", req.headers.origin);
+  console.log("Authorization header:", req.headers.authorization ? "EXISTS" : "NONE");
+  next();
+});
+
 // CORS configuration
+const corsOrigin = process.env.NODE_ENV === "production" 
+  ? process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app"
+  : "http://localhost:3000";
+
+console.log("🔧 CORS Configuration:");
+console.log("NODE_ENV:", process.env.NODE_ENV || "undefined");
+console.log("CORS Origin:", corsOrigin);
+console.log("Environment:", process.env.NODE_ENV === "production" ? "PRODUCTION" : "DEVELOPMENT");
+
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: corsOrigin,
     credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE"],
-    allowedHeaders: ["Content-Type", "Authorization", "Cookie"],
-    exposedHeaders: ["Set-Cookie"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
   })
 );
 
+// Health check endpoint for Koyeb
+app.get('/health', (req, res) => {
+  res.status(200).json({ 
+    status: 'healthy', 
+    timestamp: new Date().toISOString(),
+    service: 'campus-plus-backend' 
+  });
+});
+
 app.post('/api/email/send-email', async (req, res) => {
   const { name, email, phone, message } = req.body;
-  const transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransporter({
     service: 'Gmail',
     auth: {
       user: "productionsbymultidexters@gmail.com",
@@ -62,32 +90,8 @@ app.post('/api/email/send-email', async (req, res) => {
   }
 });
 
-
-// Set CORS headers for all responses
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Credentials", "true");
-  res.header("Access-Control-Allow-Origin", "http://localhost:3000");
-  next();
-});
-
-// Session configuration
-app.use(
-  session({
-    name: "connect.sid",
-    secret: "CampusPlus",
-    resave: true,
-    saveUninitialized: false,
-    rolling: true,
-    cookie: {
-      path: "/",
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    },
-    proxy: true,
-  })
-);
+// Initialize Passport for OAuth (JWT-based, no sessions)
+app.use(passport.initialize());
 
 // Routes
 app.use("/auth", authRoutes);
@@ -101,15 +105,11 @@ app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
 });
 
-app.get("/Chatrooms/messages/:roomid", chatroomController.getRoomMessages); // Call controller's function
-app.post("/Chatrooms/like/:messageid", chatroomController.likePost); // Like a post
-app.get("/Chatrooms/likes/:messageid", chatroomController.getLikeCount); // Get like count for a post
-
 app.use((err, req, res, next) => {
   console.error("Error:", err.message);
   res.status(500).send("Server Error");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Server running on port ${PORT}`);
 });

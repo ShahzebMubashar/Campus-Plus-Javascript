@@ -1,6 +1,6 @@
 .dynamic-timetable-container {
   margin: 20px;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 
 .options {
@@ -12,7 +12,7 @@
 
 .export-button {
   padding: 10px 20px;
-  background: #8B0000;
+  background: #8b0000;
   color: white;
   border: none;
   border-radius: 8px;
@@ -26,7 +26,8 @@
 .export-button:hover {
   transform: translateY(-2px);
   background: #a50000;
-  box-shadow: 0 10px 20px rgba(139, 0, 0, 0.2),
+  box-shadow:
+    0 10px 20px rgba(139, 0, 0, 0.2),
     0 6px 6px rgba(139, 0, 0, 0.1);
 }
 
@@ -55,7 +56,7 @@
 }
 
 .timetable th {
-  background: #1B1212;
+  background: #1b1212;
   color: white;
   font-weight: bold;
   padding: 15px;
@@ -68,7 +69,7 @@
   padding: 15px;
   border: 1px solid #ccc;
   text-align: center;
-  font-size: 16px
+  font-size: 16px;
 }
 
 .day-column {
@@ -97,7 +98,6 @@ tbody tr:hover {
 
 /* Responsive design */
 @media (max-width: 768px) {
-
   .timetable th,
   .timetable td {
     padding: 10px;

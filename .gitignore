@@ -25,3 +25,7 @@ yarn-debug.log*
 yarn-error.log*
 
 *.rest
+
+# Ignore environment variable files
+.env
+.env.example
