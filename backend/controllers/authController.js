@@ -115,9 +115,9 @@ exports.register = async (request, response) => {
 
 exports.login = async (request, response) => {
   console.log("=== JWT LOGIN ENDPOINT ===");
-  
-  const { email, password, username } = request.body;
 
+  const { email, password, username } = request.body;
+  
   if (!email && !username)
     return response.status(400).json({ error: "Please provide Email or Username" });
 
@@ -185,7 +185,7 @@ exports.resetPassword = async (request, response) => {
     }
 
     const resetToken = res.rows[0].reset_token;
-    
+
     // Verify the OTP token using JWT
     try {
       const decoded = verifyToken(resetToken);
@@ -225,12 +225,12 @@ exports.forgotPassword = async (request, response) => {
   const { userid, email } = request.user;
 
   const OTPGenerated = Math.floor(100000 + Math.random() * 900000);
-  
+
   // Use proper JWT signing with expiration
   const signedOTP = jwt.sign(
-    OTPGenerated, 
+    OTPGenerated,
     process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET,
-    { 
+    {
       expiresIn: '1h',
       issuer: process.env.JWT_ISSUER || 'campus-plus-app',
       audience: process.env.JWT_AUDIENCE || 'campus-plus-users'
@@ -297,7 +297,7 @@ exports.logout = async (request, response) => {
     // With JWT, logout is handled client-side by removing the token
     // We could implement a token blacklist here if needed
     console.log("✅ Logout successful for user:", request.user?.username || "unknown");
-    return response.status(200).json({ 
+    return response.status(200).json({
       message: "Logged out successfully",
       success: true
     });
