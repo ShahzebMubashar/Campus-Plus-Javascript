@@ -9,6 +9,11 @@ const transporter = nodemailer.createTransport({
     }
 });
 
+const isValidEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+};
+
 const batchMailer = async (request, response) => {
     const { body: { message, subject } } = request;
 
@@ -23,7 +28,16 @@ const batchMailer = async (request, response) => {
             return response.status(400).json("No registered Users found");
         }
 
-        const emailList = emails.rows.map(user => user.email);
+        let emailList = emails.rows.map(user => user.email);
+        console.log(`Found ${emailList.length} emails.`);
+
+        emailList = emailList.filter(isValidEmail);
+
+        if (!emailList.length) {
+            console.log("No valid email addresses found.");
+            return response.status(400).json("No valid email addresses found");
+        }
+
         console.log(`Sending emails to ${emailList.length} users in parallel...`);
 
         const sendResults = await Promise.all(
@@ -48,7 +62,7 @@ const batchMailer = async (request, response) => {
         const failed = sendResults.filter(result => result.status === 'failed');
 
         return response.status(200).json({
-            message: `Emails sent to ${emailList.length} users`,
+            message: `Emails sent to ${emailList.length} valid users`,
             failedRecipients: failed
         });
 
