@@ -1401,3 +1401,48 @@
     align-items: center;
   }
 }
+
+
+
+ /* Added by Jaffri */
+ /* Admin Batch Mailer Styles */
+.admin-batch-mailer {
+  background-color: #f8f9fa;
+  padding: 20px;
+  margin: 20px auto;
+  max-width: 1200px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.batch-mailer-container {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.batch-mailer-textarea {
+  width: 100%;
+  min-height: 150px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 16px;
+  resize: vertical;
+}
+
+.batch-mailer-send-btn {
+  align-self: flex-end;
+  padding: 10px 20px;
+  background-color: #1a73e8;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.batch-mailer-send-btn:hover {
+  background-color: #0d5bba;
+}
