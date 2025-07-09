@@ -819,11 +819,9 @@
     right: 0;
     width: 200px;
     height: 200px;
-    background: linear-gradient(
-      135deg,
-      rgba(59, 130, 246, 0.1) 0%,
-      rgba(37, 99, 235, 0.05) 100%
-    );
+    background: linear-gradient(135deg,
+        rgba(59, 130, 246, 0.1) 0%,
+        rgba(37, 99, 235, 0.05) 100%);
     border-radius: 50%;
     transform: translate(30%, -30%);
   }
@@ -1404,8 +1402,8 @@
 
 
 
- /* Added by Jaffri */
- /* Admin Batch Mailer Styles */
+/* Added by Jaffri */
+/* Admin Batch Mailer Styles */
 .admin-batch-mailer {
   background-color: #f8f9fa;
   padding: 20px;
@@ -1445,4 +1443,177 @@
 
 .batch-mailer-send-btn:hover {
   background-color: #0d5bba;
+}
+
+/* Batch Mailer Modal Styles */
+.batch-mailer-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.batch-mailer-modal {
+  background: #fff;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  padding: 2rem 1.5rem 1.5rem 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  animation: fadeInScale 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.modal-header h2 {
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.close-modal-btn {
+  background: none;
+  border: none;
+  font-size: 1.7rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+  color: #1a73e8;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.batch-mailer-subject {
+  padding: 0.7rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.batch-mailer-subject:focus {
+  border: 1.5px solid #1a73e8;
+}
+
+.batch-mailer-textarea {
+  min-height: 90px;
+  max-height: 200px;
+  resize: vertical;
+  padding: 0.7rem 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  outline: none;
+  transition: border 0.2s;
+}
+
+.batch-mailer-textarea:focus {
+  border: 1.5px solid #1a73e8;
+}
+
+.batch-mailer-send-btn {
+  background: linear-gradient(90deg, #1a73e8 60%, #4285f4 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 1.2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.08);
+  transition: background 0.2s, box-shadow 0.2s;
+}
+
+.batch-mailer-send-btn:hover {
+  background: linear-gradient(90deg, #1761c7 60%, #357ae8 100%);
+  box-shadow: 0 4px 16px rgba(26, 115, 232, 0.13);
+}
+
+.admin-batch-mailer-trigger {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.open-batch-mailer-btn {
+  background: #fff;
+  color: #1a73e8;
+  border: 1.5px solid #1a73e8;
+  border-radius: 8px;
+  padding: 0.6rem 1.2rem;
+  font-size: 1.05rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(26, 115, 232, 0.07);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  margin-right: 5rem;
+}
+
+.open-batch-mailer-btn:hover {
+  background: #1a73e8;
+  color: #fff;
+  border: 1.5px solid #1a73e8;
+}
+
+/* Responsive Styles */
+@media (max-width: 600px) {
+  .batch-mailer-modal {
+    max-width: 98vw;
+    padding: 1.2rem 0.7rem 1rem 0.7rem;
+  }
+
+  .modal-header h2 {
+    font-size: 1.05rem;
+  }
+
+  .batch-mailer-send-btn {
+    font-size: 1rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .batch-mailer-subject,
+  .batch-mailer-textarea {
+    font-size: 0.97rem;
+    padding: 0.6rem 0.7rem;
+  }
+
+  .open-batch-mailer-btn {
+    margin-right: 5% !important;
+    align-self: flex-end;
+  }
 }
