@@ -15,10 +15,12 @@ function Dashboard() {
     gpa: "",
     enrolledCourses: [],
     notifications: [],
+    isAdmin: false,
   });
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [message, setBatchMessage] = useState("");
 
   const fetchUserInfo = async () => {
     try {
@@ -31,9 +33,43 @@ function Dashboard() {
       }
 
       const data = await res.json();
-      setUser(data);
+      
+      setUser({
+        ...data,
+        isAdmin: data.role === "admin" || data.role === "Admin",
+      });
     } catch (error) {
       console.log("Error fetching User Info", error);
+    }
+  };
+
+  const sendBatchMessage = async () => {
+    if (!message.trim()) {
+      alert("Please enter a message");
+      return;
+    }
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/email/batch-mailer`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: message,
+          subject: "Testing from frontend",
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to send batch message");
+      }
+
+      alert("Batch message sent successfully!");
+      setBatchMessage("");
+    } catch (error) {
+      console.error("Error sending batch message:", error);
+      alert("Failed to send batch message");
     }
   };
 
@@ -132,7 +168,6 @@ function Dashboard() {
 
     const [tasks, setTasks] = useState([]);
 
-    // Fetch tasks from backend
     const fetchTasks = async () => {
       try {
         const res = await authenticatedFetch(`${API_BASE_URL}/user/my-reminders`, {
@@ -145,7 +180,6 @@ function Dashboard() {
         }
 
         const data = await res.json();
-        // Get completed task IDs from localStorage
         const completedTaskIds = JSON.parse(
           localStorage.getItem("completedTaskIds") || "[]",
         );
@@ -154,14 +188,13 @@ function Dashboard() {
           setTasks(
             data.map((task) => ({
               id: task.taskid,
-              title: task.content, // Changed from 'text' to 'title' to match deadlines structure
-              // Use either the server status or check if it's in our localStorage completed list
+              title: task.content,
               completed:
                 task.status === true || completedTaskIds.includes(task.taskid),
               priority: task.priority.toLowerCase(),
               dueDate: new Date(task.duedate).toISOString().split("T")[0],
               dueTime: new Date(task.duedate).toTimeString().substring(0, 5),
-              course: "Task", // Added to match deadlines structure
+              course: "Task",
             })),
           );
           console.log(data);
@@ -213,29 +246,24 @@ function Dashboard() {
       });
     };
 
-    // Toggle task completion
     const toggleTaskCompletion = async (id) => {
       try {
         const task = tasks.find((t) => t.id === id);
         const newStatus = !task.completed;
 
-        // Optimistically update UI
         const updatedTasks = tasks.map((task) =>
           task.id === id ? { ...task, completed: newStatus } : task,
         );
         setTasks(updatedTasks);
 
-        // Save completed task IDs to localStorage for persistence across pages
         const completedTaskIds = JSON.parse(
           localStorage.getItem("completedTaskIds") || "[]",
         );
         if (newStatus) {
-          // Add to completed tasks if not already in the list
           if (!completedTaskIds.includes(id)) {
             completedTaskIds.push(id);
           }
         } else {
-          // Remove from completed tasks
           const index = completedTaskIds.indexOf(id);
           if (index > -1) {
             completedTaskIds.splice(index, 1);
@@ -257,13 +285,9 @@ function Dashboard() {
         );
 
         if (!response.ok) {
-          // If the API call fails, revert the optimistic update
           setTasks(tasks);
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-
-        // Don't fetch tasks again - this is causing the completed status to reset
-        // The UI is already updated optimistically above
       } catch (error) {
         console.error("Error toggling task completion:", error.message);
       }
@@ -272,6 +296,29 @@ function Dashboard() {
     return (
       <div className="academic-dashboard">
         <Navbar />
+
+        {user.isAdmin && (
+          <div className="admin-batch-mailer">
+            <div className="section-header">
+              <h2>📨 Admin Batch Mailer</h2>
+            </div>
+            <div className="batch-mailer-container">
+              <textarea
+                className="batch-mailer-textarea"
+                placeholder="Enter your message to send to all users..."
+                value={message}
+                onChange={(e) => setBatchMessage(e.target.value)}
+              />
+              <button
+                className="batch-mailer-send-btn"
+                onClick={sendBatchMessage}
+              >
+                Send to All Users
+              </button>
+            </div>
+          </div>
+        )}
+
         <div className="dashboardcontainer">
           <section className="user-profile-section">
             <div
@@ -393,7 +440,6 @@ function Dashboard() {
               </button>
             </div>
             <div className="deadlines-list">
-              {/* Only show pending tasks in the dashboard */}
               {tasks.filter((task) => !task.completed).length > 0 ? (
                 tasks
                   .filter((task) => !task.completed)

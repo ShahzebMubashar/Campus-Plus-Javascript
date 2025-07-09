@@ -69,6 +69,6 @@ router.get("/test-email", async (req, res) => {
     }
 })
 
-router.get("/batch-mailer", batchMailer);
+router.post("/batch-mailer", batchMailer);
 
 module.exports = router
