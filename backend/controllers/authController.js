@@ -153,6 +153,7 @@ exports.login = async (request, response) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        rollnumber: user.rollnumber,
         fullName: user.fullname,
       },
       ...tokens
@@ -344,6 +345,7 @@ exports.testLogin = async (request, response) => {
         username: user.username,
         email: user.email,
         role: user.role,
+        rollnumber: user.rollnumber,
         fullName: user.fullname,
       },
       ...tokens
@@ -417,6 +419,7 @@ exports.currentUser = async (request, response) => {
       userid: request.user.userid,
       email: request.user.email,
       username: request.user.username,
+      rollnumber: request.user.rollnumber,
       fullName: request.user.fullName,
       role: request.user.role
     });

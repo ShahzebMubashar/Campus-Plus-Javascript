@@ -32,6 +32,7 @@ passport.use(new GoogleStrategy({
                 userid: user.userid,
                 email: user.email,
                 username: user.username,
+                rollnumber: user.rollnumber,
                 fullName: user.fullname || profile.displayName,
                 role: user.role || 'Student',
                 isProfileComplete: user.username && user.rollnumber && user.rollnumber !== 'PENDING'
@@ -124,6 +125,7 @@ passport.use(new GitHubStrategy({
                 userid: user.userid,
                 email: user.email,
                 username: user.username,
+                rollnumber: user.rollnumber,
                 fullName: user.fullname || profile.displayName,
                 role: user.role || 'Student',
                 isProfileComplete: user.username && user.rollnumber && user.rollnumber !== 'PENDING'
