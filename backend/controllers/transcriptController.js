@@ -1,11 +1,7 @@
 const pool = require("../config/database");
 
 const getTranscript = async (request, response) => {
-  const {
-    session: {
-      user: { userid },
-    },
-  } = request;
+  const userid = request.user.userid; // From JWT middleware
 
   try {
     const res = await pool.query(
@@ -49,10 +45,9 @@ const getTranscript = async (request, response) => {
 const addCourse = async (request, response) => {
   const {
     body: { coursecode, credits, grade, semester },
-    session: {
-      user: { userid },
-    },
   } = request;
+
+  const userid = request.user.userid; // From JWT middleware
 
   if (!coursecode || !credits || !grade || !semester)
     return response.status(400).json(`Enter all the fields`);
@@ -107,10 +102,9 @@ const addCourse = async (request, response) => {
 const addSemester = async (request, response) => {
   const {
     body: { name },
-    session: {
-      user: { userid },
-    },
   } = request;
+
+  const userid = request.user.userid; // From JWT middleware
 
   if (!name) {
     return response.status(400).json({ error: "Semester name is required" });
@@ -146,7 +140,7 @@ const addSemester = async (request, response) => {
       [name]
     );
 
-    return response.status(201).json({
+    return response.status(200).json({
       id: result.rows[0].id,
       name: result.rows[0].name,
       courses: [],
@@ -162,10 +156,9 @@ const addSemester = async (request, response) => {
 const removeCourse = async (request, response) => {
   const {
     params: { transcriptId },
-    session: {
-      user: { userid },
-    },
   } = request;
+
+  const userid = request.user.userid; // From JWT middleware
 
   const client = await pool.connect();
 
@@ -197,10 +190,9 @@ const removeCourse = async (request, response) => {
 const removeSemester = async (request, response) => {
   const {
     params: { semestername },
-    session: {
-      user: { userid },
-    },
   } = request;
+
+  const userid = request.user.userid; // From JWT middleware
 
   const client = await pool.connect();
 

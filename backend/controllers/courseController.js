@@ -28,9 +28,7 @@ const getCourses = async (request, response) => {
 const rateCourse = async (request, response) => {
   const {
     body: { courseid, rating },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!courseid || !rating) return response.status(400).send("Invalid Input");
@@ -82,9 +80,7 @@ const rateCourse = async (request, response) => {
 const reviewCourse = async (request, response) => {
   const {
     body: { courseid, review },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   try {
@@ -288,7 +284,7 @@ const getCourseDetails = async (req, res) => {
       LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
       LEFT JOIN CourseInfo ci ON vci.courseid = ci.courseid
       WHERE vci.courseid = $1`,
-      [courseId, req.session?.user?.userid || 0]
+              [courseId, req.user?.userid || 0]
     );
 
     await client.query("BEGIN");
@@ -315,9 +311,7 @@ const getCourseDetails = async (req, res) => {
 const rateCourseDifficulty = async (request, response) => {
   const {
     body: { courseid, rating },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!courseid || !rating || rating < 1 || rating > 5) {

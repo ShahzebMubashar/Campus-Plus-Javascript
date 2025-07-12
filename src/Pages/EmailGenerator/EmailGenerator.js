@@ -24,7 +24,6 @@ export default function EmailGenerator() {
     teacherSalutation: "",
     emailType: "select",
   });
-  const [teachers, setTeachers] = useState([]);
 
   const cards = [
     {
@@ -57,7 +56,7 @@ export default function EmailGenerator() {
   ];
 
   useEffect(() => {
-    setTeachers(templateData.teachers);
+    // No need to set teachers here as it's already done in the templateData
   }, []);
 
   function getLastName(fullName) {
@@ -79,17 +78,15 @@ export default function EmailGenerator() {
     const template = templateData.templates[emailType];
     if (template) {
       const greeting = templateData.greeting;
-      const subject = template.subject;
       let body = template.body;
       body = body.replace("{userName}", userName);
       body = body.replace("{classSection}", classSection);
       body = body.replace("{rollNumber}", rollNumber);
 
-      body = `${greeting} ${
-        selectedTeacher === "other"
+      body = `${greeting} ${selectedTeacher === "other"
           ? teacherSalutation + " " + getLastName(customTeacher)
           : getLastName(selectedTeacher)
-      },\n\n${body}\n\nRegards,\n${userName}\nSection: ${classSection}\nRoll No: ${rollNumber}`;
+        },\n\n${body}\n\nRegards,\n${userName}\nSection: ${classSection}\nRoll No: ${rollNumber}`;
 
       setShowResult(true);
       setEmailBody(body);

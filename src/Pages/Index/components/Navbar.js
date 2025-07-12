@@ -18,6 +18,7 @@ import profile from "../../../Assets/images/user.png";
 import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
+import { isAuthenticated, getUser, getUserFromToken, logout as authLogout } from "../../../utils/auth";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -56,64 +57,58 @@ function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
 
-  const checkSession = async () => {
-    try {
-      const response = await fetch("http://localhost:4000/user/profile", {
-        credentials: "include",
-      });
+  const checkAuthStatus = () => {
+    console.log("🔍 Navbar: Checking JWT authentication status...");
 
-      if (response.ok) {
-        setIsLoggedIn(true);
-        const data = await response.json();
-        setUserData(data);
-        localStorage.setItem("user", JSON.stringify(data));
-      } else {
-        setIsLoggedIn(false);
-        localStorage.removeItem("user");
-      }
-    } catch (error) {
-      console.error("Session check failed:", error);
-      setIsLoggedIn(false);
-      localStorage.removeItem("user");
-    }
+    const authStatus = isAuthenticated();
+    // Use JWT for user data (secure) with fallback to localStorage (legacy)
+    const userData = getUserFromToken() || getUser();
+
+    console.log("🔍 Navbar: Auth status:", authStatus);
+    console.log("🔍 Navbar: User data:", userData);
+
+    setIsLoggedIn(authStatus);
+    setUserData(userData);
   };
 
   useEffect(() => {
-    checkSession();
+    // Check authentication status on component mount
+    checkAuthStatus();
 
-    // Try to get user data from localStorage if available
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      try {
-        setUserData(JSON.parse(storedUser));
+    // Listen for authentication state changes
+    const handleAuthStateChange = (event) => {
+      console.log("🔍 Navbar: Auth state changed:", event.detail);
+      if (event.detail.isAuthenticated) {
         setIsLoggedIn(true);
-      } catch (error) {
-        console.error("Error parsing stored user data:", error);
+        setUserData(event.detail.user);
+      } else {
+        setIsLoggedIn(false);
+        setUserData(null);
       }
-    }
+    };
 
-    // Check session every 5 minutes
-    const interval = setInterval(checkSession, 5 * 60 * 1000);
-    return () => clearInterval(interval);
+    window.addEventListener('authStateChanged', handleAuthStateChange);
+
+    // Check authentication status periodically (for token expiration)
+    const interval = setInterval(checkAuthStatus, 5 * 60 * 1000);
+
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('authStateChanged', handleAuthStateChange);
+    };
   }, []);
 
   const handleLogout = async () => {
     try {
-      const response = await fetch("http://localhost:4000/auth/logout", {
-        method: "POST",
-        credentials: "include",
-      });
-
-      if (response.ok) {
-        localStorage.removeItem("user");
-        setIsLoggedIn(false);
-        setUserData(null);
-        navigate("/sign-in");
-      } else {
-        console.error("Logout failed:", response.statusText);
-      }
+      console.log("🔍 Navbar: Logging out user...");
+      await authLogout();
+      navigate("/sign-in");
     } catch (error) {
       console.error("Logout error:", error);
+      // Even if logout API fails, clear local state
+      setIsLoggedIn(false);
+      setUserData(null);
+      navigate("/sign-in");
     }
   };
 

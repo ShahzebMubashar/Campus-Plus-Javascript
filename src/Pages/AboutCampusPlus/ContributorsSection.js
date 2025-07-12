@@ -94,7 +94,7 @@ const ContributorsSection = () => {
                 )}
                 <div className="mt-4">
                   <h5 className="mt-2 mb-2">
-                    <a href="#">{contributor.name}</a>
+                    <button>{contributor.name}</button>
                   </h5>
                   <p className="contributor-description">
                     {contributor.description}

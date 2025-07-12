@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import API_BASE_URL from "../../../config/api.js";
+import { authenticatedFetch } from "../../../utils/auth";
 
 export default function RoomList({ rooms, onJoinRoom }) {
   const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
@@ -14,9 +16,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
 
   const fetchUserRole = async () => {
     try {
-      const response = await fetch(`http://localhost:4000/auth/user-role`, {
-        credentials: "include",
-      });
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/user-role`);
 
       if (response.ok) {
         const data = await response.json();
@@ -31,16 +31,12 @@ export default function RoomList({ rooms, onJoinRoom }) {
   const handleCreateRoom = async () => {
     if (newRoomName.trim() && newRoomDescription.trim()) {
       try {
-        const response = await fetch(`http://localhost:4000/Chatrooms/create`, {
+        const response = await authenticatedFetch(`${API_BASE_URL}/Chatrooms/create`, {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
             roomName: newRoomName,
             description: newRoomDescription,
           }),
-          credentials: "include",
         });
 
         if (response.ok) {

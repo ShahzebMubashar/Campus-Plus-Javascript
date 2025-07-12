@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./support1.css";
 import image1 from "./1.svg";
@@ -10,6 +10,25 @@ import Footer from "../Footer/Footer.js";
 
 const Support = () => {
   const [searchQuery, setSearchQuery] = useState("");
+
+  // Filter FAQ data based on search query
+  const filteredFaqData = faqData
+    .map((category) => {
+      // Filter questions in this category
+      const filteredQuestions = category.questions.filter((q) => {
+        const query = searchQuery.toLowerCase();
+        return (
+          q.question.toLowerCase().includes(query) ||
+          q.answer.toLowerCase().includes(query) ||
+          category.category.toLowerCase().includes(query)
+        );
+      });
+      if (filteredQuestions.length > 0) {
+        return { ...category, questions: filteredQuestions };
+      }
+      return null;
+    })
+    .filter(Boolean);
 
   return (
     <div className="support-page">
@@ -32,7 +51,13 @@ const Support = () => {
       </div>
 
       {/* FAQ Section */}
-      <FAQ faqData={faqData} />
+      {searchQuery && filteredFaqData.length === 0 ? (
+        <div style={{ textAlign: "center", margin: "2rem 0", color: "#888" }}>
+          No results found for "{searchQuery}".
+        </div>
+      ) : (
+        <FAQ faqData={searchQuery ? filteredFaqData : faqData} />
+      )}
 
       {/* Personal Assistant Section */}
       <section className="personal-assistant my-5">

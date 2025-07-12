@@ -8,29 +8,17 @@ import {
   FaLock,
   FaArrowLeft,
   FaBook,
-  FaStar,
   FaClock,
   FaGraduationCap,
   FaChalkboardTeacher,
 } from "react-icons/fa";
-import { BsCircleFill } from "react-icons/bs";
-
-const API_BASE_URL = process.env.REACT_APP_API_URL || "http://localhost:4000";
-
-const getDifficultyColor = (difficulty) => {
-  const difficultyMap = {
-    1: "#4CAF50", // Easy
-    2: "#8BC34A", // Moderate
-    3: "#FF9800", // Intermediate
-    4: "#F44336", // Hard
-    5: "#D32F2F", // Very Hard
-  };
-  return difficultyMap[difficulty] || "#757575";
-};
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
 
   useEffect(() => {
     // Initialize with difficulty if no rating exists
@@ -42,10 +30,15 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
   }, [currentRating, difficulty]);
 
   const handleRatingSubmit = async (rating) => {
+    // Check if user is logged in
+    if (!checkAuth()) {
+      setShowLoginPrompt(true);
+      return;
+    }
+
     try {
-      const response = await fetch(`${API_BASE_URL}/courses/rate-course`, {
+      const response = await authenticatedFetch(`${API_BASE_URL}/courses/rate-course`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -68,7 +61,10 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
       const courseResponse = await fetch(
         `${API_BASE_URL}/courses/${courseId}`,
         {
-          credentials: "include",
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
       );
 
@@ -76,7 +72,6 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
         throw new Error("Failed to fetch updated course info");
       }
 
-      const courseData = await courseResponse.json();
       setSelectedRating(rating);
       onRate(rating);
     } catch (error) {
@@ -97,30 +92,53 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
     return rating - Math.floor(rating);
   };
 
-  return (
-    <div className="rating">
-      <div className="rating-bars">
-        {[1, 2, 3, 4, 5].map((level, index) => (
-          <div
-            key={level}
-            className="rating-bar"
-            onMouseEnter={() => setHoveredRating(level)}
-            onMouseLeave={() => setHoveredRating(0)}
-            onClick={() => handleRatingSubmit(level)}
+  const LoginPrompt = () => (
+    <div className="login-overlay">
+      <div className="blurred-background" onClick={() => setShowLoginPrompt(false)}></div>
+      <div className="login-prompt">
+        <div className="login-prompt-content">
+          <div className="login-prompt-icon">🔒</div>
+          <h2>Authentication Required</h2>
+          <p>You need to log in to rate this course.</p>
+          <p>Please sign in to your account to continue.</p>
+          <button
+            className="login-prompt-btn"
+            onClick={() => (window.location.href = "/sign-in")}
           >
-            <div
-              className="rating-bar-fill"
-              style={{ transform: `scaleX(${getBarFill(index)})` }}
-            />
-          </div>
-        ))}
-      </div>
-      <div className="rating-info">
-        <span className="average-rating">
-          {selectedRating ? Number(selectedRating).toFixed(1) : "0.0"}
-        </span>
+            Sign In
+          </button>
+        </div>
       </div>
     </div>
+  );
+
+  return (
+    <>
+      <div className="rating">
+        <div className="rating-bars">
+          {[1, 2, 3, 4, 5].map((level, index) => (
+            <div
+              key={level}
+              className="rating-bar"
+              onMouseEnter={() => setHoveredRating(level)}
+              onMouseLeave={() => setHoveredRating(0)}
+              onClick={() => handleRatingSubmit(level)}
+            >
+              <div
+                className="rating-bar-fill"
+                style={{ transform: `scaleX(${getBarFill(index)})` }}
+              />
+            </div>
+          ))}
+        </div>
+        <div className="rating-info">
+          <span className="average-rating">
+            {selectedRating ? Number(selectedRating).toFixed(1) : "0.0"}
+          </span>
+        </div>
+      </div>
+      {showLoginPrompt && <LoginPrompt />}
+    </>
   );
 };
 
@@ -134,18 +152,11 @@ const PastPapersDetails = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/user/profile`, {
-          credentials: "include",
-        });
-        setIsLoggedIn(response.ok);
-      } catch (err) {
-        setIsLoggedIn(false);
-      }
+    const checkAuthStatus = () => {
+      setIsLoggedIn(checkAuth());
     };
 
-    checkAuth();
+    checkAuthStatus();
   }, []);
 
   useEffect(() => {
@@ -154,11 +165,14 @@ const PastPapersDetails = () => {
         setLoading(true);
         setError("");
 
-        // Fetch course info
+        // Fetch course info without authentication - public access
         const courseResponse = await fetch(
           `${API_BASE_URL}/courses/${courseId}`,
           {
-            credentials: "include",
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
         );
 
@@ -171,11 +185,15 @@ const PastPapersDetails = () => {
 
         const courseData = await courseResponse.json();
         setCourseInfo(courseData);
-        // Fetch papers
+
+        // Fetch papers without authentication - public access
         const papersResponse = await fetch(
           `${API_BASE_URL}/courses/${courseId}/past-papers`,
           {
-            credentials: "include",
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
           },
         );
 

@@ -7,9 +7,7 @@ const checkRoomMember = async (request, response, next) => {
 
     const {
       params: { roomid },
-      session: {
-        user: { userid },
-      },
+      user: { userid },
     } = request;
 
     if (!userid || !roomid) {
@@ -58,7 +56,7 @@ const validateRoom = async (request, response, next) => {
 
 const checkModerator = async (request, response, next) => {
   const {
-    session: { user },
+    user,
   } = request;
   console.log("Middleware Request:", request.params);
   console.log("User:", user);

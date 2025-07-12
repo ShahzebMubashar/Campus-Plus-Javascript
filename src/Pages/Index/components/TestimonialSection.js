@@ -70,6 +70,12 @@ const TestimonialSection = () => {
     setIsTouching(false);
   };
 
+  useEffect(() => {
+    if (testimonials.length > 0) {
+      setCurrentSlide(0);
+    }
+  }, [testimonials.length]);
+
   return (
     <section className="quotes">
       <div className="testimonial-section">

@@ -1,13 +1,18 @@
-// This file will be created after deleting page.tsx. It will combine the backend logic from SignInPage.js with the design and layout from the current testtest/page.tsx.
-
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import "./SignInPage.css";
 import Navbar from "../Index/components/Navbar";
 import Footer from "../../Pages/Footer/Footer";
 import logo from "../Index/cp_logo.png";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import API_BASE_URL from "../../config/api";
+import { loginWithTokens, isAuthenticated as checkAuth, getUser as getStoredUser, getUserFromToken, clearAuth } from "../../utils/auth";
 
 export default function AuthPage() {
+  // Authentication state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+
   // Backend logic/state from SignInPage.js
   const [isLogin, setIsLogin] = useState(true);
   const [formData, setFormData] = useState({
@@ -18,7 +23,160 @@ export default function AuthPage() {
     lastName: "",
   });
   const [message, setMessage] = useState("");
+  const [isSuccessMessage, setIsSuccessMessage] = useState(false);
+  const [rollNumberError, setRollNumberError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+
+  // Check for OAuth errors on component mount
+  useEffect(() => {
+    const error = searchParams.get('error');
+    if (error === 'oauth_failed') {
+      setMessage("OAuth authentication failed. Please try again or use email/password login.");
+      setIsSuccessMessage(false);
+    }
+  }, [searchParams]);
+
+  // Check authentication status on component mount (use JWT logic)
+  useEffect(() => {
+    const updateAuth = () => {
+      const auth = checkAuth();
+      setIsAuthenticated(auth);
+      // Use JWT for user data (secure) with fallback to localStorage (legacy)
+      setUserData(auth ? (getUserFromToken() || getStoredUser()) : null);
+      setIsAuthLoading(false);
+    };
+    updateAuth();
+    // Listen for auth state changes (login/logout elsewhere)
+    window.addEventListener("authStateChanged", updateAuth);
+    return () => window.removeEventListener("authStateChanged", updateAuth);
+  }, []);
+
+  // Handle logout
+  const handleLogout = async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/auth/logout`, {
+        method: "POST",
+        credentials: "include",
+      });
+
+      if (response.ok) {
+        // Use clearAuth to properly clear all auth data
+        clearAuth();
+        setIsAuthenticated(false);
+        setUserData(null);
+
+        // Dispatch custom event to notify other components of logout
+        window.dispatchEvent(new CustomEvent('authStateChanged', {
+          detail: { isAuthenticated: false, user: null }
+        }));
+
+        // Refresh the page to show the sign-in form
+        window.location.reload();
+      } else {
+        console.error("Logout failed:", response.statusText);
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
+    }
+  };
+
+  // If still loading auth status, show loading
+  if (isAuthLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="auth-container">
+          <div className="auth-wrapper">
+            <div className="auth-card">
+              <div className="loading-spinner" style={{
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                height: '200px'
+              }}>
+                <div style={{
+                  width: '40px',
+                  height: '40px',
+                  border: '4px solid #f3f3f3',
+                  borderTop: '4px solid #3b82f6',
+                  borderRadius: '50%',
+                  animation: 'spin 1s linear infinite'
+                }}></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // If user is already authenticated, show the "already signed in" message
+  if (isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <div className="auth-container">
+          <div className="auth-wrapper">
+            <div className="auth-card">
+              <div className="already-signed-in-content">
+                <div className="already-signed-in-icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                    <path
+                      d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                <h2>You're Already Signed In</h2>
+                <p>Welcome back, {userData?.fullName || userData?.username || 'User'}!</p>
+                <p>You're currently signed in to your account. Sign out to access the sign-in page.</p>
+                <div className="already-signed-in-actions">
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="already-signed-in-btn primary"
+                  >
+                    Go to Dashboard
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    className="already-signed-in-btn secondary"
+                  >
+                    Sign Out
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+
+  // Roll number validation function
+  const validateRollNumber = (rollNumber) => {
+    // Remove any dashes first
+    const cleanRollNumber = rollNumber.replace(/-/g, '');
+
+    // Check if it starts with 2 digits
+    if (!/^\d{2}/.test(cleanRollNumber)) {
+      return "Roll number must start with 2 digits (e.g., 22, 23, 24)";
+    }
+
+    // Check if it has the correct format: 2 digits + L/I/P/M/F + 4 digits
+    const rollNumberPattern = /^\d{2}[LIPMFliplmf]\d{4}$/;
+    if (!rollNumberPattern.test(cleanRollNumber)) {
+      return "Roll Number Format: 22L1234";
+    }
+
+    return ""; // Valid
+  };
 
   // For animated character (if you want to add it later)
   // const [activeField, setActiveField] = useState(null);
@@ -27,18 +185,24 @@ export default function AuthPage() {
   // Handle input changes
   const handleInputChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+
+    // Validate roll number if it's the roll number field
+    if (field === "password" && !isLogin) {
+      const error = validateRollNumber(value);
+      setRollNumberError(error);
+    }
   };
 
   // Backend: Sign In
   const handleSignInSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/login", {
+      const response = await fetch(`${API_BASE_URL}/auth/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({
           email: formData.email,
           password: formData.password,
@@ -46,54 +210,91 @@ export default function AuthPage() {
       });
       const data = await response.json();
       if (response.ok) {
-        setMessage("Sign in successful!");
-        localStorage.setItem("user", JSON.stringify(data.user));
+        setMessage("Welcome back! You've successfully signed in.");
+        setIsSuccessMessage(true);
+
+        // Store JWT tokens and user data
+        loginWithTokens(
+          {
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+          },
+          data.user
+        );
+
         setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(data.error || "Sign in failed. Please try again.");
+        setIsSuccessMessage(false);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
+      setIsSuccessMessage(false);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   // Backend: Sign Up
   const handleSignUpSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
+    // Validate roll number before submitting
+    const rollNumberError = validateRollNumber(formData.password);
+    if (rollNumberError) {
+      setMessage(rollNumberError);
+      setIsSubmitting(false);
+      return;
+    }
+
     try {
-      const response = await fetch("http://localhost:4000/auth/register", {
+      const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
         body: JSON.stringify({
-          username: formData.lastName,
-          fullName: formData.firstName,
           email: formData.email,
+          username: formData.firstName, // Use firstName as username
+          fullName: `${formData.firstName} ${formData.lastName}`,
           password: formData.confirmPassword,
-          rollnumber: formData.password,
+          rollnumber: formData.password.replace(/-/g, ''), // Remove dashes before sending
         }),
       });
       const data = await response.json();
       if (response.ok) {
-        setMessage(data.message || "Sign up successful!");
-        setTimeout(() => {
-          setIsLogin(true);
-          setFormData({
-            email: "",
-            password: "",
-            confirmPassword: "",
-            firstName: "",
-            lastName: "",
-          });
-        }, 1000);
+        setMessage(data.message || "Account created successfully! Welcome to Campus Plus!");
+        setIsSuccessMessage(true);
+
+        // Store JWT tokens and user data for new user
+        loginWithTokens(
+          {
+            accessToken: data.accessToken,
+            refreshToken: data.refreshToken,
+          },
+          data.user
+        );
+
+        setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(data.error || "Sign up failed. Please try again.");
+        setIsSuccessMessage(false);
       }
     } catch (error) {
       setMessage("An error occurred. Please try again later.");
+      setIsSuccessMessage(false);
+    } finally {
+      setIsSubmitting(false);
     }
+  };
+
+  // OAuth handlers
+  const handleGoogleAuth = () => {
+    window.location.href = `${API_BASE_URL}/auth/google`;
+  };
+
+  const handleGitHubAuth = () => {
+    window.location.href = `${API_BASE_URL}/auth/github`;
   };
 
   const toggleMode = () => {
@@ -106,6 +307,8 @@ export default function AuthPage() {
       lastName: "",
     });
     setMessage("");
+    setIsSuccessMessage(false);
+    setRollNumberError("");
   };
 
   return (
@@ -113,16 +316,16 @@ export default function AuthPage() {
       <Navbar />
       <div className="auth-container">
         {/* Animated Background */}
-        <div className="background-animation">
-          <div className="floating-orbs">
-            <div className="orb orb-1"></div>
-            <div className="orb orb-2"></div>
-            <div className="orb orb-3"></div>
-            <div className="orb orb-4"></div>
-            <div className="orb orb-5"></div>
+
+        {/* Loading overlay for sign-in/sign-up submission */}
+        {isSubmitting && (
+          <div className="signing-in-overlay">
+            <div className="signing-in-spinner"></div>
+            <div className="signing-in-message">
+              {isLogin ? "Signing in..." : "Creating account..."}
+            </div>
           </div>
-          <div className="gradient-mesh"></div>
-        </div>
+        )}
 
         {/* Main Content */}
         <div className="auth-wrapper">
@@ -265,8 +468,8 @@ export default function AuthPage() {
                         handleInputChange("password", e.target.value)
                       }
                       required
-                      className="modern-input"
-                      placeholder=" "
+                      className={`modern-input ${rollNumberError && !isLogin ? 'error' : ''}`}
+                      placeholder={!isLogin ? "22L1234" : " "}
                     />
                     <label
                       htmlFor={isLogin ? "password" : "rollNumber"}
@@ -275,6 +478,11 @@ export default function AuthPage() {
                       {isLogin ? "Password" : "Roll Number"}
                     </label>
                     <div className="input-border"></div>
+                    {rollNumberError && !isLogin && (
+                      <div className="error-message" style={{ color: '#e11d48', fontSize: '0.875rem', marginTop: '4px' }}>
+                        {rollNumberError}
+                      </div>
+                    )}
                   </div>
 
                   {!isLogin && (
@@ -330,14 +538,38 @@ export default function AuthPage() {
                     <div className="button-shine"></div>
                   </button>
                   {message && (
-                    <div
-                      style={{
-                        color: "#e11d48",
-                        marginTop: 12,
-                        textAlign: "center",
-                      }}
-                    >
-                      {message}
+                    <div className={`message-container ${isSuccessMessage ? 'success' : 'error'}`}>
+                      {isSuccessMessage ? (
+                        <div className="success-message">
+                          <div className="success-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                              <path
+                                d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </div>
+                          <span className="message-text">{message}</span>
+                        </div>
+                      ) : (
+                        <div className="error-message">
+                          <div className="error-icon">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                              <path
+                                d="M12 9V13M12 17H12.01M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z"
+                                stroke="currentColor"
+                                strokeWidth="2"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                              />
+                            </svg>
+                          </div>
+                          <span className="message-text">{message}</span>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -350,7 +582,7 @@ export default function AuthPage() {
                 <span className="divider-text">or</span>
               </div>
               <div className="social-buttons">
-                <button type="button" className="social-button google">
+                <button type="button" className="social-button google" onClick={handleGoogleAuth}>
                   <svg width="20" height="20" viewBox="0 0 24 24">
                     <path
                       fill="#4285F4"
@@ -371,7 +603,7 @@ export default function AuthPage() {
                   </svg>
                   Continue with Google
                 </button>
-                <button type="button" className="social-button github">
+                <button type="button" className="social-button github" onClick={handleGitHubAuth}>
                   <svg
                     width="20"
                     height="20"
