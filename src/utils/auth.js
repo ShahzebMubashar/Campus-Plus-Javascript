@@ -41,7 +41,28 @@ export const setUser = (user) => {
 };
 
 /**
- * Get user data from localStorage
+ * Get user data from JWT token (secure source of truth)
+ */
+export const getUserFromToken = () => {
+  const token = getAccessToken();
+  if (!token) return null;
+  
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    return {
+      userid: payload.userid,
+      username: payload.username,
+      role: payload.role,
+      isProfileComplete: payload.isProfileComplete
+    };
+  } catch (error) {
+    console.error('Error decoding JWT:', error);
+    return null;
+  }
+};
+
+/**
+ * Get user data from localStorage (legacy - for backward compatibility)
  */
 export const getUser = () => {
   const userData = localStorage.getItem(USER_KEY);

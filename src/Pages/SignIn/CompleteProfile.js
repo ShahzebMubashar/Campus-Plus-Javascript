@@ -5,7 +5,7 @@ import Footer from '../Footer/Footer';
 import logo from '../Index/cp_logo.png';
 import './CompleteProfile.css';
 import API_BASE_URL from '../../config/api.js'; 
-import { authenticatedFetch, extractTokensFromURL, loginWithTokens } from '../../utils/auth'; 
+import { authenticatedFetch, extractTokensFromURL, loginWithTokens, getUserFromToken } from '../../utils/auth'; 
 
 const CompleteProfile = () => {
     const [formData, setFormData] = useState({
@@ -160,12 +160,12 @@ const CompleteProfile = () => {
 
             if (response.ok) {
                 setMessage('Profile completed successfully! Redirecting...');
-                // Store updated user info
-                localStorage.setItem('user', JSON.stringify(data.user));
+                // Get updated user info from JWT (secure) instead of storing in localStorage
+                const updatedUserData = getUserFromToken() || data.user;
 
                 // Dispatch custom event to notify navbar of authentication change
                 window.dispatchEvent(new CustomEvent('authStateChanged', {
-                    detail: { isAuthenticated: true, user: data.user }
+                    detail: { isAuthenticated: true, user: updatedUserData }
                 }));
 
                 setTimeout(() => {

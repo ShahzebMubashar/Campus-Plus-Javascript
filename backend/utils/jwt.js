@@ -49,6 +49,7 @@ const generateTokenPair = (user) => {
     userid: user.userid,
     email: user.email,
     username: user.username,
+    rollnumber: user.rollnumber,
     role: user.role,
     fullName: user.fullName || user.fullname
   };

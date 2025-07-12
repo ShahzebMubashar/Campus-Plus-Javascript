@@ -18,7 +18,7 @@ import profile from "../../../Assets/images/user.png";
 import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
-import { isAuthenticated, getUser, logout as authLogout } from "../../../utils/auth";
+import { isAuthenticated, getUser, getUserFromToken, logout as authLogout } from "../../../utils/auth";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -61,7 +61,8 @@ function Navbar() {
     console.log("🔍 Navbar: Checking JWT authentication status...");
 
     const authStatus = isAuthenticated();
-    const userData = getUser();
+    // Use JWT for user data (secure) with fallback to localStorage (legacy)
+    const userData = getUserFromToken() || getUser();
 
     console.log("🔍 Navbar: Auth status:", authStatus);
     console.log("🔍 Navbar: User data:", userData);

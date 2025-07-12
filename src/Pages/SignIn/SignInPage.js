@@ -5,7 +5,7 @@ import Footer from "../../Pages/Footer/Footer";
 import logo from "../Index/cp_logo.png";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import API_BASE_URL from "../../config/api";
-import { loginWithTokens, isAuthenticated as checkAuth, getUser as getStoredUser } from "../../utils/auth";
+import { loginWithTokens, isAuthenticated as checkAuth, getUser as getStoredUser, getUserFromToken, clearAuth } from "../../utils/auth";
 
 export default function AuthPage() {
   // Authentication state
@@ -43,7 +43,8 @@ export default function AuthPage() {
     const updateAuth = () => {
       const auth = checkAuth();
       setIsAuthenticated(auth);
-      setUserData(auth ? getStoredUser() : null);
+      // Use JWT for user data (secure) with fallback to localStorage (legacy)
+      setUserData(auth ? (getUserFromToken() || getStoredUser()) : null);
       setIsAuthLoading(false);
     };
     updateAuth();
@@ -61,7 +62,8 @@ export default function AuthPage() {
       });
 
       if (response.ok) {
-        localStorage.removeItem("user");
+        // Use clearAuth to properly clear all auth data
+        clearAuth();
         setIsAuthenticated(false);
         setUserData(null);
 
