@@ -484,7 +484,11 @@ function Navbar() {
                 </div>
                 <div className="navbar-dropdown-section">
                   <AiOutlineHome className="navbar-dropdown-icon" />
-                  <h4>About Us</h4>
+                  <h4>
+                    <Link to="/about-campus-plus" onClick={handleDropdownLinkClick}>
+                      About Us
+                    </Link>
+                  </h4>
                   <p>
                     <Link to="/ourevents" onClick={handleDropdownLinkClick}>
                       Our Events
@@ -540,71 +544,38 @@ function Navbar() {
 
                   <div className="navbaruser-dropdown-menu">
                     {/* Section 1 */}
-                    <Link to="/profile">
-                      <img
-                        src={profile}
-                        alt="Profile"
-                        style={{ width: "18px", marginRight: "8px" }}
-                      />
-                      My Profile
+                    <Link to="/profile" className="profile-link">
+                      <img src={profile} alt="Profile" style={{ width: "18px", marginRight: "8px" }} />
+                      <span className="profile-link-text">My Profile</span>
                     </Link>
-                    <Link to="/transcript">
-                      <img
-                        src={transcript}
-                        alt="Transcript"
-                        style={{ width: "18px", marginRight: "8px" }}
-                      />
-                      Transcript
+                    <Link to="/transcript" className="profile-link">
+                      <img src={transcript} alt="Transcript" style={{ width: "18px", marginRight: "8px" }} />
+                      <span className="profile-link-text">Transcript</span>
                     </Link>
-
-                    <Link to="/support">
-                      <img
-                        src={support}
-                        alt="Help"
-                        style={{ width: "20px", marginRight: "8px" }}
-                      />
-                      Help
+                    <Link to="/support" className="profile-link">
+                      <img src={support} alt="Help" style={{ width: "20px", marginRight: "8px" }} />
+                      <span className="profile-link-text">Help</span>
                     </Link>
-
                     <hr className="dropdown-divider" />
-
                     {/* Section 2 */}
-                    <Link to="/notifications">
-                      <img
-                        src={notifications}
-                        alt="Notifications"
-                        style={{ width: "18px", marginRight: "8px" }}
-                      />
-                      Notifications
+                    <Link to="/notifications" className="profile-link">
+                      <img src={notifications} alt="Notifications" style={{ width: "18px", marginRight: "8px" }} />
+                      <span className="profile-link-text">Notifications</span>
                     </Link>
-                    <Link to="/chatroom">
-                      <img
-                        src={message}
-                        alt="Messages"
-                        style={{ width: "18px", marginRight: "8px" }}
-                      />
-                      Messages
+                    <Link to="/chatroom" className="profile-link">
+                      <img src={message} alt="Messages" style={{ width: "18px", marginRight: "8px" }} />
+                      <span className="profile-link-text">Messages</span>
                     </Link>
-
                     <hr className="dropdown-divider" />
-
                     {/* Section 3 */}
-                    <Link to="/settings">
-                      <img
-                        src={settings}
-                        alt="Settings"
-                        style={{ width: "18px", marginRight: "8px" }}
-                      />
-                      Settings
+                    <Link to="/settings" className="profile-link">
+                      <img src={settings} alt="Settings" style={{ width: "18px", marginRight: "8px" }} />
+                      <span className="profile-link-text">Settings</span>
                     </Link>
-                    <span onClick={handleLogout} style={{ cursor: "pointer" }}>
-                      <img
-                        src={logout}
-                        alt="Logout"
-                        style={{ width: "18px", marginRight: "8px" }}
-                      />
-                      Log out
-                    </span>
+                    <button onClick={handleLogout} className="profile-link">
+                      <img src={logout} alt="Logout" style={{ width: "18px", marginRight: "8px" }} />
+                      <span className="profile-link-text">Log out</span>
+                    </button>
                   </div>
                 </li>
               </>
