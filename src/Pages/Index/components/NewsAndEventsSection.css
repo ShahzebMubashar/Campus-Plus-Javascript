@@ -12,12 +12,29 @@
   background-color: #f9f9f9;
 }
 
-.testimonials-section h2 {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #003366;
-  margin-bottom: 50px !important;
+.testimonials-section h1 {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 40px;
+  line-height: 1.2;
   letter-spacing: -0.025em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  /* Remove any ::after pseudo-element that might be causing underline */
+  &::after {
+    display: none;
+    content: none;
+  }
+}
+
+.testimonials-section .features-highlighted {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-size: 1.25em;
+  font-weight: 900;
+  position: relative;
 }
 
 .slider-container {
@@ -346,8 +363,9 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .testimonials-section h2 {
-    font-size: 2rem;
+  .testimonials-section h1 {
+    font-size: 2.4rem;
+    margin-bottom: 50px;
   }
 
   .testimonial h3 {
@@ -422,8 +440,9 @@
 }
 
 @media (max-width: 480px) {
-  .testimonials-section h2 {
-    font-size: 1.8rem;
+  .testimonials-section h1 {
+    font-size: 2rem;
+    margin-bottom: 40px;
   }
 
   .testimonial h3 {

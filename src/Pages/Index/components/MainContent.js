@@ -29,13 +29,16 @@ const MainContent = () => {
         <div className="text">
           <h1 style={{ color: "#0e1320" }}>
             <span>Empower Your Journey With</span>
-            <span className="highlighted"> Campus +</span>
+            <br />
+            <span className="highlighted">Campus +</span>
           </h1>
-          <p style={{ color: "#576074", maxWidth: "80%" }}>
-            Enhance learning with an advanced LMS featuring robust tools like Past
-            Papers, Teachers info, Chatting Forums, GPA Calculators, and
-            everything you need for seamless university life.
-          </p>
+          <div className="hero-desc">
+            <p style={{ color: "#576074" }}>
+              Enhance learning with an advanced LMS featuring robust tools like Past
+              Papers, Teachers info, Chatting Forums, GPA Calculators, and
+              everything you need for seamless university life.
+            </p>
+          </div>
           <div className="button-container">
             <button className="get-started-btn" onClick={handleButtonClick}>
               {loggedIn ? "Dashboard" : "Get started"} <i className="fas fa-paper-plane" />

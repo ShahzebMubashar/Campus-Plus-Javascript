@@ -104,16 +104,12 @@ const NewsAndEventsSection = () => {
   return (
     <section className="parent-testimonials-section" id="newsandeventspage">
       <div className="testimonials-section">
-        <h2>
+        <h1>
           News &{" "}
-          <span
-            className="pp-highlighted"
-            style={{ color: "#3b82f6", fontSize: "3.5rem" }}
-          >
-            {" "}
+          <span className="features-highlighted">
             Events
           </span>
-        </h2>
+        </h1>
         <div className="slider-container-news">
           <div
             className={isMobile ? "news-slider-mobile" : "testimonials-slider"}

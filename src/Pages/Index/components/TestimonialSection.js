@@ -79,6 +79,9 @@ const TestimonialSection = () => {
   return (
     <section className="quotes">
       <div className="testimonial-section">
+        <h2 className="testimonial-title">
+          What Our <span className="testimonial-highlighted">Users</span> Say
+        </h2>
         <div
           className="slideshow-container"
           onTouchStart={handleTouchStart}

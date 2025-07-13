@@ -50,7 +50,7 @@ const PlaylistsSection = () => (
                 alt={`Thumbnail for ${playlist.name}`}
                 className="modern-playlist-thumbnail"
               />
-              <span className="modern-playlist-badge">{playlist.shortForm}</span>
+              <span className="short-form">{playlist.shortForm}</span>
             </div>
             <div className="modern-playlist-content">
               <h3 className="modern-playlist-title">{playlist.name}</h3>
