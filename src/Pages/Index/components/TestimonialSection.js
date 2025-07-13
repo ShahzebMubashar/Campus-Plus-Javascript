@@ -79,6 +79,9 @@ const TestimonialSection = () => {
   return (
     <section className="quotes">
       <div className="testimonial-section">
+        <h2 className="testimonial-title">
+          What Our <span className="testimonial-highlighted">Users</span> Say
+        </h2>
         <div
           className="slideshow-container"
           onTouchStart={handleTouchStart}
@@ -100,24 +103,26 @@ const TestimonialSection = () => {
         </div>
 
         <div className="slideshow-controls">
-          <span
-            className="prev"
-            onClick={() =>
-              changeSlide(
-                (currentSlide - 1 + testimonials.length) % testimonials.length,
-              )
-            }
-          >
-            &#10094;
-          </span>
-          <span
-            className="next"
-            onClick={() =>
-              changeSlide((currentSlide + 1) % testimonials.length)
-            }
-          >
-            &#10095;
-          </span>
+          <div className="arrow-container">
+            <span
+              className="prev"
+              onClick={() =>
+                changeSlide(
+                  (currentSlide - 1 + testimonials.length) % testimonials.length,
+                )
+              }
+            >
+              &#10094;
+            </span>
+            <span
+              className="next"
+              onClick={() =>
+                changeSlide((currentSlide + 1) % testimonials.length)
+              }
+            >
+              &#10095;
+            </span>
+          </div>
 
           <div className="slide-indicators">
             {testimonials.map((_, index) => (

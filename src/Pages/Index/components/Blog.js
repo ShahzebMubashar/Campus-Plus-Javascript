@@ -1,8 +1,8 @@
 import React from "react";
 import "./Blog.css";
-import Pic1 from "../../../Assets/images/blog-1.jpg";
-import Pic2 from "../../../Assets/images/blog-2.jpg";
-import Pic3 from "../../../Assets/images/blog-3.jpg";
+import Pic1 from "../../../Assets/images/blog-1.png";
+import Pic2 from "../../../Assets/images/blog-2.png";
+import Pic3 from "../../../Assets/images/blog-3.png";
 
 const BlogSection = () => {
   return (
@@ -17,7 +17,7 @@ const BlogSection = () => {
           </h1>
         </div>
 
-        <div className="blog-section">
+        <div className="blog-cards-grid">
           <div className="blog-card">
             <a href="https://thebrainbytes.blogspot.com/2023/08/beyond-hype-understanding-realities-of.html">
               <img src={Pic1} alt="Blog Image" />
