@@ -19,6 +19,7 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [selectedRating, setSelectedRating] = useState(0);
   const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     // Initialize with difficulty if no rating exists
@@ -35,6 +36,8 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
       setShowLoginPrompt(true);
       return;
     }
+
+    setIsSubmitting(true);
 
     try {
       const response = await authenticatedFetch(`${API_BASE_URL}/courses/rate-course`, {
@@ -57,7 +60,7 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
       const message = await response.text();
       console.log("Rating response:", message);
 
-      // Fetch updated course data
+      // Fetch updated course data to get the new average rating
       const courseResponse = await fetch(
         `${API_BASE_URL}/courses/${courseId}`,
         {
@@ -72,11 +75,16 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
         throw new Error("Failed to fetch updated course info");
       }
 
-      setSelectedRating(rating);
-      onRate(rating);
+      const updatedCourseData = await courseResponse.json();
+      
+      // Update with the new average rating from server
+      setSelectedRating(updatedCourseData.rating);
+      onRate(updatedCourseData.rating);
     } catch (error) {
       console.error("Error submitting rating:", error);
       alert(error.message || "Failed to submit rating. Please try again.");
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -114,20 +122,25 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
 
   return (
     <>
-      <div className="rating">
+      <div className={`rating ${isSubmitting ? 'submitting' : ''}`}>
         <div className="rating-bars">
           {[1, 2, 3, 4, 5].map((level, index) => (
             <div
               key={level}
-              className="rating-bar"
-              onMouseEnter={() => setHoveredRating(level)}
-              onMouseLeave={() => setHoveredRating(0)}
-              onClick={() => handleRatingSubmit(level)}
+              className={`rating-bar ${isSubmitting ? 'disabled' : ''}`}
+              onMouseEnter={() => !isSubmitting && setHoveredRating(level)}
+              onMouseLeave={() => !isSubmitting && setHoveredRating(0)}
+              onClick={() => !isSubmitting && handleRatingSubmit(level)}
             >
               <div
                 className="rating-bar-fill"
                 style={{ transform: `scaleX(${getBarFill(index)})` }}
               />
+              {isSubmitting && (
+                <div className="rating-loading">
+                  <div className="loading-dot"></div>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -331,12 +344,7 @@ const PastPapersDetails = () => {
             </div>
             <div className="detail-content">
               <h3>Difficulty</h3>
-              <Rating
-                courseId={courseId}
-                currentRating={courseInfo?.rating}
-                difficulty={courseInfo?.difficulty}
-                onRate={handleRatingUpdate}
-              />
+              <p>{courseInfo?.rating ? `${Number(courseInfo.rating) % 1 === 0 ? Number(courseInfo.rating).toFixed(0) : Number(courseInfo.rating).toFixed(1)}/5` : "N/A"}</p>
             </div>
           </div>
           <div className="detail-card">
@@ -347,6 +355,23 @@ const PastPapersDetails = () => {
               <h3>Instructors</h3>
               <p>{courseInfo?.instructors || "N/A"}</p>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Minimalistic Rating Section */}
+      <div className="rating-section">
+        <div className="rating-container">
+          <div className="rating-header">
+            <h3>Rate Difficulty</h3>
+          </div>
+          <div className="rating-component">
+            <Rating
+              courseId={courseId}
+              currentRating={courseInfo?.rating}
+              difficulty={courseInfo?.difficulty}
+              onRate={handleRatingUpdate}
+            />
           </div>
         </div>
       </div>
