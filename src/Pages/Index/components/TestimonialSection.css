@@ -142,17 +142,9 @@
         transform: translateY(0) scale(1);
       }
 
-      /* Quote icon */
+      /* Removed the quotation mark */
       &::before {
-        content: '"';
-        position: absolute;
-        top: 20px;
-        left: 30px;
-        font-size: 4rem;
-        color: rgba(59, 130, 246, 0.2);
-        font-family: serif;
-        font-weight: 900;
-        line-height: 1;
+        content: none;
       }
 
       p {
@@ -405,11 +397,11 @@
 
       .slideshow-container {
         padding: 32px;
-        min-height: 200px;
+        min-height: 240px; /* Increase height for better fit on smaller screens */
       }
 
       .testimonial-slide {
-        padding: 32px;
+        padding: 36px; /* Adjust padding for better spacing */
 
         &::before {
           font-size: 3rem;
@@ -418,7 +410,7 @@
         }
 
         p {
-          font-size: 1.1rem;
+          font-size: 1.2rem; /* Slightly increase font size for readability */
           margin-bottom: 24px;
         }
 
@@ -469,11 +461,11 @@
 
       .slideshow-container {
         padding: 24px;
-        min-height: 180px;
+        min-height: 240px; /* Further increase height for very small screens */
       }
 
       .testimonial-slide {
-        padding: 24px;
+        padding: 28px; /* Adjust padding for compact screens */
 
         &::before {
           font-size: 2.5rem;
@@ -482,7 +474,7 @@
         }
 
         p {
-          font-size: 1rem;
+          font-size: 1.1rem; /* Maintain readability on smaller screens */
           margin-bottom: 20px;
         }
 

@@ -183,23 +183,23 @@ function Navbar() {
                     </Link>
                   </h4>
                   <p>
-                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
-                      Data Structures (DS)
+                    <Link to="/past-papers/10" onClick={handleDropdownLinkClick}>
+                      Object Oriented Programming
                     </Link>
                   </p>
                   <p>
-                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
-                      Calculus (Cal)
+                    <Link to="/past-papers/19" onClick={handleDropdownLinkClick}>
+                      Data Structures
                     </Link>
                   </p>
                   <p>
-                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
-                      Theory of Automata (TOA)
+                    <Link to="/past-papers/5" onClick={handleDropdownLinkClick}>
+                      Applied Physics
                     </Link>
                   </p>
                   <p>
-                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
-                      Assembly Language (COAL)
+                    <Link to="/past-papers/18" onClick={handleDropdownLinkClick}>
+                      Discrete Structures
                     </Link>
                   </p>
                 </div>

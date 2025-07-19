@@ -294,6 +294,10 @@
   max-width: none;
   min-height: 180px;
   height: 100%;
+
+  .modern-pastpaper-bottom {
+    margin-top: auto;
+  }
 }
 
 .modern-pastpaper-card:hover {
@@ -351,16 +355,16 @@
 .stars {
   display: flex;
   gap: 2px;
-}
 
-.star-filled {
-  color: #fbbf24;
-  font-size: 0.9rem;
-}
+  .star-filled {
+    color: #fbbf24;
+    font-size: 0.9rem;
+  }
 
-.star-empty {
-  color: #d1d5db;
-  font-size: 0.9rem;
+  .star-empty {
+    color: #d1d5db;
+    font-size: 0.9rem;
+  }
 }
 
 /* Consistent Responsive Design */

@@ -5,37 +5,37 @@ import { AiFillStar } from "react-icons/ai"; // Import star icons
 const categories = [
   {
     title: "Object Oriented Programming",
-    link: "/html/Papers/ObjectOrientedProgramming.html",
+    link: "/past-papers/10",
     rating: 4.5, // Example rating
     description: "Core concepts of OOP and programming paradigms",
   },
   {
     title: "Data Structures",
-    link: "/html/Papers/DataStructures.html",
+    link: "/past-papers/19",
     rating: 4.8,
     description: "Essential data structures and algorithms",
   },
   {
     title: "Applied Physics",
-    link: "/html/Papers/AppliedPhysics.html",
+    link: "/past-papers/5",
     rating: 4.6,
     description: "Physics principles and applications",
   },
   {
     title: "Discrete Structures",
-    link: "/html/Papers/DiscreteStructures.html",
+    link: "/past-papers/18",
     rating: 4.2,
     description: "Mathematical foundations and logic",
   },
   {
     title: "Numerical Computing",
-    link: "/html/Papers/NumericalComputing.html",
+    link: "/past-papers/32",
     rating: 4.0,
     description: "Computational methods and analysis",
   },
   {
     title: "Islamic Studies/Ethics",
-    link: "/html/Papers/IslamicStudies.html",
+    link: "/past-papers/15",
     rating: 4.3,
     description: "Ethical principles and Islamic studies",
   },
