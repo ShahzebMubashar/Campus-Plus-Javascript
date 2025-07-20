@@ -1,7 +1,7 @@
 /* Modern dark sidebar inspired by the image */
 .sidebar {
   position: fixed;
-  top: 32px;
+  top: 0px;
   left: 0;
   width: 260px;
   height: 100vh;
@@ -14,6 +14,8 @@
   z-index: 100;
   border-radius: 0;
   box-shadow: 0 2px 16px rgba(24, 40, 72, 0.08);
+  overflow-y: hidden;
+  transition: width 0.3s ease-in-out;
 }
 
 .profile-section {

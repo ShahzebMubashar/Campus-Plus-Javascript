@@ -143,7 +143,7 @@ export default function Chatrooms() {
   return (
     <div className="chatroom-main-top">
       <div className="chatroom-app">
-        <Navbar />
+
         {/* Mobile Menu Toggle Button */}
         {!isSidebarOpen && isMenuVisible && (
           <button
