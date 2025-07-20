@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import API_BASE_URL from "../../../config/api.js";
 import { authenticatedFetch } from "../../../utils/auth";
+import { FaUsers, FaPlus } from "react-icons/fa";
 
 export default function RoomList({ rooms, onJoinRoom }) {
   const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
@@ -63,30 +64,31 @@ export default function RoomList({ rooms, onJoinRoom }) {
     <div className="room-list-container">
       {/* Header Section */}
       <div className="room-list-header">
-        <div className="room-list-header-stack">
-          <div className="room-list-header-left">
-            <h1 className="room-list-title">Chat Rooms</h1>
-            <p className="room-list-subtitle">
-              Browse and join chat rooms to start discussing
-            </p>
+        <div style={{ display: 'flex', alignItems: 'center', width: '100%', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            <FaUsers style={{ fontSize: '2.1rem', color: '#1976d2' }} />
+            <h1 className="room-list-title" style={{ margin: 0 }}>Rooms</h1>
+            <span style={{ background: '#e3e8f8', color: '#1976d2', borderRadius: '999px', padding: '2px 12px', fontSize: '1.05rem', fontWeight: 700, marginLeft: '4px' }}>{filteredRooms.length}</span>
           </div>
-        </div>
-        {userRole === "Admin" && (
-          <button
-            className="create-room-button"
-            onClick={() => setShowCreateRoomForm(true)}
-          >
-            <span style={{ fontSize: "18px" }}>+</span> Create Room
-          </button>
-        )}
-        <div className="room-list-search">
-          <input
-            type="text"
-            placeholder="Search rooms..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <span className="room-list-search-icon">🔍</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+            {userRole === "Admin" && (
+              <button
+                className="create-room-button"
+                onClick={() => setShowCreateRoomForm(true)}
+              >
+                <FaPlus style={{ fontSize: '1rem' }} /> Start new chat
+              </button>
+            )}
+            <div className="room-list-search">
+              <input
+                type="text"
+                placeholder="Search rooms..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <span className="room-list-search-icon">🔍</span>
+            </div>
+          </div>
         </div>
       </div>
 

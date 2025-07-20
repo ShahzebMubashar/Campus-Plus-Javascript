@@ -14,46 +14,116 @@
 }
 
 .room-list-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  z-index: 101;
+  background: #f2f4f5;
+  box-shadow: 0 2px 8px rgba(33, 150, 243, 0.04);
+  border-bottom: 1.5px solid #e3e8f8;
+  border-radius: 0;
+  padding: 20px 40px 16px 0;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
-  flex-wrap: wrap;
-  width: 100%;
-  margin-bottom: 20px;
-  padding: 20px;
-  background-color: white;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 0;
+  margin-bottom: 0;
 }
 
-.room-list-header h1 {
-  margin: 0;
+.room-list-header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.room-list-title {
   color: #1a2236;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.room-list-header-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
 }
 
 .create-room-button {
-  margin-left: auto;
-  align-self: flex-start;
-  padding: 6px 14px;
-  font-size: 0.95rem;
-  min-width: 100px;
-  max-width: 150px;
-  height: 38px;
-  display: inline-flex;
-  background-color: #2196f3;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
+  background: none;
+  color: #1976d2;
+  border: 1.5px solid #1976d2;
+  box-shadow: none;
+  padding: 8px 18px;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
   align-items: center;
   gap: 8px;
+  border-radius: 999px;
+  transition: background 0.18s, color 0.18s, border 0.18s;
 }
 
 .create-room-button:hover {
-  background-color: #1976d2;
+  background: #e3e8f8;
+  color: #1565c0;
+  border: 1.5px solid #1565c0;
+}
+
+.room-list-header-desc {
+  color: #64748b;
+  font-size: 1.05rem;
+  margin-top: 2px;
+  margin-left: 4px;
+  position: absolute;
+  left: 40px;
+  top: 60px;
+}
+
+.room-list-search {
+  margin: 0;
+  max-width: 220px;
+  width: 180px;
+  background: #e3e8f8;
+  border-radius: 999px;
+  padding: 0 14px;
+  border: none;
+  display: flex;
+  align-items: center;
+  box-shadow: none;
+}
+
+.room-list-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 1.05rem;
+  padding: 12px 0;
+  width: 100%;
+  color: #1a2236;
+}
+
+.room-list-search-icon {
+  font-size: 1.2rem;
+  color: #1976d2;
+  margin-left: 8px;
+}
+
+.room-list-container {
+  background: #22325c;
+  min-height: 100vh;
+  padding: 0 0 0 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+  padding-top: 90px;
 }
 
 .search-section {
