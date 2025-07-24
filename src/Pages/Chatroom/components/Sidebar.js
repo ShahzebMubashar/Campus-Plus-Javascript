@@ -1,5 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
+import cplogo from "../../../Assets/images/cp_logo.png"; // Adjust the path as necessary
 
 const Sidebar = ({
   userInfo,
@@ -53,7 +54,7 @@ const Sidebar = ({
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       {/* Brand Section */}
       <div className="brand-section">
-        <div className="brand-logo">📚</div>
+        <div className="brand-logo"><img src={cplogo} alt="Campus Plus logo"></img></div>
         <h2 className="brand-title">Campus Plus</h2>
       </div>
 
