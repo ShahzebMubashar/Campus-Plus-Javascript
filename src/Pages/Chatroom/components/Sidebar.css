@@ -1,162 +1,215 @@
-/* Modern dark sidebar inspired by the image */
+/* Modern clean sidebar similar to Prody design */
 .sidebar {
   position: fixed;
   top: 0px;
   left: 0;
-  width: 260px;
+  width: 280px;
   height: 100vh;
-  background: #f2f4f5;
-  color: #1a2236;
+  background: #ffffff;
+  color: #374151;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  padding: 32px 0 24px 0;
+  padding: 24px 0;
   z-index: 100;
-  border-radius: 0;
-  box-shadow: 0 2px 16px rgba(24, 40, 72, 0.08);
-  overflow-y: hidden;
-  transition: width 0.3s ease-in-out;
+  border-right: 1px solid #e5e7eb;
+  overflow-y: auto;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 }
 
-.profile-section {
+.brand-section {
   width: 100%;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  margin-bottom: 36px;
+  gap: 12px;
+  padding: 0 20px 24px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  margin-bottom: 24px;
 }
 
-.avatar {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  overflow: hidden;
-  margin-bottom: 12px;
-  border: 2.5px solid #fff;
-  box-shadow: 0 2px 8px rgba(24, 40, 72, 0.10);
-  background: #fff;
+.brand-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  background: #6366f1;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 16px;
 }
 
-.avatar img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.profile-info h3 {
+.brand-title {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 18px;
   font-weight: 700;
-  color: #1a2236;
-  text-align: center;
-}
-
-.profile-info p {
-  margin: 2px 0 0 0;
-  font-size: 0.95rem;
-  color: #64748b;
-  text-align: center;
+  color: #111827;
+  letter-spacing: -0.025em;
 }
 
 .sidebar-nav-links {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  margin-bottom: 32px;
+  gap: 0;
+  margin-bottom: 24px;
+  padding: 0 20px;
 }
 
 .sidebar-nav-link {
   width: 100%;
-  padding: 12px 32px;
-  color: #1a2236;
+  padding: 8px 12px;
+  color: #6b7280;
   text-decoration: none;
-  border-radius: 8px;
+  border-radius: 6px;
   display: flex;
   align-items: center;
-  gap: 14px;
-  font-size: 1.05rem;
+  justify-content: space-between;
+  font-size: 14px;
   font-weight: 500;
-  transition: background 0.18s, color 0.18s;
+  transition: all 0.2s ease;
   border: none;
   background: transparent;
+  margin-bottom: 1px;
 }
 
 .sidebar-nav-link:hover,
 .sidebar-nav-link.active {
-  background: #e3e8f8;
-  color: #1976d2;
+  background: #f3f4f6;
+  color: #111827;
+}
+
+.nav-badge {
+  background: #e5e7eb;
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 4px;
+  min-width: 18px;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.notification-badge {
+  background: #ef4444;
+  color: white;
 }
 
 .rooms-section {
   width: 100%;
-  margin-bottom: 18px;
+  margin-bottom: 24px;
+  border-top: 1px solid #f3f4f6;
+  padding-top: 16px;
 }
 
 .rooms-section h3 {
-  font-size: 0.85rem;
-  color: #1976d2;
+  font-size: 12px;
+  color: #9ca3af;
   text-transform: uppercase;
-  letter-spacing: 1.2px;
-  margin: 0 0 10px 32px;
-  font-weight: 700;
-  background: none;
+  letter-spacing: 0.05em;
+  margin: 0 0 8px 20px;
+  font-weight: 600;
 }
 
 .rooms-list {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 0;
   width: 100%;
+  padding: 0 20px;
 }
 
 .room-button {
   width: 100%;
-  padding: 10px 32px;
+  padding: 8px 12px;
   background: transparent;
-  color: #1a2236;
+  color: #6b7280;
   border: none;
-  border-radius: 8px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 1.01rem;
+  font-size: 14px;
   font-weight: 500;
   text-align: left;
   display: flex;
   align-items: center;
-  gap: 12px;
-  transition: background 0.18s, color 0.18s;
+  transition: all 0.2s ease;
+  margin-bottom: 1px;
 }
 
 .room-button:hover,
 .room-button.active {
-  background: #e3e8f8;
-  color: #1976d2 !important;
+  background: #f3f4f6;
+  color: #111827;
 }
 
-.room-icon {
-  font-size: 1.2rem;
+/* User Profile Section at Bottom */
+.user-profile-section {
+  margin-top: auto;
+  width: 100%;
+  padding: 16px 20px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.user-profile-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s ease;
+}
+
+.user-profile-content:hover {
+  background: #f9fafb;
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  font-weight: 600;
+  flex-shrink: 0;
+}
+
+.user-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.username {
+  font-size: 14px;
+  font-weight: 500;
+  color: #111827;
+  line-height: 1.2;
 }
 
 @media (max-width: 900px) {
   .sidebar {
     width: 70vw;
-    min-width: 160px;
-    max-width: 300px;
-    padding: 24px 0 16px 0;
+    min-width: 280px;
+    max-width: 320px;
+    padding: 32px 0 24px 0;
   }
 
-  .sidebar-nav-link,
-  .room-button {
-    padding-left: 18px;
-    padding-right: 18px;
+  .profile-section {
+    padding: 0 24px;
+    padding-bottom: 24px;
+  }
+
+  .sidebar-nav-links,
+  .rooms-list {
+    padding: 0 20px;
   }
 
   .rooms-section h3 {
-    margin-left: 18px;
+    margin-left: 28px;
   }
 }
 
@@ -165,16 +218,20 @@
     width: 100vw;
     min-width: 0;
     max-width: 100vw;
-    padding: 12px 0 8px 0;
+    padding: 24px 0 16px 0;
   }
 
-  .sidebar-nav-link,
-  .room-button {
-    padding-left: 10px;
-    padding-right: 10px;
+  .profile-section {
+    padding: 0 16px;
+    padding-bottom: 20px;
+  }
+
+  .sidebar-nav-links,
+  .rooms-list {
+    padding: 0 16px;
   }
 
   .rooms-section h3 {
-    margin-left: 10px;
+    margin-left: 20px;
   }
 }

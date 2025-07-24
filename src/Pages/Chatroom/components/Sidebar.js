@@ -14,58 +14,66 @@ const Sidebar = ({
   console.log("Sidebar isOpen:", isOpen);
   // Function to get initials from username
   const getInitials = (name) => {
-    console.log(userInfo);
     if (!name) return "U";
 
-    const names = name.split(" ");
-    if (names.length === 1) return names[0][0];
+    return name
+      .split(" ")
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .map((name) => name[0])
+      .join("")
+      .toUpperCase();
+  };
 
-    // Get first letter of first name and first letter of last name
-    return `${names[0][0]}${names[names.length - 1][0]}`;
+  // Function to generate a background color based on the name
+  const getAvatarColor = (name) => {
+    if (!name) return "#1a73e8"; // Default color
+
+    const colors = [
+      "#1a73e8",
+      "#4285f4",
+      "#0d47a1",
+      "#3367d6",
+      "#4e6cef",
+      "#3742fa",
+      "#1e3799",
+      "#0077c2",
+      "#0097e6",
+      "#00a8ff",
+    ];
+
+    // Sum the character codes to get a deterministic but unique color
+    const charSum = name
+      .split("")
+      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
+
+    return colors[charSum % colors.length];
   };
 
   return (
-    <div className={`sidebar${isOpen ? " open" : ""}`}>
-      {/* Mobile Close Button */}
-      <button
-        className="mobile-close-btn"
-        onClick={onClose}
-        style={{ display: window.innerWidth <= 768 ? "block" : "none" }}
-      >
-        ✕
-      </button>
-
-      {/* Profile Section */}
-      <div className="profile-section">
-        <div className="profile-content">
-          <div className="avatar">
-            {userInfo?.profilepic ? (
-              <img src={userInfo.profilepic} alt="User Avatar" />
-            ) : (
-              <div className="avatar-initials">
-                {getInitials(userInfo?.name)}
-              </div>
-            )}
-          </div>
-          <div className="profile-info">
-            <h3>{userInfo?.name || "Welcome Back"}</h3>
-            <p>Campus+ Member</p>
-          </div>
-        </div>
+    <div className={`sidebar ${isOpen ? "open" : ""}`}>
+      {/* Brand Section */}
+      <div className="brand-section">
+        <div className="brand-logo">📚</div>
+        <h2 className="brand-title">Campus Plus</h2>
       </div>
 
       {/* Navigation Links */}
-      <div className="sidebar-nav-links">
-        <a href="/profile" className="sidebar-nav-link">
-          👤 Profile
+      <nav className="sidebar-nav-links">
+        <a href="/" className="sidebar-nav-link">
+          Dashboard
         </a>
-        <a href="/settings" className="sidebar-nav-link">
-          ⚙️ Settings
+        <a href="/chatroom" className="sidebar-nav-link active">
+          Chatrooms
+          <span className="nav-badge">{joinedRooms?.length || 0}</span>
+        </a>
+        <a href="/profile" className="sidebar-nav-link">
+          Profile
         </a>
         <a href="/notifications" className="sidebar-nav-link">
-          🔔 Notifications
+          Notifications
+          <span className="nav-badge notification-badge">3</span>
         </a>
-      </div>
+      </nav>
 
       {/* Joined Rooms Section */}
       <div className="rooms-section">
@@ -83,10 +91,24 @@ const Sidebar = ({
                 }
               }}
             >
-              <span className="room-icon">💬</span>
               {room.roomname}
             </button>
           ))}
+        </div>
+      </div>
+
+      {/* User Profile Section at Bottom */}
+      <div className="user-profile-section">
+        <div className="user-profile-content">
+          <div
+            className="user-avatar"
+            style={{ backgroundColor: getAvatarColor(userInfo?.username) }}
+          >
+            {getInitials(userInfo?.username)}
+          </div>
+          <div className="user-info">
+            <span className="username">{userInfo?.username || "Guest"}</span>
+          </div>
         </div>
       </div>
     </div>
