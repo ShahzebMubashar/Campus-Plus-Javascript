@@ -27,7 +27,7 @@
 
 .room-list-header-content {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: space-between;
   width: 100%;
   gap: 20px;
@@ -88,8 +88,9 @@
 
 .room-list-header-right {
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
   gap: 10px;
   min-width: 300px;
 }
@@ -136,8 +137,9 @@
   outline: none;
   font-size: 1rem;
   padding: 12px 0;
-  width: 100%;
+  width: 700px !important;
   color: #495057;
+  box-sizing: border-box;
 }
 
 .room-list-search input::placeholder {
@@ -147,7 +149,7 @@
 .room-list-search-icon {
   font-size: 1.1rem;
   color: #6c757d;
-  margin-left: 8px;
+  margin-left: 250px;
   flex-shrink: 0;
 }
 
