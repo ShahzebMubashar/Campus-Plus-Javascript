@@ -10,7 +10,9 @@ import {
   AiOutlineLaptop,
   AiOutlineMenu,
   AiOutlineClose,
+  AiOutlineUp,
 } from "react-icons/ai";
+import { IoLocationOutline } from "react-icons/io5";
 import support from "../../../Assets/images/support.png";
 import message from "../../../Assets/images/conversation.png";
 import settings from "../../../Assets/images/setting.png";
@@ -19,14 +21,6 @@ import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
 import { isAuthenticated, getUser, getUserFromToken, logout as authLogout } from "../../../utils/auth";
-// import bell from "../../../Assets/images/bell.png"
-// import { FaUserCircle } from 'react-icons/fa';
-
-// const [showUserMenu, setShowUserMenu] = useState(false);
-
-// const toggleUserMenu = () => {
-//     setShowUserMenu(!showUserMenu);
-// };
 
 // Helper function to get user initials from username
 const getUserInitials = (username) => {
@@ -135,6 +129,7 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="nav-main">
+          {/* Logo Section */}
           <div className="logo">
             <Link to="/">
               <img src={Logo} alt="Logo" />
@@ -142,6 +137,7 @@ function Navbar() {
             </Link>
           </div>
 
+          {/* Mobile Menu Button */}
           <button
             className={`mobile-menu-button ${isMobileMenuOpen ? "menu-open" : ""}`}
             onClick={toggleMobileMenu}
@@ -149,9 +145,8 @@ function Navbar() {
             {isMobileMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
           </button>
 
-          <ul
-            className={`nav-links ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}
-          >
+          {/* Navigation Links */}
+          <ul className={`nav-links ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}>
             <li>
               <Link to="/past-papers" onClick={handleDropdownLinkClick}>
                 Past Papers
@@ -163,7 +158,8 @@ function Navbar() {
                 className="navbar-dropdown-toggle"
                 onClick={() => handleDropdownToggle("services")}
               >
-                Services <AiOutlineDown className="navbar-dropdown-arrow" />
+                Services 
+                <AiOutlineDown className="navbar-dropdown-arrow" />
               </span>
               <div
                 className="navbar-dropdown-menu"
@@ -184,22 +180,22 @@ function Navbar() {
                   </h4>
                   <p>
                     <Link to="/past-papers/10" onClick={handleDropdownLinkClick}>
-                      Object Oriented Programming
+                      Data Structures (DS)
                     </Link>
                   </p>
                   <p>
                     <Link to="/past-papers/19" onClick={handleDropdownLinkClick}>
-                      Data Structures
+                      Calculus (Cal)
                     </Link>
                   </p>
                   <p>
                     <Link to="/past-papers/5" onClick={handleDropdownLinkClick}>
-                      Applied Physics
+                      Theory of Automata (TOA)
                     </Link>
                   </p>
                   <p>
                     <Link to="/past-papers/18" onClick={handleDropdownLinkClick}>
-                      Discrete Structures
+                      Assembly Language (COAL)
                     </Link>
                   </p>
                 </div>
@@ -234,6 +230,11 @@ function Navbar() {
                 <div className="navbar-dropdown-section">
                   <AiOutlineHome className="navbar-dropdown-icon" />
                   <h4>Accessibility</h4>
+                  <p>
+                    <Link to="/faculty" onClick={handleDropdownLinkClick}>
+                      Faculty Info
+                    </Link>
+                  </p>
                   <p>
                     <Link to="/timetable" onClick={handleDropdownLinkClick}>
                       Time Table Generator
@@ -274,8 +275,7 @@ function Navbar() {
                   </p>
                   <p>
                     <Link to="/playlists" onClick={handleDropdownLinkClick}>
-                      {" "}
-                      Molder (Database)
+                      Brain Molder (Database)
                     </Link>
                   </p>
                 </div>
@@ -287,7 +287,8 @@ function Navbar() {
                 className="navbar-dropdown-toggle"
                 onClick={() => handleDropdownToggle("generators")}
               >
-                Generators <AiOutlineDown className="navbar-dropdown-arrow" />
+                Generators 
+                <AiOutlineDown className="navbar-dropdown-arrow" />
               </span>
               <div
                 className="navbar-dropdown-menu"
@@ -376,7 +377,7 @@ function Navbar() {
 
             <li>
               <Link to="/chatroom" onClick={handleDropdownLinkClick}>
-                Chatrooms
+                ChatGPT
               </Link>
             </li>
 
@@ -385,7 +386,7 @@ function Navbar() {
                 className="navbar-dropdown-toggle"
                 onClick={() => handleDropdownToggle("support")}
               >
-                Student Support{" "}
+                Student Support
                 <AiOutlineDown className="navbar-dropdown-arrow" />
               </span>
               <div
@@ -518,6 +519,7 @@ function Navbar() {
                 </div>
               </div>
             </li>
+            
             {isLoggedIn ? (
               <>
                 <li>
