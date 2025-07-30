@@ -3,7 +3,7 @@
 .content {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  min-height: 85vh;
+  min-height: 70vh;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,7 +34,7 @@
   .content-container {
     max-width: 1400px;
     max-width: 80%;
-    margin: 7% auto 4% auto;
+    margin: 2% auto; /* Reduced gap */
     padding: 0 1.5rem;
     text-align: center;
     position: relative;
@@ -66,19 +66,6 @@
           font-size: 4rem;
           font-weight: 900;
           position: relative;
-          
-          &::after {
-            content: '';
-            position: absolute;
-            bottom: -8px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent 0%, #3b82f6 50%, transparent 100%);
-            border-radius: 2px;
-            animation: expandLine 1s ease-out 0.5s both;
-          }
         }
       }
       
@@ -103,17 +90,17 @@
       animation: fadeInUp 0.7s 0.5s both;
       
       .get-started-btn {
-        background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-        color: #ffffff;
-        padding: 16px 32px;
-        font-size: 1.1rem;
-        font-weight: 600;
-        display: inline-flex;
-        align-items: center;
-        gap: 12px;
-        border-radius: 50px;
-        text-decoration: none;
-        transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        background: black; /* Ensure black background */
+        color: white; /* White text */
+        padding: 14px 28px; /* Adjust padding for balanced look */
+        font-size: 1rem; /* Ensure readable font size */
+        font-weight: 600; /* Maintain bold text */
+        border-radius: 50px; /* Rounded button */
+        display: inline-flex; /* Align icon and text */
+        align-items: center; /* Center alignment */
+        gap: 8px; /* Space between text and icon */
+        text-decoration: none; /* Remove underline */
+        transition: all 0.3s ease; /* Smooth hover effect */
         position: relative;
         overflow: hidden;
         box-shadow: 
@@ -121,41 +108,18 @@
           0 2px 4px -1px rgba(0, 0, 0, 0.06),
           0 0 0 1px rgba(255, 255, 255, 0.05);
         
-        &::before {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: -100%;
-          width: 100%;
-          height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-          transition: left 0.5s ease;
-        }
-        
         i {
-          font-size: 1.2rem;
-          transition: transform 0.3s ease;
+          font-size: 1.2rem; /* Icon size */
+          transition: transform 0.3s ease; /* Smooth icon movement */
         }
         
         &:hover {
-          transform: translateY(-3px);
-          box-shadow: 
-            0 20px 25px -5px rgba(0, 0, 0, 0.1),
-            0 10px 10px -5px rgba(0, 0, 0, 0.04),
-            0 0 0 1px rgba(59, 130, 246, 0.1);
-          
-          &::before {
-            left: 100%;
-          }
-          
-          i {
-            transform: translateX(4px);
-          }
+          transform: translateY(-2px); /* Slight lift on hover */
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
         }
         
         &:active {
-          transform: translateY(-1px);
-          transition: all 0.1s ease;
+          transform: translateY(0); /* Reset on click */
         }
       }
     }
@@ -190,7 +154,7 @@
 /* Consistent Responsive Design */
 @media (max-width: 1024px) {
   .content {
-    padding: 60px 0;
+  
     
     .content-container {
       padding: 0 30px;
@@ -217,7 +181,6 @@
 
 @media (max-width: 768px) {
   .content {
-    padding: 50px 0;
     
     .content-container {
       padding: 0 20px;
@@ -250,7 +213,6 @@
 
 @media (max-width: 480px) {
   .content {
-    padding: 40px 0;
     
     .content-container {
       padding: 0 16px;
