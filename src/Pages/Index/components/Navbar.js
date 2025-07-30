@@ -10,9 +10,7 @@ import {
   AiOutlineLaptop,
   AiOutlineMenu,
   AiOutlineClose,
-  AiOutlineUp,
 } from "react-icons/ai";
-import { IoLocationOutline } from "react-icons/io5";
 import support from "../../../Assets/images/support.png";
 import message from "../../../Assets/images/conversation.png";
 import settings from "../../../Assets/images/setting.png";
@@ -129,7 +127,6 @@ function Navbar() {
     <>
       <nav className="navbar">
         <div className="nav-main">
-          {/* Logo Section */}
           <div className="logo">
             <Link to="/">
               <img src={Logo} alt="Logo" />
@@ -137,7 +134,6 @@ function Navbar() {
             </Link>
           </div>
 
-          {/* Mobile Menu Button */}
           <button
             className={`mobile-menu-button ${isMobileMenuOpen ? "menu-open" : ""}`}
             onClick={toggleMobileMenu}
@@ -145,8 +141,9 @@ function Navbar() {
             {isMobileMenuOpen ? <AiOutlineClose /> : <AiOutlineMenu />}
           </button>
 
-          {/* Navigation Links */}
-          <ul className={`nav-links ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}>
+          <ul
+            className={`nav-links ${isMobileMenuOpen ? "mobile-menu-open" : ""}`}
+          >
             <li>
               <Link to="/past-papers" onClick={handleDropdownLinkClick}>
                 Past Papers
@@ -158,8 +155,7 @@ function Navbar() {
                 className="navbar-dropdown-toggle"
                 onClick={() => handleDropdownToggle("services")}
               >
-                Services 
-                <AiOutlineDown className="navbar-dropdown-arrow" />
+                Services <AiOutlineDown className="navbar-dropdown-arrow" />
               </span>
               <div
                 className="navbar-dropdown-menu"
@@ -287,8 +283,7 @@ function Navbar() {
                 className="navbar-dropdown-toggle"
                 onClick={() => handleDropdownToggle("generators")}
               >
-                Generators 
-                <AiOutlineDown className="navbar-dropdown-arrow" />
+                Generators <AiOutlineDown className="navbar-dropdown-arrow" />
               </span>
               <div
                 className="navbar-dropdown-menu"
@@ -386,7 +381,7 @@ function Navbar() {
                 className="navbar-dropdown-toggle"
                 onClick={() => handleDropdownToggle("support")}
               >
-                Student Support
+                Student Support{" "}
                 <AiOutlineDown className="navbar-dropdown-arrow" />
               </span>
               <div
@@ -519,7 +514,6 @@ function Navbar() {
                 </div>
               </div>
             </li>
-            
             {isLoggedIn ? (
               <>
                 <li>
