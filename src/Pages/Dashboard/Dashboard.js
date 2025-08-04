@@ -337,6 +337,28 @@ function AcademicDashboard({
     }
   };
 
+  // Function to get user's initials from name or username (copied from ProfilePage)
+  const getUserInitials = (user) => {
+    const displayName = user?.name || user?.username || user?.fullName;
+    if (!displayName) return "U";
+    return displayName
+      .split(" ")
+      .filter((_, index, array) => index === 0 || index === array.length - 1)
+      .map((name) => name[0])
+      .join("")
+      .toUpperCase();
+  };
+  // Function to generate a background color based on the name (copied from ProfilePage)
+  const getAvatarColor = (name) => {
+    if (!name) return "#1a73e8"; // Default color
+    const colors = [
+      "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
+      "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff",
+    ];
+    const charSum = name.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+    return colors[charSum % colors.length];
+  };
+
   return (
     <div className="academic-dashboard">
       <Navbar />
@@ -393,7 +415,7 @@ function AcademicDashboard({
           <div
             className="profile-picture"
             style={{
-              backgroundColor: "#1a73e8",
+              backgroundColor: getAvatarColor(user?.name || user?.username || user?.fullName || ""),
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
@@ -405,7 +427,7 @@ function AcademicDashboard({
               letterSpacing: "1px",
             }}
           >
-            {user?.fullName?.split(" ").map((name) => name[0]).join("").toUpperCase()}
+            {getUserInitials(user)}
           </div>
           <div className="user-info">
             <h1 className="user-name">
