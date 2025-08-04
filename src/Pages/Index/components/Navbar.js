@@ -18,7 +18,8 @@ import profile from "../../../Assets/images/user.png";
 import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
-import { isAuthenticated, getUser, logout as authLogout } from "../../../utils/auth";
+import API_BASE_URL from '../../../config/api';
+import { isAuthenticated, getUser, logout as authLogout, authenticatedFetch } from "../../../utils/auth";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -29,25 +30,26 @@ import { isAuthenticated, getUser, logout as authLogout } from "../../../utils/a
 // };
 
 // Helper function to get user initials from username
-const getUserInitials = (username) => {
-  if (!username) return "U";
+const getUserInitials = (user) => {
+  const displayName = user?.name || user?.username;
+  if (!displayName) return "U";
+  return displayName
+    .split(" ")
+    .filter((_, index, array) => index === 0 || index === array.length - 1)
+    .map((name) => name[0])
+    .join("")
+    .toUpperCase();
+};
 
-  // Split the username by spaces to get first and last name
-  const nameParts = username.split(" ");
-
-  // If there are multiple parts, use first letter of first and last part
-  if (nameParts.length > 1) {
-    return (nameParts[0][0] + nameParts[nameParts.length - 1][0]).toUpperCase();
-  }
-
-  // If no spaces (single name), check for other separators like underscore, dots, etc.
-  const parts = username.split(/[._-]/);
-  if (parts.length > 1) {
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-  }
-
-  // If single word with no separators, use first two letters
-  return username.substring(0, 2).toUpperCase();
+// Function to generate a background color based on the name (copied from ProfilePage)
+const getAvatarColor = (name) => {
+  if (!name) return "#1a73e8"; // Default color
+  const colors = [
+    "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
+    "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff",
+  ];
+  const charSum = name.split("").reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  return colors[charSum % colors.length];
 };
 
 function Navbar() {
@@ -57,40 +59,50 @@ function Navbar() {
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate();
 
+  // Fetch user profile from backend for accurate initials (like ProfilePage)
+  const fetchUserProfile = async () => {
+    try {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setUserData(data);
+        return;
+      }
+    } catch (e) {
+      // fallback below
+    }
+    // fallback to localStorage if fetch fails
+    setUserData(getUser());
+  };
+
   const checkAuthStatus = () => {
-    console.log("🔍 Navbar: Checking JWT authentication status...");
-
     const authStatus = isAuthenticated();
-    const userData = getUser();
-
-    console.log("🔍 Navbar: Auth status:", authStatus);
-    console.log("🔍 Navbar: User data:", userData);
-
     setIsLoggedIn(authStatus);
-    setUserData(userData);
+    if (authStatus) {
+      fetchUserProfile();
+    } else {
+      setUserData(null);
+    }
   };
 
   useEffect(() => {
-    // Check authentication status on component mount
     checkAuthStatus();
-
-    // Listen for authentication state changes
     const handleAuthStateChange = (event) => {
-      console.log("🔍 Navbar: Auth state changed:", event.detail);
       if (event.detail.isAuthenticated) {
+        fetchUserProfile();
         setIsLoggedIn(true);
-        setUserData(event.detail.user);
       } else {
         setIsLoggedIn(false);
         setUserData(null);
       }
     };
-
     window.addEventListener('authStateChanged', handleAuthStateChange);
-
-    // Check authentication status periodically (for token expiration)
     const interval = setInterval(checkAuthStatus, 5 * 60 * 1000);
-
     return () => {
       clearInterval(interval);
       window.removeEventListener('authStateChanged', handleAuthStateChange);
@@ -522,16 +534,14 @@ function Navbar() {
                 </li>
                 <li className="navbaruser-dropdown">
                   <div className="navbaruser-icon">
-                    <div className="navbar-profile-avatar">
+                    <div className="navbar-profile-avatar" style={!userData?.profilePic ? {
+                      backgroundColor: getAvatarColor(userData?.name || userData?.username || "")
+                    } : {}}>
                       {userData?.profilePic ? (
                         <img src={userData.profilePic} alt="Profile" />
                       ) : (
                         <span>
-                          {userData?.name
-                            ? getUserInitials(userData.name)
-                            : userData?.username
-                              ? getUserInitials(userData.username)
-                              : "U"}
+                          {getUserInitials(userData)}
                         </span>
                       )}
                     </div>
