@@ -32,37 +32,37 @@ const FeaturesSection = () => {
         </h1>
         <div className="features-services-grid">
           <FeatureItem
-            href="/past-papers"
+            href="/html/pastpapers.html"
             icon={IoFileTrayFull}
             title="Past Papers"
             description="Practice exams, boost scores, understand concepts, and exam pattern insight."
           />
           <FeatureItem
-            href="/playlists"
+            href="/html/playlist.html"
             icon={IoPlayCircle}
             title="Youtube Playlists"
             description="Organize videos, seamless learning, easy access, curated content, and continuous playback."
           />
           <FeatureItem
-            href="/faculty"
+            href="/html/faculty.html"
             icon={IoPeople}
             title="Faculty Information"
             description="Easily access all the office locations and hours, and faculty contact details."
           />
           <FeatureItem
-            href="/timetable"
+            href="/html/comingsoon.html"
             icon={IoCalendar}
             title="Time Table Generator"
             description="Create personalized schedules, manage class timings, avoid conflicts, and stay organized."
           />
           <FeatureItem
-            href="/support"
+            href="/html/support.html"
             icon={IoHelpCircle}
             title="Student Support"
             description="Access FAQs, find answers, connect with support, and locate key contacts."
           />
           <FeatureItem
-            href="/calculator"
+            href="/html/calculator.html"
             icon={IoCalculator}
             title="GPA Calculator"
             description="Calculate CGPA and SGPA, track academic progress, and plan your goals."

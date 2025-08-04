@@ -42,7 +42,8 @@ const getUserInitials = (user) => {
 };
 
 // Function to generate a background color based on the name (copied from ProfilePage)
-const getAvatarColor = (name) => {
+const getAvatarColor = (user) => {
+  const name = user?.name || user?.username || "";
   if (!name) return "#1a73e8"; // Default color
   const colors = [
     "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
@@ -81,6 +82,7 @@ function Navbar() {
   };
 
   const checkAuthStatus = () => {
+    console.log("🔍 Navbar: Checking JWT authentication status...");
     const authStatus = isAuthenticated();
     setIsLoggedIn(authStatus);
     if (authStatus) {
@@ -91,8 +93,12 @@ function Navbar() {
   };
 
   useEffect(() => {
+    // Check authentication status on component mount
     checkAuthStatus();
+
+    // Listen for authentication state changes
     const handleAuthStateChange = (event) => {
+      console.log("🔍 Navbar: Auth state changed:", event.detail);
       if (event.detail.isAuthenticated) {
         fetchUserProfile();
         setIsLoggedIn(true);
@@ -101,8 +107,12 @@ function Navbar() {
         setUserData(null);
       }
     };
+
     window.addEventListener('authStateChanged', handleAuthStateChange);
+
+    // Check authentication status periodically (for token expiration)
     const interval = setInterval(checkAuthStatus, 5 * 60 * 1000);
+
     return () => {
       clearInterval(interval);
       window.removeEventListener('authStateChanged', handleAuthStateChange);
@@ -535,7 +545,7 @@ function Navbar() {
                 <li className="navbaruser-dropdown">
                   <div className="navbaruser-icon">
                     <div className="navbar-profile-avatar" style={!userData?.profilePic ? {
-                      backgroundColor: getAvatarColor(userData?.name || userData?.username || "")
+                      backgroundColor: getAvatarColor(userData)
                     } : {}}>
                       {userData?.profilePic ? (
                         <img src={userData.profilePic} alt="Profile" />
