@@ -194,7 +194,7 @@
 }
 
 .modal-form-group input,
-.modal-form-group textarea {
+.modal-form-group textarea {                 
   width: 100%;
   padding: 12px;
   border: 2px solid #e5e7eb;

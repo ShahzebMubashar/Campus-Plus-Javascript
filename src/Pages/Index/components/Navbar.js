@@ -18,7 +18,7 @@ import profile from "../../../Assets/images/user.png";
 import notifications from "../../../Assets/images/active.png";
 import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
-import { isAuthenticated, getUser, getUserFromToken, logout as authLogout } from "../../../utils/auth";
+import { isAuthenticated, getUser, logout as authLogout } from "../../../utils/auth";
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -61,8 +61,7 @@ function Navbar() {
     console.log("🔍 Navbar: Checking JWT authentication status...");
 
     const authStatus = isAuthenticated();
-    // Use JWT for user data (secure) with fallback to localStorage (legacy)
-    const userData = getUserFromToken() || getUser();
+    const userData = getUser();
 
     console.log("🔍 Navbar: Auth status:", authStatus);
     console.log("🔍 Navbar: User data:", userData);
@@ -183,23 +182,23 @@ function Navbar() {
                     </Link>
                   </h4>
                   <p>
-                    <Link to="/past-papers/10" onClick={handleDropdownLinkClick}>
-                      Object Oriented Programming
+                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
+                      Data Structures (DS)
                     </Link>
                   </p>
                   <p>
-                    <Link to="/past-papers/19" onClick={handleDropdownLinkClick}>
-                      Data Structures
+                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
+                      Calculus (Cal)
                     </Link>
                   </p>
                   <p>
-                    <Link to="/past-papers/5" onClick={handleDropdownLinkClick}>
-                      Applied Physics
+                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
+                      Theory of Automata (TOA)
                     </Link>
                   </p>
                   <p>
-                    <Link to="/past-papers/18" onClick={handleDropdownLinkClick}>
-                      Discrete Structures
+                    <Link to="/past-papers" onClick={handleDropdownLinkClick}>
+                      Assembly Language (COAL)
                     </Link>
                   </p>
                 </div>
@@ -484,11 +483,7 @@ function Navbar() {
                 </div>
                 <div className="navbar-dropdown-section">
                   <AiOutlineHome className="navbar-dropdown-icon" />
-                  <h4>
-                    <Link to="/about-campus-plus" onClick={handleDropdownLinkClick}>
-                      About Us
-                    </Link>
-                  </h4>
+                  <h4>About Us</h4>
                   <p>
                     <Link to="/ourevents" onClick={handleDropdownLinkClick}>
                       Our Events
@@ -544,38 +539,71 @@ function Navbar() {
 
                   <div className="navbaruser-dropdown-menu">
                     {/* Section 1 */}
-                    <Link to="/profile" className="profile-link">
-                      <img src={profile} alt="Profile" style={{ width: "18px", marginRight: "8px" }} />
-                      <span className="profile-link-text">My Profile</span>
+                    <Link to="/profile">
+                      <img
+                        src={profile}
+                        alt="Profile"
+                        style={{ width: "18px", marginRight: "8px" }}
+                      />
+                      My Profile
                     </Link>
-                    <Link to="/transcript" className="profile-link">
-                      <img src={transcript} alt="Transcript" style={{ width: "18px", marginRight: "8px" }} />
-                      <span className="profile-link-text">Transcript</span>
+                    <Link to="/transcript">
+                      <img
+                        src={transcript}
+                        alt="Transcript"
+                        style={{ width: "18px", marginRight: "8px" }}
+                      />
+                      Transcript
                     </Link>
-                    <Link to="/support" className="profile-link">
-                      <img src={support} alt="Help" style={{ width: "20px", marginRight: "8px" }} />
-                      <span className="profile-link-text">Help</span>
+
+                    <Link to="/support">
+                      <img
+                        src={support}
+                        alt="Help"
+                        style={{ width: "20px", marginRight: "8px" }}
+                      />
+                      Help
                     </Link>
+
                     <hr className="dropdown-divider" />
+
                     {/* Section 2 */}
-                    <Link to="/notifications" className="profile-link">
-                      <img src={notifications} alt="Notifications" style={{ width: "18px", marginRight: "8px" }} />
-                      <span className="profile-link-text">Notifications</span>
+                    <Link to="/notifications">
+                      <img
+                        src={notifications}
+                        alt="Notifications"
+                        style={{ width: "18px", marginRight: "8px" }}
+                      />
+                      Notifications
                     </Link>
-                    <Link to="/chatroom" className="profile-link">
-                      <img src={message} alt="Messages" style={{ width: "18px", marginRight: "8px" }} />
-                      <span className="profile-link-text">Messages</span>
+                    <Link to="/chatroom">
+                      <img
+                        src={message}
+                        alt="Messages"
+                        style={{ width: "18px", marginRight: "8px" }}
+                      />
+                      Messages
                     </Link>
+
                     <hr className="dropdown-divider" />
+
                     {/* Section 3 */}
-                    <Link to="/settings" className="profile-link">
-                      <img src={settings} alt="Settings" style={{ width: "18px", marginRight: "8px" }} />
-                      <span className="profile-link-text">Settings</span>
+                    <Link to="/settings">
+                      <img
+                        src={settings}
+                        alt="Settings"
+                        style={{ width: "18px", marginRight: "8px" }}
+                      />
+                      Settings
                     </Link>
-                    <button onClick={handleLogout} className="profile-link">
-                      <img src={logout} alt="Logout" style={{ width: "18px", marginRight: "8px" }} />
-                      <span className="profile-link-text">Log out</span>
-                    </button>
+                    <span onClick={handleLogout} style={{ cursor: "pointer" }}>
+                      <img
+                        src={logout}
+                        alt="Logout"
+                        style={{ width: "18px", marginRight: "8px" }}
+                      />
+                      Log out
+                    </span>
                   </div>
                 </li>
               </>
