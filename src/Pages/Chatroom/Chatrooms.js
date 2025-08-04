@@ -22,6 +22,7 @@ export default function Chatrooms() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(true);
+  const [pendingBack, setPendingBack] = useState(false); // <-- add this
 
   useEffect(() => {
     // Check authentication first
@@ -43,13 +44,22 @@ export default function Chatrooms() {
 
   // Handle roomId parameter from URL
   useEffect(() => {
-    if (roomId && rooms.length > 0 && isAuthenticated) {
+    // Only select a room if roomId is present, rooms are loaded, user is authenticated,
+    // and activeRoom is not null (prevents re-selecting after navigating back)
+    if (roomId && rooms.length > 0 && isAuthenticated && activeRoom === null) {
       const room = rooms.find(r => r.roomid === parseInt(roomId));
       if (room) {
         handleRoomSelect(room, false); // false to prevent navigation
       }
     }
-  }, [roomId, rooms, isAuthenticated]);
+  }, [roomId, rooms, isAuthenticated, activeRoom]);
+
+  // Reset activeRoom if URL is /chatroom (no roomId)
+  useEffect(() => {
+    if (!roomId && activeRoom !== null) {
+      setActiveRoom(null);
+    }
+  }, [roomId]);
 
   useEffect(() => {
     if (!isSidebarOpen) return;
@@ -86,6 +96,13 @@ export default function Chatrooms() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    if (pendingBack && activeRoom === null) {
+      navigate("/chatroom");
+      setPendingBack(false);
+    }
+  }, [pendingBack, activeRoom, navigate]);
 
   const toggleSidebar = (e) => {
     if (e) e.stopPropagation();
@@ -191,7 +208,7 @@ export default function Chatrooms() {
                 room={activeRoom}
                 onBack={() => {
                   setActiveRoom(null);
-                  navigate("/chatroom");
+                  setPendingBack(true);
                 }}
                 onLeave={async () => {
                   await handleLeaveRoom(activeRoom.roomid);
