@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar.js";
 import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
@@ -11,6 +12,8 @@ import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/au
 
 
 export default function Chatrooms() {
+  const { roomId } = useParams();
+  const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
   const [joinedRooms, setJoinedRooms] = useState([]);
   const [activeRoom, setActiveRoom] = useState(null);
@@ -37,6 +40,16 @@ export default function Chatrooms() {
 
     checkAuthStatus();
   }, []);
+
+  // Handle roomId parameter from URL
+  useEffect(() => {
+    if (roomId && rooms.length > 0 && isAuthenticated) {
+      const room = rooms.find(r => r.roomid === parseInt(roomId));
+      if (room) {
+        handleRoomSelect(room, false); // false to prevent navigation
+      }
+    }
+  }, [roomId, rooms, isAuthenticated]);
 
   useEffect(() => {
     if (!isSidebarOpen) return;
@@ -119,7 +132,7 @@ export default function Chatrooms() {
     }
   };
 
-  const handleRoomSelect = async (room) => {
+  const handleRoomSelect = async (room, shouldNavigate = true) => {
     // If room is not joined, join it first
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
@@ -138,12 +151,17 @@ export default function Chatrooms() {
       }
     }
     setActiveRoom(room);
+
+    // Navigate to room URL if shouldNavigate is true
+    if (shouldNavigate) {
+      navigate(`/chatroom/${room.roomid}`);
+    }
   };
 
   return (
     <div className="chatroom-main-top">
       <div className="chatroom-app">
-        <Navbar />
+
         {/* Mobile Menu Toggle Button */}
         {!isSidebarOpen && isMenuVisible && (
           <button
@@ -171,10 +189,14 @@ export default function Chatrooms() {
             {activeRoom ? (
               <RoomView
                 room={activeRoom}
-                onBack={() => setActiveRoom(null)}
+                onBack={() => {
+                  setActiveRoom(null);
+                  navigate("/chatroom");
+                }}
                 onLeave={async () => {
                   await handleLeaveRoom(activeRoom.roomid);
                   setActiveRoom(null);
+                  navigate("/chatroom");
                   fetchJoinedRooms();
                 }}
               />

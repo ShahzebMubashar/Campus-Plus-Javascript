@@ -85,6 +85,7 @@ function AppRoutes() {
         <Route path="/map" element={<Map />} />
         <Route path="/calculator" element={<Calculator />} />
         <Route path="/chatroom" element={<Chatroom />} />
+        <Route path="/chatroom/:roomId" element={<Chatroom />} />
         <Route path="/past-papers/:courseId" element={<PastPapersDetails />} />
         <Route path="/datesheet" element={<Datesheet />} />
         <Route path="/dashboard" element={<Dashboard />} />

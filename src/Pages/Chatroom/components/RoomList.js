@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import API_BASE_URL from "../../../config/api.js";
 import { authenticatedFetch } from "../../../utils/auth";
+import { FaUsers, FaPlus } from "react-icons/fa";
+import "./RoomList.css";
 
 export default function RoomList({ rooms, onJoinRoom }) {
   const [showCreateRoomForm, setShowCreateRoomForm] = useState(false);
@@ -63,67 +65,76 @@ export default function RoomList({ rooms, onJoinRoom }) {
     <div className="room-list-container">
       {/* Header Section */}
       <div className="room-list-header">
-        <div className="room-list-header-stack">
+        <div className="room-list-header-content">
           <div className="room-list-header-left">
-            <h1 className="room-list-title">Chat Rooms</h1>
-            <p className="room-list-subtitle">
-              Browse and join chat rooms to start discussing
-            </p>
+            <FaUsers className="room-list-header-icon" />
+            <h1 className="room-list-title">Rooms</h1>
+            <span className="room-list-count-badge">{filteredRooms.length}</span>
+          </div>
+          <div className="room-list-header-right">
+            <div className="room-list-search">
+              <input
+                type="text"
+                placeholder="Search rooms..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <span className="room-list-search-icon">🔍</span>
+            </div>
           </div>
         </div>
-        {userRole === "Admin" && (
-          <button
-            className="create-room-button"
-            onClick={() => setShowCreateRoomForm(true)}
-          >
-            <span style={{ fontSize: "18px" }}>+</span> Create Room
-          </button>
-        )}
-        <div className="room-list-search">
-          <input
-            type="text"
-            placeholder="Search rooms..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <span className="room-list-search-icon">🔍</span>
+        <div className="room-list-description">
+          <div className="room-list-description-content">
+            <p>Connect with your peers and join study groups, project discussions, or general conversations. Select a room below to start chatting!</p>
+            {userRole === "Admin" && (
+              <button
+                className="create-room-button"
+                onClick={() => setShowCreateRoomForm(true)}
+              >
+                <FaPlus className="create-room-button-icon" /> Start new chat
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
       {/* Create Room Modal */}
       {showCreateRoomForm && (
-        <div className="create-room-modal">
-          <div className="create-room-modal-content">
-            <h2 className="create-room-modal-title">Create New Room</h2>
-            <input
-              className="create-room-input"
-              type="text"
-              placeholder="Room Name"
-              value={newRoomName}
-              onChange={(e) => setNewRoomName(e.target.value)}
-            />
-            <textarea
-              className="create-room-textarea"
-              placeholder="Room Description"
-              value={newRoomDescription}
-              onChange={(e) => setNewRoomDescription(e.target.value)}
-            />
-            <div className="modal-buttons">
-              <button
-                className="modal-button modal-button-cancel"
-                onClick={() => setShowCreateRoomForm(false)}
-              >
-                Cancel
-              </button>
-              <button
-                className="modal-button modal-button-create"
-                onClick={handleCreateRoom}
-              >
-                Create Room
-              </button>
+        <>
+          <div className="modal-overlay" onClick={() => setShowCreateRoomForm(false)}></div>
+          <div className="create-room-modal">
+            <div className="create-room-modal-content">
+              <h2 className="create-room-modal-title">Create New Room</h2>
+              <input
+                className="create-room-input"
+                type="text"
+                placeholder="Room Name"
+                value={newRoomName}
+                onChange={(e) => setNewRoomName(e.target.value)}
+              />
+              <textarea
+                className="create-room-textarea"
+                placeholder="Room Description"
+                value={newRoomDescription}
+                onChange={(e) => setNewRoomDescription(e.target.value)}
+              />
+              <div className="modal-buttons">
+                <button
+                  className="modal-button modal-button-cancel"
+                  onClick={() => setShowCreateRoomForm(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="modal-button modal-button-create"
+                  onClick={handleCreateRoom}
+                >
+                  Create Room
+                </button>
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
 
       {/* Rooms Grid */}
@@ -146,14 +157,7 @@ export default function RoomList({ rooms, onJoinRoom }) {
             </div>
           ))
         ) : (
-          <div
-            style={{
-              gridColumn: "1/-1",
-              textAlign: "center",
-              padding: "40px",
-              color: "#666",
-            }}
-          >
+          <div className="no-rooms-message">
             No rooms found matching your search.
           </div>
         )}
