@@ -2,7 +2,7 @@
 
 .content {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #fff;
   min-height: 70vh;
   display: flex;
   align-items: center;
@@ -20,6 +20,7 @@
     background: radial-gradient(ellipse, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
     z-index: 1;
   }
+
   &::after {
     content: '';
     position: absolute;
@@ -34,7 +35,8 @@
   .content-container {
     max-width: 1400px;
     max-width: 80%;
-    margin: 2% auto; /* Reduced gap */
+    margin: 2% auto;
+    /* Reduced gap */
     padding: 0 1.5rem;
     text-align: center;
     position: relative;
@@ -42,22 +44,24 @@
 
     .text {
       padding: 0;
-      
+
       h1 {
         font-size: 3.5rem;
         font-weight: 800;
         line-height: 1.2;
-        margin-bottom: 12px; /* Reduced gap */
+        margin-bottom: 12px;
+        /* Reduced gap */
         color: #0f172a;
         letter-spacing: -0.025em;
-        text-shadow: 0 4px 24px rgba(59,130,246,0.08); /* Soft shadow for depth */
+        text-shadow: 0 4px 24px rgba(59, 130, 246, 0.08);
+        /* Soft shadow for depth */
         opacity: 0;
         animation: fadeInUp 0.7s 0.1s both;
-        
+
         span {
           display: inline-block;
         }
-        
+
         .highlighted {
           background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
           -webkit-background-clip: text;
@@ -68,58 +72,76 @@
           position: relative;
         }
       }
-      
+
       p {
         font-size: 1.25rem;
         color: #64748b;
         line-height: 1.7;
-        margin: 0 auto 28px; /* Reduced gap */
+        margin: 0 auto 28px;
+        /* Reduced gap */
         font-weight: 400;
         opacity: 0;
         animation: fadeInUp 0.7s 0.3s both;
         text-align: center;
       }
     }
-    
+
     .button-container {
       display: flex;
       justify-content: center;
       gap: 20px;
-      margin-top: 18px; /* Reduced gap */
+      margin-top: 18px;
+      /* Reduced gap */
       opacity: 0;
       animation: fadeInUp 0.7s 0.5s both;
-      
+
       .get-started-btn {
-        background: black; /* Ensure black background */
-        color: white; /* White text */
-        padding: 14px 28px; /* Adjust padding for balanced look */
-        font-size: 1rem; /* Ensure readable font size */
-        font-weight: 600; /* Maintain bold text */
-        border-radius: 50px; /* Rounded button */
-        display: inline-flex; /* Align icon and text */
-        align-items: center; /* Center alignment */
-        gap: 8px; /* Space between text and icon */
-        text-decoration: none; /* Remove underline */
-        transition: all 0.3s ease; /* Smooth hover effect */
+        background: black;
+        /* Ensure black background */
+        color: white;
+        /* White text */
+        padding: 14px 28px;
+        /* Adjust padding for balanced look */
+        font-size: 1rem;
+        /* Ensure readable font size */
+        font-weight: 600;
+        /* Maintain bold text */
+        border-radius: 50px;
+        /* Rounded button */
+        display: inline-flex;
+        /* Align icon and text */
+        align-items: center;
+        /* Center alignment */
+        gap: 8px;
+        /* Space between text and icon */
+        text-decoration: none;
+        /* Remove underline */
+        transition: all 0.3s ease;
+        /* Smooth hover effect */
         position: relative;
         overflow: hidden;
-        box-shadow: 
+        box-shadow:
           0 4px 6px -1px rgba(0, 0, 0, 0.1),
           0 2px 4px -1px rgba(0, 0, 0, 0.06),
           0 0 0 1px rgba(255, 255, 255, 0.05);
-        
+
         i {
-          font-size: 1.2rem; /* Icon size */
-          transition: transform 0.3s ease; /* Smooth icon movement */
+          font-size: 1.2rem;
+          /* Icon size */
+          transition: transform 0.3s ease;
+          /* Smooth icon movement */
         }
-        
+
         &:hover {
-          transform: translateY(-2px); /* Slight lift on hover */
-          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* Subtle shadow */
+          transform: translateY(-2px);
+          /* Slight lift on hover */
+          box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+          /* Subtle shadow */
         }
-        
+
         &:active {
-          transform: translateY(0); /* Reset on click */
+          transform: translateY(0);
+          /* Reset on click */
         }
       }
     }
@@ -136,6 +158,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -146,6 +169,7 @@
   from {
     width: 0%;
   }
+
   to {
     width: 80%;
   }
@@ -154,23 +178,23 @@
 /* Consistent Responsive Design */
 @media (max-width: 1024px) {
   .content {
-  
-    
+
+
     .content-container {
       padding: 0 30px;
-      
+
       .text h1 {
         font-size: 3rem;
-        
+
         .highlighted {
           font-size: 3.5rem;
         }
       }
-      
+
       .text p {
         font-size: 1.1rem;
       }
-      
+
       .button-container .get-started-btn {
         padding: 14px 28px;
         font-size: 1rem;
@@ -181,27 +205,27 @@
 
 @media (max-width: 768px) {
   .content {
-    
+
     .content-container {
       padding: 0 20px;
-      
+
       .text h1 {
         font-size: 2.5rem;
         margin-bottom: 10px;
-        
+
         .highlighted {
           font-size: 3rem;
         }
       }
-      
+
       .text p {
         font-size: 1rem;
         margin-bottom: 18px;
       }
-      
+
       .button-container {
         margin-top: 16px;
-        
+
         .get-started-btn {
           padding: 12px 24px;
           font-size: 0.95rem;
@@ -213,28 +237,28 @@
 
 @media (max-width: 480px) {
   .content {
-    
+
     .content-container {
       padding: 0 16px;
-      
+
       .text h1 {
         font-size: 2rem;
         margin-bottom: 8px;
-        
-        
+
+
         .highlighted {
           font-size: 2.5rem;
         }
       }
-      
+
       .text p {
         font-size: 0.95rem;
         margin-bottom: 12px;
       }
-      
+
       .button-container {
         margin-top: 10px;
-        
+
         .get-started-btn {
           padding: 10px 20px;
           font-size: 0.9rem;
