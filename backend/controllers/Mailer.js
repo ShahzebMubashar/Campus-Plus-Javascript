@@ -73,5 +73,6 @@ const batchMailer = async (request, response) => {
 };
 
 module.exports = {
-    batchMailer
+    batchMailer,
+    transporter,
 };
