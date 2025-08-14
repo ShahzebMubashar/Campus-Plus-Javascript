@@ -1,3 +1,4 @@
+const transporter = require("../controllers/Mailer").transporter;
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -270,6 +271,11 @@ const createRoom = async (request, response) => {
     );
 
     await client.query("COMMIT");
+
+    transporter.sendMail({
+      from: "CampusPlus",
+      
+    })
 
     return response.status(201).json(`Room: ${roomName} created successfully`);
   } catch (error) {
