@@ -1,4 +1,6 @@
 const transporter = require("../controllers/Mailer").transporter;
+const emailSelection = require("../controllers/Mailer").getValidEmails;
+const { get } = require("react-scroll/modules/mixins/scroller");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -274,8 +276,10 @@ const createRoom = async (request, response) => {
 
     transporter.sendMail({
       from: "CampusPlus",
-      
-    })
+      to: emailSelection(),
+      subject: `New Chatroom Created: ${roomName}`,
+      text: `Hey there! A new chatroom named ${roomName} has been created. Join now to start chatting! We look forward to seeing you there!\n\nRegards,\nTeam CampusPlus`,
+    });
 
     return response.status(201).json(`Room: ${roomName} created successfully`);
   } catch (error) {
