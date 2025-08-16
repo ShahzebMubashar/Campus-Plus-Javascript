@@ -1,7 +1,10 @@
+const { get } = require('react-scroll/modules/mixins/scroller');
 const pool = require('../config/database');
 
 const generateNotification = async (request, response) => {
-    const { user: { userid }, body: { notification, title } } = request;
+    const { user: { userid, role }, body: { notification, title } } = request;
+
+    // if (role !== "Admin") return response.status(403).json("Only admins can generate notifications");
 
     if (!notification || !title) return response.status(400).json("Notification and title are required");
 
@@ -30,7 +33,22 @@ const generateNotification = async (request, response) => {
     }
 }
 
+const getNotifications = async (request, response) => {
+    try {
+        const query = `Select * from Notifications order by posted_at desc`;
+
+        const res = await pool.query(query);
+
+        if (!res.rowCount) return response.status(200).json("No notifications found");
+
+        return response.status(200).json(res.rows);
+    } catch (error) {
+        console.error("Error fetching notifications:", error);
+        return response.status(500).json("Internal server error");
+    }
+}
 
 module.exports = {
     generateNotification,
+    getNotifications,
 };
