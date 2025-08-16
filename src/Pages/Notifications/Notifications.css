@@ -320,3 +320,20 @@
     gap: 5px;
   }
 }
+
+.delete-notification-btn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    color: #ef4444;
+    opacity: 0.7;
+    transition: opacity 0.2s;
+}
+
+.delete-notification-btn:hover {
+    opacity: 1;
+}

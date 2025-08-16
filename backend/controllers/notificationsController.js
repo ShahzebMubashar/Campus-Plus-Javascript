@@ -19,7 +19,10 @@ const generateNotification = async (request, response) => {
 
         const result = await client.query(query, values);
 
-        if (!result.rowCount) return response.status(500).json("Failed to create notification");
+        if (!result.rowCount) {
+            await client.query("ROLLBACK");
+            return response.status(500).json("Failed to create notification");
+        }
 
         await client.query("COMMIT");
 
@@ -48,7 +51,47 @@ const getNotifications = async (request, response) => {
     }
 }
 
+const deleteNotification = async (request, response) => {
+    const { params: { notificationid }, user: { role } } = request;
+    console.log("\n\n\nDeleting notification with ID:", notificationid);
+
+    if (!notificationid) return response.status(400).json("Notification ID is required");
+
+    const client = await pool.connect().then(console.log("Connected to database for deleting notification"));
+
+    if (role !== "Admin") return response.status(403).json("Only admins can delete notifications");
+    console.log("Admin role confirmed for deleting notification");
+    try {
+        const query = `Delete from Notifications where notificationid = $1 returning *`;
+
+        const values = [notificationid];
+
+        await client.query("BEGIN");
+
+        const result = await client.query(query, values);
+
+        if (!result.rowCount) {
+            await client.query("ROLLBACK");
+            console.log("Notification not found for deletion");
+            return response.status(404).json("Notification not found");
+        }
+
+        console.log("Notification deleted successfully:", result.rows[0]);
+        await client.query("COMMIT");
+
+        return response.status(200).json("Notification deleted successfully");
+    } catch (error) {
+        console.error("Error deleting notification:", error);
+        await client.query("ROLLBACK");
+        return response.status(500).json("Internal server error");
+    } finally {
+        client.release();
+    }
+}
+
+
 module.exports = {
     generateNotification,
     getNotifications,
+    deleteNotification,
 };

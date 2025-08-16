@@ -62,50 +62,25 @@ function Notifications() {
         }
     };
 
-    const markAsRead = async (notificationId) => {
+    const deleteNotification = async (notificationId) => {
+        console.log("Deleting notification with ID:", notificationId);
         try {
             const res = await authenticatedFetch(
-                `${API_BASE_URL}/user/notifications/${notificationId}/read`,
-                {
-                    method: "PUT",
-                }
+                `${API_BASE_URL}/notifications/delete/${notificationId}`,
+                { method: "DELETE" }
             );
 
-            if (!res.ok) {
-                throw new Error("Failed to mark notification as read");
-            }
+            if (!res.ok) throw new Error("Failed to delete notification");
 
-            setNotifications(notifications.map(notification =>
-                notification.id === notificationId
-                    ? { ...notification, isRead: true }
-                    : notification
-            ));
+            setNotifications(prevNotifications =>
+                prevNotifications.filter(n => n.notificationid !== notificationId)
+            );
         } catch (error) {
-            console.error("Error marking notification as read:", error);
+            console.error("Error deleting notification:", error);
+            alert("Failed to delete notification");
         }
     };
 
-    const markAllAsRead = async () => {
-        try {
-            const res = await authenticatedFetch(
-                `${API_BASE_URL}/user/notifications/mark-all-read`,
-                {
-                    method: "PUT",
-                }
-            );
-
-            if (!res.ok) {
-                throw new Error("Failed to mark all notifications as read");
-            }
-
-            setNotifications(notifications.map(notification => ({
-                ...notification,
-                isRead: true
-            })));
-        } catch (error) {
-            console.error("Error marking all notifications as read:", error);
-        }
-    };
 
     const handleGenerateNotification = async () => {
         try {
@@ -113,34 +88,17 @@ function Notifications() {
                 `${API_BASE_URL}/notifications/generate`,
                 {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
+                    headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        notification: newNotification.message,
                         title: newNotification.title,
-                        // Include other fields if your backend supports them
-                        // type: newNotification.type,
-                        // course: newNotification.course
+                        notification: newNotification.message,
                     }),
                 }
             );
 
-            if (!res.ok) {
-                throw new Error("Failed to generate notification");
-            }
+            if (!res.ok) throw new Error("Failed to generate notification");
 
-            const data = await res.json();
-            // Add the new notification to the beginning of the array
-            setNotifications([{
-                id: data.id || Date.now(), // use the ID from response or fallback
-                title: data.title || newNotification.title,
-                message: data.notification || newNotification.message,
-                type: data.type || newNotification.type,
-                course: data.course || newNotification.course,
-                isRead: false,
-                createdAt: data.posted_at || new Date().toISOString()
-            }, ...notifications]);
+            await fetchNotifications();
 
             setShowGenerateForm(false);
             setNewNotification({
@@ -154,6 +112,8 @@ function Notifications() {
             alert("Failed to generate notification");
         }
     };
+
+
 
     useEffect(() => {
         const checkAuthAndFetchData = async () => {
@@ -248,25 +208,15 @@ function Notifications() {
                 <section className="notifications-section">
                     <div className="section-header">
                         <h2>🔔 Notifications</h2>
-                        <div style={{ display: "flex", gap: "10px" }}>
-                            {notifications.length > 0 && (
-                                <button
-                                    className="mark-all-read-btn"
-                                    onClick={markAllAsRead}
-                                >
-                                    Mark all as read
-                                </button>
-                            )}
-                            {user.isAdmin && (
-                                <button
-                                    className="mark-all-read-btn"
-                                    style={{ backgroundColor: "#10b981" }}
-                                    onClick={() => setShowGenerateForm(!showGenerateForm)}
-                                >
-                                    {showGenerateForm ? "Cancel" : "Generate Notification"}
-                                </button>
-                            )}
-                        </div>
+                        {user.isAdmin && (
+                            <button
+                                className="mark-all-read-btn"
+                                style={{ backgroundColor: "#10b981" }}
+                                onClick={() => setShowGenerateForm(!showGenerateForm)}
+                            >
+                                {showGenerateForm ? "Cancel" : "Generate Notification"}
+                            </button>
+                        )}
                     </div>
 
                     {showGenerateForm && user.isAdmin && (
@@ -356,8 +306,7 @@ function Notifications() {
                             {notifications.map((notification, index) => (
                                 <div
                                     key={notification.id || index}
-                                    className={`notification-card ${notification.isRead ? "read" : "unread"}`}
-                                    onClick={() => !notification.isRead && markAsRead(notification.id)}
+                                    className="notification-card"
                                 >
                                     <div className="notification-icon">
                                         {notification.type === "announcement" && "📢"}
@@ -368,7 +317,6 @@ function Notifications() {
                                     <div className="notification-content">
                                         <h3 className="notification-title">{notification.title}</h3>
                                         <p className="notification-message">
-                                            {/* Use either notification.notification or notification.message */}
                                             {notification.notification || notification.message}
                                         </p>
                                         <div className="notification-meta">
@@ -382,8 +330,13 @@ function Notifications() {
                                             )}
                                         </div>
                                     </div>
-                                    {!notification.isRead && (
-                                        <div className="unread-indicator"></div>
+                                    {user.isAdmin && (
+                                        <button
+                                            className="delete-notification-btn"
+                                            onClick={() => deleteNotification(notification.notificationid)}
+                                        >
+                                            🗑️
+                                        </button>
                                     )}
                                 </div>
                             ))}
