@@ -72,6 +72,28 @@ const batchMailer = async (request, response) => {
     }
 };
 
+async function getValidEmails() {
+    console.log('\n\n\nFUNCTION CALLED TO CHECK VALID EMAILS\n\n\n');
+    const client = await pool.connect();
+
+    try {
+        const result = await client.query("Select * from ViewUserEmails");
+
+        if (!result.rowCount) return [];
+
+        const emails = result.rows.map(row => row.email);
+
+        return emails.filter(email => isValidEmail(email));
+    } catch (error) {
+        console.error("Error fetching valid emails:", error.message);
+    } finally {
+        client.release();
+    }
+} 
+
 module.exports = {
-    batchMailer
+    batchMailer,
+    getValidEmails,
+    isValidEmail,
+    transporter,
 };

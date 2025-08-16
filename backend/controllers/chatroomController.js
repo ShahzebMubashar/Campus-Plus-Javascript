@@ -1,3 +1,6 @@
+const transporter = require("../controllers/Mailer").transporter;
+const getValidEmails = require("../controllers/Mailer").getValidEmails;
+// const { get } = require("react-scroll/modules/mixins/scroller");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -257,25 +260,79 @@ const createRoom = async (request, response) => {
   try {
     await client.query("BEGIN");
 
-    let res = await client.query(`Select * from Rooms where name = $1`, [
+    let res = await client.query(`SELECT * FROM Rooms WHERE name = $1`, [
       roomName,
     ]);
 
     if (res.rowCount) return response.status(400).json("Room already exists");
 
     res = await client.query(
-      `Insert into Rooms (name, description, created_at, created_by)
-      values ($1, $2, current_timestamp, $3)`,
+      `INSERT INTO Rooms (name, description, created_at, created_by)
+      VALUES ($1, $2, current_timestamp, $3) RETURNING *`,
       [roomName, description, userid]
     );
 
     await client.query("COMMIT");
 
-    return response.status(201).json(`Room: ${roomName} created successfully`);
+    //  Commenting out the mailer for create room
+
+    // process.nextTick(async () => {
+    //   try {
+    //     const emailList = await getValidEmails();
+    //     if (!emailList.length) {
+    //       console.log("No valid emails found for notification");
+    //       return;
+    //     }
+
+    //     const emailResults = await Promise.allSettled(
+    //       emailList.map(async (email) => {
+    //         try {
+    //           await transporter.sendMail({
+    //             from: `"Campus Plus" <${process.env.EMAIL_USER}>`,
+    //             to: email,
+    //             subject: 'New Room Created: ' + roomName,
+    //             text: `Hello!\n\nA new room "${roomName}" has been created. Join now to participate in discussions.\n\nDescription: ${description}\n\nWe look forward to seeing you there!\n\nRegards,\nCampus Plus Team`,
+    //             html: `
+    //               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    //                 <h2 style="color: #2c3e50;">New Room: ${roomName}</h2>
+    //                 <p>Hello!</p>
+    //                 <p>A new discussion room has been created:</p>
+    //                 <p><strong>${roomName}</strong></p>
+    //                 <p>${description}</p>
+    //                 <p>Join now to participate in discussions.</p>
+    //                 <hr>
+    //                 <p style="color: #7f8c8d;">Regards,<br>Campus Plus Team</p>
+    //               </div>
+    //             `
+    //           });
+    //           // return { email, status: 'success' };
+    //         } catch (err) {
+    //           console.error(`Failed to send email to ${email}:`, err.message);
+    //           // return { email, status: 'failed', error: err.message };
+    //         }
+    //       })
+    //     );
+
+    //     const successful = emailResults.filter(r => r.status === 'fulfilled' && r.value.status === 'success');
+    //     console.log(`Sent ${successful.length}/${emailList.length} notifications successfully`);
+    //   } catch (err) {
+    //     console.error("Error in email notification background process:", err);
+    //   }
+    // });
+
+    return response.status(201).json({
+      success: true,
+      message: `Room "${roomName}" created successfully`,
+      roomId: res.rows[0]?.id
+    });
   } catch (error) {
     console.error("Create room error:", error.message);
     await client.query("ROLLBACK");
-    return response.status(500).json("Server Error");
+    return response.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message
+    });
   } finally {
     if (client) client.release();
   }

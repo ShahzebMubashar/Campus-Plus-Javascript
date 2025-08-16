@@ -17,6 +17,7 @@ const transcriptRoute = require("../routes/transcriptRoutes");
 const emailRoute = require("../routes/emailRoutes");
 const userRoutes = require("../routes/userRoutes");
 const chatroomController = require("../controllers/chatroomController");
+const notificationRoutes = require("../routes/notificationRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -100,6 +101,7 @@ app.use("/Courses", courseRoutes);
 app.use("/Chatrooms", chatroomRoute);
 app.use("/Transcripts", transcriptRoute);
 app.use("/api/email", emailRoute);
+app.use("/notifications", notificationRoutes);
 
 app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
