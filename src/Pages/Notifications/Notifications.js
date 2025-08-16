@@ -46,7 +46,7 @@ function Notifications() {
 
     const fetchNotifications = async () => {
         try {
-            const res = await authenticatedFetch(`${API_BASE_URL}/user/notifications`, {
+            const res = await authenticatedFetch(`${API_BASE_URL}/notifications`, {
                 method: "GET",
             });
 
@@ -55,9 +55,10 @@ function Notifications() {
             }
 
             const data = await res.json();
-            setNotifications(data);
+            setNotifications(Array.isArray(data) ? data : []);
         } catch (error) {
             console.error("Error fetching notifications:", error);
+            setNotifications([]);
         }
     };
 
@@ -118,6 +119,9 @@ function Notifications() {
                     body: JSON.stringify({
                         notification: newNotification.message,
                         title: newNotification.title,
+                        // Include other fields if your backend supports them
+                        // type: newNotification.type,
+                        // course: newNotification.course
                     }),
                 }
             );
@@ -127,7 +131,17 @@ function Notifications() {
             }
 
             const data = await res.json();
-            setNotifications([data, ...notifications]);
+            // Add the new notification to the beginning of the array
+            setNotifications([{
+                id: data.id || Date.now(), // use the ID from response or fallback
+                title: data.title || newNotification.title,
+                message: data.notification || newNotification.message,
+                type: data.type || newNotification.type,
+                course: data.course || newNotification.course,
+                isRead: false,
+                createdAt: data.posted_at || new Date().toISOString()
+            }, ...notifications]);
+
             setShowGenerateForm(false);
             setNewNotification({
                 title: "",
@@ -137,6 +151,7 @@ function Notifications() {
             });
         } catch (error) {
             console.error("Error generating notification:", error);
+            alert("Failed to generate notification");
         }
     };
 
@@ -352,10 +367,13 @@ function Notifications() {
                                     </div>
                                     <div className="notification-content">
                                         <h3 className="notification-title">{notification.title}</h3>
-                                        <p className="notification-message">{notification.message}</p>
+                                        <p className="notification-message">
+                                            {/* Use either notification.notification or notification.message */}
+                                            {notification.notification || notification.message}
+                                        </p>
                                         <div className="notification-meta">
                                             <span className="notification-time">
-                                                {new Date(notification.createdAt).toLocaleString()}
+                                                {new Date(notification.createdAt || notification.posted_at).toLocaleString()}
                                             </span>
                                             {notification.course && (
                                                 <span className="notification-course">
