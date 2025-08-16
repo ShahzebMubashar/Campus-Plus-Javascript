@@ -1,5 +1,6 @@
 const { get } = require('react-scroll/modules/mixins/scroller');
 const pool = require('../config/database');
+const { PenToolIcon } = require('lucide-react');
 
 const generateNotification = async (request, response) => {
     const { user: { userid, role }, body: { notification, title } } = request;
@@ -19,7 +20,10 @@ const generateNotification = async (request, response) => {
 
         const result = await client.query(query, values);
 
-        if (!result.rowCount) return response.status(500).json("Failed to create notification");
+        if (!result.rowCount) {
+            await client.query("ROLLBACK");
+            return response.status(500).json("Failed to create notification");
+        }
 
         await client.query("COMMIT");
 
@@ -48,7 +52,42 @@ const getNotifications = async (request, response) => {
     }
 }
 
+const deleteNotification = async (request, response) => {
+    const { params: { notificationid }, user: { role } } = request;
+
+    const client = await pool.connect();
+
+    if (role !== "Admin") return response.status(403).json("Only admins can delete notifications");
+
+    try {
+        const query = `Delete from Notifications where notificationid = $1 returning *`;
+
+        const values = [notificationid];
+
+        await client.query("BEGIN");
+
+        const result = await client.query(query, values);
+
+        if (!result.rowCount) {
+            await client.query("ROLLBACK");
+            return response.status(404).json("Notification not found");
+        }
+
+        await client.query("COMMIT");
+
+        return response.status(200).json("Notification deleted successfully");
+    } catch (error) {
+        console.error("Error deleting notification:", error);
+        await client.query("ROLLBACK");
+        return response.status(500).json("Internal server error");
+    } finally {
+        client.release();
+    }
+}
+
+
 module.exports = {
     generateNotification,
     getNotifications,
+    deleteNotification,
 };
