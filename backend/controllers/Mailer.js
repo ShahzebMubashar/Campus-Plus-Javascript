@@ -73,6 +73,7 @@ const batchMailer = async (request, response) => {
 };
 
 async function getValidEmails() {
+    console.log('\n\n\nFUNCTION CALLED TO CHECK VALID EMAILS\n\n\n');
     const client = await pool.connect();
 
     try {
