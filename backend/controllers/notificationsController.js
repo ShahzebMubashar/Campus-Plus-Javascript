@@ -1,6 +1,5 @@
 const { get } = require('react-scroll/modules/mixins/scroller');
 const pool = require('../config/database');
-const { PenToolIcon } = require('lucide-react');
 
 const generateNotification = async (request, response) => {
     const { user: { userid, role }, body: { notification, title } } = request;
