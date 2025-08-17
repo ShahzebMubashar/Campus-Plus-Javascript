@@ -39,6 +39,7 @@ function App() {
             <Route path="/past-papers" element={<PastPapers />} />
             <Route path="/notifications" element={<Notifications />} />
           </Routes>
+        </div>
       </Router>
     </div>
   );
