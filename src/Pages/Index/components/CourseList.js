@@ -16,7 +16,7 @@ const CourseList = ({ courses, onRemove, onRemoveAll }) => {
             </span>
             <button
               className="remove-button"
-              onClick={() => onRemove(course.courseCode)}
+              onClick={() => onRemove(course.courseCode, course.section)}
             >
               &times;
             </button>
