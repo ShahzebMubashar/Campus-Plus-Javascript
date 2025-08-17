@@ -2,6 +2,7 @@ import React from "react";
 import "./Sidebar.css";
 import cplogo from "../../../Assets/images/cp_logo.png";
 import useProfileUser from "../../../hooks/useProfileUser";
+import { Link } from "react-router-dom";
 
 const Sidebar = ({
   rooms,
@@ -48,15 +49,32 @@ const Sidebar = ({
       <div className="cp-sidebar-content">
         {/* Brand Section */}
         <div className="brand-section">
-          <div className="brand-logo">
-            <img src={cplogo} alt="Campus Plus logo" />
-          </div>
-          <h2 className="brand-title">Campus Plus</h2>
+          <Link
+            to="/"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              textDecoration: "none",
+            }}
+          >
+            <div className="brand-logo">
+              <img src={cplogo} alt="Campus Plus logo" />
+            </div>
+            <h2
+              className="brand-title"
+              style={{ marginLeft: 8, color: "#1976d2" }}
+            >
+              Campus Plus
+            </h2>
+          </Link>
         </div>
 
         {/* Navigation Links */}
         <nav className="sidebar-nav-links">
           <a href="/" className="sidebar-nav-link">
+            Home
+          </a>
+          <a href="/dashboard" className="sidebar-nav-link">
             Dashboard
           </a>
           <a href="/chatroom" className="sidebar-nav-link active">
@@ -101,6 +119,7 @@ const Sidebar = ({
             className="cp-sidebar-user-avatar"
             style={{
               backgroundColor: getAvatarColor(),
+              color: "#fff", // <-- ensure initials are white
               borderRadius: "50%",
               display: "flex",
               alignItems: "center",
