@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "./RoomView.css";
-import Sidebar from "./Sidebar";
+import API_BASE_URL from "../../../config/api.js";
+import { authenticatedFetch } from "../../../utils/auth";
+import useProfileUser from "../../../hooks/useProfileUser";
 
 // Modern blue theme color constants
 const colors = {
@@ -30,15 +31,11 @@ const Comment = ({ comment, level = 0, room, fetchPosts }) => {
     if (replyText.trim()) {
       try {
         console.log(room.roomid, comment.messageid, comment.commentid);
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply/${room.roomid}/${comment.commentid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/reply/${room.roomid}/${comment.commentid}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ content: replyText }),
-            credentials: "include",
           },
         );
 
@@ -174,6 +171,8 @@ export default function RoomView({ room, onBack, onLeave }) {
     type: "",
   });
 
+  const profileUser = useProfileUser();
+
   // Button styles for reusability
   const buttonStyles = {
     primary: {
@@ -271,9 +270,7 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch("http://localhost:4000/auth/user-info", {
-        credentials: "include",
-      });
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/user-info`);
       if (response.ok) {
         const data = await response.json();
         setUserInfo(data);
@@ -285,11 +282,8 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const fetchJoinedRooms = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:4000/Chatrooms/user/groups",
-        {
-          credentials: "include",
-        },
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/user/groups`,
       );
       if (response.ok) {
         const data = await response.json();
@@ -304,11 +298,10 @@ export default function RoomView({ room, onBack, onLeave }) {
     // If room is not joined, join it first
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/join/${room.roomid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/join/${room.roomid}`,
           {
             method: "POST",
-            credentials: "include",
           },
         );
         if (response.ok) {
@@ -325,11 +318,8 @@ export default function RoomView({ room, onBack, onLeave }) {
     console.log(`Fetching Posts...`);
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/messages/${room.roomid}`,
-        {
-          credentials: "include",
-        },
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/messages/${room.roomid}`,
       );
 
       if (response.ok) {
@@ -379,15 +369,11 @@ export default function RoomView({ room, onBack, onLeave }) {
   const handleCreatePost = async () => {
     if (newPost.trim()) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/messages`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/messages`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ message: newPost }),
-            credentials: "include",
           },
         );
         if (response.ok) {
@@ -438,11 +424,10 @@ export default function RoomView({ room, onBack, onLeave }) {
     );
     if (confirmDelete) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/delete/${room.roomid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/delete/${room.roomid}`,
           {
             method: "DELETE",
-            credentials: "include",
           },
         );
 
@@ -460,18 +445,14 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handleUpdateRoom = async () => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/change-room-name/${room.roomid}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/change-room-name/${room.roomid}`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({
             newName: editedRoomName,
             description: editedRoomDescription,
           }),
-          credentials: "include",
         },
       );
 
@@ -492,20 +473,16 @@ export default function RoomView({ room, onBack, onLeave }) {
     if (!postId) return;
 
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/like/${postId}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/like/${postId}`,
         {
           method: "POST",
-          credentials: "include",
         },
       );
 
       if (response.ok) {
-        const likeCountResponse = await fetch(
-          `http://localhost:4000/Chatrooms/likes/${postId}`,
-          {
-            credentials: "include",
-          },
+        const likeCountResponse = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/likes/${postId}`,
         );
 
         if (likeCountResponse.ok) {
@@ -528,18 +505,14 @@ export default function RoomView({ room, onBack, onLeave }) {
     console.log(postId);
     if (newComment.trim()) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/reply1/${room.roomid}/${postId}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/reply1/${room.roomid}/${postId}`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({
               message: newComment,
               parentReplyId: parentReplyId, // can be null or an integer
             }),
-            credentials: "include",
           },
         );
 
@@ -560,11 +533,10 @@ export default function RoomView({ room, onBack, onLeave }) {
       "Are you sure you want to leave this room?",
     );
     if (confirmLeave) {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/leave/${room.roomid}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/leave/${room.roomid}`,
         {
           method: "DELETE",
-          credentials: "include",
         },
       );
 
@@ -579,15 +551,11 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handleProcessPost = async (messageid, status) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/process/${room.roomid}`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/process/${room.roomid}`,
         {
           method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
           body: JSON.stringify({ messageid, status }),
-          credentials: "include",
         },
       );
 
@@ -604,11 +572,10 @@ export default function RoomView({ room, onBack, onLeave }) {
   const handleDeletePost = async (messageid) => {
     if (window.confirm("Are you sure you want to delete this post?")) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/messages/${messageid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/messages/${messageid}`,
           {
             method: "DELETE",
-            credentials: "include",
           },
         );
 
@@ -663,15 +630,11 @@ export default function RoomView({ room, onBack, onLeave }) {
     const newContent = prompt("Edit your post:", currentContent);
     if (newContent && newContent !== currentContent) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/${room.roomid}/posts/${messageid}/edit`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ content: newContent }),
-            credentials: "include",
           },
         );
 
@@ -690,11 +653,10 @@ export default function RoomView({ room, onBack, onLeave }) {
 
   const handlePinPost = async (messageid) => {
     try {
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/${room.roomid}/posts/${messageid}/pin`,
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/${room.roomid}/posts/${messageid}/pin`,
         {
           method: "POST",
-          credentials: "include",
         },
       );
 
@@ -714,15 +676,11 @@ export default function RoomView({ room, onBack, onLeave }) {
     const reason = prompt("Please enter the reason for reporting this post:");
     if (reason) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/posts/${messageid}/report`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/posts/${messageid}/report`,
           {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
             body: JSON.stringify({ reason }),
-            credentials: "include",
           },
         );
 
@@ -752,13 +710,9 @@ export default function RoomView({ room, onBack, onLeave }) {
       if (searchUsername) params.append("username", searchUsername);
       if (searchDate) params.append("date", searchDate);
 
-      const response = await fetch(
-        `http://localhost:4000/Chatrooms/search/${
-          room.roomid
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/search/${room.roomid
         }?${params.toString()}`,
-        {
-          credentials: "include",
-        },
       );
 
       if (response.ok) {
@@ -805,15 +759,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         position: "relative",
       }}
     >
-      <Sidebar
-        room={room}
-        onBack={onBack}
-        onLeave={onLeave}
-        userInfo={userInfo}
-        rooms={rooms}
-        joinedRooms={joinedRooms}
-        onRoomSelect={handleRoomSelect}
-      />
+
       {/* Main content */}
       <div
         className="room-view-content"
@@ -1215,14 +1161,44 @@ export default function RoomView({ room, onBack, onLeave }) {
                           gap: "12px",
                         }}
                       >
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            backgroundColor:
+                              post.userid === profileUser?.userid
+                                ? getAvatarColor(profileUser)
+                                : getAvatarColor({ name: post.username }),
+                            color: "white",
+                            border: "2px solid white",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                            flexShrink: 0,
+                            textTransform: "uppercase",
+                            letterSpacing: "1px",
+                            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                          }}
+                        >
+                          {post.userid === profileUser?.userid
+                            ? getUserInitials(profileUser)
+                            : getUserInitials({ name: post.username })}
+                        </div>
                         <span
                           style={{
                             fontWeight: "600",
                             color: colors.primary,
                             fontSize: "16px",
+                            textAlign: "left",
                           }}
                         >
-                          {post.username}
+                          {post.userid === profileUser?.userid
+                            ? profileUser?.name || profileUser?.username
+                            : post.username}
                         </span>
                         {post.is_pinned && (
                           <span
@@ -1420,7 +1396,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                         stroke="currentColor"
                         strokeWidth="2"
                       >
-                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-4"></path>
                         <polyline points="16 6 12 2 8 6"></polyline>
                         <line x1="12" y1="2" x2="12" y2="15"></line>
                       </svg>
@@ -1579,4 +1555,28 @@ export default function RoomView({ room, onBack, onLeave }) {
       </div>
     </div>
   );
+}
+
+// Utility: Get initials from name or username (same as ProfilePage)
+function getUserInitials(user) {
+  const displayName = user?.name || user?.username || user?.fullName;
+  if (!displayName) return "U";
+  return displayName
+    .split(" ")
+    .filter((_, idx, arr) => idx === 0 || idx === arr.length - 1)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+}
+
+// Utility: Get avatar color from name (same as ProfilePage)
+function getAvatarColor(user) {
+  const name = user?.name || user?.username || user?.fullName || "";
+  if (!name) return "#1a73e8";
+  const colors = [
+    "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
+    "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff",
+  ];
+  const charSum = name.split("").reduce((sum, c) => sum + c.charCodeAt(0), 0);
+  return colors[charSum % colors.length];
 }

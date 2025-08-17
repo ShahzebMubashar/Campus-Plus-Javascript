@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import Sidebar from "./components/Sidebar.js";
 import RoomList from "./components/RoomList.js";
 import RoomView from "./components/RoomView.js";
 import Navbar from "../Index/components/Navbar.js";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
 import "../Chatroom/css/Chatroom.css";
 import { AiOutlineMenu } from "react-icons/ai";
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
+import ChatroomMobileBanner from "./components/ChatroomMobileBanner";
+
 
 export default function Chatrooms() {
+  const { roomId } = useParams();
+  const navigate = useNavigate();
   const [rooms, setRooms] = useState([]);
   const [joinedRooms, setJoinedRooms] = useState([]);
   const [activeRoom, setActiveRoom] = useState(null);
@@ -15,12 +23,46 @@ export default function Chatrooms() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(true);
+  const [pendingBack, setPendingBack] = useState(false); // <-- add this
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
-    fetchUserInfo();
-    fetchAllRooms();
-    fetchJoinedRooms();
+    // Check authentication first
+    const checkAuthStatus = () => {
+      const authStatus = checkAuth();
+      setIsAuthenticated(authStatus);
+      setLoading(false);
+
+      if (authStatus) {
+        // Only fetch data if user is authenticated
+        fetchUserInfo();
+        fetchAllRooms();
+        fetchJoinedRooms();
+      }
+    };
+
+    checkAuthStatus();
   }, []);
+
+  // Handle roomId parameter from URL
+  useEffect(() => {
+    // Only select a room if roomId is present, rooms are loaded, user is authenticated,
+    // and activeRoom is not null (prevents re-selecting after navigating back)
+    if (roomId && rooms.length > 0 && isAuthenticated && activeRoom === null) {
+      const room = rooms.find(r => r.roomid === parseInt(roomId));
+      if (room) {
+        handleRoomSelect(room, false); // false to prevent navigation
+      }
+    }
+  }, [roomId, rooms, isAuthenticated, activeRoom]);
+
+  // Reset activeRoom if URL is /chatroom (no roomId)
+  useEffect(() => {
+    if (!roomId && activeRoom !== null) {
+      setActiveRoom(null);
+    }
+  }, [roomId]);
 
   useEffect(() => {
     if (!isSidebarOpen) return;
@@ -58,6 +100,19 @@ export default function Chatrooms() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (pendingBack && activeRoom === null) {
+      navigate("/chatroom");
+      setPendingBack(false);
+    }
+  }, [pendingBack, activeRoom, navigate]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const toggleSidebar = (e) => {
     if (e) e.stopPropagation();
     setIsSidebarOpen((prev) => !prev);
@@ -65,49 +120,34 @@ export default function Chatrooms() {
 
   const fetchUserInfo = async () => {
     try {
-      const response = await fetch("http://localhost:4000/user/profile", {
+      const response = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "apploication/json",
-        },
       });
       if (response.ok) {
         const data = await response.json();
         setUserInfo(data);
-        setIsAuthenticated(true);
-      } else {
-        setIsAuthenticated(false);
       }
     } catch (error) {
       console.error("Error fetching user info:", error);
-      setIsAuthenticated(false);
     }
   };
 
   const fetchAllRooms = async () => {
     try {
-      const response = await fetch("http://localhost:4000/Chatrooms", {
-        credentials: "include",
-      });
+      const response = await authenticatedFetch(`${API_BASE_URL}/Chatrooms`);
       if (response.ok) {
         const data = await response.json();
         setRooms(data);
       }
     } catch (error) {
       console.error("Error fetching rooms:", error);
-    } finally {
-      setLoading(false);
     }
   };
 
   const fetchJoinedRooms = async () => {
     try {
-      const response = await fetch(
-        "http://localhost:4000/Chatrooms/user/groups",
-        {
-          credentials: "include",
-        },
+      const response = await authenticatedFetch(
+        `${API_BASE_URL}/Chatrooms/user/groups`,
       );
       if (response.ok) {
         const data = await response.json();
@@ -118,15 +158,14 @@ export default function Chatrooms() {
     }
   };
 
-  const handleRoomSelect = async (room) => {
+  const handleRoomSelect = async (room, shouldNavigate = true) => {
     // If room is not joined, join it first
     if (!joinedRooms.find((r) => r.roomid === room.roomid)) {
       try {
-        const response = await fetch(
-          `http://localhost:4000/Chatrooms/join/${room.roomid}`,
+        const response = await authenticatedFetch(
+          `${API_BASE_URL}/Chatrooms/join/${room.roomid}`,
           {
             method: "POST",
-            credentials: "include",
           },
         );
         if (response.ok) {
@@ -138,30 +177,22 @@ export default function Chatrooms() {
       }
     }
     setActiveRoom(room);
+
+    // Navigate to room URL if shouldNavigate is true
+    if (shouldNavigate) {
+      navigate(`/chatroom/${room.roomid}`);
+    }
   };
 
-  // Login prompt component
-  const LoginPrompt = () => (
-    <div className="login-prompt">
-      <div className="login-prompt-content">
-        <div className="login-prompt-icon">🔒</div>
-        <h2>Authentication Required</h2>
-        <p>You need to log in to access the chatroom feature.</p>
-        <p>Please sign in to your account to continue.</p>
-        <button
-          className="login-prompt-btn"
-          onClick={() => (window.location.href = "/sign-in")}
-        >
-          Sign In
-        </button>
-      </div>
-    </div>
-  );
+  // Replace your return with this:
+  if (isMobile && !!userInfo) {
+    return <ChatroomMobileBanner isLoggedIn={!!userInfo} />;
+  }
 
   return (
     <div className="chatroom-main-top">
       <div className="chatroom-app">
-        <Navbar />
+
         {/* Mobile Menu Toggle Button */}
         {!isSidebarOpen && isMenuVisible && (
           <button
@@ -184,15 +215,20 @@ export default function Chatrooms() {
               if (e) e.stopPropagation();
               setIsSidebarOpen(false);
             }}
+            notificationCount={notificationCount} // <-- pass here
           />
           <div className="main-content">
             {activeRoom ? (
               <RoomView
                 room={activeRoom}
-                onBack={() => setActiveRoom(null)}
+                onBack={() => {
+                  setActiveRoom(null);
+                  setPendingBack(true);
+                }}
                 onLeave={async () => {
                   await handleLeaveRoom(activeRoom.roomid);
                   setActiveRoom(null);
+                  navigate("/chatroom");
                   fetchJoinedRooms();
                 }}
               />
@@ -209,10 +245,11 @@ export default function Chatrooms() {
         </div>
         {/* Login prompt overlay with blurred background */}
         {!isAuthenticated && !loading && (
-          <div className="login-overlay">
-            <div className="blurred-background"></div>
-            <LoginPrompt />
-          </div>
+          <BlurLoginPrompt
+            message="Chatroom Access Required"
+            subMessage="Please sign in to access the chatroom feature and join conversations."
+            buttonText="Sign In"
+          />
         )}
       </div>
     </div>
@@ -221,12 +258,12 @@ export default function Chatrooms() {
 
 // Helper function for leaving a room
 async function handleLeaveRoom(roomId) {
+  const { authenticatedFetch } = await import("../../utils/auth");
   try {
-    const response = await fetch(
-      `http://localhost:4000/Chatrooms/leave/${roomId}`,
+    const response = await authenticatedFetch(
+      `${API_BASE_URL}/Chatrooms/leave/${roomId}`,
       {
         method: "DELETE",
-        credentials: "include",
       },
     );
     return response.ok;

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./ProfilePage.css";
 import Navbar from "../Index/components/Navbar";
+import BlurLoginPrompt from "../BlurLoginPrompt.js";
+import API_BASE_URL from "../../config/api.js";
+import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
 
 function ProfilePage() {
   const [user, setUser] = useState({
@@ -14,13 +17,10 @@ function ProfilePage() {
     notifications: [],
   });
 
-  const [currentCourses, setCurrentCourses] = useState({});
-
   const fetchCurrentCourses = async () => {
     try {
-      const res = await fetch("http://localhost:4000/user/current-courses", {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/current-courses`, {
         method: "GET",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -43,9 +43,8 @@ function ProfilePage() {
 
   const fetchUserInfo = async () => {
     try {
-      const res = await fetch("http://localhost:4000/user/profile", {
+      const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -63,7 +62,23 @@ function ProfilePage() {
   };
 
   useEffect(() => {
-    fetchUserInfo();
+    const checkAuthAndFetchData = async () => {
+      try {
+        if (checkAuth()) {
+          setIsAuthenticated(true);
+          fetchUserInfo();
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+        setIsAuthenticated(false);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    };
+
+    checkAuthAndFetchData();
   }, []);
 
   useEffect(() => {
@@ -74,6 +89,8 @@ function ProfilePage() {
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showSettingsModal, setShowSettingsModal] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
 
   const [editForm, setEditForm] = useState({ ...user });
   const [passwordForm, setPasswordForm] = useState({
@@ -98,9 +115,8 @@ function ProfilePage() {
   const handleEditFormSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:4000/user/profile", {
+      const response = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "PUT",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -135,9 +151,8 @@ function ProfilePage() {
   const triggerForgotPassword = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/forgot", {
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/forgot`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -167,9 +182,8 @@ function ProfilePage() {
 
     setIsLoading(true);
     try {
-      const response = await fetch("http://localhost:4000/auth/reset", {
+      const response = await authenticatedFetch(`${API_BASE_URL}/auth/reset`, {
         method: "POST",
-        credentials: "include",
         headers: {
           "Content-Type": "application/json",
         },
@@ -244,6 +258,23 @@ function ProfilePage() {
 
     return colors[charSum % colors.length];
   };
+
+  if (isAuthLoading) {
+    return <div className="loading">Loading...</div>;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <>
+        <Navbar />
+        <BlurLoginPrompt
+          message="Profile Access Required"
+          subMessage="Please sign in to view and manage your profile."
+          buttonText="Sign In"
+        />
+      </>
+    );
+  }
 
   return (
     <div className="lms-profile-root">

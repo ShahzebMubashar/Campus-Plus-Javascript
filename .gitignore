@@ -29,3 +29,4 @@ yarn-error.log*
 
 # Ignore environment variable files
 .env
+.env.example

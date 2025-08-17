@@ -56,7 +56,6 @@ const NewsAndEventsSection = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [isTouching, setIsTouching] = useState(false);
   const [startX, setStartX] = useState(0);
-  const [endX, setEndX] = useState(0);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   useEffect(() => {
@@ -83,7 +82,6 @@ const NewsAndEventsSection = () => {
   };
   const handleTouchEnd = (e) => {
     if (!isTouching) return;
-    setEndX(e.changedTouches[0].clientX);
     const swipeDistance = startX - e.changedTouches[0].clientX;
     if (swipeDistance > 50) {
       // Swipe left
@@ -106,16 +104,12 @@ const NewsAndEventsSection = () => {
   return (
     <section className="parent-testimonials-section" id="newsandeventspage">
       <div className="testimonials-section">
-        <h2>
+        <h1>
           News &{" "}
-          <span
-            className="pp-highlighted"
-            style={{ color: "#3b82f6", fontSize: "3.5rem" }}
-          >
-            {" "}
+          <span className="features-highlighted">
             Events
           </span>
-        </h2>
+        </h1>
         <div className="slider-container-news">
           <div
             className={isMobile ? "news-slider-mobile" : "testimonials-slider"}
@@ -123,14 +117,14 @@ const NewsAndEventsSection = () => {
             onTouchEnd={isMobile ? handleTouchEnd : undefined}
           >
             {isMobile ? (
-              <div className="news-card-slide active">
+              <div className={`news-card-slide ${newsItems[currentSlide].type.toLowerCase()}`}>
+                {/* Type Badge */}
+                <div className={`type-indicator ${newsItems[currentSlide].type.toLowerCase()}`}>
+                  {newsItems[currentSlide].type}
+                </div>
+                
                 <div className="news-title-row">
                   <h3>{newsItems[currentSlide].title}</h3>
-                </div>
-                <div className="news-category-row">
-                  <p className="news-category">
-                    {newsItems[currentSlide].type}
-                  </p>
                 </div>
                 <div className="news-card-content">
                   <p>{newsItems[currentSlide].description}</p>
@@ -138,9 +132,13 @@ const NewsAndEventsSection = () => {
               </div>
             ) : (
               newsItems.map((item, index) => (
-                <div className="testimonial" key={index}>
+                <div className={`testimonial ${item.type.toLowerCase()}`} key={index}>
+                  {/* Type Badge */}
+                  <div className={`type-indicator ${item.type.toLowerCase()}`}>
+                    {item.type}
+                  </div>
+                  
                   <h3>{item.title}</h3>
-                  <p className="news-category">{item.type}</p>
                   <p>{item.description}</p>
                 </div>
               ))

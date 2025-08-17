@@ -34,18 +34,11 @@ const Datesheet = () => {
     const rows = data.split("\n").slice(1);
     return rows.map((row) => {
       const [
-        id,
         course,
         courseCode,
         section,
-        instructor,
-        credit_hours,
-        program,
-        target_dept,
-        parent_dept,
         type,
         repeat,
-        ...lectures2
       ] = row.split(",");
       return { course, courseCode, section, type, repeat };
     });

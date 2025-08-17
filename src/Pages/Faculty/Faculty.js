@@ -30,7 +30,6 @@ const slowScrollTo = (targetPosition, duration) => {
 };
 
 const FacultySection = () => {
-  const [menuActive, setMenuActive] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredFaculty, setFilteredFaculty] = useState(facultyData);
 
@@ -229,38 +228,6 @@ const FacultyCard = ({ faculty }) => {
         ></i>
       </p>
     </div>
-  );
-};
-
-const ScrollToTopButton = () => {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (document.documentElement.scrollTop > 100) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.onscroll = handleScroll;
-
-    return () => (window.onscroll = null); // Cleanup on component unmount
-  }, []);
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  return (
-    <button
-      id="myBtn"
-      className={`scroll-to-top-btn ${isVisible ? "visible" : ""}`}
-      onClick={scrollToTop}
-    >
-      ↑
-    </button>
   );
 };
 

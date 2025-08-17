@@ -113,22 +113,43 @@
   background-color: #2563eb;
 }
 
-/* Responsive design */
-@media (max-width: 1024px) {
+/* Comprehensive Responsive Design */
+
+/* Desktop First - Large screens (1200px+) */
+@media (min-width: 1200px) {
+  .content-wrapper {
+    margin-top: 90px;
+  }
+
+  .sidebar {
+    width: 300px;
+  }
+
+  .main-content {
+    margin-left: 0px;
+    width: calc(100% - 300px);
+    padding: 32px;
+  }
+}
+
+/* Tablet and Small Desktop (769px - 1199px) */
+@media (max-width: 1199px) and (min-width: 769px) {
   .content-wrapper {
     margin-top: 80px;
   }
 
   .sidebar {
-    width: 260px;
+    width: 280px;
   }
 
   .main-content {
-    margin-left: 260px;
-    width: calc(100% - 260px);
+    margin-left: 280px;
+    width: calc(100% - 280px);
+    padding: 24px;
   }
 }
 
+/* Large Mobile and Small Tablet (481px - 768px) */
 @media (max-width: 768px) {
   .chatroom-main-top {
     margin-top: -4%;
@@ -141,13 +162,15 @@
 
   .sidebar {
     position: fixed;
-    left: -280px;
+    left: -100%;
     top: 70px;
-    width: 280px;
+    width: 320px;
+    max-width: 85vw;
     height: calc(100vh - 70px);
-    transition: left 0.3s ease;
+    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     z-index: 1000;
     background: white;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
   }
 
   .sidebar.open {
@@ -163,24 +186,49 @@
 
   .mobile-menu-toggle {
     display: block;
-    position: absolute;
-    top: 100px !important;
+    position: fixed;
+    top: 85px;
     left: 16px;
     z-index: 1001;
-    background: #2196f3;
+    background: #3b82f6;
     color: white;
     border: none;
-    border-radius: 8px;
-    padding: 8px 12px;
+    border-radius: 12px;
+    padding: 12px 16px;
     cursor: pointer;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    font-size: 14px;
+    font-weight: 600;
+    transition: all 0.2s ease;
   }
 
   .mobile-menu-toggle:hover {
-    background: #1976d2;
+    background: #2563eb;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 16px rgba(59, 130, 246, 0.4);
+  }
+
+  /* Overlay for mobile sidebar */
+  .sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+  }
+
+  .sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
   }
 }
 
+/* Mobile (321px - 480px) */
 @media (max-width: 480px) {
   .chatroom-main-top {
     margin-top: -2%;
@@ -192,8 +240,10 @@
 
   .sidebar {
     top: 60px;
-    width: 100%;
+    width: 100vw;
+    max-width: 100vw;
     height: calc(100vh - 60px);
+    left: -100vw;
   }
 
   .main-content {
@@ -202,25 +252,24 @@
   }
 
   .mobile-menu-toggle {
-    top: 70px;
+    top: 75px;
     left: 12px;
-    padding: 6px 10px;
-    font-size: 14px;
-    position: absolute;
+    padding: 10px 14px;
+    font-size: 13px;
   }
 }
 
-@media (max-width: 360px) {
+/* Small Mobile (320px and below) */
+@media (max-width: 320px) {
   .main-content {
     padding: 8px;
   }
 
   .mobile-menu-toggle {
-    top: 65px;
+    top: 70px;
     left: 8px;
-    padding: 5px 8px;
+    padding: 8px 12px;
     font-size: 12px;
-    position: absolute;
   }
 }
 
@@ -252,11 +301,9 @@
   font-size: 28px;
   font-weight: 600;
   color: var(--text-color);
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--primary-dark)
-  );
+  background: linear-gradient(135deg,
+      var(--primary-color),
+      var(--primary-dark));
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -307,11 +354,9 @@
 
 .create-room-button {
   padding: 12px 24px;
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--primary-dark)
-  );
+  background: linear-gradient(135deg,
+      var(--primary-color),
+      var(--primary-dark));
   color: white;
   border: none;
   border-radius: 8px;
@@ -510,11 +555,9 @@
 }
 
 .modal-button-create {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--primary-dark)
-  );
+  background: linear-gradient(135deg,
+      var(--primary-color),
+      var(--primary-dark));
   color: white;
 }
 
@@ -604,11 +647,9 @@
 }
 
 .login-prompt-btn {
-  background: linear-gradient(
-    135deg,
-    var(--primary-color),
-    var(--primary-dark)
-  );
+  background: linear-gradient(135deg,
+      var(--primary-color),
+      var(--primary-dark));
   color: white;
   border: none;
   padding: 12px 32px;

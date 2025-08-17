@@ -24,12 +24,11 @@ const {
   getUserJoinedGroups,
   myRooms,
   addnestedReply,
+  likePost,
+  getLikeCount,
 } = require("../controllers/chatroomController");
 
-const {
-  checkAuthorisation,
-  checkAdmin,
-} = require("../middlewares/authMiddleware");
+const { jwtAuthMiddleware, optionalJwtAuth } = require("../middlewares/jwtAuthMiddleware");
 
 const {
   checkRoomMember,
@@ -39,84 +38,91 @@ const {
 
 const router = express.Router();
 
-router.get("/:roomid?", getRooms);
-router.post("/create", checkAuthorisation, createRoom);
-router.post("/join/:roomid", checkAuthorisation, validateRoom, joinRoom);
-router.post(
-  "/send-message/:roomid",
-  checkAuthorisation,
-  checkRoomMember,
-  sendMessage
-);
-router.post(
-  "/reply1/:roomid/:parentMessage",
-  checkAuthorisation,
-  checkRoomMember,
-  sendReply
-);
-router.post(
-  "/process/:roomid",
-  checkAuthorisation,
-  checkModerator,
-  processPost
-);
-router.post("/:roomid/messages", createPost);
+// ALL CHATROOM ROUTES REQUIRE AUTHENTICATION
+router.get("/:roomid?", jwtAuthMiddleware, getRooms);
+router.get("/:roomid/messages/:messageid", jwtAuthMiddleware, getPost);
+router.get("/likes/:messageid", jwtAuthMiddleware, getLikeCount);
+router.get("/messages/:roomid", jwtAuthMiddleware, getRoomMessages);
+router.get("/search/:roomid", jwtAuthMiddleware, searchPosts);
+
+// Room management
+router.post("/create", jwtAuthMiddleware, createRoom);
+router.post("/join/:roomid", jwtAuthMiddleware, validateRoom, joinRoom);
 router.delete(
   "/leave/:roomid",
-  checkAuthorisation,
+  jwtAuthMiddleware,
   validateRoom,
   checkRoomMember,
   LeaveRoom
 );
 router.post(
   "/change-room-name/:roomid",
-  checkAuthorisation,
+  jwtAuthMiddleware,
   checkModerator,
   validateRoom,
   changeRoomDetails
 );
 router.delete(
   "/delete/:roomid",
-  checkAuthorisation,
-  checkAdmin,
+  jwtAuthMiddleware,
   validateRoom,
   deleteRoom
 );
+
+// Messaging
+router.post(
+  "/send-message/:roomid",
+  jwtAuthMiddleware,
+  checkRoomMember,
+  sendMessage
+);
+router.post(
+  "/reply1/:roomid/:parentMessage",
+  jwtAuthMiddleware,
+  checkRoomMember,
+  sendReply
+);
+router.post(
+  "/reply/:roomid/:parentReplyId",
+  jwtAuthMiddleware,
+  addnestedReply
+);
+router.post("/:roomid/messages", jwtAuthMiddleware, createPost);
+
+// Post management
 router.delete(
   "/:roomid/messages/:messageid",
-  checkAuthorisation,
+  jwtAuthMiddleware,
   checkRoomMember,
   deletePost
 );
-router.get("/:roomid/messages/:messageid", getPost);
-
-// Post editing routes
-router.post("/:roomid/posts/:messageid/edit", checkAuthorisation, editPost);
+router.post("/:roomid/posts/:messageid/edit", jwtAuthMiddleware, editPost);
 router.get(
   "/posts/:messageid/edit-history",
-  checkAuthorisation,
+  jwtAuthMiddleware,
   getPostEditHistory
 );
 
-// Post pinning routes
-router.post("/:roomid/posts/:messageid/pin", checkAuthorisation, pinPost);
+// Post interactions
+router.post("/like/:messageid", jwtAuthMiddleware, likePost);
+router.post("/:roomid/posts/:messageid/pin", jwtAuthMiddleware, pinPost);
+router.post("/posts/:messageid/report", jwtAuthMiddleware, reportPost);
+router.post("/posts/:messageid/view", jwtAuthMiddleware, trackPostView);
 
-// Post reporting routes
-router.post("/posts/:messageid/report", checkAuthorisation, reportPost);
-
-router.post("/posts/:messageid/view", checkAuthorisation, trackPostView);
-
-router.get("/messages/:roomid", getRoomMessages);
-router.get("/search/:roomid", searchPosts);
-
-router.get("/user/groups", checkAuthorisation, getUserJoinedGroups);
-
-router.get("/my-rooms/:userid", checkAuthorisation, myRooms);
-
+// Moderation
 router.post(
-  "/reply/:roomid/:parentReplyId",
-  checkAuthorisation,
-  addnestedReply
+  "/process/:roomid",
+  jwtAuthMiddleware,
+  checkModerator,
+  processPost
 );
+
+// User-specific
+router.get("/user/groups", jwtAuthMiddleware, getUserJoinedGroups);
+router.get("/my-rooms/:userid", jwtAuthMiddleware, myRooms);
+
+// Polls
+router.post("/polls", jwtAuthMiddleware, createPoll);
+router.post("/polls/:pollid/vote", jwtAuthMiddleware, votePoll);
 
 module.exports = router;

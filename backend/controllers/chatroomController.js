@@ -1,3 +1,6 @@
+const transporter = require("../controllers/Mailer").transporter;
+const getValidEmails = require("../controllers/Mailer").getValidEmails;
+// const { get } = require("react-scroll/modules/mixins/scroller");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
@@ -112,9 +115,7 @@ const getRooms = async (request, response) => {
 const getRoomMessages = async (req, res) => {
   const {
     params: { roomid },
-    session: {
-      user: { role },
-    },
+    user: { role },
   } = req;
 
   try {
@@ -151,7 +152,7 @@ const getRoomMessages = async (req, res) => {
     if (messagesResult.rowCount === 0) {
       return res.status(404).json({
         message: "No messages found for this room",
-        userRole: req.session.user.role ?? null,
+        userRole: req.user?.role ?? null,
       });
     }
 
@@ -220,7 +221,7 @@ const getRoomMessages = async (req, res) => {
 
     const returnData = {
       data: structuredResponse,
-      userRole: req.session?.user?.role ?? null,
+      userRole: req.user?.role ?? null,
     };
 
     return res.status(200).json(returnData);
@@ -249,9 +250,7 @@ function cleanReply(reply) {
 const createRoom = async (request, response) => {
   const {
     body: { roomName, description },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!roomName || !description)
@@ -261,25 +260,79 @@ const createRoom = async (request, response) => {
   try {
     await client.query("BEGIN");
 
-    let res = await client.query(`Select * from Rooms where name = $1`, [
+    let res = await client.query(`SELECT * FROM Rooms WHERE name = $1`, [
       roomName,
     ]);
 
     if (res.rowCount) return response.status(400).json("Room already exists");
 
     res = await client.query(
-      `Insert into Rooms (name, description, created_at, created_by)
-      values ($1, $2, current_timestamp, $3)`,
+      `INSERT INTO Rooms (name, description, created_at, created_by)
+      VALUES ($1, $2, current_timestamp, $3) RETURNING *`,
       [roomName, description, userid]
     );
 
     await client.query("COMMIT");
 
-    return response.status(201).json(`Room: ${roomName} created successfully`);
+    //  Commenting out the mailer for create room
+
+    // process.nextTick(async () => {
+    //   try {
+    //     const emailList = await getValidEmails();
+    //     if (!emailList.length) {
+    //       console.log("No valid emails found for notification");
+    //       return;
+    //     }
+
+    //     const emailResults = await Promise.allSettled(
+    //       emailList.map(async (email) => {
+    //         try {
+    //           await transporter.sendMail({
+    //             from: `"Campus Plus" <${process.env.EMAIL_USER}>`,
+    //             to: email,
+    //             subject: 'New Room Created: ' + roomName,
+    //             text: `Hello!\n\nA new room "${roomName}" has been created. Join now to participate in discussions.\n\nDescription: ${description}\n\nWe look forward to seeing you there!\n\nRegards,\nCampus Plus Team`,
+    //             html: `
+    //               <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+    //                 <h2 style="color: #2c3e50;">New Room: ${roomName}</h2>
+    //                 <p>Hello!</p>
+    //                 <p>A new discussion room has been created:</p>
+    //                 <p><strong>${roomName}</strong></p>
+    //                 <p>${description}</p>
+    //                 <p>Join now to participate in discussions.</p>
+    //                 <hr>
+    //                 <p style="color: #7f8c8d;">Regards,<br>Campus Plus Team</p>
+    //               </div>
+    //             `
+    //           });
+    //           // return { email, status: 'success' };
+    //         } catch (err) {
+    //           console.error(`Failed to send email to ${email}:`, err.message);
+    //           // return { email, status: 'failed', error: err.message };
+    //         }
+    //       })
+    //     );
+
+    //     const successful = emailResults.filter(r => r.status === 'fulfilled' && r.value.status === 'success');
+    //     console.log(`Sent ${successful.length}/${emailList.length} notifications successfully`);
+    //   } catch (err) {
+    //     console.error("Error in email notification background process:", err);
+    //   }
+    // });
+
+    return response.status(201).json({
+      success: true,
+      message: `Room "${roomName}" created successfully`,
+      roomId: res.rows[0]?.id
+    });
   } catch (error) {
     console.error("Create room error:", error.message);
     await client.query("ROLLBACK");
-    return response.status(500).json("Server Error");
+    return response.status(500).json({
+      success: false,
+      message: "Server Error",
+      error: error.message
+    });
   } finally {
     if (client) client.release();
   }
@@ -288,9 +341,7 @@ const createRoom = async (request, response) => {
 const joinRoom = async (request, response) => {
   const {
     params: { roomid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!userid || !roomid) {
@@ -330,9 +381,7 @@ const sendMessage = async (request, response) => {
   const {
     body: { message, parent_reply_id = null, messageid = null },
     params: { roomid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -371,9 +420,7 @@ const sendReply = async (request, response) => {
   const {
     body: { message, parent_reply_id = null },
     params: { roomid, parentMessage }, // parentMessage is the messageid
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -434,9 +481,7 @@ const addnestedReply = async (request, response) => {
   const {
     params: { roomid, parentReplyId },
     body: { content },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -515,9 +560,7 @@ const processPost = async (request, response) => {
 const likePost = async (req, res) => {
   const {
     params: { messageid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = req;
 
   try {
@@ -579,7 +622,7 @@ const createPost = async (req, res) => {
       `INSERT INTO messages (roomid, userid, content, posted_at, status) 
            VALUES ($1, $2, $3, NOW(), 'Pending') 
            RETURNING messageid, roomid, userid, content, posted_at, status`,
-      [roomid, req.session.user.userid, message]
+      [roomid, req.user.userid, message]
     );
 
     return res.status(201).json({ message: result.rows[0] });
@@ -592,9 +635,7 @@ const createPost = async (req, res) => {
 const LeaveRoom = async (request, response) => {
   const {
     params: { roomid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   if (!roomid) return response.status(400).json("Room ID is required");
@@ -688,9 +729,7 @@ const deleteRoom = async (request, response) => {
 const deletePost = async (request, response) => {
   const {
     params: { roomid, messageid },
-    session: {
-      user: { role },
-    },
+    user: { role },
   } = request;
 
   if (role !== "Admin") {
@@ -770,9 +809,7 @@ const editPost = async (request, response) => {
   const {
     params: { roomid, messageid },
     body: { content },
-    session: {
-      user: { role, userid },
-    },
+    user: { role, userid },
   } = request;
 
   const client = await pool.connect();
@@ -847,9 +884,7 @@ const getPostEditHistory = async (request, response) => {
 const pinPost = async (request, response) => {
   const {
     params: { roomid, messageid },
-    session: {
-      user: { role, userid },
-    },
+    user: { role, userid },
   } = request;
 
   if (role !== "Admin" && role !== "Moderator") {
@@ -901,9 +936,7 @@ const reportPost = async (request, response) => {
   const {
     params: { messageid },
     body: { reason },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   try {
@@ -928,9 +961,7 @@ const createPoll = async (request, response) => {
   const {
     params: { roomid },
     body: { question, options, isMultipleChoice, endTime },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -974,9 +1005,7 @@ const votePoll = async (request, response) => {
   const {
     params: { pollid },
     body: { selectedOptions },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   const client = await pool.connect();
@@ -1026,9 +1055,7 @@ const votePoll = async (request, response) => {
 const trackPostView = async (request, response) => {
   const {
     params: { messageid },
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   try {
@@ -1050,9 +1077,7 @@ const searchPosts = async (request, response) => {
   const {
     params: { roomid },
     query: { keyword, username, date },
-    session: {
-      user: { role },
-    },
+    user: { role },
   } = request;
 
   try {
@@ -1128,9 +1153,7 @@ const searchPosts = async (request, response) => {
 
 const getUserJoinedGroups = async (request, response) => {
   const {
-    session: {
-      user: { userid },
-    },
+    user: { userid },
   } = request;
 
   try {
