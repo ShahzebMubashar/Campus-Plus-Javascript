@@ -1,6 +1,6 @@
 import React from "react";
 import "./Sidebar.css";
-import cplogo from "../../../Assets/images/cp_logo.png"; // Adjust the path as necessary
+import cplogo from "../../../Assets/images/cp_logo.png";
 import useProfileUser from "../../../hooks/useProfileUser";
 
 const Sidebar = ({
@@ -13,9 +13,6 @@ const Sidebar = ({
 }) => {
   const user = useProfileUser();
 
-  // Debug log
-  console.log("Sidebar isOpen:", isOpen);
-  // Get initials and color (same as ProfilePage)
   const getUserInitials = () => {
     const displayName = user?.name || user?.username;
     if (!displayName) return "U";
@@ -47,58 +44,61 @@ const Sidebar = ({
   };
 
   return (
-    <div className={`sidebar ${isOpen ? "open" : ""}`}>
-      {/* Brand Section */}
-      <div className="brand-section">
-        <div className="brand-logo"><img src={cplogo} alt="Campus Plus logo"></img></div>
-        <h2 className="brand-title">Campus Plus</h2>
-      </div>
+    <div className={`cp-sidebar ${isOpen ? "open" : ""}`}>
+      <div className="cp-sidebar-content">
+        {/* Brand Section */}
+        <div className="brand-section">
+          <div className="brand-logo">
+            <img src={cplogo} alt="Campus Plus logo" />
+          </div>
+          <h2 className="brand-title">Campus Plus</h2>
+        </div>
 
-      {/* Navigation Links */}
-      <nav className="sidebar-nav-links">
-        <a href="/" className="sidebar-nav-link">
-          Dashboard
-        </a>
-        <a href="/chatroom" className="sidebar-nav-link active">
-          Chatrooms
-          <span className="nav-badge">{joinedRooms?.length || 0}</span>
-        </a>
-        <a href="/profile" className="sidebar-nav-link">
-          Profile
-        </a>
-        <a href="/notifications" className="sidebar-nav-link">
-          Notifications
-          <span className="nav-badge notification-badge">3</span>
-        </a>
-      </nav>
+        {/* Navigation Links */}
+        <nav className="sidebar-nav-links">
+          <a href="/" className="sidebar-nav-link">
+            Dashboard
+          </a>
+          <a href="/chatroom" className="sidebar-nav-link active">
+            Chatrooms
+            <span className="nav-badge">{joinedRooms?.length || 0}</span>
+          </a>
+          <a href="/profile" className="sidebar-nav-link">
+            Profile
+          </a>
+          <a href="/notifications" className="sidebar-nav-link">
+            Notifications
+            <span className="nav-badge notification-badge">3</span>
+          </a>
+        </nav>
 
-      {/* Joined Rooms Section */}
-      <div className="rooms-section">
-        <h3>My Rooms ({joinedRooms?.length || 0})</h3>
-        <div className="rooms-list">
-          {joinedRooms?.map((room) => (
-            <button
-              key={room.roomid}
-              className={`room-button ${activeRoom?.roomid === room.roomid ? "active" : ""}`}
-              onClick={() => {
-                onRoomSelect(room);
-                // Close sidebar on mobile after room selection
-                if (window.innerWidth <= 768 && onClose) {
-                  onClose();
-                }
-              }}
-            >
-              {room.roomname}
-            </button>
-          ))}
+        {/* Joined Rooms Section */}
+        <div className="rooms-section">
+          <h3>My Rooms ({joinedRooms?.length || 0})</h3>
+          <div className="rooms-list">
+            {joinedRooms?.map((room) => (
+              <button
+                key={room.roomid}
+                className={`room-button ${activeRoom?.roomid === room.roomid ? "active" : ""}`}
+                onClick={() => {
+                  onRoomSelect(room);
+                  if (window.innerWidth <= 768 && onClose) {
+                    onClose();
+                  }
+                }}
+              >
+                {room.roomname}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
       {/* User Profile Section at Bottom */}
-      <div className="user-profile-section">
-        <div className="user-profile-content">
+      <div className="cp-sidebar-user-profile">
+        <div className="cp-sidebar-user-profile-content">
           <div
-            className="user-avatar"
+            className="cp-sidebar-user-avatar"
             style={{
               backgroundColor: getAvatarColor(),
               borderRadius: "50%",
@@ -118,8 +118,8 @@ const Sidebar = ({
           >
             {getUserInitials()}
           </div>
-          <div className="user-info">
-            <span className="username">
+          <div className="cp-sidebar-user-info">
+            <span className="cp-sidebar-username">
               {user?.name || user?.username || "Guest"}
             </span>
           </div>

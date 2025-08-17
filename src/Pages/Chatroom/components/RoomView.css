@@ -501,10 +501,10 @@
 
 /* Tablet Portrait and Large Mobile (481px - 768px) */
 @media (max-width: 768px) {
-  .room-view-container {
+  /* .room-view-container {
     flex-direction: column;
     padding: 0;
-  }
+  } */
 
   .room-view-content {
     padding: 12px;

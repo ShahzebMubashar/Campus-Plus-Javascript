@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "./RoomView.css";
-import Sidebar from "./Sidebar";
 import API_BASE_URL from "../../../config/api.js";
 import { authenticatedFetch } from "../../../utils/auth";
 import useProfileUser from "../../../hooks/useProfileUser";
@@ -761,15 +759,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         position: "relative",
       }}
     >
-      <Sidebar
-        room={room}
-        onBack={onBack}
-        onLeave={onLeave}
-        userInfo={userInfo}
-        rooms={rooms}
-        joinedRooms={joinedRooms}
-        onRoomSelect={handleRoomSelect}
-      />
+
       {/* Main content */}
       <div
         className="room-view-content"

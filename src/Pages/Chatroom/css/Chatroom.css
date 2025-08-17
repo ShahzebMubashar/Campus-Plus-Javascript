@@ -126,7 +126,7 @@
   }
 
   .main-content {
-    margin-left: 300px;
+    margin-left: 0px;
     width: calc(100% - 300px);
     padding: 32px;
   }

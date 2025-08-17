@@ -1,22 +1,3 @@
-/* Modern clean sidebar similar to Prody design */
-.sidebar {
-  position: fixed;
-  top: 0px;
-  left: 0;
-  width: 280px;
-  height: 100vh;
-  background: #ffffff;
-  color: #374151;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  padding: 24px 0;
-  z-index: 100;
-  border-right: 1px solid #e5e7eb;
-  overflow-y: auto;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
 .brand-section {
   width: 90%;
   display: flex;
@@ -146,332 +127,57 @@
   color: #111827;
 }
 
-/* User Profile Section at Bottom */
-.user-profile-section {
-  margin-top: auto;
+/* --- ONLY cp-sidebar classes below --- */
+
+.cp-sidebar {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 24px 0;
+  z-index: 100;
+  border-right: 1px solid #e5e7eb;
+  background: #fff;
+  width: 320px;
+  min-width: 240px;
+  max-width: 100vw;
+  overflow: hidden;
+}
+
+.cp-sidebar-content {
+  flex: 1 1 auto;
+  width: 100%;
+  overflow-y: auto;
+  padding: 0 0 0 0;
+}
+
+.cp-sidebar-user-profile {
   width: 100%;
   padding: 16px 20px;
   border-top: 1px solid #f3f4f6;
+  background: #fff;
 }
 
-.user-profile-content {
+.cp-sidebar-user-profile-content {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 8px;
-  border-radius: 6px;
-  transition: background 0.2s ease;
+  gap: 16px;
 }
 
-.user-profile-content:hover {
-  background: #f9fafb;
+.cp-sidebar-user-avatar {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  font-size: 1.2rem;
 }
 
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 6px;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 600;
-  flex-shrink: 0;
-}
-
-.user-info {
+.cp-sidebar-user-info {
   flex: 1;
-  display: flex;
-  flex-direction: column;
 }
 
-.username {
-  font-size: 14px;
+.cp-sidebar-username {
   font-weight: 500;
-  color: #111827;
-  line-height: 1.2;
-}
-
-/* Enhanced Responsive Design for All Screen Sizes */
-
-/* Extra Large Screens (1400px+) */
-@media (min-width: 1400px) {
-  .sidebar {
-    width: 320px;
-    padding: 32px 0;
-  }
-
-  .brand-section {
-    padding: 0 24px 20px 24px;
-    margin-bottom: 20px;
-  }
-
-  .sidebar-nav-links,
-  .rooms-list {
-    padding: 0 24px;
-  }
-
-  .user-profile-section {
-    padding: 20px 24px;
-  }
-}
-
-/* Large Screens (1200px - 1399px) */
-@media (max-width: 1399px) and (min-width: 1200px) {
-  .sidebar {
-    width: 300px;
-  }
-}
-
-/* Desktop (992px - 1199px) */
-@media (max-width: 1199px) and (min-width: 992px) {
-  .sidebar {
-    width: 280px;
-  }
-}
-
-/* Large Tablet (769px - 991px) */
-@media (max-width: 991px) and (min-width: 769px) {
-  .sidebar {
-    width: 260px;
-  }
-
-  .brand-logo {
-    width: 36px;
-    height: 36px;
-  }
-
-  .brand-title {
-    font-size: 16px;
-  }
-}
-
-/* Tablet Portrait (481px - 768px) */
-@media (max-width: 768px) {
-  .sidebar {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 320px;
-    max-width: 85vw;
-    height: 100vh;
-    z-index: 1000;
-    transition: left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
-    backdrop-filter: blur(10px);
-  }
-
-  .sidebar.open {
-    left: 0;
-  }
-
-  .brand-section {
-    padding: 0 16px 20px 16px;
-    margin-bottom: 20px;
-  }
-
-  .brand-logo {
-    width: 40px;
-    height: 40px;
-  }
-
-  .brand-title {
-    font-size: 18px;
-  }
-
-  .sidebar-nav-links,
-  .rooms-list {
-    padding: 0 16px;
-  }
-
-  .user-profile-section {
-    padding: 16px;
-  }
-
-  /* Mobile close button */
-  .sidebar::after {
-    content: '✕';
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 32px;
-    height: 32px;
-    background: #f3f4f6;
-    border: none;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    font-size: 16px;
-    color: #6b7280;
-    transition: all 0.2s ease;
-  }
-
-  .sidebar::after:hover {
-    background: #e5e7eb;
-    color: #374151;
-  }
-}
-
-/* Large Mobile (376px - 480px) */
-@media (max-width: 480px) {
-  .sidebar {
-    width: 100vw;
-    max-width: 100vw;
-    left: -100vw;
-  }
-
-  .brand-section {
-    padding: 0 12px 16px 12px;
-    margin-bottom: 16px;
-  }
-
-  .brand-logo {
-    width: 36px;
-    height: 36px;
-  }
-
-  .brand-title {
-    font-size: 16px;
-  }
-
-  .sidebar-nav-links,
-  .rooms-list {
-    padding: 0 12px;
-  }
-
-  .sidebar-nav-link,
-  .room-button {
-    padding: 10px 12px;
-    font-size: 15px;
-  }
-
-  .nav-badge {
-    font-size: 11px;
-    padding: 1px 5px;
-  }
-
-  .rooms-section h3 {
-    margin-left: 12px;
-    font-size: 11px;
-  }
-
-  .user-profile-section {
-    padding: 12px;
-  }
-
-  .user-avatar {
-    width: 28px;
-    height: 28px;
-    font-size: 12px;
-  }
-
-  .username {
-    font-size: 13px;
-  }
-}
-
-/* Small Mobile (320px - 375px) */
-@media (max-width: 375px) {
-  .sidebar {
-    padding: 16px 0;
-  }
-
-  .brand-section {
-    padding: 0 8px 12px 8px;
-    margin-bottom: 12px;
-  }
-
-  .brand-logo {
-    width: 32px;
-    height: 32px;
-  }
-
-  .brand-title {
-    font-size: 15px;
-  }
-
-  .sidebar-nav-links,
-  .rooms-list {
-    padding: 0 8px;
-  }
-
-  .sidebar-nav-link,
-  .room-button {
-    padding: 8px 10px;
-    font-size: 14px;
-  }
-
-  .user-profile-section {
-    padding: 10px 8px;
-  }
-
-  .user-avatar {
-    width: 26px;
-    height: 26px;
-    font-size: 11px;
-  }
-
-  .username {
-    font-size: 12px;
-  }
-}
-
-/* Extra Small Mobile (up to 320px) */
-@media (max-width: 320px) {
-  .sidebar {
-    padding: 12px 0;
-  }
-
-  .brand-section {
-    padding: 0 6px 10px 6px;
-    margin-bottom: 10px;
-    gap: 6px;
-  }
-
-  .brand-logo {
-    width: 28px;
-    height: 28px;
-  }
-
-  .brand-title {
-    font-size: 14px;
-  }
-
-  .sidebar-nav-links,
-  .rooms-list {
-    padding: 0 6px;
-  }
-
-  .sidebar-nav-link,
-  .room-button {
-    padding: 6px 8px;
-    font-size: 13px;
-  }
-
-  .nav-badge {
-    font-size: 10px;
-    padding: 1px 4px;
-  }
-
-  .rooms-section h3 {
-    margin-left: 6px;
-    font-size: 10px;
-  }
-
-  .user-profile-section {
-    padding: 8px 6px;
-  }
-
-  .user-avatar {
-    width: 24px;
-    height: 24px;
-    font-size: 10px;
-  }
-
-  .username {
-    font-size: 11px;
-  }
+  color: #222;
+  font-size: 1.05rem;
 }
