@@ -332,3 +332,100 @@ div[class*="react-select"] {
     align-self: flex-end;
   }
 }
+
+/* Admin section styling */
+.admin-section {
+  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+  border: 2px solid #ff9800;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 25px;
+  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.15);
+}
+
+.admin-section h3 {
+  color: #e65100;
+  font-size: 1.3rem;
+  font-weight: 600;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.admin-section h3::before {
+  content: "⚙";
+  font-size: 1.2rem;
+}
+
+.csv-upload-container {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.csv-upload-container input[type="file"] {
+  padding: 10px;
+  border: 2px dashed #ff9800;
+  border-radius: 8px;
+  background-color: rgba(255, 152, 0, 0.05);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.csv-upload-container input[type="file"]:hover {
+  border-color: #e65100;
+  background-color: rgba(255, 152, 0, 0.1);
+}
+
+.upload-button {
+  background: linear-gradient(135deg, #ff9800, #f57c00);
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+}
+
+.upload-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #f57c00, #e65100);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+}
+
+.upload-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Status message styling */
+.upload-status {
+  padding: 12px;
+  border-radius: 8px;
+  font-weight: 500;
+  margin-top: 10px;
+  border-left: 4px solid;
+}
+
+.upload-status.success {
+  background-color: #d4edda;
+  color: #155724;
+  border-left-color: #28a745;
+}
+
+.upload-status.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border-left-color: #dc3545;
+}
+
+.upload-status.info {
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-left-color: #17a2b8;
+}

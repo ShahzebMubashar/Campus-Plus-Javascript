@@ -5,6 +5,8 @@ import DynamicTimetable from "./DynamicTimetable";
 import Footer from "../Footer/Footer";
 import Select from "react-select"; // React-Select for searchable dropdowns
 import "./Timetable.css";
+import { getAccessToken } from "../../utils/auth";
+import API_BASE_URL from "../../config/api";
 
 const Timetable = () => {
   const [csvData, setCsvData] = useState([]);
@@ -12,8 +14,14 @@ const Timetable = () => {
   const [courses, setCourses] = useState({});
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [currentCourse, setCurrentCourse] = useState(null);
+  const [csvFile, setCsvFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [showAdminSection, setShowAdminSection] = useState(false);
 
   useEffect(() => {
+    // Check admin status from backend
+    checkAdminStatus();
+    
     fetch(require("../../Assets/data/courses.csv"))
       .then((response) => response.text())
       .then((data) => processCsv(parseCsvData(data)))
@@ -138,15 +146,118 @@ const Timetable = () => {
     setSelectedCourses(updatedCourses);
   };
 
-  const removeCourse = (courseCode) => {
+  const removeCourse = (courseCode, section) => {
     setSelectedCourses(
-      selectedCourses.filter((c) => c.courseCode !== courseCode),
+      selectedCourses.filter((c) => !(c.courseCode === courseCode && c.section === section)),
     );
   };
 
   const clearAllCourses = () => {
     setSelectedCourses([]);
   };
+
+  const checkAdminStatus = async () => {
+    try {
+      const token = getAccessToken();
+      if (!token) {
+        setShowAdminSection(false);
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/auth/user-role`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setShowAdminSection(data.userRole === 'Admin');
+      } else {
+        setShowAdminSection(false);
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      setShowAdminSection(false);
+    }
+  };
+
+  const handleCsvUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      setUploadStatus("Please select a file");
+      return;
+    }
+    
+    if (file.type !== "text/csv" && !file.name.endsWith('.csv')) {
+      setUploadStatus("Please select a valid CSV file");
+      setCsvFile(null);
+      return;
+    }
+    
+    if (file.size > 10 * 1024 * 1024) { // 10MB limit
+      setUploadStatus("File size must be less than 10MB");
+      setCsvFile(null);
+      return;
+    }
+    
+    setCsvFile(file);
+    setUploadStatus("");
+  };
+
+  const uploadCsv = async () => {
+    if (!csvFile) {
+      setUploadStatus("Please select a CSV file first");
+      return;
+    }
+
+    try {
+      setUploadStatus("Processing CSV file...");
+      
+      // Read the file content
+      const fileContent = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsText(csvFile);
+      });
+
+      // Validate CSV structure
+      const lines = fileContent.split('\n');
+      if (lines.length < 2) {
+        setUploadStatus("Invalid CSV file: Must contain at least a header row and one data row");
+        return;
+      }
+
+      // Check required columns
+      const header = lines[0].toLowerCase();
+      const requiredColumns = ['id', 'title', 'code', 'section', 'instructor'];
+      const missingColumns = requiredColumns.filter(col => !header.includes(col));
+      
+      if (missingColumns.length > 0) {
+        setUploadStatus(`Invalid CSV structure: Missing required columns: ${missingColumns.join(', ')}`);
+        return;
+      }
+
+      // Process the CSV data directly
+      const parsedData = parseCsvData(fileContent);
+      processCsv(parsedData);
+      
+      setUploadStatus("CSV processed successfully! Data updated.");
+      setCsvFile(null);
+      
+      // Reset file input
+      const fileInput = document.getElementById('csv-upload');
+      if (fileInput) fileInput.value = '';
+      
+    } catch (error) {
+      console.error("CSV processing error:", error);
+      setUploadStatus("Error processing CSV file");
+    }
+  };
+
   const customstyles = {
     placeholder: (base) => ({
       ...base,
@@ -199,6 +310,34 @@ const Timetable = () => {
       <Navbar />
       <div className="app-container">
         <h1 className="header">Timetable Course Selector</h1>
+        
+        {/* Admin-only CSV upload section */}
+        {showAdminSection && (
+          <div className="admin-section">
+            <h3>Admin Controls</h3>
+            <div className="csv-upload-container">
+              <input
+                type="file"
+                id="csv-upload"
+                accept=".csv"
+                onChange={handleCsvUpload}
+              />
+              <button 
+                onClick={uploadCsv}
+                disabled={!csvFile}
+                className="upload-button"
+              >
+                Process CSV File
+              </button>
+              {uploadStatus && (
+                <div className={`upload-status ${uploadStatus.includes('success') ? 'success' : uploadStatus.includes('failed') || uploadStatus.includes('error') ? 'error' : 'info'}`}>
+                  {uploadStatus}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="selectors">
           <div style={{ width: "100%", marginBottom: "20px" }}>
             <label className="selector-label">Course Selection</label>
