@@ -9,6 +9,7 @@ import "../Chatroom/css/Chatroom.css";
 import { AiOutlineMenu } from "react-icons/ai";
 import API_BASE_URL from "../../config/api.js";
 import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/auth";
+import ChatroomMobileBanner from "./components/ChatroomMobileBanner";
 
 
 export default function Chatrooms() {
@@ -23,6 +24,8 @@ export default function Chatrooms() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isMenuVisible, setIsMenuVisible] = useState(true);
   const [pendingBack, setPendingBack] = useState(false); // <-- add this
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
     // Check authentication first
@@ -104,6 +107,12 @@ export default function Chatrooms() {
     }
   }, [pendingBack, activeRoom, navigate]);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 900);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   const toggleSidebar = (e) => {
     if (e) e.stopPropagation();
     setIsSidebarOpen((prev) => !prev);
@@ -175,6 +184,11 @@ export default function Chatrooms() {
     }
   };
 
+  // Replace your return with this:
+  if (isMobile && !!userInfo) {
+    return <ChatroomMobileBanner isLoggedIn={!!userInfo} />;
+  }
+
   return (
     <div className="chatroom-main-top">
       <div className="chatroom-app">
@@ -201,6 +215,7 @@ export default function Chatrooms() {
               if (e) e.stopPropagation();
               setIsSidebarOpen(false);
             }}
+            notificationCount={notificationCount} // <-- pass here
           />
           <div className="main-content">
             {activeRoom ? (

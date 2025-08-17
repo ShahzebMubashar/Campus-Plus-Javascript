@@ -101,32 +101,35 @@ export default function RoomList({ rooms, onJoinRoom }) {
       {/* Create Room Modal */}
       {showCreateRoomForm && (
         <>
-          <div className="modal-overlay" onClick={() => setShowCreateRoomForm(false)}></div>
-          <div className="create-room-modal">
-            <div className="create-room-modal-content">
-              <h2 className="create-room-modal-title">Create New Room</h2>
+          <div
+            className="chatroom-modal-overlay"
+            onClick={() => setShowCreateRoomForm(false)}
+          ></div>
+          <div className="chatroom-create-room-modal">
+            <div className="chatroom-create-room-modal-content">
+              <h2 className="chatroom-create-room-modal-title">Create New Room</h2>
               <input
-                className="create-room-input"
+                className="chatroom-modal-input"
                 type="text"
                 placeholder="Room Name"
                 value={newRoomName}
                 onChange={(e) => setNewRoomName(e.target.value)}
               />
               <textarea
-                className="create-room-textarea"
+                className="chatroom-modal-textarea"
                 placeholder="Room Description"
                 value={newRoomDescription}
                 onChange={(e) => setNewRoomDescription(e.target.value)}
               />
-              <div className="modal-buttons">
+              <div className="chatroom-modal-buttons">
                 <button
-                  className="modal-button modal-button-cancel"
+                  className="chatroom-modal-button chatroom-modal-button-cancel"
                   onClick={() => setShowCreateRoomForm(false)}
                 >
                   Cancel
                 </button>
                 <button
-                  className="modal-button modal-button-create"
+                  className="chatroom-modal-button chatroom-modal-button-create"
                   onClick={handleCreateRoom}
                 >
                   Create Room

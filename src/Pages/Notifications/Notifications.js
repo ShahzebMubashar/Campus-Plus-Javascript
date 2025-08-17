@@ -7,9 +7,14 @@ import { authenticatedFetch, isAuthenticated as checkAuth } from "../../utils/au
 
 function Notifications() {
     const [user, setUser] = useState({
-        fullName: "",
+        name: "",
+        username: "",
         email: "",
-        rollNumber: "",
+        rollnumber: "",
+        degree: "",
+        batch: "",
+        gpa: "",
+        notifications: [],
         isAdmin: false,
     });
 
@@ -24,10 +29,14 @@ function Notifications() {
         course: ""
     });
 
+    // --- Use the same fetchUserInfo logic as ProfilePage ---
     const fetchUserInfo = async () => {
         try {
             const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
                 method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
             });
 
             if (!res.ok) {
@@ -42,6 +51,37 @@ function Notifications() {
         } catch (error) {
             console.log("Error fetching User Info", error);
         }
+    };
+
+    // --- Use the same initials and color logic as ProfilePage ---
+    const getUserInitials = () => {
+        const displayName = user.name || user.username;
+        if (!displayName) return "U";
+        return displayName
+            .split(" ")
+            .filter((_, index, array) => index === 0 || index === array.length - 1)
+            .map((name) => name[0])
+            .join("")
+            .toUpperCase();
+    };
+
+    const getAvatarColor = () => {
+        const name = user.name || user.username || "";
+        if (!name) return "#1a73e8";
+        const colors = [
+            "#1a73e8",
+            "#4285f4",
+            "#0d47a1",
+            "#3367d6",
+            "#4e6cef",
+            "#3742fa",
+            "#1e3799",
+            "#0077c2",
+            "#0097e6",
+            "#00a8ff",
+        ];
+        const charSum = name.split("").reduce((sum, c) => sum + c.charCodeAt(0), 0);
+        return colors[charSum % colors.length];
     };
 
     const fetchNotifications = async () => {
@@ -162,7 +202,7 @@ function Notifications() {
                     <div
                         className="profile-picture"
                         style={{
-                            backgroundColor: user.isAdmin ? "#8b5cf6" : "#3b82f6",
+                            backgroundColor: getAvatarColor(),
                             borderRadius: "50%",
                             display: "flex",
                             alignItems: "center",
@@ -172,22 +212,16 @@ function Notifications() {
                             fontWeight: "bold",
                             textTransform: "uppercase",
                             letterSpacing: "1px",
+                            color: "#fff",
                         }}
                     >
-                        {user.fullName
-                            ? user.fullName
-                                .split(" ")
-                                .filter((_, index, array) => index === 0 || index === array.length - 1)
-                                .map((name) => name[0])
-                                .join("")
-                                .toUpperCase()
-                            : "U"}
+                        {getUserInitials()}
                     </div>
                     <div className="user-info">
-                        <h1 className="user-name">
-                            {user?.fullName || user?.username || "Loading..."}
+                        <h1 className="user-name" style={{ textAlign: "left" }}>
+                            {user?.name || user?.username || "Loading..."}
                         </h1>
-                        <h5 className="user-name-username">
+                        <h5 className="user-name-username" style={{ textAlign: "left" }}>
                             @{user?.username || "Loading..."}
                         </h5>
                         <div className="user-details">
@@ -195,10 +229,10 @@ function Notifications() {
                                 <span className="user-detail-icon">📧</span>
                                 <span>{user?.email || "Loading..."}</span>
                             </div>
-                            {user?.rollNumber && (
+                            {user?.rollnumber && (
                                 <div className="user-detail-item">
                                     <span className="user-detail-icon">🎓</span>
-                                    <span>Roll No: {user.rollNumber}</span>
+                                    <span>Roll No: {user.rollnumber}</span>
                                 </div>
                             )}
                         </div>

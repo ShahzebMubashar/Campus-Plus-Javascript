@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import "./RoomView.css";
-import Sidebar from "./Sidebar";
 import API_BASE_URL from "../../../config/api.js";
 import { authenticatedFetch } from "../../../utils/auth";
+import useProfileUser from "../../../hooks/useProfileUser";
 
 // Modern blue theme color constants
 const colors = {
@@ -171,6 +170,8 @@ export default function RoomView({ room, onBack, onLeave }) {
     message: "",
     type: "",
   });
+
+  const profileUser = useProfileUser();
 
   // Button styles for reusability
   const buttonStyles = {
@@ -758,15 +759,7 @@ export default function RoomView({ room, onBack, onLeave }) {
         position: "relative",
       }}
     >
-      <Sidebar
-        room={room}
-        onBack={onBack}
-        onLeave={onLeave}
-        userInfo={userInfo}
-        rooms={rooms}
-        joinedRooms={joinedRooms}
-        onRoomSelect={handleRoomSelect}
-      />
+
       {/* Main content */}
       <div
         className="room-view-content"
@@ -1168,14 +1161,44 @@ export default function RoomView({ room, onBack, onLeave }) {
                           gap: "12px",
                         }}
                       >
+                        <div
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            borderRadius: "50%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontSize: "14px",
+                            fontWeight: "bold",
+                            backgroundColor:
+                              post.userid === profileUser?.userid
+                                ? getAvatarColor(profileUser)
+                                : getAvatarColor({ name: post.username }),
+                            color: "white",
+                            border: "2px solid white",
+                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
+                            flexShrink: 0,
+                            textTransform: "uppercase",
+                            letterSpacing: "1px",
+                            transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                          }}
+                        >
+                          {post.userid === profileUser?.userid
+                            ? getUserInitials(profileUser)
+                            : getUserInitials({ name: post.username })}
+                        </div>
                         <span
                           style={{
                             fontWeight: "600",
                             color: colors.primary,
                             fontSize: "16px",
+                            textAlign: "left",
                           }}
                         >
-                          {post.username}
+                          {post.userid === profileUser?.userid
+                            ? profileUser?.name || profileUser?.username
+                            : post.username}
                         </span>
                         {post.is_pinned && (
                           <span
@@ -1373,7 +1396,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                         stroke="currentColor"
                         strokeWidth="2"
                       >
-                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2h-4"></path>
                         <polyline points="16 6 12 2 8 6"></polyline>
                         <line x1="12" y1="2" x2="12" y2="15"></line>
                       </svg>
@@ -1532,4 +1555,28 @@ export default function RoomView({ room, onBack, onLeave }) {
       </div>
     </div>
   );
+}
+
+// Utility: Get initials from name or username (same as ProfilePage)
+function getUserInitials(user) {
+  const displayName = user?.name || user?.username || user?.fullName;
+  if (!displayName) return "U";
+  return displayName
+    .split(" ")
+    .filter((_, idx, arr) => idx === 0 || idx === arr.length - 1)
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase();
+}
+
+// Utility: Get avatar color from name (same as ProfilePage)
+function getAvatarColor(user) {
+  const name = user?.name || user?.username || user?.fullName || "";
+  if (!name) return "#1a73e8";
+  const colors = [
+    "#1a73e8", "#4285f4", "#0d47a1", "#3367d6", "#4e6cef",
+    "#3742fa", "#1e3799", "#0077c2", "#0097e6", "#00a8ff",
+  ];
+  const charSum = name.split("").reduce((sum, c) => sum + c.charCodeAt(0), 0);
+  return colors[charSum % colors.length];
 }
