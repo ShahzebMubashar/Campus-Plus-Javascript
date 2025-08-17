@@ -20,7 +20,6 @@ import logout from "../../../Assets/images/logout.png";
 import transcript from "../../../Assets/images/transcript.png";
 import API_BASE_URL from '../../../config/api';
 import { isAuthenticated, getUser, logout as authLogout, authenticatedFetch } from "../../../utils/auth";
-
 // import bell from "../../../Assets/images/bell.png"
 // import { FaUserCircle } from 'react-icons/fa';
 
@@ -543,7 +542,6 @@ function Navbar() {
                     Dashboard
                   </Link>
                 </li>
-
                 <li className="navbaruser-dropdown">
                   <div className="navbaruser-icon">
                     <div className="navbar-profile-avatar" style={!userData?.profilePic ? {

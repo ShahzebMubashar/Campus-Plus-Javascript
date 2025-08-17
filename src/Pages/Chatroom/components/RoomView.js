@@ -24,46 +24,7 @@ const colors = {
   pinned: "#bbdefb",
 };
 
-const getUserInitials = (userData) => {
-  // Try to use name first, then fallback to username if available
-  const displayName = userData?.name || userData?.username;
-
-  if (!displayName) return "U";
-
-  return displayName
-    .split(" ")
-    .filter((_, index, array) => index === 0 || index === array.length - 1)
-    .map((name) => name[0])
-    .join("")
-    .toUpperCase();
-};
-
-const getAvatarColor = (userData) => {
-  const name = userData?.name || userData?.username;
-  if (!name) return "#1a73e8"; // Default color
-
-  const colors = [
-    "#1a73e8",
-    "#4285f4",
-    "#0d47a1",
-    "#3367d6",
-    "#4e6cef",
-    "#3742fa",
-    "#1e3799",
-    "#0077c2",
-    "#0097e6",
-    "#00a8ff",
-  ];
-
-  // Sum the character codes to get a deterministic but unique color
-  const charSum = name
-    .split("")
-    .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-
-  return colors[charSum % colors.length];
-};
-
-const Comment = ({ comment, level = 0, room, fetchPosts, userInfo }) => {
+const Comment = ({ comment, level = 0, room, fetchPosts }) => {
   const [showReplyBox, setShowReplyBox] = useState(false);
   const [replyText, setReplyText] = useState("");
 
@@ -108,50 +69,20 @@ const Comment = ({ comment, level = 0, room, fetchPosts, userInfo }) => {
         style={{
           display: "flex",
           justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginBottom: "8px",
+          alignItems: "center",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          {/* Profile avatar - only colored initials like ProfilePage */}
-          <div
-            style={{
-              width: "28px",
-              height: "28px",
-              borderRadius: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "11px",
-              fontWeight: "bold",
-              backgroundColor:
-                comment.userid === userInfo?.userid
-                  ? getAvatarColor(userInfo)
-                  : getAvatarColor({ name: comment.username }),
-              color: "white",
-              border: "1px solid white",
-              boxShadow: "0 1px 2px rgba(0,0,0,0.1)",
-              flexShrink: 0,
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-            }}
-          >
-            {comment.userid === userInfo?.userid
-              ? getUserInitials(userInfo)
-              : getUserInitials({ name: comment.username })}
-          </div>
-          <strong style={{ color: colors.textPrimary, textAlign: "left" }}>
-            {comment.username}
-          </strong>
-        </div>
+        <strong style={{ color: colors.textPrimary }}>
+          {comment.username}
+        </strong>
         <span style={{ color: colors.textSecondary, fontSize: "12px" }}>
           {new Date(comment.posted_at).toLocaleString()}
         </span>
       </div>
-      <p style={{ margin: "0 0 8px 36px", color: colors.textPrimary, textAlign: "left" }}>
+      <p style={{ margin: "8px 0 0", color: colors.textPrimary }}>
         {comment.content}
       </p>
-      <div style={{ marginLeft: "36px" }}>
+      <div style={{ marginTop: "8px" }}>
         <button
           onClick={() => setShowReplyBox(!showReplyBox)}
           style={{
@@ -167,7 +98,7 @@ const Comment = ({ comment, level = 0, room, fetchPosts, userInfo }) => {
         </button>
       </div>
       {showReplyBox && (
-        <div style={{ marginTop: "10px", marginLeft: "36px" }}>
+        <div style={{ marginTop: "10px" }}>
           <input
             type="text"
             placeholder="Write a reply..."
@@ -209,7 +140,6 @@ const Comment = ({ comment, level = 0, room, fetchPosts, userInfo }) => {
             level={level + 1}
             room={room}
             fetchPosts={fetchPosts}
-            userInfo={userInfo}
           />
         </div>
       ))}
@@ -1226,7 +1156,8 @@ export default function RoomView({ room, onBack, onLeave }) {
                         display: "flex",
                         flexDirection:
                           post.status === "Pending" ? "column" : "row",
-                        alignItems: "flex-start",
+                        alignItems:
+                          post.status === "Pending" ? "flex-start" : "center",
                         gap: post.status === "Pending" ? "4px" : "12px",
                       }}
                     >
@@ -1237,46 +1168,46 @@ export default function RoomView({ room, onBack, onLeave }) {
                           gap: "12px",
                         }}
                       >
-                        {/* Profile avatar - only colored initials like ProfilePage */}
-                        <div
-                          style={{
-                            width: "40px",
-                            height: "40px",
-                            borderRadius: "50%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontSize: "14px",
-                            fontWeight: "bold",
-                            backgroundColor:
-                              post.userid === userInfo?.userid
-                                ? getAvatarColor(userInfo)
-                                : getAvatarColor({ name: post.name || post.username }),
-                            color: "white",
-                            border: "2px solid white",
-                            boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
-                            flexShrink: 0,
-                            textTransform: "uppercase",
-                            letterSpacing: "1px",
-                            transition: "transform 0.2s ease, box-shadow 0.2s ease",
-                          }}
-                        >
-                          {post.userid === userInfo?.userid
-                            ? getUserInitials(userInfo)
-                            : getUserInitials({ name: post.name || post.username })}
-                        </div>
                         <span
                           style={{
                             fontWeight: "600",
                             color: colors.primary,
                             fontSize: "16px",
-                            textAlign: "left",
                           }}
                         >
-                          {post.userid === userInfo?.userid
-                            ? userInfo?.name || userInfo?.username
-                            : post.name || post.username}
+                          {post.username}
                         </span>
+                        {post.is_pinned && (
+                          <span
+                            style={{
+                              backgroundColor: colors.pinned,
+                              color: colors.primaryDark,
+                              padding: "4px 10px",
+                              borderRadius: "12px",
+                              fontSize: "12px",
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "4px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            📌 Pinned
+                          </span>
+                        )}
+                        {post.status === "Pending" && (
+                          <span
+                            style={{
+                              backgroundColor: colors.pending,
+                              color: "white",
+                              padding: "4px 10px",
+                              borderRadius: "12px",
+                              fontSize: "12px",
+                              fontWeight: "500",
+                            }}
+                          >
+                            Pending
+                          </span>
+                        )}
                       </div>
                       {post.status === "Pending" &&
                         (userRole === "Admin" || userRole === "Moderator") && (
@@ -1285,7 +1216,6 @@ export default function RoomView({ room, onBack, onLeave }) {
                               display: "flex",
                               gap: "8px",
                               marginTop: "6px",
-                              marginLeft: "52px",
                             }}
                           >
                             <button
@@ -1371,8 +1301,6 @@ export default function RoomView({ room, onBack, onLeave }) {
                       color: colors.textPrimary,
                       fontSize: "15px",
                       lineHeight: "1.5",
-                      textAlign: "left",
-                      marginLeft: "52px",
                     }}
                   >
                     {highlightText(post.content, searchQuery)}
@@ -1445,7 +1373,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                         stroke="currentColor"
                         strokeWidth="2"
                       >
-                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2z"></path>
+                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
                         <polyline points="16 6 12 2 8 6"></polyline>
                         <line x1="12" y1="2" x2="12" y2="15"></line>
                       </svg>
@@ -1469,7 +1397,6 @@ export default function RoomView({ room, onBack, onLeave }) {
                           comment={comment}
                           room={room}
                           fetchPosts={fetchPosts}
-                          userInfo={userInfo}
                         />
                       ))
                     ) : (
