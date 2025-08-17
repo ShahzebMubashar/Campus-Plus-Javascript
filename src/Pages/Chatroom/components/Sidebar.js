@@ -87,7 +87,9 @@ const Sidebar = ({
           </a>
           <a href="/notifications" className="sidebar-nav-link">
             Notifications
-            <span className="nav-badge notification-badge">{notificationCount}</span>
+            <span className="nav-badge notification-badge">
+              {notificationCount > 0 ? notificationCount : "?"}
+            </span>
           </a>
         </nav>
 
