@@ -20,6 +20,12 @@
   overflow-x: hidden;
 }
 
+/* Center align all text in RoomView */
+.room-view-content,
+.room-view-content * {
+  text-align: left !important;
+}
+
 /* Modernized RoomView Header and Buttons */
 .room-header {
   display: flex;
@@ -194,7 +200,7 @@
 }
 
 .modal-form-group input,
-.modal-form-group textarea {                 
+.modal-form-group textarea {
   width: 100%;
   padding: 12px;
   border: 2px solid #e5e7eb;

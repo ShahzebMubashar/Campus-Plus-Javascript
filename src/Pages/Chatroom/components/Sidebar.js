@@ -1,9 +1,9 @@
 import React from "react";
 import "./Sidebar.css";
 import cplogo from "../../../Assets/images/cp_logo.png"; // Adjust the path as necessary
+import useProfileUser from "../../../hooks/useProfileUser";
 
 const Sidebar = ({
-  userInfo,
   rooms,
   joinedRooms,
   activeRoom,
@@ -11,24 +11,25 @@ const Sidebar = ({
   isOpen,
   onClose,
 }) => {
+  const user = useProfileUser();
+
   // Debug log
   console.log("Sidebar isOpen:", isOpen);
-  // Function to get initials from username
-  const getInitials = (name) => {
-    if (!name) return "U";
-
-    return name
+  // Get initials and color (same as ProfilePage)
+  const getUserInitials = () => {
+    const displayName = user?.name || user?.username;
+    if (!displayName) return "U";
+    return displayName
       .split(" ")
-      .filter((_, index, array) => index === 0 || index === array.length - 1)
-      .map((name) => name[0])
+      .filter((_, idx, arr) => idx === 0 || idx === arr.length - 1)
+      .map((n) => n[0])
       .join("")
       .toUpperCase();
   };
 
-  // Function to generate a background color based on the name
-  const getAvatarColor = (name) => {
-    if (!name) return "#1a73e8"; // Default color
-
+  const getAvatarColor = () => {
+    const name = user?.name || user?.username || "";
+    if (!name) return "#1a73e8";
     const colors = [
       "#1a73e8",
       "#4285f4",
@@ -41,12 +42,7 @@ const Sidebar = ({
       "#0097e6",
       "#00a8ff",
     ];
-
-    // Sum the character codes to get a deterministic but unique color
-    const charSum = name
-      .split("")
-      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-
+    const charSum = name.split("").reduce((sum, c) => sum + c.charCodeAt(0), 0);
     return colors[charSum % colors.length];
   };
 
@@ -103,12 +99,29 @@ const Sidebar = ({
         <div className="user-profile-content">
           <div
             className="user-avatar"
-            style={{ backgroundColor: getAvatarColor(userInfo?.username) }}
+            style={{
+              backgroundColor: getAvatarColor(),
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              fontSize: "1.0rem",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              transition: "transform 0.3s ease, box-shadow 0.3s ease",
+              cursor: "default",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+              border: "3px solid white",
+            }}
           >
-            {getInitials(userInfo?.username)}
+            {getUserInitials()}
           </div>
           <div className="user-info">
-            <span className="username">{userInfo?.username || "Guest"}</span>
+            <span className="username">
+              {user?.name || user?.username || "Guest"}
+            </span>
           </div>
         </div>
       </div>
