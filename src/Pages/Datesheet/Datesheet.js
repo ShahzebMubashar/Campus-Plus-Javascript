@@ -6,6 +6,8 @@ import "./Datesheet.css"; // New CSS for Datesheet
 import CourseList from "../Index/components/CourseList";
 import Navbar from "../Index/components/Navbar";
 import Footer from "../Footer/Footer";
+import { getAccessToken } from "../../utils/auth";
+import API_BASE_URL from "../../config/api";
 
 const Datesheet = () => {
   const [csvData, setCsvData] = useState([]);
@@ -14,8 +16,14 @@ const Datesheet = () => {
   const [courses, setCourses] = useState({});
   const [selectedCourses, setSelectedCourses] = useState([]);
   const [currentCourse, setCurrentCourse] = useState(null);
+  const [csvFile, setCsvFile] = useState(null);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [showAdminSection, setShowAdminSection] = useState(false);
 
   useEffect(() => {
+    // Check admin status from backend
+    checkAdminStatus();
+    
     Promise.all([
       fetch(require("../../Assets/data/courses.csv")).then((res) => res.text()),
       fetch(require("../../Assets/data/datesheet.csv")).then((res) =>
@@ -34,13 +42,34 @@ const Datesheet = () => {
     const rows = data.split("\n").slice(1);
     return rows.map((row) => {
       const [
-        course,
-        courseCode,
+        id,
+        title, // Changed from course
+        code, // Changed from courseCode
         section,
+        instructor,
+        credit_hours,
+        program,
+        target_department, // Changed from target_dept
+        parent_department, // Changed from parent_dept
         type,
         repeat,
+        ...lectures2
       ] = row.split(",");
-      return { course, courseCode, section, type, repeat };
+      const lectures = lectures2.join(",");
+      return {
+        id,
+        course: title, // Mapped title to course
+        courseCode: code, // Mapped code to courseCode
+        section,
+        instructor,
+        credit_hours,
+        program,
+        target_dept: target_department, // Mapped target_department to target_dept
+        parent_dept: parent_department, // Mapped parent_department to parent_dept
+        type,
+        repeat,
+        lectures,
+      };
     });
   };
 
@@ -57,16 +86,16 @@ const Datesheet = () => {
     const courseByName = {};
 
     data.forEach(({ courseCode, course, section, type, repeat }) => {
-      if (!coursesBySection[section]) coursesBySection[section] = [];
-      coursesBySection[section].push({
-        courseCode,
-        course,
-        section,
-        type,
-        repeat,
-      });
+      if (section && course) {
+        if (!coursesBySection[section]) coursesBySection[section] = [];
+        coursesBySection[section].push({
+          courseCode,
+          course,
+          section,
+          type,
+          repeat,
+        });
 
-      if (course) {
         if (!courseByName[course])
           courseByName[course] = { course, sections: [], type, repeat };
         courseByName[course].sections.push(section);
@@ -115,14 +144,14 @@ const Datesheet = () => {
         row.repeat === "False",
     );
     const unique = newCourses.filter(
-      (row) => !selectedCourses.some((c) => c.courseCode === row.courseCode),
+      (row) => !selectedCourses.some((c) => c.courseCode === row.courseCode && c.section === section),
     );
     setSelectedCourses([...selectedCourses, ...unique]);
   };
 
-  const removeCourse = (courseCode) => {
+  const removeCourse = (courseCode, section) => {
     setSelectedCourses(
-      selectedCourses.filter((c) => c.courseCode !== courseCode),
+      selectedCourses.filter((c) => !(c.courseCode === courseCode && c.section === section)),
     );
   };
 
@@ -130,11 +159,141 @@ const Datesheet = () => {
     setSelectedCourses([]);
   };
 
+  const checkAdminStatus = async () => {
+    try {
+      const token = getAccessToken();
+      if (!token) {
+        setShowAdminSection(false);
+        return;
+      }
+
+      const response = await fetch(`${API_BASE_URL}/auth/user-role`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setShowAdminSection(data.userRole === 'Admin');
+      } else {
+        setShowAdminSection(false);
+      }
+    } catch (error) {
+      console.error('Error checking admin status:', error);
+      setShowAdminSection(false);
+    }
+  };
+
+  const handleCsvUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+      setUploadStatus("Please select a file");
+      return;
+    }
+    
+    if (file.type !== "text/csv" && !file.name.endsWith('.csv')) {
+      setUploadStatus("Please select a valid CSV file");
+      setCsvFile(null);
+      return;
+    }
+    
+    if (file.size > 10 * 1024 * 1024) { // 10MB limit
+      setUploadStatus("File size must be less than 10MB");
+      setCsvFile(null);
+      return;
+    }
+    
+    setCsvFile(file);
+    setUploadStatus("");
+  };
+
+  const uploadCsv = async () => {
+    if (!csvFile) {
+      setUploadStatus("Please select a CSV file first");
+      return;
+    }
+
+    try {
+      setUploadStatus("Processing CSV file...");
+      
+      // Read the file content
+      const fileContent = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = reject;
+        reader.readAsText(csvFile);
+      });
+
+      // Validate CSV structure
+      const lines = fileContent.split('\n');
+      if (lines.length < 2) {
+        setUploadStatus("Invalid CSV file: Must contain at least a header row and one data row");
+        return;
+      }
+
+      // Check required columns for datesheet
+      const header = lines[0].toLowerCase();
+      const requiredColumns = ['date', 'day', 'time slot', 'course code', 'course title'];
+      const missingColumns = requiredColumns.filter(col => !header.includes(col));
+      
+      if (missingColumns.length > 0) {
+        setUploadStatus(`Invalid CSV structure: Missing required columns: ${missingColumns.join(', ')}`);
+        return;
+      }
+
+      // Process the CSV data directly
+      const parsedData = parseDatesheet(fileContent);
+      setDatesheetData(parsedData);
+      
+      setUploadStatus("Datesheet CSV processed successfully! Data updated.");
+      setCsvFile(null);
+      
+      // Reset file input
+      const fileInput = document.getElementById('datesheet-csv-upload');
+      if (fileInput) fileInput.value = '';
+      
+    } catch (error) {
+      console.error("CSV processing error:", error);
+      setUploadStatus("Error processing CSV file");
+    }
+  };
+
   return (
     <div>
       <Navbar />
       <div className="datesheet-container">
         <h1 className="header">Datesheet Generator</h1>
+        
+        {/* Admin-only CSV upload section */}
+        {showAdminSection && (
+          <div className="admin-section">
+            <h3>Admin Controls</h3>
+            <div className="csv-upload-container">
+              <input
+                type="file"
+                id="datesheet-csv-upload"
+                accept=".csv"
+                onChange={handleCsvUpload}
+              />
+              <button 
+                onClick={uploadCsv}
+                disabled={!csvFile}
+                className="upload-button"
+              >
+                Process Datesheet CSV
+              </button>
+              {uploadStatus && (
+                <div className={`upload-status ${uploadStatus.includes('success') ? 'success' : uploadStatus.includes('failed') || uploadStatus.includes('error') ? 'error' : 'info'}`}>
+                  {uploadStatus}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
         <div className="selectors">
           <div style={{ flex: "1 1 0%" }}>
             <Select

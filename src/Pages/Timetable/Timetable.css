@@ -335,97 +335,101 @@ div[class*="react-select"] {
 
 /* Admin section styling */
 .admin-section {
-  background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-  border: 2px solid #ff9800;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border: 2px solid #e2e8f0;
   border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 25px;
-  box-shadow: 0 4px 16px rgba(255, 152, 0, 0.15);
+  padding: 25px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 16px rgba(13, 71, 161, 0.08);
 }
 
 .admin-section h3 {
-  color: #e65100;
-  font-size: 1.3rem;
+  color: #0d47a1;
+  font-size: 1.25rem;
   font-weight: 600;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .admin-section h3::before {
   content: "⚙";
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 
 .csv-upload-container {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 15px;
+  align-items: flex-start;
 }
 
 .csv-upload-container input[type="file"] {
-  padding: 10px;
-  border: 2px dashed #ff9800;
+  padding: 12px;
+  border: 2px dashed #cbd5e1;
   border-radius: 8px;
-  background-color: rgba(255, 152, 0, 0.05);
+  background-color: #ffffff;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  color: #64748b;
 }
 
 .csv-upload-container input[type="file"]:hover {
-  border-color: #e65100;
-  background-color: rgba(255, 152, 0, 0.1);
+  border-color: #0d47a1;
+  background-color: #f8fafc;
 }
 
 .upload-button {
-  background: linear-gradient(135deg, #ff9800, #f57c00);
+  background: linear-gradient(135deg, #0d47a1 0%, #1976d2 100%);
   color: white;
-  padding: 12px 24px;
   border: none;
+  padding: 12px 24px;
   border-radius: 8px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
+  transition: all 0.2s ease;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 8px rgba(13, 71, 161, 0.2);
 }
 
 .upload-button:hover:not(:disabled) {
-  background: linear-gradient(135deg, #f57c00, #e65100);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 71, 161, 0.3);
 }
 
 .upload-button:disabled {
-  background: #ccc;
+  background: #cbd5e1;
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
 }
 
-/* Status message styling */
 .upload-status {
-  padding: 12px;
+  padding: 12px 16px;
   border-radius: 8px;
+  font-size: 0.9rem;
   font-weight: 500;
   margin-top: 10px;
-  border-left: 4px solid;
+  width: 100%;
+  text-align: center;
 }
 
 .upload-status.success {
-  background-color: #d4edda;
-  color: #155724;
-  border-left-color: #28a745;
+  background-color: #f0fdf4;
+  color: #059669;
+  border: 1px solid #bbf7d0;
 }
 
 .upload-status.error {
-  background-color: #f8d7da;
-  color: #721c24;
-  border-left-color: #dc3545;
+  background-color: #fef2f2;
+  color: #dc2626;
+  border: 1px solid #fecaca;
 }
 
 .upload-status.info {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  border-left-color: #17a2b8;
+  background-color: #eff6ff;
+  color: #0d47a1;
+  border: 1px solid #bfdbfe;
 }
