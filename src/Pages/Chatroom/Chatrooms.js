@@ -25,6 +25,7 @@ export default function Chatrooms() {
   const [isMenuVisible, setIsMenuVisible] = useState(true);
   const [pendingBack, setPendingBack] = useState(false); // <-- add this
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   useEffect(() => {
     // Check authentication first
@@ -214,6 +215,7 @@ export default function Chatrooms() {
               if (e) e.stopPropagation();
               setIsSidebarOpen(false);
             }}
+            notificationCount={notificationCount} // <-- pass here
           />
           <div className="main-content">
             {activeRoom ? (

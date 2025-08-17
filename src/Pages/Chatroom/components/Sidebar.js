@@ -11,6 +11,7 @@ const Sidebar = ({
   onRoomSelect,
   isOpen,
   onClose,
+  notificationCount = 0, // <-- add this prop
 }) => {
   const user = useProfileUser();
 
@@ -86,7 +87,7 @@ const Sidebar = ({
           </a>
           <a href="/notifications" className="sidebar-nav-link">
             Notifications
-            <span className="nav-badge notification-badge">3</span>
+            <span className="nav-badge notification-badge">{notificationCount}</span>
           </a>
         </nav>
 
