@@ -18,27 +18,27 @@ function App() {
   return (
     <div>
       <Router>
-        {/* Conditionally render Navbar only if the route is not '/about-campus-plus' */}
-        <Routes>
-          {/* Default Route for Home page */}
-          <Route
-            path="*"
-            element={
-              <>
-                <AppRoutes />
-              </>
-            }
-          />
+        <div className="App">
+          <Routes>
+            {/* Default Route for Home page */}
+            <Route
+              path="*"
+              element={
+                <>
+                  <AppRoutes />
+                </>
+              }
+            />
 
-          {/* Route for AboutCampusPlus page (without Navbar) */}
-          <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
-          <Route path="/coming-soon" element={<ComingSoon />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/error404" element={<Error404 />} />
-          <Route path="/faculty" element={<FacultySection />} />
-          <Route path="/past-papers" element={<PastPapers />} />
-          <Route path="/notifications" element={<Notifications />} />
-        </Routes>
+            {/* Route for AboutCampusPlus page (without Navbar) */}
+            <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
+            <Route path="/coming-soon" element={<ComingSoon />} />
+            <Route path="/contact" element={<Contact />} />
+            <Route path="/error404" element={<Error404 />} />
+            <Route path="/faculty" element={<FacultySection />} />
+            <Route path="/past-papers" element={<PastPapers />} />
+            <Route path="/notifications" element={<Notifications />} />
+          </Routes>
       </Router>
     </div>
   );

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./Sidebar.css";
-import cplogo from "../../../Assets/images/cp_logo.png"; // Adjust the path as necessary
+import cplogo from "../../../Assets/images/cp_logo.png";
+import API_BASE_URL from "../../../config/api.js";
+import { authenticatedFetch } from "../../../utils/auth";
 
 const Sidebar = ({
-  userInfo,
   rooms,
   joinedRooms,
   activeRoom,
@@ -11,24 +12,52 @@ const Sidebar = ({
   isOpen,
   onClose,
 }) => {
-  // Debug log
-  console.log("Sidebar isOpen:", isOpen);
-  // Function to get initials from username
-  const getInitials = (name) => {
-    if (!name) return "U";
+  // Always fetch latest user info on mount
+  const [finalUserInfo, setFinalUserInfo] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem("user"));
+    } catch {
+      return null;
+    }
+  });
 
-    return name
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await authenticatedFetch(
+          `${API_BASE_URL}/user/profile`,
+          {
+            method: "GET",
+            headers: { "Content-Type": "application/json" },
+          }
+        );
+        if (!res.ok) throw new Error("Failed to fetch user info");
+        const data = await res.json();
+        setFinalUserInfo(data);
+        localStorage.setItem("user", JSON.stringify(data));
+      } catch (error) {
+        // fallback to localStorage if fetch fails
+      }
+    };
+    fetchUserInfo();
+  }, []);
+
+  // Get initials (same as ProfilePage)
+  const getUserInitials = () => {
+    const displayName = finalUserInfo?.name || finalUserInfo?.username;
+    if (!displayName) return "U";
+    return displayName
       .split(" ")
-      .filter((_, index, array) => index === 0 || index === array.length - 1)
-      .map((name) => name[0])
+      .filter((_, idx, arr) => idx === 0 || idx === arr.length - 1)
+      .map((n) => n[0])
       .join("")
       .toUpperCase();
   };
 
-  // Function to generate a background color based on the name
-  const getAvatarColor = (name) => {
-    if (!name) return "#1a73e8"; // Default color
-
+  // Get avatar color (same as ProfilePage)
+  const getAvatarColor = () => {
+    const name = finalUserInfo?.name || finalUserInfo?.username || "";
+    if (!name) return "#1a73e8";
     const colors = [
       "#1a73e8",
       "#4285f4",
@@ -41,12 +70,7 @@ const Sidebar = ({
       "#0097e6",
       "#00a8ff",
     ];
-
-    // Sum the character codes to get a deterministic but unique color
-    const charSum = name
-      .split("")
-      .reduce((sum, char) => sum + char.charCodeAt(0), 0);
-
+    const charSum = name.split("").reduce((sum, c) => sum + c.charCodeAt(0), 0);
     return colors[charSum % colors.length];
   };
 
@@ -54,7 +78,9 @@ const Sidebar = ({
     <div className={`sidebar ${isOpen ? "open" : ""}`}>
       {/* Brand Section */}
       <div className="brand-section">
-        <div className="brand-logo"><img src={cplogo} alt="Campus Plus logo"></img></div>
+        <div className="brand-logo">
+          <img src={cplogo} alt="Campus Plus logo" />
+        </div>
         <h2 className="brand-title">Campus Plus</h2>
       </div>
 
@@ -83,13 +109,11 @@ const Sidebar = ({
           {joinedRooms?.map((room) => (
             <button
               key={room.roomid}
-              className={`room-button ${activeRoom?.roomid === room.roomid ? "active" : ""}`}
+              className={`room-button ${activeRoom?.roomid === room.roomid ? "active" : ""
+                }`}
               onClick={() => {
                 onRoomSelect(room);
-                // Close sidebar on mobile after room selection
-                if (window.innerWidth <= 768 && onClose) {
-                  onClose();
-                }
+                if (window.innerWidth <= 768 && onClose) onClose();
               }}
             >
               {room.roomname}
@@ -98,17 +122,42 @@ const Sidebar = ({
         </div>
       </div>
 
-      {/* User Profile Section at Bottom */}
+      {/* User Profile Section */}
       <div className="user-profile-section">
         <div className="user-profile-content">
           <div
             className="user-avatar"
-            style={{ backgroundColor: getAvatarColor(userInfo?.username) }}
+            style={{
+              backgroundColor: getAvatarColor(),
+              borderRadius: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflow: "hidden",
+              fontSize: "1.0rem",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              transition: "transform 0.3s ease, boxShadow 0.3s ease",
+              cursor: "default",
+              boxShadow: "0 4px 10px rgba(0, 0, 0, 0.2)",
+              border: "3px solid white",
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = "scale(1.05)";
+              e.currentTarget.style.boxShadow = "0 8px 16px rgba(0, 0, 0, 0.3)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = "scale(1)";
+              e.currentTarget.style.boxShadow = "0 4px 10px rgba(0, 0, 0, 0.2)";
+            }}
           >
-            {getInitials(userInfo?.username)}
+            {getUserInitials()}
           </div>
           <div className="user-info">
-            <span className="username">{userInfo?.username || "Guest"}</span>
+            <span className="username">
+              {finalUserInfo?.name || finalUserInfo?.username || "Guest"}
+            </span>
           </div>
         </div>
       </div>
