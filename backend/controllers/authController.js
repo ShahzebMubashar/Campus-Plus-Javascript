@@ -110,7 +110,6 @@ exports.newRegister = async (request, response) => {
       message: 'OTP sent to institutional email',
       email: studentEmail,
       otpSent: true,
-      otp // ⚠️ For testing only – remove in production
     });
 
   } catch (error) {
