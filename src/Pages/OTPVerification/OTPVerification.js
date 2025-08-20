@@ -14,9 +14,6 @@ export default function OTPVerification() {
     const [isSuccessMessage, setIsSuccessMessage] = useState(false);
     const [countdown, setCountdown] = useState(5);
     const [email, setEmail] = useState("");
-    const [username, setUsername] = useState("");
-    const [rollnumber, setRollnumber] = useState("");
-    const [password, setPassword] = useState("");
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -25,9 +22,6 @@ export default function OTPVerification() {
     useEffect(() => {
         if (location.state && location.state.email) {
             setEmail(location.state.email);
-            setUsername(location.state.username || ""); // Use username from state or empty
-            setRollnumber(location.state.rollnumber || ""); // Use rollnumber from state or empty
-            setPassword(location.state.password || ""); // Use password from state or empty
         } else {
             // If no email is provided, redirect back to sign up
             navigate("/sign-in");
@@ -78,9 +72,6 @@ export default function OTPVerification() {
                 body: JSON.stringify({
                     email: email,
                     otp: otpValue,
-                    username: location.state?.username || "", // Use username from state or empty
-                    rollnumber: location.state?.rollnumber || "", // Use rollnumber from state or empty
-                    password: location.state?.password || "", // Use password from state or empty
                 }),
             });
 
@@ -89,17 +80,17 @@ export default function OTPVerification() {
             if (response.ok) {
                 setMessage("OTP verified successfully! Your account has been created.");
                 setIsSuccessMessage(true);
+                setOtp(["", "", "", "", "", ""]); // Reset OTP input
 
-                // Store JWT tokens and user data for new user
                 loginWithTokens(
-                    {
-                        accessToken: data.accessToken,
-                        refreshToken: data.refreshToken,
-                    },
-                    data.user
+                  {
+                    accessToken: data.accessToken,
+                    refreshToken: data.refreshToken,
+                  },
+                  data.user
                 );
 
-                setTimeout(() => navigate("/dashboard"), 2000);
+                setTimeout(() => navigate("/"), 2000);
             } else {
                 setMessage(data.error || "OTP verification failed. Please try again.");
                 setIsSuccessMessage(false);

@@ -19,7 +19,7 @@ const from = "no-reply@campusplus.com";
 
 exports.newRegister = async (request, response) => {
   const {
-    body: { username, rollnumber, fullName }
+    body: { username, rollnumber, fullName, password }
   } = request;
 
   if (!username || !rollnumber)
@@ -82,11 +82,11 @@ exports.newRegister = async (request, response) => {
              <p>Thank you,<br/>FAST Registration Team</p>`
     });
 
-    const client = await pool.connect();
+    let client = await pool.connect();
 
-    await client.query('BEGIN');
 
     try {
+      await client.query('BEGIN');
       const res = await client.query(`Insert into OTPVerification (email, otp, expires_at)
         Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
         [studentEmail, otp]
@@ -102,6 +102,32 @@ exports.newRegister = async (request, response) => {
       console.error("Error inserting OTP:", error);
       await client.query('ROLLBACK');
       return response.status(500).json("Failed to send OTP. Please try again.");
+    } finally {
+      client.release();
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    client = await pool.connect();
+
+    try {
+      await client.query('BEGIN');
+
+      const res = await client.query(`Insert into Users (email, username, rollnumber, password)
+        values ($1, $2, $3, $4) returning userid`,
+        [studentEmail, username, rollInput, hashedPassword]
+      );
+
+      if (!res.rowCount) {
+        await client.query('ROLLBACK');
+        return response.status(500).json("Failed to create user. Please try again.");
+      }
+
+      await client.query('COMMIT');
+
+    } catch (error) {
+      console.error("Error sending email:", error);
+      return response.status(500).json("Failed to send OTP email. Please try again.");
     } finally {
       client.release();
     }
@@ -123,9 +149,8 @@ exports.verifyOTP = async (request, response) => {
   console.log("Request body:", request.body);
   const { body: { otp, email, username, rollnumber, password } } = request;
 
-  if (!otp || !email || !username || !rollnumber || !password) {
+  if (!otp || !email) {
     console.log("Missing fields in the request body");
-    console.log("OTP:", otp, "Email:", email, "Username:", username, "Rollnumber:", rollnumber, "Password:", password);
     return response.status(400).json("Please provide all required fields");
   }
 
@@ -137,25 +162,23 @@ exports.verifyOTP = async (request, response) => {
     );
 
     if (!res.rowCount) {
-      console.log("Invalid OTP or OTP expired for email:", email);
+      console.log("Invalid OTP or email not found");
       return response.status(400).json("Invalid OTP entered or Email does not match rollnumber");
     }
-    console.log("OTP verification successful for email:", email);
-    await client.query('COMMIT');
+
+    await client.query('BEGIN');
 
     res = await client.query(`Delete from OTPVerification where email = $1`, [email]);
-    console.log("OTP deleted from database for email:", email);
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-
-    res = await client.query(`Insert into Users (email, username, rollnumber, password) values ($1, $2, $3, $4) returning userid`,
-      [email, username, rollnumber, hashedPassword]
-    );
+    res = await client.query(`Update Users set isverified = True where email = $1`, [email]);
 
     if (!res.rowCount) {
+      await client.query('ROLLBACK');
       return response.status(500).json("Failed to create user. Please try again.");
     }
-    console.log("User created successfully with ID:", res.rows[0].userid);
+
+    await client.query("COMMIT");
+
     return response.status(200).json({
       message: "OTP verified successfully",
       email: email,
@@ -163,7 +186,7 @@ exports.verifyOTP = async (request, response) => {
     });
 
   } catch (error) {
-    console.error("Error verifying OTP:", error);
+    await client.query("ROLLBACK");
     return response.status(500).json("Internal Server Error");
   } finally {
     client.release();
@@ -280,7 +303,7 @@ exports.login = async (request, response) => {
       `SELECT u.*, ui.name as fullName 
        FROM Users u 
        LEFT JOIN UserInfo ui ON u.userid = ui.userid 
-       WHERE u.email = $1 OR u.username = $1`,
+       WHERE (u.email = $1 OR u.username = $1) and isverified = True`,
       [email || username]
     );
 
