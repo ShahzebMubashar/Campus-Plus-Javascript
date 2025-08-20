@@ -248,6 +248,14 @@ export default function AuthPage() {
     }
 
     try {
+      console.log("\n\n\n\n\n\n\n\n\n\nSign Up Data:", {
+        email: formData.email,
+        username: formData.firstName, // Use firstName as username
+        rollnumber: formData.password.replace(/-/g, ''), // Remove dashes before sending
+        password: formData.confirmPassword,
+      });
+
+      // Send sign up request to backend
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
@@ -266,12 +274,13 @@ export default function AuthPage() {
       if (response.ok) {
         // setMessage(data.message || "Account created successfully! Welcome to Campus Plus!");
         // setIsSuccessMessage(true);
+        console.log("Data:", { 'email': formData.email, 'username': formData.firstName, 'rollnumber': formData.password.replace(/-/g, ''), 'password': formData.confirmPassword });
         navigate("/otp-verification", {
           state: {
             email: formData.email,
             username: formData.firstName, // Use firstName as username
-            rollnumber: formData.password.replace(/-/g, ''), // Remove dashes before sending
-            password: formData.password,
+            rollnumber: formData.password.replace(/-/g, ''),
+            password: formData.confirmPassword,
           },
           replace: true,
         });

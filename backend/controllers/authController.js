@@ -145,10 +145,13 @@ exports.verifyOTP = async (request, response) => {
 
     res = await client.query(`Delete from OTPVerification where email = $1`, [email]);
     console.log("OTP deleted from database for email:", email);
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     res = await client.query(`Insert into Users (email, username, rollnumber, password) values ($1, $2, $3, $4) returning userid`,
-      [email, username, rollnumber, password]
+      [email, username, rollnumber, hashedPassword]
     );
-    console.log("User creation query executed:", res);
+
     if (!res.rowCount) {
       return response.status(500).json("Failed to create user. Please try again.");
     }
