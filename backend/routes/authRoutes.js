@@ -9,6 +9,7 @@ const {
   resetPassword,
   refreshToken,
   currentUser,
+  newRegister,
 } = require("../controllers/authController");
 const { jwtAuthMiddleware, optionalJwtAuth } = require("../middlewares/jwtAuthMiddleware");
 const { generateTokenPair } = require("../utils/jwt");
@@ -25,7 +26,7 @@ router.get("/test", (req, res) => {
 });
 
 router.post("/login", login);
-router.post("/register", register);
+router.post("/register", newRegister);
 router.post("/logout", jwtAuthMiddleware, logout);
 router.post("/test-login", testLogin);
 router.post("/refresh-token", refreshToken);

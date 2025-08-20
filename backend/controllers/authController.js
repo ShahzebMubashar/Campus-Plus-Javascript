@@ -1,6 +1,5 @@
 const pool = require("../config/database.js");
 const bcrypt = require("bcrypt");
-const { randomBytes } = require("crypto");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
@@ -17,6 +16,84 @@ const transporter = nodemailer.createTransport({
 });
 
 const from = "no-reply@campusplus.com";
+
+exports.newRegister = async (request, response) => {
+  const {
+    body: { username, rollnumber, fullName }
+  } = request;
+
+  if (!username || !rollnumber)
+    return response.status(400).json("Please provide all the required fields");
+
+  try {
+    // Normalize input
+    const rollInput = rollnumber.trim().toUpperCase();
+    const patterns = [
+      /^(\d{2})([A-Z])-(\d{4})$/, // 24L-1234
+      /^([A-Z])(\d{2})(\d{4})$/,  // L241234
+      /^(\d{2})([A-Z])(\d{4})$/   // 24L1234
+    ];
+
+    let match = null, city = '', batch = '', digits = '';
+
+    for (const p of patterns) {
+      match = rollInput.match(p);
+      if (match) break;
+    }
+
+    if (!match) {
+      return response.status(400).json("Invalid roll number format");
+    }
+
+    if (match.length === 4) {
+      if (/^\d{2}[A-Z]-\d{4}$/.test(rollInput) || /^\d{2}[A-Z]\d{4}$/.test(rollInput)) {
+        batch = match[1];
+        city = match[2];
+        digits = match[3];
+      } else {
+        city = match[1];
+        batch = match[2];
+        digits = match[3];
+      }
+    }
+
+    const cityLower = city.toLowerCase();
+    const studentEmail = `${cityLower}${batch}${digits}@${city === 'L' ? 'lhr.nu.edu.pk' : 'nu.edu.pk'}`;
+
+    // Generate OTP
+    const otp = Math.floor(100000 + Math.random() * 900000);
+
+    // Send Email
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.MAILER_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: studentEmail,
+      subject: 'Your Registration OTP',
+      html: `<p>Dear ${fullName || 'Student'},</p>
+             <p>Your OTP for registration is: <b>${otp}</b></p>
+             <p>This OTP is valid for 10 minutes.</p>
+             <p>Thank you,<br/>FAST Registration Team</p>`
+    });
+
+    return response.status(200).json({
+      message: 'OTP sent to institutional email',
+      email: studentEmail,
+      otpSent: true,
+      otp // ⚠️ For testing only – remove in production
+    });
+
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json('Internal Server Error');
+  }
+};
 
 exports.register = async (request, response) => {
   const {
@@ -117,7 +194,7 @@ exports.login = async (request, response) => {
   console.log("=== JWT LOGIN ENDPOINT ===");
 
   const { email, password, username } = request.body;
-  
+
   if (!email && !username)
     return response.status(400).json({ error: "Please provide Email or Username" });
 
