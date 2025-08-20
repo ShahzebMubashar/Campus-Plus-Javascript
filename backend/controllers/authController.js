@@ -82,6 +82,30 @@ exports.newRegister = async (request, response) => {
              <p>Thank you,<br/>FAST Registration Team</p>`
     });
 
+    const client = await pool.connect();
+
+    await client.query('BEGIN');
+
+    try {
+      const res = await client.query(`Insert into OTPVerification (email, otp, expires_at)
+        Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
+        [studentEmail, otp]
+      );
+
+      if (!res.rowCount) {
+        await client.query('ROLLBACK');
+        return response.status(500).json("Failed to send OTP. Please try again.");
+      }
+
+      await client.query('COMMIT');
+    } catch (error) {
+      console.error("Error inserting OTP:", error);
+      await client.query('ROLLBACK');
+      return response.status(500).json("Failed to send OTP. Please try again.");
+    } finally {
+      client.release();
+    }
+
     return response.status(200).json({
       message: 'OTP sent to institutional email',
       email: studentEmail,
@@ -94,6 +118,55 @@ exports.newRegister = async (request, response) => {
     return response.status(500).json('Internal Server Error');
   }
 };
+
+exports.verifyOTP = async (request, response) => {
+  console.log("=== VERIFY OTP ===");
+  console.log("Request body:", request.body);
+  const { body: { otp, email, username, rollnumber, password } } = request;
+
+  if (!otp || !email || !username || !rollnumber || !password) {
+    console.log("Missing fields in the request body");
+    console.log("OTP:", otp, "Email:", email, "Username:", username, "Rollnumber:", rollnumber, "Password:", password);
+    return response.status(400).json("Please provide all required fields");
+  }
+
+  const client = await pool.connect();
+
+  try {
+    let res = await pool.query(`Select * from OTPVerification where email = $1 and otp = $2`,
+      [email, otp]
+    );
+
+    if (!res.rowCount) {
+      console.log("Invalid OTP or OTP expired for email:", email);
+      return response.status(400).json("Invalid OTP entered or Email does not match rollnumber");
+    }
+    console.log("OTP verification successful for email:", email);
+    await client.query('COMMIT');
+
+    res = await client.query(`Delete from OTPVerification where email = $1`, [email]);
+    console.log("OTP deleted from database for email:", email);
+    res = await client.query(`Insert into Users (email, username, rollnumber, password) values ($1, $2, $3, $4) returning userid`,
+      [email, username, rollnumber, password]
+    );
+    console.log("User creation query executed:", res);
+    if (!res.rowCount) {
+      return response.status(500).json("Failed to create user. Please try again.");
+    }
+    console.log("User created successfully with ID:", res.rows[0].userid);
+    return response.status(200).json({
+      message: "OTP verified successfully",
+      email: email,
+      otpVerified: true
+    });
+
+  } catch (error) {
+    console.error("Error verifying OTP:", error);
+    return response.status(500).json("Internal Server Error");
+  } finally {
+    client.release();
+  }
+}
 
 exports.register = async (request, response) => {
   const {

@@ -262,20 +262,30 @@ export default function AuthPage() {
         }),
       });
       const data = await response.json();
+      console.log("Sign Up Data:", data);
       if (response.ok) {
-        setMessage(data.message || "Account created successfully! Welcome to Campus Plus!");
-        setIsSuccessMessage(true);
-
-        // Store JWT tokens and user data for new user
-        loginWithTokens(
-          {
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
+        // setMessage(data.message || "Account created successfully! Welcome to Campus Plus!");
+        // setIsSuccessMessage(true);
+        navigate("/otp-verification", {
+          state: {
+            email: formData.email,
+            username: formData.firstName, // Use firstName as username
+            rollnumber: formData.password.replace(/-/g, ''), // Remove dashes before sending
+            password: formData.password,
           },
-          data.user
-        );
+          replace: true,
+        });
 
-        setTimeout(() => navigate("/"), 2000);
+        // // Store JWT tokens and user data for new user
+        // loginWithTokens(
+        //   {
+        //     accessToken: data.accessToken,
+        //     refreshToken: data.refreshToken,
+        //   },
+        //   data.user
+        // );
+
+        // setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(data.error || "Sign up failed. Please try again.");
         setIsSuccessMessage(false);
