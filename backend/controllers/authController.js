@@ -19,14 +19,12 @@ const from = "no-reply@campusplus.com";
 
 exports.newRegister = async (request, response) => {
   const {
-    body: { username, rollnumber, fullName, password }
+    body: { username, rollnumber, fullName, password, email }
   } = request;
-
-  if (!username || !rollnumber)
+  if (!username || !rollnumber || !email || !password)
     return response.status(400).json("Please provide all the required fields");
 
   try {
-    // Normalize input
     const rollInput = rollnumber.trim().toUpperCase();
     const patterns = [
       /^(\d{2})([A-Z])-(\d{4})$/, // 24L-1234
@@ -57,13 +55,10 @@ exports.newRegister = async (request, response) => {
       }
     }
 
-    const cityLower = city.toLowerCase();
-    const studentEmail = `${cityLower}${batch}${digits}@${city === 'L' ? 'lhr.nu.edu.pk' : 'nu.edu.pk'}`;
+    const formattedRoll = `${batch}${city}-${digits}`;
 
-    // Generate OTP
     const otp = Math.floor(100000 + Math.random() * 900000);
 
-    // Send Email
     const transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
@@ -74,7 +69,7 @@ exports.newRegister = async (request, response) => {
 
     await transporter.sendMail({
       from: process.env.EMAIL_USER,
-      to: studentEmail,
+      to: email,
       subject: 'Your Registration OTP',
       html: `<p>Dear ${fullName || 'Student'},</p>
              <p>Your OTP for registration is: <b>${otp}</b></p>
@@ -89,7 +84,7 @@ exports.newRegister = async (request, response) => {
       await client.query('BEGIN');
       const res = await client.query(`Insert into OTPVerification (email, otp, expires_at)
         Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
-        [studentEmail, otp]
+        [email, otp]
       );
 
       if (!res.rowCount) {
@@ -115,7 +110,7 @@ exports.newRegister = async (request, response) => {
 
       const res = await client.query(`Insert into Users (email, username, rollnumber, password)
         values ($1, $2, $3, $4) returning userid`,
-        [studentEmail, username, rollInput, hashedPassword]
+        [email, username, formattedRoll, hashedPassword]
       );
 
       if (!res.rowCount) {
@@ -134,7 +129,7 @@ exports.newRegister = async (request, response) => {
 
     return response.status(200).json({
       message: 'OTP sent to institutional email',
-      email: studentEmail,
+      email: email,
       otpSent: true,
     });
 
@@ -146,11 +141,9 @@ exports.newRegister = async (request, response) => {
 
 exports.verifyOTP = async (request, response) => {
   console.log("=== VERIFY OTP ===");
-  console.log("Request body:", request.body);
-  const { body: { otp, email, username, rollnumber, password } } = request;
+  const { body: { otp, email } } = request;
 
   if (!otp || !email) {
-    console.log("Missing fields in the request body");
     return response.status(400).json("Please provide all required fields");
   }
 
@@ -162,7 +155,6 @@ exports.verifyOTP = async (request, response) => {
     );
 
     if (!res.rowCount) {
-      console.log("Invalid OTP or email not found");
       return response.status(400).json("Invalid OTP entered or Email does not match rollnumber");
     }
 
@@ -199,7 +191,6 @@ exports.register = async (request, response) => {
   } = request;
 
   if (!username || !email || !password || !rollnumber) {
-    console.log("Missing fields in the request body");
     return response.status(400).json("Please provide all the fields");
   }
 
@@ -316,9 +307,6 @@ exports.login = async (request, response) => {
     if (!isMatch)
       return response.status(401).json({ error: "Invalid credentials" });
 
-    console.log("✅ Login successful for user:", user.username);
-
-    // Generate JWT tokens
     const tokens = generateTokenPair(user);
 
     return response.status(200).json({
@@ -389,7 +377,7 @@ exports.resetPassword = async (request, response) => {
 
     return response.status(200).json("Password reset successfully!");
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     await client.query(`ROLLBACK`);
     return response.status(500).json("Server Error");
   } finally {
@@ -402,7 +390,6 @@ exports.forgotPassword = async (request, response) => {
 
   const OTPGenerated = Math.floor(100000 + Math.random() * 900000);
 
-  // Use proper JWT signing with expiration
   const signedOTP = jwt.sign(
     OTPGenerated,
     process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET,
@@ -454,7 +441,7 @@ exports.forgotPassword = async (request, response) => {
 
     await client.query("COMMIT");
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     await client.query("ROLLBACK");
     return response.status(500).json("Server Error");
   } finally {
@@ -537,7 +524,7 @@ exports.userRole = async (request, response) => {
       .status(200)
       .json({ userRole: request.user?.role ?? null });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return response.status(500).json({ error: "Server Error" });
   }
 };
