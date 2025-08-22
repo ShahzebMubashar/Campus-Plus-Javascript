@@ -513,7 +513,7 @@ export default function AuthPage() {
 
                   {isLogin && (
                     <div className="forgot-section">
-                      <button type="button" className="forgot-link">
+                      <button type="button" className="forgot-link" onClick={() => navigate("/forgot-password")}>
                         Forgot your password?
                       </button>
                     </div>

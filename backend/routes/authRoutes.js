@@ -11,6 +11,7 @@ const {
   currentUser,
   newRegister,
   verifyOTP,
+  verifyIdentity
 } = require("../controllers/authController");
 const { jwtAuthMiddleware, optionalJwtAuth } = require("../middlewares/jwtAuthMiddleware");
 const { generateTokenPair } = require("../utils/jwt");
@@ -32,6 +33,8 @@ router.post("/logout", jwtAuthMiddleware, logout);
 router.post("/test-login", testLogin);
 router.post("/refresh-token", refreshToken);
 router.post("/verify-otp", verifyOTP);
+router.post("/verify-identity", verifyIdentity);
+router.post("/reset-password", resetPassword);
 
 router.get("/user-role", jwtAuthMiddleware, userRole);
 
@@ -119,9 +122,6 @@ router.post("/complete-profile", jwtAuthMiddleware, async (req, res) => {
     res.status(500).json({ error: "Server error" });
   }
 });
-
-router.post("/forgot", jwtAuthMiddleware, forgotPassword);
-router.post("/reset", jwtAuthMiddleware, resetPassword);
 
 router.get("/google",
   passport.authenticate("google", {

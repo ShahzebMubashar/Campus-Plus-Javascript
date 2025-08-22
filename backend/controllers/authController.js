@@ -4,6 +4,7 @@ const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
 const { generateTokenPair, verifyToken } = require("../utils/jwt.js");
+const { request } = require("express");
 
 dotenv.config();
 
@@ -133,6 +134,106 @@ exports.newRegister = async (request, response) => {
       otpSent: true,
     });
 
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json('Internal Server Error');
+  }
+};
+
+exports.resetPassword = async (request, response) => {
+  const { body: { email, rollnumber, password } } = request;
+
+  if (!email || !rollnumber || !password) {
+    return response.status(400).json("Please provide all required fields");
+  }
+
+  const client = await pool.connect();
+
+  try {
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    await client.query('BEGIN');
+
+    let res = await client.query(`Update Users set password = $1 where email = $2 and rollnumber = $3 returning userid`,
+      [hashedPassword, email, rollnumber]
+    );
+
+    if (!res.rowCount) {
+      await client.query('ROLLBACK');
+      return response.status(400).json("Email and Roll Number do not match any user");
+    }
+
+    return response.status(200).json({
+      message: "Password reset successfully",
+      email: email,
+      rollnumber: rollnumber,
+    });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json('Internal Server Error');
+  } finally {
+    client.release();
+  }
+}
+
+exports.verifyIdentity = async (request, response) => {
+  const { body: { email, rollnumber } } = request;
+  console.log("HERE");
+  console.log(email, rollnumber);
+  if (!email || !rollnumber) {
+    return response.status(400).json("Please provide all required fields");
+  }
+
+  const client = await pool.connect();
+
+  try {
+    const res = await pool.query(`Select * from Users where email = $1 and rollnumber = $2`, [email, rollnumber]);
+    console.log("HEREHERE")
+    if (!res.rowCount) {
+      return response.status(400).json("Email and Roll Number do not match any user");
+    }
+
+    console.log("Identity verified for email:", email, "and rollnumber:", rollnumber);
+
+    const otp = Math.floor(100000 + Math.random() * 900000);
+    const transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.MAILER_PASS
+      }
+    });
+
+    await transporter.sendMail({
+      from: process.env.EMAIL_USER,
+      to: email,
+      subject: 'Your Password Reset OTP',
+      html: `<p>Dear User,</p>
+             <p>Your OTP for password reset is: <b>${otp}</b></p>
+             <p>This OTP is valid for 10 minutes.</p>
+             <p>Thank you,<br/>CampusPlus Support Team</p>`
+    });
+
+    await client.query('BEGIN');
+
+    const insertRes = await client.query(`Insert into OTPVerification (email, otp, expires_at)
+      Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
+      [email, otp]
+    );
+
+    if (!insertRes.rowCount) {
+      await client.query('ROLLBACK');
+      return response.status(500).json("Failed to send OTP. Please try again.");
+    }
+
+    await client.query('COMMIT');
+
+    return response.status(200).json({
+      message: "Identity verified successfully",
+      email: email,
+      rollnumber: rollnumber,
+      identityVerified: true
+    });
   } catch (error) {
     console.error(error);
     return response.status(500).json('Internal Server Error');
@@ -324,64 +425,6 @@ exports.login = async (request, response) => {
   } catch (error) {
     console.error("Login error:", error);
     return response.status(500).json({ error: "Server error" });
-  }
-};
-
-exports.resetPassword = async (request, response) => {
-  const {
-    body: { OTP, newPassword },
-    user: { userid },
-  } = request;
-
-  if (!OTP || !newPassword)
-    return response.status(400).json(`Enter all the fields`);
-
-  const client = await pool.connect();
-
-  try {
-    let res = await pool.query(
-      `Select * from ResetPassword where userid = $1`,
-      [userid]
-    );
-
-    if (!res.rowCount) {
-      return response.status(400).json(`No reset request found. Please request a new OTP.`);
-    }
-
-    const resetToken = res.rows[0].reset_token;
-
-    // Verify the OTP token using JWT
-    try {
-      const decoded = verifyToken(resetToken);
-      if (decoded !== parseInt(OTP)) {
-        return response.status(400).json(`Invalid OTP Entered!`);
-      }
-    } catch (error) {
-      return response.status(400).json(`Invalid or expired OTP!`);
-    }
-
-    await client.query(`BEGIN`);
-
-    res = await client.query(`Delete from ResetPassword where userid = $1`, [
-      userid,
-    ]);
-
-    const hashedNewPassword = await bcrypt.hash(newPassword, 10);
-
-    res = await client.query(
-      `Update Users set password = $1, lasteditted = current_timestamp where userid = $2`,
-      [hashedNewPassword, userid]
-    );
-
-    await client.query("COMMIT");
-
-    return response.status(200).json("Password reset successfully!");
-  } catch (error) {
-    console.error(error.message);
-    await client.query(`ROLLBACK`);
-    return response.status(500).json("Server Error");
-  } finally {
-    if (client) client.release();
   }
 };
 

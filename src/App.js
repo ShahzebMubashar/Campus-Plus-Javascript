@@ -14,6 +14,7 @@ import FacultySection from "./Pages/Faculty/Faculty.js";
 import PastPapers from "./Pages/Past Papers/PastPapers.js";
 import Notifications from "./Pages/Notifications/Notifications.js";
 import OTPVerification from "./Pages/OTPVerification/OTPVerification.js"; // Import the OTPVerification component
+import ForgotPasswordPage from "./Pages/ForgotPassword/ForgotPassword.js";
 
 function App() {
   return (
@@ -40,6 +41,9 @@ function App() {
             <Route path="/past-papers" element={<PastPapers />} />
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/otp-verification" element={<OTPVerification />} />
+            <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+            
+            {/* Catch-all route for 404 errors */}
           </Routes>
         </div>
       </Router>
