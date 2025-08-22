@@ -248,6 +248,7 @@ export default function AuthPage() {
     }
 
     try {
+      // Send sign up request to backend
       const response = await fetch(`${API_BASE_URL}/auth/register`, {
         method: "POST",
         headers: {
@@ -255,27 +256,32 @@ export default function AuthPage() {
         },
         body: JSON.stringify({
           email: formData.email,
-          username: formData.firstName, // Use firstName as username
+          username: formData.lastName, 
           fullName: `${formData.firstName} ${formData.lastName}`,
           password: formData.confirmPassword,
           rollnumber: formData.password.replace(/-/g, ''), // Remove dashes before sending
         }),
       });
       const data = await response.json();
+      console.log("Sign Up Data:", data);
       if (response.ok) {
-        setMessage(data.message || "Account created successfully! Welcome to Campus Plus!");
-        setIsSuccessMessage(true);
-
-        // Store JWT tokens and user data for new user
-        loginWithTokens(
-          {
-            accessToken: data.accessToken,
-            refreshToken: data.refreshToken,
+        navigate("/otp-verification", {
+          state: {
+            email: formData.email,
           },
-          data.user
-        );
+          replace: true,
+        });
 
-        setTimeout(() => navigate("/"), 2000);
+        // // Store JWT tokens and user data for new user
+        // loginWithTokens(
+        //   {
+        //     accessToken: data.accessToken,
+        //     refreshToken: data.refreshToken,
+        //   },
+        //   data.user
+        // );
+
+        // setTimeout(() => navigate("/"), 2000);
       } else {
         setMessage(data.error || "Sign up failed. Please try again.");
         setIsSuccessMessage(false);
