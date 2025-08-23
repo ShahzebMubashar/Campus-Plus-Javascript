@@ -1,4 +1,3 @@
-const { FaTruck } = require('react-icons/fa');
 const pool = require('../config/database');
 
 const generateNotification = async (request, response) => {
@@ -129,9 +128,27 @@ const readNotifications = async (request, response) => {
     }
 }
 
+const getNotificationCount = async (request, response) => {
+    const { body: { userid } } = request;
+
+    if (!userid) return response.status(400).json("User ID is required");
+
+    try {
+        const res = await pool.query(`Select * from NotificationCount where userid = $1`, [userid]);
+
+        if (!res.rowCount) return response.status(404).json("User not found");
+
+        return response.status(200).json(res.rows[0].notification_count);
+    } catch (error) {
+        console.error("Error fetching notification count:", error);
+        return response.status(500).json("Internal server error");
+    }
+}
+
 module.exports = {
     generateNotification,
     getNotifications,
     deleteNotification,
-    readNotifications
+    readNotifications,
+    getNotificationCount,
 };
