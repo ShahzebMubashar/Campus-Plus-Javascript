@@ -15,6 +15,7 @@ function Notifications() {
         batch: "",
         gpa: "",
         notifications: [],
+        userid: null,
         isAdmin: false,
     });
 
@@ -44,6 +45,7 @@ function Notifications() {
             }
 
             const data = await res.json();
+            console.log("\n\n\n\nFetched User Info:", data);
             setUser({
                 ...data,
                 isAdmin: data.role === "admin" || data.role === "Admin",
@@ -175,6 +177,25 @@ function Notifications() {
 
         checkAuthAndFetchData();
     }, []);
+
+    useEffect(() => {
+        const readNotifications = async (e) => {
+            console.log("\n\n\n\nMarking notifications as read for user ID:", user.userid);
+            
+            try {
+                await fetch(`${API_BASE_URL}/notifications/mark-read`, {
+                    method: "POST",
+                    credentials: "include",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ userid: user.userid }),
+                });
+            } catch (error) {
+                console.error("Error marking notifications as read:", error);
+            }
+        };
+
+        readNotifications();
+    }, [user.userid]);
 
     if (isAuthLoading) {
         return <div className="loading">Loading...</div>;

@@ -1,3 +1,4 @@
+const { FaTruck } = require('react-icons/fa');
 const pool = require('../config/database');
 
 const generateNotification = async (request, response) => {
@@ -21,6 +22,13 @@ const generateNotification = async (request, response) => {
         if (!result.rowCount) {
             await client.query("ROLLBACK");
             return response.status(500).json("Failed to create notification");
+        }
+
+        const updateNotificationCount = await client.query(`Update NotificationCount set notification_count = notification_count + 1`);
+
+        if (!updateNotificationCount.rowCount) {
+            await client.query("ROLLBACK");
+            return response.status(500).json("Failed to update notification count");
         }
 
         await client.query("COMMIT");
@@ -88,9 +96,42 @@ const deleteNotification = async (request, response) => {
     }
 }
 
+const readNotifications = async (request, response) => {
+    const { body: { userid } } = request;
+
+    console.log("\n\n\nMarking notifications as read for user ID:", userid);
+
+    if (!userid) return response.status(400).json("User ID is required");
+
+    const client = await pool.connect();
+
+    try {
+        const query = `Update NotificationCount set notification_count = 0 where userid = $1 returning *`;
+        const values = [userid];
+
+        await client.query("BEGIN");
+
+        const result = await client.query(query, values);
+
+        if (!result.rowCount) {
+            await client.query("ROLLBACK");
+            return response.status(404).json("No notifications to mark as read");
+        }
+
+        await client.query("COMMIT");
+
+        return response.status(200).json("Notifications marked as read");
+    } catch (error) {
+        console.error("Error marking notifications as read:", error);
+        return response.status(500).json("Internal server error");
+    } finally {
+        client.release();
+    }
+}
 
 module.exports = {
     generateNotification,
     getNotifications,
     deleteNotification,
+    readNotifications
 };
