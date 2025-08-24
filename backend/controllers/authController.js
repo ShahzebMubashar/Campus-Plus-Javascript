@@ -3,8 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const nodemailer = require("nodemailer");
 const dotenv = require("dotenv");
-const { generateTokenPair, verifyToken } = require("../utils/jwt.js");
-const { request } = require("express");
+const { generateTokenPair } = require("../utils/jwt.js");
 
 dotenv.config();
 

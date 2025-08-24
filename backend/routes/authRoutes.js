@@ -1,14 +1,11 @@
 const express = require("express");
 const {
   login,
-  register,
   logout,
   testLogin,
   userRole,
-  forgotPassword,
   resetPassword,
   refreshToken,
-  currentUser,
   newRegister,
   verifyOTP,
   verifyIdentity,

@@ -1,4 +1,3 @@
-const { request } = require("express");
 const pool = require("../config/database");
 
 const viewUserInfo = async (request, response) => {
