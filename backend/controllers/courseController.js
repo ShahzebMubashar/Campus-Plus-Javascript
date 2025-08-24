@@ -73,6 +73,8 @@ const rateCourse = async (request, response) => {
   } catch (error) {
     console.error("Error in rateCourse:", error);
     return response.status(500).send("Internal Server Error");
+  } finally {
+    if (client) client.release();
   }
 };
 
@@ -107,6 +109,8 @@ const reviewCourse = async (request, response) => {
     console.error("Error in reviewCourse:", error);
     await pool.query("ROLLBACK");
     return response.status(500).send("Internal Server Error");
+  } finally {
+    if (client) client.release();
   }
 };
 
@@ -284,7 +288,7 @@ const getCourseDetails = async (req, res) => {
       LEFT JOIN CourseRating cr ON vci.courseid = cr.courseid
       LEFT JOIN CourseInfo ci ON vci.courseid = ci.courseid
       WHERE vci.courseid = $1`,
-              [courseId, req.user?.userid || 0]
+      [courseId, req.user?.userid || 0]
     );
 
     await client.query("BEGIN");
@@ -304,6 +308,8 @@ const getCourseDetails = async (req, res) => {
     console.error('Error fetching course details:', err);
     await client.query("ROLLBACK");
     return res.status(500).json({ message: 'Server error while fetching course details' });
+  } finally {
+    client.release();
   }
 };
 
@@ -321,6 +327,7 @@ const rateCourseDifficulty = async (request, response) => {
   try {
     const client = await pool.connect();
 
+    await client.query("BEGIN");
     // Update the difficulty in courseinfo table
     await client.query(
       `UPDATE CourseInfo 
@@ -329,8 +336,10 @@ const rateCourseDifficulty = async (request, response) => {
       [rating, courseid]
     );
 
+    await client.query("COMMIT");
+
     // Get the updated course details
-    const result = await client.query(
+    const result = await pool.query(
       `SELECT vci.*, 
        CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
        CASE WHEN cr.ratedcount > 0 THEN cr.ratedcount ELSE 0 END as rating_count,
@@ -351,6 +360,8 @@ const rateCourseDifficulty = async (request, response) => {
   } catch (error) {
     console.error("Error in rateCourseDifficulty:", error);
     return response.status(500).json({ message: "Internal Server Error" });
+  } finally {
+    if (client) client.release();
   }
 };
 

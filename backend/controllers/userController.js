@@ -3,7 +3,7 @@ const pool = require("../config/database");
 const viewUserInfo = async (request, response) => {
   console.log("=== VIEW USER INFO ENDPOINT ===");
   console.log("JWT User:", request.user);
-  
+
   const userid = request.user.userid; // From JWT middleware
   console.log(`[ENDPOINT HIT] GET Userinfo for userid: ${userid}`);
 
@@ -49,13 +49,12 @@ const editUserInfo = async (request, response) => {
 
   try {
     const client = await pool.connect();
-    await client.query("BEGIN");
 
     let res = await client.query(`Select * from UserInfo where userid = $1`, [
       userid,
     ]);
 
-    console.log(`Query Returned: ${res.rows[0]}\nRow Count: ${res.rowCount}`);
+    await client.query("BEGIN");
 
     if (!res.rowCount)
       await client.query(
@@ -80,6 +79,8 @@ const editUserInfo = async (request, response) => {
     console.error(error.message);
     await pool.query("ROLLBACK");
     return response.status(500).send("Internal Server Error");
+  } finally {
+    if (client) client.release();
   }
 };
 
@@ -141,10 +142,8 @@ const addReminder = async (request, response) => {
 const getReminders = async (request, response) => {
   const userid = request.user.userid; // From JWT middleware
 
-  const client = await pool.connect();
-
   try {
-    const result = await client.query(
+    const result = await pool.query(
       `SELECT * FROM UserTasks 
        WHERE userid = $1 
        ORDER BY priority, duedate`,
@@ -152,13 +151,11 @@ const getReminders = async (request, response) => {
     );
 
     if (!result.rowCount) return response.status(404).json("No Upcoming Tasks");
-    console.log(result.rows);
+
     return response.status(200).json(result.rows);
   } catch (error) {
     console.error("Error fetching reminders:", error.message);
     return response.status(500).json({ error: "Internal Server Error" });
-  } finally {
-    client.release();
   }
 };
 

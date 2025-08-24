@@ -59,14 +59,13 @@ const getNotifications = async (request, response) => {
 
 const deleteNotification = async (request, response) => {
     const { params: { notificationid }, user: { role } } = request;
-    console.log("\n\n\nDeleting notification with ID:", notificationid);
 
     if (!notificationid) return response.status(400).json("Notification ID is required");
 
-    const client = await pool.connect().then(console.log("Connected to database for deleting notification"));
+    const client = await pool.connect();
 
     if (role !== "Admin") return response.status(403).json("Only admins can delete notifications");
-    console.log("Admin role confirmed for deleting notification");
+
     try {
         const query = `Delete from Notifications where notificationid = $1 returning *`;
 

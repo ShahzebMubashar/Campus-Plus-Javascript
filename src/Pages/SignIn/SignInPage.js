@@ -263,11 +263,12 @@ export default function AuthPage() {
         }),
       });
       const data = await response.json();
-      console.log("Sign Up Data:", data);
+
       if (response.ok) {
         navigate("/otp-verification", {
           state: {
             email: formData.email,
+            rollnumber: formData.password.replace(/-/g, ''),
           },
           replace: true,
         });
