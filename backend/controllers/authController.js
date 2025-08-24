@@ -213,6 +213,13 @@ exports.verifyIdentity = async (request, response) => {
 
     await client.query('BEGIN');
 
+    const deletePreviousOTP = await client.query(`Delete from OTPVerification where email = $1`, [email]);
+
+    if (!deletePreviousOTP.rowCount) {
+      await client.query('ROLLBACK');
+      return response.status(500).json("Failed to delete previous OTP. Please try again.");
+    }
+
     const insertRes = await client.query(`Insert into OTPVerification (email, otp, expires_at)
       Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
       [email, otp]
