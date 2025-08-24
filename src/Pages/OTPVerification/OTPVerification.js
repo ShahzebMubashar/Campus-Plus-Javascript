@@ -287,15 +287,18 @@ export default function OTPVerification() {
                         {/* Footer */}
                         <div className="auth-footer">
                             <div className="resend-otp-section">
-                                <p>Didn't receive the code?</p>
+                              <span className="resend-label">Didn't receive the code?</span>
+                              {countdown > 0 ? (
+                                <span className="countdown">{`Resend in ${countdown}s`}</span>
+                              ) : (
                                 <button
-                                    type="button"
-                                    onClick={handleResendOtp}
-                                    className="resend-link"
-                                    disabled={countdown > 0}
+                                  type="button"
+                                  onClick={handleResendOtp}
+                                  className="resend-link"
                                 >
-                                    {countdown > 0 ? `Resend in ${countdown}s` : 'Resend OTP'}
+                                  Resend OTP
                                 </button>
+                              )}
                             </div>
                             <p className="switch-prompt">
                                 Need to change your email?
