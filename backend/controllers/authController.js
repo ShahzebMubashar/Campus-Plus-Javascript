@@ -151,10 +151,13 @@ exports.resetPassword = async (request, response) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
+    let res = await pool.query(`Select password from Users where email = $1 and rollnumber = $2`,
+      [email, rollnumber]
+    );
 
     await client.query('BEGIN');
 
-    let res = await client.query(`Update Users set password = $1 where email = $2 and rollnumber = $3 returning userid`,
+    res = await client.query(`Update Users set password = $1 where email = $2 and rollnumber = $3 returning userid`,
       [hashedPassword, email, rollnumber]
     );
 
@@ -162,6 +165,8 @@ exports.resetPassword = async (request, response) => {
       await client.query('ROLLBACK');
       return response.status(400).json("Email and Roll Number do not match any user");
     }
+
+    await client.query('COMMIT');
 
     return response.status(200).json({
       message: "Password reset successfully",
@@ -178,7 +183,7 @@ exports.resetPassword = async (request, response) => {
 
 exports.verifyIdentity = async (request, response) => {
   const { body: { email, rollnumber } } = request;
-
+  console.log("Email:", email, "Roll Number:", rollnumber);
   if (!email || !rollnumber) {
     return response.status(400).json("Please provide all required fields");
   }
@@ -189,6 +194,7 @@ exports.verifyIdentity = async (request, response) => {
     const res = await pool.query(`Select * from Users where email = $1 and rollnumber = $2`, [email, rollnumber]);
 
     if (!res.rowCount) {
+      console.log("No user found with provided email and roll number");
       return response.status(400).json("Email and Roll Number do not match any user");
     }
 
@@ -212,13 +218,8 @@ exports.verifyIdentity = async (request, response) => {
     });
 
     await client.query('BEGIN');
-
+    console.log("HERE");
     const deletePreviousOTP = await client.query(`Delete from OTPVerification where email = $1`, [email]);
-
-    if (!deletePreviousOTP.rowCount) {
-      await client.query('ROLLBACK');
-      return response.status(500).json("Failed to delete previous OTP. Please try again.");
-    }
 
     const insertRes = await client.query(`Insert into OTPVerification (email, otp, expires_at)
       Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
