@@ -1,6 +1,6 @@
 const pool = require("../config/database.js");
 const fetch = require('node-fetch');
-// Controller to fetch all courses
+
 const getCourses = async (request, response) => {
   try {
     const result = await pool.query(`
@@ -24,7 +24,6 @@ const getCourses = async (request, response) => {
   }
 };
 
-// Controller to rate a course
 const rateCourse = async (request, response) => {
   const {
     body: { courseid, rating },
@@ -78,7 +77,6 @@ const rateCourse = async (request, response) => {
   }
 };
 
-// Controller to review a course
 const reviewCourse = async (request, response) => {
   const {
     body: { courseid, review },
@@ -119,13 +117,11 @@ const addCourse = async (request, response) => {
     body: { coursename, coursecode, credits, grading, difficulty },
   } = request;
 
-  // Validate input
   if (!coursename || !coursecode || !credits || !grading || !difficulty) {
     return response.status(400).json({ message: "All fields are required" });
   }
 
   try {
-    // Check if the course already exists
     let res = await pool.query(
       `SELECT * FROM Courses WHERE coursecode ILIKE $1`,
       [coursecode]
@@ -140,7 +136,6 @@ const addCourse = async (request, response) => {
     try {
       await client.query("BEGIN");
 
-      // Insert into Courses table
       res = await client.query(
         `INSERT INTO Courses (coursecode) VALUES ($1) RETURNING courseid`,
         [coursecode]
@@ -148,7 +143,6 @@ const addCourse = async (request, response) => {
 
       const courseid = res.rows[0].courseid;
 
-      // Insert into CourseInfo table
       await client.query(
         `INSERT INTO CourseInfo (courseid, coursename, credits, grading, difficulty)
          VALUES ($1, $2, $3, $4, $5)`,
@@ -185,13 +179,11 @@ const addCourses = async (request, response) => {
     for (const course of courses) {
       const { coursename, coursecode, credits, grading, difficulty } = course;
 
-      // Validate each course
       if (!coursename || !coursecode || !credits || !grading || !difficulty) {
         await client.query("ROLLBACK");
         return response.status(400).json({ message: "All fields are required for each course" });
       }
 
-      // Check if course exists
       const existsRes = await client.query(
         `SELECT 1 FROM viewcourseinfo WHERE coursecode ILIKE $1 and coursename ILIKE $2`,
         [coursecode, coursename]
@@ -201,14 +193,12 @@ const addCourses = async (request, response) => {
         return response.status(400).json({ message: `Course with code ${coursecode} and ${coursename} already exists` });
       }
 
-      // Insert into Courses
       const res = await client.query(
         `INSERT INTO Courses (coursecode) VALUES ($1) RETURNING courseid`,
         [coursecode]
       );
       const courseid = res.rows[0].courseid;
 
-      // Insert into CourseInfo
       await client.query(
         `INSERT INTO CourseInfo (courseid, coursename, credits, grading, difficulty)
          VALUES ($1, $2, $3, $4, $5)`,
@@ -247,20 +237,18 @@ const getPastPapers = async (req, res) => {
 const downloadPastPapers = async (req, res) => {
   const { paperId } = req.params;
   try {
-    // Query the database for the file_link using paperId
     const result = await pool.query('SELECT file_link FROM past_papers WHERE paper_id = $1', [paperId]);
     if (result.rows.length === 0) {
       return res.status(404).send('Paper not found');
     }
     const fileLink = result.rows[0].file_link;
 
-    // Fetch the file from the external link (e.g., Google Drive)
     const response = await fetch(fileLink);
     if (!response.ok) {
       return res.status(500).send('Failed to fetch file');
     }
-    // Stream the file to the client
-    res.setHeader('Content-Type', 'application/pdf'); // Adjust the type if needed
+
+    res.setHeader('Content-Type', 'application/pdf'); 
     response.body.pipe(res);
   } catch (err) {
     console.error(err.message);
@@ -313,7 +301,6 @@ const getCourseDetails = async (req, res) => {
   }
 };
 
-// Controller to rate course difficulty
 const rateCourseDifficulty = async (request, response) => {
   const {
     body: { courseid, rating },
@@ -328,7 +315,7 @@ const rateCourseDifficulty = async (request, response) => {
     const client = await pool.connect();
 
     await client.query("BEGIN");
-    // Update the difficulty in courseinfo table
+
     await client.query(
       `UPDATE CourseInfo 
        SET difficulty = $1 
@@ -338,7 +325,6 @@ const rateCourseDifficulty = async (request, response) => {
 
     await client.query("COMMIT");
 
-    // Get the updated course details
     const result = await pool.query(
       `SELECT vci.*, 
        CASE WHEN cr.ratedcount > 0 THEN ROUND(cr.ratingsum::numeric / cr.ratedcount, 1) ELSE NULL END as rating,
@@ -365,7 +351,6 @@ const rateCourseDifficulty = async (request, response) => {
   }
 };
 
-// Exporting the functions
 module.exports = {
   getCourses,
   rateCourse,
