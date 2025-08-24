@@ -1,4 +1,3 @@
-const { request } = require("http");
 const pool = require("../config/database");
 
 const checkRoomMember = async (request, response, next) => {

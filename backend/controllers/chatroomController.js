@@ -1,6 +1,4 @@
 const transporter = require("../controllers/Mailer").transporter;
-const getValidEmails = require("../controllers/Mailer").getValidEmails;
-// const { get } = require("react-scroll/modules/mixins/scroller");
 const pool = require("../config/database");
 
 const getRooms = async (request, response) => {
