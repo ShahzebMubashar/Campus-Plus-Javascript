@@ -2,7 +2,6 @@ const pool = require("../config/database");
 
 const checkRoomMember = async (request, response, next) => {
   try {
-    console.log("Middleware Request:", request.params);
 
     const {
       params: { roomid },
@@ -57,14 +56,11 @@ const checkModerator = async (request, response, next) => {
   const {
     user,
   } = request;
-  console.log("Middleware Request:", request.params);
-  console.log("User:", user);
-  console.log("User Role:", user.role);
+
   if (!user.role || (user.role !== "Moderator" && user.role !== "Admin"))
     return response
       .status(403)
       .send("You are not authorized to perform this action");
-  console.log("Moderator check passed for user:", user.username);
   next();
 };
 

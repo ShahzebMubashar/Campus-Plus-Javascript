@@ -21,15 +21,16 @@ exports.newRegister = async (request, response) => {
   const {
     body: { username, rollnumber, fullName, password, email }
   } = request;
+
   if (!username || !rollnumber || !email || !password)
     return response.status(400).json("Please provide all the required fields");
 
   try {
     const rollInput = rollnumber.trim().toUpperCase();
     const patterns = [
-      /^(\d{2})([A-Z])-(\d{4})$/, // 24L-1234
-      /^([A-Z])(\d{2})(\d{4})$/,  // L241234
-      /^(\d{2})([A-Z])(\d{4})$/   // 24L1234
+      /^(\d{2})([A-Z])-(\d{4})$/,
+      /^([A-Z])(\d{2})(\d{4})$/,
+      /^(\d{2})([A-Z])(\d{4})$/
     ];
 
     let match = null, city = '', batch = '', digits = '';
@@ -182,7 +183,7 @@ exports.resetPassword = async (request, response) => {
 
 exports.verifyIdentity = async (request, response) => {
   const { body: { email, rollnumber } } = request;
-  console.log("Email:", email, "Roll Number:", rollnumber);
+
   if (!email || !rollnumber) {
     return response.status(400).json("Please provide all required fields");
   }
@@ -193,7 +194,6 @@ exports.verifyIdentity = async (request, response) => {
     const res = await pool.query(`Select * from Users where email = $1 and rollnumber = $2`, [email, rollnumber]);
 
     if (!res.rowCount) {
-      console.log("No user found with provided email and roll number");
       return response.status(400).json("Email and Roll Number do not match any user");
     }
 
@@ -217,8 +217,8 @@ exports.verifyIdentity = async (request, response) => {
     });
 
     await client.query('BEGIN');
-    console.log("HERE");
-    const deletePreviousOTP = await client.query(`Delete from OTPVerification where email = $1`, [email]);
+
+    await client.query(`Delete from OTPVerification where email = $1`, [email]);
 
     const insertRes = await client.query(`Insert into OTPVerification (email, otp, expires_at)
       Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
@@ -247,7 +247,6 @@ exports.verifyIdentity = async (request, response) => {
 };
 
 exports.verifyOTP = async (request, response) => {
-  console.log("=== VERIFY OTP ===");
   const { body: { otp, email } } = request;
 
   if (!otp || !email) {
@@ -354,105 +353,9 @@ exports.resendOTP = async (request, response) => {
   } finally {
     client.release();
   }
-}
-
-// exports.register = async (request, response) => {
-//   const {
-//     body: { username, email, password, rollnumber, fullName },
-//   } = request;
-
-//   if (!username || !email || !password || !rollnumber) {
-//     return response.status(400).json("Please provide all the fields");
-//   }
-
-//   try {
-//     const client = await pool.connect();
-//     await client.query("BEGIN");
-
-//     const checkUser = await client.query(
-//       `SELECT (SELECT COUNT(*) FROM Users WHERE username = $1) AS usernameCount,
-//                     (SELECT COUNT(*) FROM Users WHERE email = $2) AS emailCount,
-//                     (SELECT COUNT(*) FROM Users WHERE rollnumber = $3) AS rollnumberCount`,
-//       [username, email, rollnumber]
-//     );
-
-//     const { usernamecount, emailcount, rollnumbercount } = checkUser.rows[0];
-
-//     if (parseInt(rollnumbercount))
-//       return response
-//         .status(409)
-//         .json(`Roll Number ${rollnumber} already exists`);
-
-//     if (parseInt(emailcount))
-//       return response.status(409).json(`Email ${email} already exists`);
-
-//     if (parseInt(usernamecount)) {
-//       let newUserName = username;
-//       let randomUserID = Math.floor(Math.random() * 1000);
-//       while (true) {
-//         newUserName = `${username}${randomUserID}`;
-//         const userCheck = await client.query(
-//           "SELECT * FROM Users WHERE username = $1",
-//           [newUserName]
-//         );
-//         if (!userCheck.rowCount) break;
-//       }
-
-//       return response
-//         .status(409)
-//         .json(`Username ${username} already exists. Try ${newUserName}`);
-//     }
-
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     const result = await client.query(
-//       `INSERT INTO Users (username, email, password, rollnumber) VALUES ($1, $2, $3, $4) RETURNING userid, username, email, rollnumber`,
-//       [username, email, hashedPassword, rollnumber]
-//     );
-
-//     if (fullName) {
-//       await client.query(
-//         `INSERT INTO UserInfo (userid, name) VALUES ($1, $2)`,
-//         [result.rows[0].userid, fullName]
-//       );
-//     }
-
-//     await client.query("COMMIT");
-
-//     const user = {
-//       userid: parseInt(result.rows[0].userid),
-//       username: result.rows[0].username,
-//       email: result.rows[0].email,
-//       rollnumber: result.rows[0].rollnumber,
-//       fullName: fullName || null,
-//       role: 'Student' // Default role for new users
-//     };
-
-//     // Generate JWT tokens
-//     const tokens = generateTokenPair(user);
-
-//     return response.status(201).json({
-//       message: `User ${result.rows[0].username} registered successfully`,
-//       user: {
-//         userid: user.userid,
-//         username: user.username,
-//         email: user.email,
-//         rollnumber: user.rollnumber,
-//         fullName: user.fullName,
-//         role: user.role
-//       },
-//       ...tokens
-//     });
-//   } catch (error) {
-//     console.error("Registration error:", error.message);
-//     await pool.query("ROLLBACK");
-//     return response.status(500).json("Server Error");
-//   }
-// };
+};
 
 exports.login = async (request, response) => {
-  console.log("=== JWT LOGIN ENDPOINT ===");
-
   const { email, password, username } = request.body;
 
   if (!email && !username)
@@ -498,81 +401,8 @@ exports.login = async (request, response) => {
   }
 };
 
-// exports.forgotPassword = async (request, response) => {
-//   const { userid, email } = request.user;
-
-//   const OTPGenerated = Math.floor(100000 + Math.random() * 900000);
-
-//   const signedOTP = jwt.sign(
-//     OTPGenerated,
-//     process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET,
-//     {
-//       expiresIn: '1h',
-//       issuer: process.env.JWT_ISSUER || 'campus-plus-app',
-//       audience: process.env.JWT_AUDIENCE || 'campus-plus-users'
-//     }
-//   );
-
-//   const mailOptions = {
-//     from: from,
-//     to: email,
-//     subject: "Password Change Verification – One-Time Password (OTP)",
-//     text: `Dear User,
-  
-//   You have requested to change your password. Please use the following One-Time Password (OTP) to proceed:
-  
-//   OTP: ${OTPGenerated}
-  
-//   This OTP is valid for 1 hour. 
-//   If you did not request a password change, please disregard this email.
-  
-//   Thank you,
-//   CampusPlus Support Team`,
-//   };
-
-//   const client = await pool.connect();
-
-//   try {
-//     await client.query("BEGIN");
-
-//     const res = await client.query(
-//       `Select * from ResetPassword where userid = $1`,
-//       [userid]
-//     );
-
-//     if (res.rowCount)
-//       await client.query(
-//         `Delete from ResetPassword where userid = $1 or token_expiry < current_timestamp + interval '1 hour'`,
-//         [userid]
-//       );
-
-//     await client.query(
-//       `Insert into ResetPassword (userid, reset_token, token_expiry)
-//       Values ($1, $2, current_timestamp + Interval '1 hour')`,
-//       [userid, signedOTP]
-//     );
-
-//     await client.query("COMMIT");
-//   } catch (error) {
-//     console.error(error.message);
-//     await client.query("ROLLBACK");
-//     return response.status(500).json("Server Error");
-//   } finally {
-//     if (client) client.release();
-//   }
-
-//   transporter.sendMail(mailOptions, (error, info) => {
-//     if (error) return console.log(`Error: `, error);
-//   });
-
-//   return response.status(200).json("OTP Generated!");
-// };
-
 exports.logout = async (request, response) => {
   try {
-    // With JWT, logout is handled client-side by removing the token
-    // We could implement a token blacklist here if needed
-    console.log("✅ Logout successful for user:", request.user?.username || "unknown");
     return response.status(200).json({
       message: "Logged out successfully",
       success: true
@@ -610,7 +440,6 @@ exports.testLogin = async (request, response) => {
 
     if (!isMatch) return response.status(401).json("Invalid Credentials");
 
-    // Generate proper JWT tokens
     const tokens = generateTokenPair(user);
 
     return response.status(200).json({
@@ -642,7 +471,6 @@ exports.userRole = async (request, response) => {
   }
 };
 
-// Add token refresh endpoint
 exports.refreshToken = async (request, response) => {
   try {
     const { refreshToken } = request.body;
@@ -651,11 +479,9 @@ exports.refreshToken = async (request, response) => {
       return response.status(400).json({ error: "Refresh token required" });
     }
 
-    // Verify refresh token
     const { verifyToken } = require("../utils/jwt.js");
     const decoded = verifyToken(refreshToken);
 
-    // Get user from database
     const result = await pool.query(
       `SELECT u.*, ui.name as fullName 
        FROM Users u 
@@ -682,7 +508,6 @@ exports.refreshToken = async (request, response) => {
   }
 };
 
-// Add current user endpoint for JWT
 exports.currentUser = async (request, response) => {
   try {
     if (!request.user) {
