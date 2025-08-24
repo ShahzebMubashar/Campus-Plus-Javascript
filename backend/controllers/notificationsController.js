@@ -3,8 +3,6 @@ const pool = require('../config/database');
 const generateNotification = async (request, response) => {
     const { user: { userid, role }, body: { notification, title } } = request;
 
-    // if (role !== "Admin") return response.status(403).json("Only admins can generate notifications");
-
     if (!notification || !title) return response.status(400).json("Notification and title are required");
 
     const client = await pool.connect();
@@ -77,11 +75,9 @@ const deleteNotification = async (request, response) => {
 
         if (!result.rowCount) {
             await client.query("ROLLBACK");
-            console.log("Notification not found for deletion");
             return response.status(404).json("Notification not found");
         }
 
-        console.log("Notification deleted successfully:", result.rows[0]);
         await client.query("COMMIT");
 
         return response.status(200).json("Notification deleted successfully");
@@ -96,8 +92,6 @@ const deleteNotification = async (request, response) => {
 
 const readNotifications = async (request, response) => {
     const { body: { userid } } = request;
-
-    console.log("\n\n\nMarking notifications as read for user ID:", userid);
 
     if (!userid) return response.status(400).json("User ID is required");
 
