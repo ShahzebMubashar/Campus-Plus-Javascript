@@ -4,7 +4,7 @@ const viewUserInfo = async (request, response) => {
   console.log("=== VIEW USER INFO ENDPOINT ===");
   console.log("JWT User:", request.user);
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
   console.log(`[ENDPOINT HIT] GET Userinfo for userid: ${userid}`);
 
   if (!userid) {
@@ -42,7 +42,7 @@ const editUserInfo = async (request, response) => {
     body: { batch, degree, name },
   } = request;
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   if (!batch || !degree || !name)
     return response.status(400).json(`Please Enter all the fields`);
@@ -85,7 +85,7 @@ const editUserInfo = async (request, response) => {
 };
 
 const currentCourses = async (request, response) => {
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   try {
     let res = await pool.query(
@@ -113,7 +113,7 @@ const addReminder = async (request, response) => {
       body: { duedate, content, priority },
     } = request;
 
-    const userid = request.user.userid; // From JWT middleware
+    const userid = request.user.userid; 
 
     await client.query("BEGIN");
 
@@ -138,9 +138,8 @@ const addReminder = async (request, response) => {
   }
 };
 
-// Add this new endpoint to fetch reminders
 const getReminders = async (request, response) => {
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   try {
     const result = await pool.query(
@@ -164,7 +163,7 @@ const deleteReminder = async (request, response) => {
     params: { reminderid },
   } = request;
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   const client = await pool.connect();
 
@@ -194,7 +193,7 @@ const updatePriority = async (request, response) => {
     body: { priority, status },
   } = request;
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   const client = await pool.connect();
 
