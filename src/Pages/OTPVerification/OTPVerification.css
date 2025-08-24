@@ -35,49 +35,53 @@
 }
 
 .resend-otp-section {
+  font-size: 0.95rem;
+  font-weight: 500;
+  line-height: 1.5;
+  display: flex;
+  align-items: center !important;
+  justify-content: center;
+  gap: 8px;
   margin-bottom: 20px;
-  text-align: center;
 }
 
-.resend-otp-section p {
+.resend-label,
+.resend-link,
+.countdown {
   color: #64748b;
   font-size: 0.95rem;
-  margin-bottom: 8px;
+  line-height: inherit;
+  margin: 0;
+  padding: 0;
+  font-weight: 500;
+  display: inline;
+  vertical-align: baseline;
 }
 
 .resend-link {
-  background: none;
-  border: none;
-  color: #3b82f6;
-  font-size: 0.95rem;
-  font-weight: 500;
+  height: auto;
+  min-height: 0;
+  display: inline;
   cursor: pointer;
-  transition: all 0.3s ease;
-  position: relative;
+  font-weight: 500;
+  color: #64748b;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  padding: 0;
+  margin: 0;
+  vertical-align: baseline;
+  /* Remove margin-top */
+  /* Remove position/top */
+  transform: translateY(-2px);
 }
 
-.resend-link:disabled {
-  color: #94a3b8;
-  cursor: not-allowed;
-}
-
-.resend-link::after {
-  content: "";
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: #3b82f6;
-  transition: width 0.3s ease;
-}
-
-.resend-link:not(:disabled):hover::after {
-  width: 100%;
-}
-
-.resend-link:not(:disabled):hover {
-  color: #1d4ed8;
+.countdown {
+  display: inline;
+  vertical-align: baseline;
+  /* Fine-tune alignment if needed: */
+  transform: translateY(-2px);
+  font-weight: 500;
+  margin-bottom: 13px !important;
 }
 
 /* Responsive Design for OTP Inputs */
@@ -85,7 +89,7 @@
   .otp-input-container {
     gap: 8px;
   }
-  
+
   .otp-input {
     width: 45px;
     height: 55px;
@@ -97,7 +101,7 @@
   .otp-input-container {
     gap: 6px;
   }
-  
+
   .otp-input {
     width: 40px;
     height: 50px;
