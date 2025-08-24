@@ -135,10 +135,14 @@ const addSemester = async (request, response) => {
       });
     }
 
+    await client.query("BEGIN");
+
     const result = await client.query(
       "INSERT INTO semesters (name) VALUES ($1) RETURNING *",
       [name]
     );
+
+    await client.query("COMMIT");
 
     return response.status(200).json({
       id: result.rows[0].id,
@@ -147,6 +151,7 @@ const addSemester = async (request, response) => {
     });
   } catch (error) {
     console.error("Error adding semester:", error);
+    await client.query("ROLLBACK");
     return response.status(500).json({ error: "Internal server error" });
   } finally {
     client.release();

@@ -241,6 +241,8 @@ exports.verifyIdentity = async (request, response) => {
   } catch (error) {
     console.error(error);
     return response.status(500).json('Internal Server Error');
+  } finally {
+    client.release();
   }
 };
 
@@ -354,99 +356,99 @@ exports.resendOTP = async (request, response) => {
   }
 }
 
-exports.register = async (request, response) => {
-  const {
-    body: { username, email, password, rollnumber, fullName },
-  } = request;
+// exports.register = async (request, response) => {
+//   const {
+//     body: { username, email, password, rollnumber, fullName },
+//   } = request;
 
-  if (!username || !email || !password || !rollnumber) {
-    return response.status(400).json("Please provide all the fields");
-  }
+//   if (!username || !email || !password || !rollnumber) {
+//     return response.status(400).json("Please provide all the fields");
+//   }
 
-  try {
-    const client = await pool.connect();
-    await client.query("BEGIN");
+//   try {
+//     const client = await pool.connect();
+//     await client.query("BEGIN");
 
-    const checkUser = await client.query(
-      `SELECT (SELECT COUNT(*) FROM Users WHERE username = $1) AS usernameCount,
-                    (SELECT COUNT(*) FROM Users WHERE email = $2) AS emailCount,
-                    (SELECT COUNT(*) FROM Users WHERE rollnumber = $3) AS rollnumberCount`,
-      [username, email, rollnumber]
-    );
+//     const checkUser = await client.query(
+//       `SELECT (SELECT COUNT(*) FROM Users WHERE username = $1) AS usernameCount,
+//                     (SELECT COUNT(*) FROM Users WHERE email = $2) AS emailCount,
+//                     (SELECT COUNT(*) FROM Users WHERE rollnumber = $3) AS rollnumberCount`,
+//       [username, email, rollnumber]
+//     );
 
-    const { usernamecount, emailcount, rollnumbercount } = checkUser.rows[0];
+//     const { usernamecount, emailcount, rollnumbercount } = checkUser.rows[0];
 
-    if (parseInt(rollnumbercount))
-      return response
-        .status(409)
-        .json(`Roll Number ${rollnumber} already exists`);
+//     if (parseInt(rollnumbercount))
+//       return response
+//         .status(409)
+//         .json(`Roll Number ${rollnumber} already exists`);
 
-    if (parseInt(emailcount))
-      return response.status(409).json(`Email ${email} already exists`);
+//     if (parseInt(emailcount))
+//       return response.status(409).json(`Email ${email} already exists`);
 
-    if (parseInt(usernamecount)) {
-      let newUserName = username;
-      let randomUserID = Math.floor(Math.random() * 1000);
-      while (true) {
-        newUserName = `${username}${randomUserID}`;
-        const userCheck = await client.query(
-          "SELECT * FROM Users WHERE username = $1",
-          [newUserName]
-        );
-        if (!userCheck.rowCount) break;
-      }
+//     if (parseInt(usernamecount)) {
+//       let newUserName = username;
+//       let randomUserID = Math.floor(Math.random() * 1000);
+//       while (true) {
+//         newUserName = `${username}${randomUserID}`;
+//         const userCheck = await client.query(
+//           "SELECT * FROM Users WHERE username = $1",
+//           [newUserName]
+//         );
+//         if (!userCheck.rowCount) break;
+//       }
 
-      return response
-        .status(409)
-        .json(`Username ${username} already exists. Try ${newUserName}`);
-    }
+//       return response
+//         .status(409)
+//         .json(`Username ${username} already exists. Try ${newUserName}`);
+//     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+//     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const result = await client.query(
-      `INSERT INTO Users (username, email, password, rollnumber) VALUES ($1, $2, $3, $4) RETURNING userid, username, email, rollnumber`,
-      [username, email, hashedPassword, rollnumber]
-    );
+//     const result = await client.query(
+//       `INSERT INTO Users (username, email, password, rollnumber) VALUES ($1, $2, $3, $4) RETURNING userid, username, email, rollnumber`,
+//       [username, email, hashedPassword, rollnumber]
+//     );
 
-    if (fullName) {
-      await client.query(
-        `INSERT INTO UserInfo (userid, name) VALUES ($1, $2)`,
-        [result.rows[0].userid, fullName]
-      );
-    }
+//     if (fullName) {
+//       await client.query(
+//         `INSERT INTO UserInfo (userid, name) VALUES ($1, $2)`,
+//         [result.rows[0].userid, fullName]
+//       );
+//     }
 
-    await client.query("COMMIT");
+//     await client.query("COMMIT");
 
-    const user = {
-      userid: parseInt(result.rows[0].userid),
-      username: result.rows[0].username,
-      email: result.rows[0].email,
-      rollnumber: result.rows[0].rollnumber,
-      fullName: fullName || null,
-      role: 'Student' // Default role for new users
-    };
+//     const user = {
+//       userid: parseInt(result.rows[0].userid),
+//       username: result.rows[0].username,
+//       email: result.rows[0].email,
+//       rollnumber: result.rows[0].rollnumber,
+//       fullName: fullName || null,
+//       role: 'Student' // Default role for new users
+//     };
 
-    // Generate JWT tokens
-    const tokens = generateTokenPair(user);
+//     // Generate JWT tokens
+//     const tokens = generateTokenPair(user);
 
-    return response.status(201).json({
-      message: `User ${result.rows[0].username} registered successfully`,
-      user: {
-        userid: user.userid,
-        username: user.username,
-        email: user.email,
-        rollnumber: user.rollnumber,
-        fullName: user.fullName,
-        role: user.role
-      },
-      ...tokens
-    });
-  } catch (error) {
-    console.error("Registration error:", error.message);
-    await pool.query("ROLLBACK");
-    return response.status(500).json("Server Error");
-  }
-};
+//     return response.status(201).json({
+//       message: `User ${result.rows[0].username} registered successfully`,
+//       user: {
+//         userid: user.userid,
+//         username: user.username,
+//         email: user.email,
+//         rollnumber: user.rollnumber,
+//         fullName: user.fullName,
+//         role: user.role
+//       },
+//       ...tokens
+//     });
+//   } catch (error) {
+//     console.error("Registration error:", error.message);
+//     await pool.query("ROLLBACK");
+//     return response.status(500).json("Server Error");
+//   }
+// };
 
 exports.login = async (request, response) => {
   console.log("=== JWT LOGIN ENDPOINT ===");
@@ -496,75 +498,75 @@ exports.login = async (request, response) => {
   }
 };
 
-exports.forgotPassword = async (request, response) => {
-  const { userid, email } = request.user;
+// exports.forgotPassword = async (request, response) => {
+//   const { userid, email } = request.user;
 
-  const OTPGenerated = Math.floor(100000 + Math.random() * 900000);
+//   const OTPGenerated = Math.floor(100000 + Math.random() * 900000);
 
-  const signedOTP = jwt.sign(
-    OTPGenerated,
-    process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET,
-    {
-      expiresIn: '1h',
-      issuer: process.env.JWT_ISSUER || 'campus-plus-app',
-      audience: process.env.JWT_AUDIENCE || 'campus-plus-users'
-    }
-  );
+//   const signedOTP = jwt.sign(
+//     OTPGenerated,
+//     process.env.JWT_SECRET || process.env.ACCESS_TOKEN_SECRET,
+//     {
+//       expiresIn: '1h',
+//       issuer: process.env.JWT_ISSUER || 'campus-plus-app',
+//       audience: process.env.JWT_AUDIENCE || 'campus-plus-users'
+//     }
+//   );
 
-  const mailOptions = {
-    from: from,
-    to: email,
-    subject: "Password Change Verification – One-Time Password (OTP)",
-    text: `Dear User,
+//   const mailOptions = {
+//     from: from,
+//     to: email,
+//     subject: "Password Change Verification – One-Time Password (OTP)",
+//     text: `Dear User,
   
-  You have requested to change your password. Please use the following One-Time Password (OTP) to proceed:
+//   You have requested to change your password. Please use the following One-Time Password (OTP) to proceed:
   
-  OTP: ${OTPGenerated}
+//   OTP: ${OTPGenerated}
   
-  This OTP is valid for 1 hour. 
-  If you did not request a password change, please disregard this email.
+//   This OTP is valid for 1 hour. 
+//   If you did not request a password change, please disregard this email.
   
-  Thank you,
-  CampusPlus Support Team`,
-  };
+//   Thank you,
+//   CampusPlus Support Team`,
+//   };
 
-  const client = await pool.connect();
+//   const client = await pool.connect();
 
-  try {
-    await client.query("BEGIN");
+//   try {
+//     await client.query("BEGIN");
 
-    const res = await client.query(
-      `Select * from ResetPassword where userid = $1`,
-      [userid]
-    );
+//     const res = await client.query(
+//       `Select * from ResetPassword where userid = $1`,
+//       [userid]
+//     );
 
-    if (res.rowCount)
-      await client.query(
-        `Delete from ResetPassword where userid = $1 or token_expiry < current_timestamp + interval '1 hour'`,
-        [userid]
-      );
+//     if (res.rowCount)
+//       await client.query(
+//         `Delete from ResetPassword where userid = $1 or token_expiry < current_timestamp + interval '1 hour'`,
+//         [userid]
+//       );
 
-    await client.query(
-      `Insert into ResetPassword (userid, reset_token, token_expiry)
-      Values ($1, $2, current_timestamp + Interval '1 hour')`,
-      [userid, signedOTP]
-    );
+//     await client.query(
+//       `Insert into ResetPassword (userid, reset_token, token_expiry)
+//       Values ($1, $2, current_timestamp + Interval '1 hour')`,
+//       [userid, signedOTP]
+//     );
 
-    await client.query("COMMIT");
-  } catch (error) {
-    console.error(error.message);
-    await client.query("ROLLBACK");
-    return response.status(500).json("Server Error");
-  } finally {
-    if (client) client.release();
-  }
+//     await client.query("COMMIT");
+//   } catch (error) {
+//     console.error(error.message);
+//     await client.query("ROLLBACK");
+//     return response.status(500).json("Server Error");
+//   } finally {
+//     if (client) client.release();
+//   }
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) return console.log(`Error: `, error);
-  });
+//   transporter.sendMail(mailOptions, (error, info) => {
+//     if (error) return console.log(`Error: `, error);
+//   });
 
-  return response.status(200).json("OTP Generated!");
-};
+//   return response.status(200).json("OTP Generated!");
+// };
 
 exports.logout = async (request, response) => {
   try {

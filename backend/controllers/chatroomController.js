@@ -552,6 +552,8 @@ const processPost = async (request, response) => {
     console.error("Process post error:", error.message);
     await client.query("ROLLBACK");
     return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
   }
 };
 
@@ -561,8 +563,10 @@ const likePost = async (req, res) => {
     user: { userid },
   } = req;
 
+  const client = await pool.connect();
+
   try {
-    await pool.query(
+    await client.query(
       `INSERT INTO messagereactions (messageid, userid, reaction_type) VALUES ($1, $2, 'Like')
       on conflict
       do nothing
@@ -580,6 +584,8 @@ const likePost = async (req, res) => {
   } catch (error) {
     console.error("Error liking post:", error);
     res.status(500).json({ message: "Error liking post" });
+  } finally {
+    client.release();
   }
 };
 
@@ -615,18 +621,27 @@ const createPost = async (req, res) => {
     return res.status(400).json({ error: "Message content cannot be empty" });
   }
 
+  const client = await pool.connect();
+
   try {
-    const result = await pool.query(
+    await client.query("BEGIN");
+
+    const result = await client.query(
       `INSERT INTO messages (roomid, userid, content, posted_at, status) 
            VALUES ($1, $2, $3, NOW(), 'Pending') 
            RETURNING messageid, roomid, userid, content, posted_at, status`,
       [roomid, req.user.userid, message]
     );
 
+    await client.query("COMMIT");
+
     return res.status(201).json({ message: result.rows[0] });
   } catch (error) {
     console.error("Error creating post:", error);
+    await client.query("ROLLBACK");
     return res.status(500).json({ error: "Failed to create post" });
+  } finally {
+    if (client) client.release();
   }
 };
 
@@ -937,13 +952,19 @@ const reportPost = async (request, response) => {
     user: { userid },
   } = request;
 
+  const client = await pool.connect();
+
   try {
-    const res = await pool.query(
+    await client.query("BEGIN");
+
+    const res = await client.query(
       `INSERT INTO post_reports (messageid, reporterid, reason)
        VALUES ($1, $2, $3)
        RETURNING reportid`,
       [messageid, userid, reason]
     );
+
+    await client.query("COMMIT");
 
     return response.status(201).json({
       message: "Post reported successfully",
@@ -951,7 +972,10 @@ const reportPost = async (request, response) => {
     });
   } catch (error) {
     console.error("Report post error:", error.message);
+    await client.query("ROLLBACK");
     return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
   }
 };
 
@@ -1056,18 +1080,27 @@ const trackPostView = async (request, response) => {
     user: { userid },
   } = request;
 
+  const client = await pool.connect();
+
   try {
-    await pool.query(
+    await client.query("BEGIN");
+
+    await client.query(
       `INSERT INTO post_views (messageid, userid)
        VALUES ($1, $2)
        ON CONFLICT (messageid, userid) DO NOTHING`,
       [messageid, userid]
     );
 
+    await client.query("COMMIT");
+
     return response.status(200).json("View tracked successfully");
   } catch (error) {
     console.error("Track view error:", error.message);
+    await client.query("ROLLBACK");
     return response.status(500).json("Server Error");
+  } finally {
+    if (client) client.release();
   }
 };
 

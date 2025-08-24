@@ -14,6 +14,7 @@ export default function OTPVerification() {
     const [isSuccessMessage, setIsSuccessMessage] = useState(false);
     const [countdown, setCountdown] = useState(5);
     const [email, setEmail] = useState("");
+    const [rollnumber, setRollnumber] = useState("");
 
     const navigate = useNavigate();
     const location = useLocation();
@@ -22,6 +23,9 @@ export default function OTPVerification() {
     useEffect(() => {
         if (location.state && location.state.email) {
             setEmail(location.state.email);
+            setRollnumber(location.state.rollnumber || "");
+            console.log("Email from state:", location.state.email);
+            console.log("Roll Number from state:", location.state.rollnumber);
         } else {
             // If no email is provided, redirect back to sign up
             navigate("/sign-in");
@@ -83,11 +87,11 @@ export default function OTPVerification() {
                 setOtp(["", "", "", "", "", ""]); // Reset OTP input
 
                 loginWithTokens(
-                  {
-                    accessToken: data.accessToken,
-                    refreshToken: data.refreshToken,
-                  },
-                  data.user
+                    {
+                        accessToken: data.accessToken,
+                        refreshToken: data.refreshToken,
+                    },
+                    data.user
                 );
 
                 setTimeout(() => navigate("/"), 2000);
@@ -115,6 +119,7 @@ export default function OTPVerification() {
                 },
                 body: JSON.stringify({
                     email: email,
+                    rollnumber: rollnumber,
                 }),
             });
 
@@ -287,18 +292,18 @@ export default function OTPVerification() {
                         {/* Footer */}
                         <div className="auth-footer">
                             <div className="resend-otp-section">
-                              <span className="resend-label">Didn't receive the code?</span>
-                              {countdown > 0 ? (
-                                <span className="countdown">{`Resend in ${countdown}s`}</span>
-                              ) : (
-                                <button
-                                  type="button"
-                                  onClick={handleResendOtp}
-                                  className="resend-link"
-                                >
-                                  Resend OTP
-                                </button>
-                              )}
+                                <span className="resend-label">Didn't receive the code?</span>
+                                {countdown > 0 ? (
+                                    <span className="countdown">{`Resend in ${countdown}s`}</span>
+                                ) : (
+                                    <button
+                                        type="button"
+                                        onClick={handleResendOtp}
+                                        className="resend-link"
+                                    >
+                                        Resend OTP
+                                    </button>
+                                )}
                             </div>
                             <p className="switch-prompt">
                                 Need to change your email?
