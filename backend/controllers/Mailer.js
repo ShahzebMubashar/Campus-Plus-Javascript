@@ -24,21 +24,16 @@ const batchMailer = async (request, response) => {
         const emails = await pool.query(`SELECT email FROM Users`);
 
         if (!emails.rowCount) {
-            console.log("No registered Users found");
             return response.status(400).json("No registered Users found");
         }
 
         let emailList = emails.rows.map(user => user.email);
-        console.log(`Found ${emailList.length} emails.`);
 
         emailList = emailList.filter(isValidEmail);
 
         if (!emailList.length) {
-            console.log("No valid email addresses found.");
             return response.status(400).json("No valid email addresses found");
         }
-
-        console.log(`Sending emails to ${emailList.length} users in parallel...`);
 
         const sendResults = await Promise.all(
             emailList.map(async (email) => {
@@ -50,7 +45,7 @@ const batchMailer = async (request, response) => {
                         text: message,
                         html: `<p>${message}</p>`
                     });
-                    console.log(`Email sent to ${email}`);
+
                     return { email, status: 'sent' };
                 } catch (err) {
                     console.error(`Failed to send email to ${email}:`, err.message);
@@ -73,7 +68,6 @@ const batchMailer = async (request, response) => {
 };
 
 async function getValidEmails() {
-    console.log('\n\n\nFUNCTION CALLED TO CHECK VALID EMAILS\n\n\n');
     const client = await pool.connect();
 
     try {
