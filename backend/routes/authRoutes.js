@@ -11,7 +11,8 @@ const {
   currentUser,
   newRegister,
   verifyOTP,
-  verifyIdentity
+  verifyIdentity,
+  resendOTP
 } = require("../controllers/authController");
 const { jwtAuthMiddleware, optionalJwtAuth } = require("../middlewares/jwtAuthMiddleware");
 const { generateTokenPair } = require("../utils/jwt");
@@ -35,6 +36,7 @@ router.post("/refresh-token", refreshToken);
 router.post("/verify-otp", verifyOTP);
 router.post("/verify-identity", verifyIdentity);
 router.post("/reset-password", resetPassword);
+router.post("/resend-otp", resendOTP);
 
 router.get("/user-role", jwtAuthMiddleware, userRole);
 

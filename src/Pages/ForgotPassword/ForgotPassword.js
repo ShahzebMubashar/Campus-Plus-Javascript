@@ -145,7 +145,6 @@ export default function ForgotPasswordPage() {
         }
     };
 
-    // Resend OTP
     const handleResendOtp = async () => {
         if (countdown > 0) return;
 
@@ -158,6 +157,7 @@ export default function ForgotPasswordPage() {
                 },
                 body: JSON.stringify({
                     email: formData.email,
+                    rollnumber: formData.rollNumber.replace(/-/g, ''),
                 }),
             });
 
