@@ -1,7 +1,7 @@
 const pool = require("../config/database");
 
 const getTranscript = async (request, response) => {
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid;
 
   try {
     const res = await pool.query(
@@ -37,7 +37,7 @@ const getTranscript = async (request, response) => {
 
     return response.status(200).json(formattedTranscript);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return response.status(500).json(`Internal Server Error`);
   }
 };
@@ -47,7 +47,7 @@ const addCourse = async (request, response) => {
     body: { coursecode, credits, grade, semester },
   } = request;
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   if (!coursecode || !credits || !grade || !semester)
     return response.status(400).json(`Enter all the fields`);
@@ -91,7 +91,7 @@ const addCourse = async (request, response) => {
 
     return response.status(200).json(`Course Added Successfully`);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     await client.query(`ROLLBACK`);
     return response.status(500).json(`Internal Server Error`);
   } finally {
@@ -104,7 +104,7 @@ const addSemester = async (request, response) => {
     body: { name },
   } = request;
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   if (!name) {
     return response.status(400).json({ error: "Semester name is required" });
@@ -117,7 +117,6 @@ const addSemester = async (request, response) => {
       `Select * from ViewTranscripts where semestername = $1 and userid = $2`,
       [name, userid]
     );
-    console.log(checkResult.rows);
 
     if (checkResult.rowCount)
       return response.status(400).json(`Semester Already Exists!`);
@@ -163,7 +162,7 @@ const removeCourse = async (request, response) => {
     params: { transcriptId },
   } = request;
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   const client = await pool.connect();
 
@@ -184,7 +183,7 @@ const removeCourse = async (request, response) => {
     await client.query("COMMIT");
     return response.status(200).json(`Deleted Course Successfully!`);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     await client.query("ROLLBACK");
     return response.status(500).json(`Internal Server Error`);
   } finally {
@@ -197,7 +196,7 @@ const removeSemester = async (request, response) => {
     params: { semestername },
   } = request;
 
-  const userid = request.user.userid; // From JWT middleware
+  const userid = request.user.userid; 
 
   const client = await pool.connect();
 
@@ -222,7 +221,7 @@ const removeSemester = async (request, response) => {
 
     return response.status(200).json(`Semester Removed Successfully!`);
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     await client.query("ROLLBACK");
     return response.status(500).json(`Internal Server Error`);
   } finally {
