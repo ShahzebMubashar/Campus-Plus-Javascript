@@ -20,7 +20,6 @@ const pool = new pg.Pool({
 (async () => {
   try {
     const client = await pool.connect();
-    console.log("Successfully connected to the database!");
     client.release(); // Release the client back to the pool
   } catch (err) {
     console.error("Database connection error:", err.message);
