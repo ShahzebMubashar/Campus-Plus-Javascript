@@ -1,4 +1,5 @@
 const express = require("express");
+const chatroomController = require("../controllers/chatroomController");
 const {
   getRooms,
   createRoom,
@@ -26,6 +27,9 @@ const {
   addnestedReply,
   likePost,
   getLikeCount,
+  suggestRoom,
+  getRoomSuggestions,
+  reviewRoomSuggestion,
 } = require("../controllers/chatroomController");
 
 const { jwtAuthMiddleware, optionalJwtAuth } = require("../middlewares/jwtAuthMiddleware");
@@ -39,7 +43,6 @@ const {
 const router = express.Router();
 
 // ALL CHATROOM ROUTES REQUIRE AUTHENTICATION
-router.get("/:roomid?", jwtAuthMiddleware, getRooms);
 router.get("/:roomid/messages/:messageid", jwtAuthMiddleware, getPost);
 router.get("/likes/:messageid", jwtAuthMiddleware, getLikeCount);
 router.get("/messages/:roomid", jwtAuthMiddleware, getRoomMessages);
@@ -124,5 +127,14 @@ router.get("/my-rooms/:userid", jwtAuthMiddleware, myRooms);
 // Polls
 router.post("/polls", jwtAuthMiddleware, createPoll);
 router.post("/polls/:pollid/vote", jwtAuthMiddleware, votePoll);
+
+// Suggest Room
+router.post("/suggest", jwtAuthMiddleware, suggestRoom);
+router.get("/suggestions", jwtAuthMiddleware, chatroomController.getRoomSuggestions);
+router.post("/suggestions/:id/review", jwtAuthMiddleware, reviewRoomSuggestion);
+router.post("/suggestions/:id/edit", jwtAuthMiddleware, chatroomController.editRoomSuggestion);
+
+// ALL CHATROOM ROUTES REQUIRE AUTHENTICATION
+router.get("/:roomid?", jwtAuthMiddleware, getRooms);
 
 module.exports = router;
