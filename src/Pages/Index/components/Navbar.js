@@ -9,8 +9,15 @@ import {
   AiOutlineHome,
   AiOutlineLaptop,
   AiOutlineMenu,
-  AiOutlineClose,
+  AiOutlineClose
 } from "react-icons/ai";
+import { IoCalculatorOutline } from "react-icons/io5";
+import { MdOutlineEmail } from "react-icons/md";
+import { LuLetterText } from "react-icons/lu";
+import { MdOutlineSchedule } from "react-icons/md";
+import { FaBloggerB } from "react-icons/fa";
+import { FaQuestion } from "react-icons/fa";
+import { FaInfo } from "react-icons/fa";
 import support from "../../../Assets/images/support.png";
 import message from "../../../Assets/images/conversation.png";
 import settings from "../../../Assets/images/setting.png";
@@ -321,7 +328,7 @@ function Navbar() {
                 }}
               >
                 <div className="navbar-dropdown-section">
-                  <AiOutlineHeart className="navbar-dropdown-icon" />
+                  <IoCalculatorOutline className="navbar-dropdown-icon" />
                   <h4>Calculators</h4>
                   <p>
                     <Link to="/calculator" onClick={handleDropdownLinkClick}>
@@ -340,7 +347,7 @@ function Navbar() {
                   </p>
                 </div>
                 <div className="navbar-dropdown-section">
-                  <AiOutlineFileText className="navbar-dropdown-icon" />
+                  <MdOutlineEmail className="navbar-dropdown-icon" />
                   <h4>Email Support</h4>
                   <p>
                     <Link
@@ -357,7 +364,7 @@ function Navbar() {
                   </p>
                 </div>
                 <div className="navbar-dropdown-section">
-                  <AiOutlineHome className="navbar-dropdown-icon" />
+                  <LuLetterText className="navbar-dropdown-icon" />
                   <h4>Application Support</h4>
                   <p>
                     <Link
@@ -374,7 +381,7 @@ function Navbar() {
                   </p>
                 </div>
                 <div className="navbar-dropdown-section">
-                  <AiOutlineHome className="navbar-dropdown-icon" />
+                  <MdOutlineSchedule className="navbar-dropdown-icon" />
                   <h4>Time Table & Date Sheet</h4>
                   <p>
                     <Link to="/datesheet" onClick={handleDropdownLinkClick}>
@@ -420,7 +427,7 @@ function Navbar() {
                 }}
               >
                 <div className="navbar-dropdown-section">
-                  <AiOutlineHeart className="navbar-dropdown-icon" />
+                  <FaBloggerB className="navbar-dropdown-icon" />
                   <h4>
                     <Link
                       to="https://thebrainbytes.blogspot.com/"
@@ -471,7 +478,7 @@ function Navbar() {
                   </p>
                 </div>
                 <div className="navbar-dropdown-section">
-                  <AiOutlineFileText className="navbar-dropdown-icon" />
+                  <FaQuestion className="navbar-dropdown-icon" />
                   <h4>
                     <Link to="/support" onClick={handleDropdownLinkClick}>
                       Frequently Asked Questions
@@ -504,7 +511,7 @@ function Navbar() {
                   </p>
                 </div>
                 <div className="navbar-dropdown-section">
-                  <AiOutlineHome className="navbar-dropdown-icon" />
+                  <FaInfo className="navbar-dropdown-icon" />
                   <h4>About Us</h4>
                   <p>
                     <Link to="/ourevents" onClick={handleDropdownLinkClick}>
