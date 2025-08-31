@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import "./Navbar.css";
 import Logo from "../cp_logo.png";
 import { Link, useNavigate } from "react-router-dom";
@@ -61,7 +61,7 @@ function Navbar() {
   const navigate = useNavigate();
 
   // Fetch user profile from backend for accurate initials (like ProfilePage)
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     try {
       const res = await authenticatedFetch(`${API_BASE_URL}/user/profile`, {
         method: "GET",
@@ -79,9 +79,9 @@ function Navbar() {
     }
     // fallback to localStorage if fetch fails
     setUserData(getUser());
-  };
+  }, []);
 
-  const checkAuthStatus = () => {
+  const checkAuthStatus = useCallback(() => {
     console.log("🔍 Navbar: Checking JWT authentication status...");
     const authStatus = isAuthenticated();
     setIsLoggedIn(authStatus);
@@ -90,7 +90,7 @@ function Navbar() {
     } else {
       setUserData(null);
     }
-  };
+  }, [fetchUserProfile]); // add fetchUserProfile if it's defined with useCallback, else leave []
 
   useEffect(() => {
     // Check authentication status on component mount
@@ -117,7 +117,7 @@ function Navbar() {
       clearInterval(interval);
       window.removeEventListener('authStateChanged', handleAuthStateChange);
     };
-  }, []);
+  }, [checkAuthStatus, fetchUserProfile]);
 
   const handleLogout = async () => {
     try {
@@ -512,11 +512,13 @@ function Navbar() {
                     </Link>
                   </p>
                   <p>
-                    <Link
-                      to="/about-campus-plus"
-                      onClick={handleDropdownLinkClick}
-                    >
-                      About Campus +
+                    <Link to="/contact" onClick={handleDropdownLinkClick}>
+                      Contact Us
+                    </Link>
+                  </p>
+                  <p>
+                    <Link to="https://forms.fillout.com/t/cHBEKSMdPKus" onClick={handleDropdownLinkClick}>
+                      Report a Bug
                     </Link>
                   </p>
                   <p>
@@ -527,11 +529,7 @@ function Navbar() {
                       About MultiDexters
                     </Link>
                   </p>
-                  <p>
-                    <Link to="/contact" onClick={handleDropdownLinkClick}>
-                      Contact Us
-                    </Link>
-                  </p>
+
                 </div>
               </div>
             </li>

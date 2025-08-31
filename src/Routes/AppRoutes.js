@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Routes, Route, useLocation } from "react-router-dom";
 import Loader from "../Pages/Index/components/Loader.js"; // Import Loader component
 import MainLayout from "../Layouts/MainLayout.js";
-import AboutCampusPlus from "../Pages/AboutCampusPlus/AboutCampusPlus.js";
+// import AboutCampusPlus from "../Pages/AboutCampusPlus/AboutCampusPlus.js";
 import ComingSoon from "../Pages/Coming Soon/ComingSoon.js";
 import Contact from "../Pages/Contact/ContactPage.js";
 import Error404 from "../Pages/Error404/Error404.js";
@@ -62,7 +62,7 @@ function AppRoutes() {
         <Route path="*" element={<MainLayout />} />
 
         {/* Other Routes */}
-        <Route path="/about-campus-plus" element={<AboutCampusPlus />} />
+        {/* <Route path="/about-campus-plus" element={<AboutCampusPlus />} /> */}
         <Route path="/coming-soon" element={<ComingSoon />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/error404" element={<Error404 />} />
