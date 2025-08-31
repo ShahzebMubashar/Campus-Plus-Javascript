@@ -7,6 +7,7 @@ import FAQ from "./faq.js";
 import faqData from "./faqData.js";
 import Navbar from "../Index/components/Navbar.js";
 import Footer from "../Footer/Footer.js";
+import "../Index/components/FAQSection.css";
 
 const Support = () => {
   const [searchQuery, setSearchQuery] = useState("");
