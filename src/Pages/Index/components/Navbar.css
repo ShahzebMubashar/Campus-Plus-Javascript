@@ -470,7 +470,7 @@ main {
   }
 
   .navbar-dropdown-icon {
-    margin-left: 40%;
+    display: none;
   }
 }
 
