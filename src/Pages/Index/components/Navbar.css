@@ -497,3 +497,17 @@ main {
     max-width: none;
   }
 }
+
+@media screen and (max-width: 1024px) {
+  .nav-links {
+    padding: 20px 20px 15px 20px;
+    gap: 20px;
+  }
+
+  .nav-links li {
+    margin: 0;
+    padding: 10px 0;
+    width: 100%;
+    text-align: left;
+  }
+}
