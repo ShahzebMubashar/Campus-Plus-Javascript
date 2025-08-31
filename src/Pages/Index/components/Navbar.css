@@ -151,6 +151,7 @@
   color: #0d47a1;
   background-color: #eef2ff;
   border-radius: 50%;
+  margin-left: 35%;
   padding: 15px;
   display: inline-flex;
   /* Change to inline-flex to align inline */
@@ -466,6 +467,10 @@ main {
 
   .logo span {
     font-size: 20px;
+  }
+
+  .navbar-dropdown-icon {
+    margin-left: 40%;
   }
 }
 
