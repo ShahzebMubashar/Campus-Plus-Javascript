@@ -3,6 +3,8 @@ import React from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/react"; // Add this import
 
 // import Navbar from './Pages/Index/components/Navbar.js';
 import AppRoutes from "./Routes/AppRoutes.js";
@@ -42,11 +44,13 @@ function App() {
             <Route path="/notifications" element={<Notifications />} />
             <Route path="/otp-verification" element={<OTPVerification />} />
             <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-            
+
             {/* Catch-all route for 404 errors */}
           </Routes>
         </div>
       </Router>
+      <Analytics />
+      <SpeedInsights /> {/* Add this here */}
     </div>
   );
 }
