@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Calculator.css";
 import Navbar from "../Index/components/Navbar";
 import pic1 from "../../Assets/images/3580920.webp";
@@ -29,6 +29,10 @@ const Calculator = () => {
   const [sgpaResult, setSgpaResult] = useState(null);
   const [cgpaResult, setCgpaResult] = useState(null);
   const [aggregateResult, setAggregateResult] = useState(null);
+
+  useEffect(() => {
+    document.title = "Calculators | Campus Plus";
+  }, []);
 
   const generateCourses = () => {
     const count = Number.parseInt(numberOfCourses) || 0;
@@ -88,10 +92,10 @@ const Calculator = () => {
           0.5 +
           (Number.parseFloat(marks.fscObtainedMarks) /
             Number.parseFloat(marks.fscTotalMarks)) *
-            0.3 +
+          0.3 +
           (Number.parseFloat(marks.matricObtainedMarks) /
             Number.parseFloat(marks.matricTotalMarks)) *
-            0.2) *
+          0.2) *
         100;
     } else {
       aggregate =
@@ -100,10 +104,10 @@ const Calculator = () => {
           0.6 +
           (Number.parseFloat(marks.fscObtainedMarks) /
             Number.parseFloat(marks.fscTotalMarks)) *
-            0.2 +
+          0.2 +
           (Number.parseFloat(marks.matricObtainedMarks) /
             Number.parseFloat(marks.matricTotalMarks)) *
-            0.2) *
+          0.2) *
         100;
     }
     setAggregateResult(aggregate.toFixed(2));

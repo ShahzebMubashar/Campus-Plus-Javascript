@@ -749,6 +749,10 @@ export default function RoomView({ room, onBack, onLeave }) {
     );
   };
 
+  useEffect(() => {
+    document.title = "Chatrooms | Campus Plus";
+  }, []);
+
   return (
     <div
       className="room-view-container"

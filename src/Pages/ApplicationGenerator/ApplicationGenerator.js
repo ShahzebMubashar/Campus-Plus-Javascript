@@ -69,6 +69,10 @@ export default function ApplicationGenerator() {
     fetchTemplates();
   }, []);
 
+  useEffect(() => {
+    document.title = "Application Generator | Campus Plus";
+  }, []);
+
   async function loadAppTemplates() {
     const response = await fetch(
       "./template.json?cache_bust=" + new Date().getTime(),
