@@ -75,7 +75,7 @@ const BackToTopButton = () => {
           cy="45"
         />
       </svg>
-      <button id="myBtn" onClick={topFunction} style={{ display: "none" }}>
+      <button id="myBtn" onClick={topFunction} style={{ display: "flex" }}>
         <i className="fas fa-rocket"></i>
       </button>
     </div>
