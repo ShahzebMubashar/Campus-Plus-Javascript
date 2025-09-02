@@ -180,7 +180,7 @@ const Footer = () => {
         <div className="footer-bottom-container">
           <div className="footer-bottom-content">
             <p className="footer-copyright">
-              © 2024{" "}
+              © 2025{" "}
               <span className="copyright-highlight">MultiDexters Inc.</span> All rights
               reserved.
             </p>
