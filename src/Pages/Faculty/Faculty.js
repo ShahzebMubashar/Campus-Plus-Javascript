@@ -147,7 +147,7 @@ const SearchSection = ({ searchQuery, setSearchQuery }) => (
         className="search-icon"
         style={{
           position: "absolute",
-          right: "18px",
+          left: "450px", // Move closer to the edge
           top: "50%",
           transform: "translateY(-50%)",
           color: "#888",
