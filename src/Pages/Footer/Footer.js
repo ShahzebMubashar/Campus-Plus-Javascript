@@ -113,19 +113,19 @@ const Footer = () => {
               <h4 className="footer-heading">Departments</h4>
               <ul className="footer-list">
                 <li>
-                  <a href="/computing">School of Computing</a>
+                  <a href="https://lhr.nu.edu.pk/fsc/">School of Computing</a>
                 </li>
                 <li>
-                  <a href="/management">School of Management</a>
+                  <a href="https://lhr.nu.edu.pk/fsm/">School of Management</a>
                 </li>
                 <li>
-                  <a href="/electrical">Electrical Engineering</a>
+                  <a href="https://lhr.nu.edu.pk/ee/">Electrical Engineering</a>
                 </li>
                 <li>
-                  <a href="/civil">Civil Engineering</a>
+                  <a href="https://lhr.nu.edu.pk/cv/">Civil Engineering</a>
                 </li>
                 <li>
-                  <a href="/sciences">Sciences & Humanities</a>
+                  <a href="https://lhr.nu.edu.pk/ss/">Sciences & Humanities</a>
                 </li>
               </ul>
             </div>
