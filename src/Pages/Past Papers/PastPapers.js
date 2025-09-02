@@ -78,22 +78,22 @@ const PastPapers = () => {
       // First priority: Available papers
       const aHasPapers = a.past_papers_count > 0;
       const bHasPapers = b.past_papers_count > 0;
-      
+
       if (aHasPapers && !bHasPapers) return -1;
       if (!aHasPapers && bHasPapers) return 1;
-      
+
       // Second priority: Rating count (more ratings = higher priority)
       const aRatingCount = a.rating_count || 0;
       const bRatingCount = b.rating_count || 0;
-      
+
       if (aRatingCount !== bRatingCount) {
         return bRatingCount - aRatingCount; // Descending order
       }
-      
+
       // Third priority: Rating value (higher rating = higher priority)
       const aRating = a.rating || 0;
       const bRating = b.rating || 0;
-      
+
       return bRating - aRating; // Descending order
     });
 
@@ -224,7 +224,7 @@ const PastPapers = () => {
           <h1>Course Repository</h1>
           <p>Access past papers and course materials to enhance your learning experience</p>
         </div>
-        
+
         <div className="stats-cards">
           <div className="stat-card">
             <div className="stat-icon">
@@ -260,7 +260,7 @@ const PastPapers = () => {
             />
           </div>
         </div>
-        
+
         {showNote && (
           <div className="note-banner-wrapper">
             <div className="info-note">
@@ -280,6 +280,7 @@ const PastPapers = () => {
       <div className="courses-grid">
         {filteredCourses.map(renderCourseCard)}
       </div>
+
     </div>
   );
 };
