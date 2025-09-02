@@ -3,6 +3,7 @@ import "./Calculator.css";
 import Navbar from "../Index/components/Navbar";
 import pic1 from "../../Assets/images/3580920.webp";
 import pic2 from "../../Assets/images/8899729.webp";
+import Footer from "../Footer/Footer"
 
 const Calculator = () => {
   const [active, setActive] = useState(false);
@@ -453,6 +454,7 @@ const Calculator = () => {
           )}
         </div>
       )}
+      <Footer />
     </div>
   );
 };
