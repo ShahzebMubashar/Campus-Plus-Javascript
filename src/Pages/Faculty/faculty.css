@@ -261,6 +261,10 @@ html {
   .search-bar button {
     display: none;
   }
+
+  .search-icon {
+    display: none !important;
+  }
 }
 
 .no-results {

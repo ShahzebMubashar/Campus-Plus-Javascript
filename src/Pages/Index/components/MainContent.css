@@ -205,30 +205,30 @@
 
 @media (max-width: 768px) {
   .content {
-
     .content-container {
       padding: 0 20px;
 
       .text h1 {
-        font-size: 2.5rem;
-        margin-bottom: 10px;
+        font-size: 2.4rem !important;
+        margin-bottom: 18px;
 
         .highlighted {
-          font-size: 3rem;
+          font-size: 3.5rem !important;
+          margin-bottom: 10px;
         }
       }
 
       .text p {
-        font-size: 1rem;
-        margin-bottom: 18px;
+        font-size: 1.15rem !important;
+        margin-bottom: 22px !important;
       }
 
       .button-container {
-        margin-top: 16px;
+        margin-top: 18px;
 
         .get-started-btn {
-          padding: 12px 24px;
-          font-size: 0.95rem;
+          padding: 14px 28px;
+          font-size: 1.05rem;
         }
       }
     }
@@ -237,31 +237,32 @@
 
 @media (max-width: 480px) {
   .content {
-
     .content-container {
       padding: 0 16px;
 
       .text h1 {
-        font-size: 2rem;
-        margin-bottom: 8px;
-
+        font-size: 2.3rem;
+        /* bigger */
+        margin-bottom: 10px;
 
         .highlighted {
-          font-size: 2.5rem;
+          font-size: 2.8rem;
+          /* bigger */
         }
       }
 
       .text p {
-        font-size: 0.95rem;
-        margin-bottom: 12px;
+        font-size: 1.05rem;
+        /* bigger */
+        margin-bottom: 16px;
       }
 
       .button-container {
-        margin-top: 10px;
+        margin-top: 12px;
 
         .get-started-btn {
-          padding: 10px 20px;
-          font-size: 0.9rem;
+          padding: 12px 24px;
+          font-size: 1rem;
         }
       }
     }
