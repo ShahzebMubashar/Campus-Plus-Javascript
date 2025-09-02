@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 import "./ContactPage.css";
@@ -18,6 +18,10 @@ const ContactPage = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
   const [showTooltip, setShowTooltip] = useState(false);
+
+  useEffect(() => {
+    document.title = "Contact Us | Campus Plus";
+  }, []);
 
   return (
     <div className="contact-main-container">

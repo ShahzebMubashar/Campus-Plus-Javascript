@@ -272,3 +272,11 @@ async function handleLeaveRoom(roomId) {
     return false;
   }
 }
+
+export function PastPapersPage() {
+  useEffect(() => {
+    document.title = "Chatrooms | Campus Plus";
+  }, []);
+
+  return null; // or your component JSX
+}
