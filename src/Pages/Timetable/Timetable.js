@@ -19,9 +19,13 @@ const Timetable = () => {
   const [showAdminSection, setShowAdminSection] = useState(false);
 
   useEffect(() => {
+    document.title = "Timetable | Campus Plus";
+  }, []);
+
+  useEffect(() => {
     // Check admin status from backend
     checkAdminStatus();
-    
+
     fetch(require("../../Assets/data/courses.csv"))
       .then((response) => response.text())
       .then((data) => processCsv(parseCsvData(data)))
@@ -190,19 +194,19 @@ const Timetable = () => {
       setUploadStatus("Please select a file");
       return;
     }
-    
+
     if (file.type !== "text/csv" && !file.name.endsWith('.csv')) {
       setUploadStatus("Please select a valid CSV file");
       setCsvFile(null);
       return;
     }
-    
+
     if (file.size > 10 * 1024 * 1024) { // 10MB limit
       setUploadStatus("File size must be less than 10MB");
       setCsvFile(null);
       return;
     }
-    
+
     setCsvFile(file);
     setUploadStatus("");
   };
@@ -215,7 +219,7 @@ const Timetable = () => {
 
     try {
       setUploadStatus("Processing CSV file...");
-      
+
       // Read the file content
       const fileContent = await new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -235,7 +239,7 @@ const Timetable = () => {
       const header = lines[0].toLowerCase();
       const requiredColumns = ['id', 'title', 'code', 'section', 'instructor'];
       const missingColumns = requiredColumns.filter(col => !header.includes(col));
-      
+
       if (missingColumns.length > 0) {
         setUploadStatus(`Invalid CSV structure: Missing required columns: ${missingColumns.join(', ')}`);
         return;
@@ -244,14 +248,14 @@ const Timetable = () => {
       // Process the CSV data directly
       const parsedData = parseCsvData(fileContent);
       processCsv(parsedData);
-      
+
       setUploadStatus("CSV processed successfully! Data updated.");
       setCsvFile(null);
-      
+
       // Reset file input
       const fileInput = document.getElementById('csv-upload');
       if (fileInput) fileInput.value = '';
-      
+
     } catch (error) {
       console.error("CSV processing error:", error);
       setUploadStatus("Error processing CSV file");
@@ -310,7 +314,7 @@ const Timetable = () => {
       <Navbar />
       <div className="app-container">
         <h1 className="header">Timetable Course Selector</h1>
-        
+
         {/* Admin-only CSV upload section */}
         {showAdminSection && (
           <div className="admin-section">
@@ -322,7 +326,7 @@ const Timetable = () => {
                 accept=".csv"
                 onChange={handleCsvUpload}
               />
-              <button 
+              <button
                 onClick={uploadCsv}
                 disabled={!csvFile}
                 className="upload-button"
