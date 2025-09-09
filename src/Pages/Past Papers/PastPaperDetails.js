@@ -76,7 +76,7 @@ const Rating = ({ courseId, currentRating, difficulty, onRate }) => {
       }
 
       const updatedCourseData = await courseResponse.json();
-      
+
       // Update with the new average rating from server
       setSelectedRating(updatedCourseData.rating);
       onRate(updatedCourseData.rating);
@@ -275,6 +275,16 @@ const PastPapersDetails = () => {
       });
     }
   };
+
+  // Scroll to top on component mount
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  // SET page title
+  useEffect(() => {
+    document.title = "Past Paper Details | Campus Plus";
+  }, []);
 
   if (loading) {
     return (

@@ -547,9 +547,10 @@
 /* Tablet Portrait and Large Mobile (481px - 768px) */
 @media (max-width: 768px) {
   .room-view-container {
-    padding-left: 0; /* Remove padding on mobile */
+    padding-left: 0;
+    /* Remove padding on mobile */
   }
-  
+
   .room-view-content {
     padding: 12px;
     margin-left: 0;
