@@ -12,13 +12,13 @@ const getRooms = async (request, response) => {
     if (roomid) {
       res = await pool.query(
         `SELECT 
-          r.roomid, r.roomname, r.description,
-          m.messageid, m.userid as message_userid, m.username as message_username, 
-          m.rollnumber as message_rollnumber, m.content as message_content, 
+          r.roomid, r.name as roomname, r.description,
+          m.messageid, m.userid as message_userid, 
+         m.content as message_content, 
           m.posted_at as message_posted_at,
           re.replyid, re.userid as reply_userid, re.username as reply_username,
           re.rollnumber as reply_rollnumber, re.content as reply_content,
-          re.posted_at as reply_posted_at, re.parent_reply_id
+          re.posted_at as reply_posted_at
         FROM rooms r
         LEFT JOIN messages m ON m.roomid = r.roomid
         LEFT JOIN messagereplies1 re ON re.messageid = m.messageid
@@ -50,7 +50,7 @@ const getRooms = async (request, response) => {
             rollnumber: row.message_rollnumber,
             content: row.message_content,
             posted_at: row.message_posted_at,
-            replies: [], 
+            replies: [],
           });
         }
 
@@ -63,7 +63,7 @@ const getRooms = async (request, response) => {
             content: row.reply_content,
             posted_at: row.reply_posted_at,
             parent_reply_id: row.parent_reply_id,
-            replies: [], 
+            replies: [],
           };
 
           repliesMap.set(row.replyid, reply);
@@ -1118,7 +1118,7 @@ const getUserJoinedGroups = async (request, response) => {
 
     const transformedGroups = result.rows.map((group) => ({
       roomid: group.roomid,
-      roomname: group.name, 
+      roomname: group.name,
       description: group.description,
       created_at: group.created_at,
       member_count: group.member_count,
@@ -1157,6 +1157,81 @@ const myRooms = async (request, response) => {
   }
 };
 
+// In-memory array for demo; replace with DB logic as needed
+const roomSuggestions = [];
+
+const suggestRoom = async (req, res) => {
+  try {
+    const { roomName, description } = req.body;
+    const suggestedBy = req.user ? req.user.userid : null; // If using auth
+
+    if (!roomName || !description) {
+      return res.status(400).json({ message: "Room name and description are required." });
+    }
+
+    await pool.query(
+      `INSERT INTO room_suggestions (room_name, description, suggested_by) VALUES ($1, $2, $3)`,
+      [roomName, description, suggestedBy]
+    );
+
+    return res.status(200).json({ message: "Suggestion received!" });
+  } catch (error) {
+    return res.status(500).json({ message: "Failed to save suggestion." });
+  }
+};
+
+const getRoomSuggestions = async (req, res) => {
+  try {
+    const result = await pool.query(
+      `SELECT rs.*, u.username AS suggested_by_username
+       FROM room_suggestions rs
+       LEFT JOIN users u ON rs.suggested_by = u.userid
+       ORDER BY rs.created_at DESC`
+    );
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error("getRoomSuggestions error:", error); // <-- Add this line
+    res.status(500).json({ message: "Failed to fetch suggestions." });
+  }
+};
+
+const reviewRoomSuggestion = async (req, res) => {
+  // Only admin should access this
+  if (req.user.role !== "Admin") return res.status(403).json({ message: "Forbidden" });
+
+  const { id } = req.params;
+  const { status } = req.body; // 'approved' or 'rejected'
+  const reviewedBy = req.user.userid;
+
+  if (!["approved", "rejected"].includes(status)) {
+    return res.status(400).json({ message: "Invalid status" });
+  }
+
+  try {
+    await pool.query(
+      `UPDATE room_suggestions SET status = $1, reviewed_by = $2, reviewed_at = NOW() WHERE id = $3`,
+      [status, reviewedBy, id]
+    );
+    res.status(200).json({ message: "Suggestion updated" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update suggestion." });
+  }
+};
+
+const editRoomSuggestion = async (req, res) => {
+  const { id } = req.params;
+  const { roomName, description } = req.body;
+  try {
+    await pool.query(
+      `UPDATE room_suggestions SET room_name = $1, description = $2 WHERE id = $3`,
+      [roomName, description, id]
+    );
+    res.status(200).json({ message: "Suggestion updated" });
+  } catch (error) {
+    res.status(500).json({ message: "Failed to update suggestion." });
+  }
+};
+
 module.exports = {
   getRooms,
   createRoom,
@@ -1184,4 +1259,8 @@ module.exports = {
   getUserJoinedGroups,
   myRooms,
   addnestedReply,
+  suggestRoom,
+  getRoomSuggestions,
+  reviewRoomSuggestion,
+  editRoomSuggestion,
 };

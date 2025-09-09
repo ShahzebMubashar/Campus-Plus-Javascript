@@ -6,7 +6,9 @@ import {
   faLinkedin,
   faTwitter,
   faYoutube,
+  faWhatsapp,
 } from "@fortawesome/free-brands-svg-icons";
+import { faGlobe } from "@fortawesome/free-solid-svg-icons";
 import "./Footer.css";
 
 const Footer = () => {
@@ -17,7 +19,8 @@ const Footer = () => {
         <div className="newsletter-container">
           <div className="newsletter-content">
             <h2 className="newsletter-title">
-              Stay Updated with <span className="newsletter-highlight">Campus Plus</span>
+              Stay Updated with{" "}
+              <span className="newsletter-highlight">Campus Plus</span>
             </h2>
             <p className="newsletter-description">
               Get the latest updates, news, and events delivered to your inbox
@@ -48,20 +51,36 @@ const Footer = () => {
                 From past papers to faculty information, we've got you covered.
               </p>
               <div className="social-links">
-                <a href="/linkedin" className="social-link" aria-label="LinkedIn">
+                <a
+                  href="https://www.linkedin.com/company/multidexters/"
+                  className="social-link"
+                  aria-label="LinkedIn"
+                >
                   <FontAwesomeIcon icon={faLinkedin} />
                 </a>
-                <a href="/facebook" className="social-link" aria-label="Facebook">
-                  <FontAwesomeIcon icon={faFacebook} />
+                <a
+                  href="https://www.multidexters.live"
+                  className="social-link"
+                  aria-label="Website"
+                >
+                  <FontAwesomeIcon icon={faGlobe} />
                 </a>
-                <a href="/instagram" className="social-link" aria-label="Instagram">
+                <a
+                  href="https://www.instagram.com/multidexters/"
+                  className="social-link"
+                  aria-label="Instagram"
+                >
                   <FontAwesomeIcon icon={faInstagram} />
                 </a>
-                <a href="/twitter" className="social-link" aria-label="Twitter">
-                  <FontAwesomeIcon icon={faTwitter} />
-                </a>
-                <a href="/youtube" className="social-link" aria-label="YouTube">
-                  <FontAwesomeIcon icon={faYoutube} />
+                <a
+                  href="https://wa.me/923060999229"
+                  className="social-link"
+                  aria-label="WhatsApp"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title="+92 306 0999229"
+                >
+                  <FontAwesomeIcon icon={faWhatsapp} />
                 </a>
               </div>
             </div>
@@ -72,44 +91,84 @@ const Footer = () => {
             <div className="footer-column">
               <h4 className="footer-heading">Study Resources</h4>
               <ul className="footer-list">
-                <li><a href="/past-papers">Past Papers</a></li>
-                <li><a href="/playlists">Video Playlists</a></li>
-                <li><a href="/faculty">Faculty Directory</a></li>
-                <li><a href="/timetable">Timetable Generator</a></li>
-                <li><a href="/calculator">GPA Calculator</a></li>
+                <li>
+                  <a href="/past-papers">Past Papers</a>
+                </li>
+                <li>
+                  <a href="/playlists">Video Playlists</a>
+                </li>
+                <li>
+                  <a href="/faculty">Faculty Directory</a>
+                </li>
+                <li>
+                  <a href="/timetable">Timetable Generator</a>
+                </li>
+                <li>
+                  <a href="/calculator">GPA Calculator</a>
+                </li>
               </ul>
             </div>
-            
+
             <div className="footer-column">
               <h4 className="footer-heading">Departments</h4>
               <ul className="footer-list">
-                <li><a href="/computing">School of Computing</a></li>
-                <li><a href="/management">School of Management</a></li>
-                <li><a href="/electrical">Electrical Engineering</a></li>
-                <li><a href="/civil">Civil Engineering</a></li>
-                <li><a href="/sciences">Sciences & Humanities</a></li>
+                <li>
+                  <a href="https://lhr.nu.edu.pk/fsc/">School of Computing</a>
+                </li>
+                <li>
+                  <a href="https://lhr.nu.edu.pk/fsm/">School of Management</a>
+                </li>
+                <li>
+                  <a href="https://lhr.nu.edu.pk/ee/">Electrical Engineering</a>
+                </li>
+                <li>
+                  <a href="https://lhr.nu.edu.pk/cv/">Civil Engineering</a>
+                </li>
+                <li>
+                  <a href="https://lhr.nu.edu.pk/ss/">Sciences & Humanities</a>
+                </li>
               </ul>
             </div>
-            
+
             <div className="footer-column">
               <h4 className="footer-heading">Support</h4>
               <ul className="footer-list">
-                <li><a href="/support">Student Support</a></li>
-                <li><a href="/faq">FAQs</a></li>
-                <li><a href="/contact">Contact Us</a></li>
-                <li><a href="/news">News & Events</a></li>
-                <li><a href="/blog">Blog</a></li>
+                <li>
+                  <a href="/support">Student Support</a>
+                </li>
+                <li>
+                  <a href="/faq">FAQs</a>
+                </li>
+                <li>
+                  <a href="/contact">Contact Us</a>
+                </li>
+                <li>
+                  <a href="/news">News & Events</a>
+                </li>
+                <li>
+                  <a href="/blog">Blog</a>
+                </li>
               </ul>
             </div>
-            
+
             <div className="footer-column">
               <h4 className="footer-heading">About</h4>
               <ul className="footer-list">
-                <li><a href="/about">About Campus Plus</a></li>
-                <li><a href="/team">Our Team</a></li>
-                <li><a href="/privacy">Privacy Policy</a></li>
-                <li><a href="/terms">Terms of Service</a></li>
-                <li><a href="/multidexters">MultiDexters</a></li>
+                <li>
+                  <a href="/about">About Campus Plus</a>
+                </li>
+                <li>
+                  <a href="/team">Our Team</a>
+                </li>
+                <li>
+                  <a href="/privacy">Privacy Policy</a>
+                </li>
+                <li>
+                  <a href="/terms">Terms of Service</a>
+                </li>
+                <li>
+                  <a href="/multidexters">MultiDexters</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -121,7 +180,9 @@ const Footer = () => {
         <div className="footer-bottom-container">
           <div className="footer-bottom-content">
             <p className="footer-copyright">
-              © 2024 <span className="copyright-highlight">MultiDexters Inc.</span> All rights reserved.
+              © 2025{" "}
+              <span className="copyright-highlight">MultiDexters Inc.</span> All rights
+              reserved.
             </p>
             <div className="footer-bottom-links">
               <a href="/privacy">Privacy</a>

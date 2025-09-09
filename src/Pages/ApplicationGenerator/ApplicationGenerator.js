@@ -10,6 +10,7 @@ import Card from "./Components/Card.js";
 import Form from "./Components/Form.js";
 import templateData from "./check.json";
 import { copyApplication, downloadApplication } from "./copyanddownload.js";
+import Footer from "../Footer/Footer.js"; // Add this import at the top
 
 export default function ApplicationGenerator() {
   const [showForm, setShowForm] = useState(false);
@@ -67,6 +68,10 @@ export default function ApplicationGenerator() {
     };
 
     fetchTemplates();
+  }, []);
+
+  useEffect(() => {
+    document.title = "Application Generator | Campus Plus";
   }, []);
 
   async function loadAppTemplates() {
@@ -183,6 +188,7 @@ export default function ApplicationGenerator() {
       <div className="copy-confirmation" id="copy-confirmation">
         Copied to clipboard!
       </div>
+      <Footer /> {/* Add this line before the closing div */}
     </div>
   );
 }

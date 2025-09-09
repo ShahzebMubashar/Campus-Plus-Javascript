@@ -177,6 +177,12 @@
 .social-links {
   display: flex;
   gap: 16px;
+  justify-content: center;
+  /* Center horizontally */
+  align-items: center;
+  /* Center vertically */
+  margin-top: 24px;
+  /* Optional: add spacing above icons */
 }
 
 .social-link {
@@ -335,7 +341,7 @@
     grid-template-columns: 1fr;
     gap: 60px;
   }
-  
+
   .footer-links-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 40px;
@@ -346,27 +352,27 @@
   .newsletter-title {
     font-size: 2rem;
   }
-  
+
   .newsletter-form {
     flex-direction: column;
     gap: 12px;
   }
-  
+
   .newsletter-button {
     width: 100%;
   }
-  
+
   .footer-links-grid {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .footer-bottom-content {
     flex-direction: column;
     text-align: center;
     gap: 16px;
   }
-  
+
   .social-links {
     justify-content: center;
   }
@@ -376,19 +382,19 @@
   .newsletter-title {
     font-size: 1.8rem;
   }
-  
+
   .newsletter-description {
     font-size: 1rem;
   }
-  
+
   .brand-title {
     font-size: 1.8rem;
   }
-  
+
   .footer-heading {
     font-size: 1rem;
   }
-  
+
   .social-link {
     width: 44px;
     height: 44px;

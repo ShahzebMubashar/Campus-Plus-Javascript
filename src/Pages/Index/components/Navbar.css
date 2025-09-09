@@ -151,6 +151,7 @@
   color: #0d47a1;
   background-color: #eef2ff;
   border-radius: 50%;
+  margin-left: 35%;
   padding: 15px;
   display: inline-flex;
   /* Change to inline-flex to align inline */
@@ -467,6 +468,10 @@ main {
   .logo span {
     font-size: 20px;
   }
+
+  .navbar-dropdown-icon {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -490,5 +495,19 @@ main {
   .nav-links {
     width: 100%;
     max-width: none;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+  .nav-links {
+    padding: 20px 20px 15px 20px;
+    gap: 20px;
+  }
+
+  .nav-links li {
+    margin: 0;
+    padding: 10px 0;
+    width: 100%;
+    text-align: left;
   }
 }

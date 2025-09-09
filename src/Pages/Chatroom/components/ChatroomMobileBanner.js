@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const ChatroomMobileBanner = ({ isLoggedIn }) => {
     const [isMobile, setIsMobile] = useState(window.innerWidth <= 900);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const checkMobile = () => setIsMobile(window.innerWidth <= 900);
@@ -65,14 +67,31 @@ const ChatroomMobileBanner = ({ isLoggedIn }) => {
                         color: "#4a5568",
                         fontSize: "1.05rem",
                         fontWeight: 500,
-                        marginBottom: "0.5rem",
+                        marginBottom: "1.2rem",
                         lineHeight: 1.5,
                     }}
                 >
-                    The chatroom feature is not available on mobile devices yet.
-                    <br />
+                    The chatroom feature is not available on mobile devices yet.<br />
                     Please use a desktop or tablet to access chatrooms.
                 </div>
+                <button
+                    onClick={() => navigate("/")}
+                    style={{
+                        marginTop: "0.5rem",
+                        background: "#2563eb",
+                        color: "#fff",
+                        border: "none",
+                        borderRadius: 8,
+                        padding: "0.7rem 1.5rem",
+                        fontWeight: 600,
+                        fontSize: "1rem",
+                        cursor: "pointer",
+                        boxShadow: "0 2px 8px rgba(37,99,235,0.08)",
+                        transition: "background 0.2s",
+                    }}
+                >
+                    Back to Home
+                </button>
             </div>
         </div>
     );
