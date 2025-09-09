@@ -8,6 +8,7 @@ import Navbar from "../Index/components/Navbar";
 import Footer from "../Footer/Footer";
 import { getAccessToken } from "../../utils/auth";
 import API_BASE_URL from "../../config/api";
+import { fetchCSVData, clearCSVCache } from "../../services/csvDataService";
 
 const Datesheet = () => {
   const [csvData, setCsvData] = useState([]);
@@ -24,10 +25,13 @@ const Datesheet = () => {
     // Check admin status from backend
     checkAdminStatus();
     
+    // Fetch CSV data from backend with caching
     Promise.all([
-      fetch(require("../../Assets/data/courses.csv")).then((res) => res.text()),
-      fetch(require("../../Assets/data/datesheet.csv")).then((res) =>
-        res.text(),
+      fetchCSVData('courses').catch(() => 
+        fetch(require("../../Assets/data/courses.csv")).then((res) => res.text())
+      ),
+      fetchCSVData('datesheet').catch(() => 
+        fetch(require("../../Assets/data/datesheet.csv")).then((res) => res.text())
       ),
     ]).then(([coursesRaw, datesheetRaw]) => {
       const parsedCourses = parseCourses(coursesRaw);
@@ -35,6 +39,8 @@ const Datesheet = () => {
       processCsv(parsedCourses);
       setDatesheetData(parsedDatesheet);
       setCsvData(parsedCourses);
+    }).catch((err) => {
+      console.error("Error loading CSV data:", err);
     });
   }, []);
 
@@ -247,6 +253,9 @@ const Datesheet = () => {
       // Process the CSV data directly
       const parsedData = parseDatesheet(fileContent);
       setDatesheetData(parsedData);
+      
+      // Clear cache to force fresh data on next load
+      clearCSVCache('datesheet');
       
       setUploadStatus("Datesheet CSV processed successfully! Data updated.");
       setCsvFile(null);

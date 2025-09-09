@@ -18,6 +18,7 @@ const emailRoute = require("../routes/emailRoutes");
 const userRoutes = require("../routes/userRoutes");
 const chatroomController = require("../controllers/chatroomController");
 const notificationRoutes = require("../routes/notificationRoutes");
+const csvRoutes = require("../routes/csvRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -88,6 +89,7 @@ app.use("/Chatrooms", chatroomRoute);
 app.use("/Transcripts", transcriptRoute);
 app.use("/api/email", emailRoute);
 app.use("/notifications", notificationRoutes);
+app.use("/api/csv", csvRoutes);
 
 app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");

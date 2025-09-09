@@ -1,0 +1,179 @@
+Date,Day,Time Slot,Course Code,Course Title
+09-Apr-2025,Wednesday,09:00 - 10:00,MG2008,Data Analysis for Business I
+09-Apr-2025,Wednesday,10:30 - 11:30,AF4007,Financial Risk Mgmt.
+09-Apr-2025,Wednesday,12:00 - 13:00,DS2004,Fundamental of Big Data Analytics
+09-Apr-2025,Wednesday,14:00 - 15:00,EE2003,Computer Organization and Assembly Language
+09-Apr-2025,Wednesday,15:30 - 16:30,CV2006,Structural Analysis-I
+09-Apr-2025,Wednesday,17:00 - 18:00,BA3001,Machine Learning for Business Analytics
+09-Apr-2025,Wednesday,18:30 - 19:30,EE1001,Linear Circuit Analysis
+09-Apr-2025,Wednesday,09:00 - 10:00,AF3001,Financial Management
+09-Apr-2025,Wednesday,10:30 - 11:30,MG1009,Fundamentals of Management
+09-Apr-2025,Wednesday,12:00 - 13:00,SS2012,Technical and Business Writing
+09-Apr-2025,Wednesday,14:00 - 15:00,MG3002,Business Law
+09-Apr-2025,Wednesday,15:30 - 16:30,CS4083,Distributed Data Engineering
+09-Apr-2025,Wednesday,17:00 - 18:00,CS2006,Operating Systems
+09-Apr-2025,Wednesday,18:30 - 19:30,SE4001,Software Re-Engineering
+09-Apr-2025,Wednesday,09:00 - 10:00,CS2018,Operating Systems
+09-Apr-2025,Wednesday,10:30 - 11:30,CS4080,Mining Massive Datasets
+09-Apr-2025,Wednesday,12:00 - 13:00,SE2003,Formal Methods
+09-Apr-2025,Wednesday,14:00 - 15:00,CS4104,Applied Machine Learning
+09-Apr-2025,Wednesday,15:30 - 16:30,NS1004,Engineering Mechanics
+09-Apr-2025,Wednesday,17:00 - 18:00,CS3006,Parallel and Distributed Computing
+09-Apr-2025,Wednesday,18:30 - 19:30,CS4032,Web Programming
+09-Apr-2025,Wednesday,09:00 - 10:00,CS4059,Fundamentals of Computer Vision
+09-Apr-2025,Wednesday,10:30 - 11:30,AF2004,Business Finance
+09-Apr-2025,Wednesday,12:00 - 13:00,CS4063,Natural Language Processing
+09-Apr-2025,Wednesday,14:00 - 15:00,EE3032,Power Electronics
+09-Apr-2025,Wednesday,15:30 - 16:30,MT4031,Operations Research
+09-Apr-2025,Wednesday,17:00 - 18:00,EE2010,Electro-Mechanical Systems
+09-Apr-2025,Wednesday,18:30 - 19:30,EE3031,Digital Signal Processing
+09-Apr-2025,Wednesday,09:00 - 10:00,CV3004,Transportation planning and Engineering
+09-Apr-2025,Wednesday,10:30 - 11:30,MG3007,Construction Engineering and Management
+09-Apr-2025,Wednesday,12:00 - 13:00,CS6047,Advanced Natural Language Processing
+09-Apr-2025,Wednesday,15:30 - 16:30,BA4007,Empowering Organizations with Analytics and Data Visualization
+09-Apr-2025,Wednesday,17:00 - 18:00,CV4007,Geotechnical and Foundation Engg.
+09-Apr-2025,Wednesday,18:30 - 19:30,MG5050,Econometrics
+09-Apr-2025,Wednesday,10:30 - 11:30,EE2012,Computer Organization and Architecture
+09-Apr-2025,Wednesday,12:00 - 13:00,DS5007,Natural Language Processing
+09-Apr-2025,Wednesday,15:30 - 16:30,MG2011,Environmental Science and Sustainability for Business
+09-Apr-2025,Wednesday,18:30 - 19:30,MG5017,Strategic Marketing
+09-Apr-2025,Wednesday,10:30 - 11:30,CS4037,Introduction to Cloud Computing
+09-Apr-2025,Wednesday,12:00 - 13:00,ME2001,Basic Mechanical Engineering
+09-Apr-2025,Wednesday,15:30 - 16:30,MG5024,Cases in Management
+09-Apr-2025,Wednesday,18:30 - 19:30,CS5039,Evolutionary Computations
+09-Apr-2025,Wednesday,10:30 - 11:30,SS1014,Expository Writing
+09-Apr-2025,Wednesday,15:30 - 16:30,MG4009,Managerial Economics
+10-Apr-2025,Thursday,09:00 - 10:00,CV4009,Hydraulic Engineering
+10-Apr-2025,Thursday,10:30 - 11:30,MG4011,Entrepreneurship
+10-Apr-2025,Thursday,12:00 - 13:00,NS1003,Engineering Geology
+10-Apr-2025,Thursday,14:00 - 15:00,SS2041,Critical Thinking
+10-Apr-2025,Thursday,15:30 - 16:30,BA4001,Decision Science for Business
+10-Apr-2025,Thursday,17:00 - 18:00,CS4036,Software Testing
+10-Apr-2025,Thursday,18:30 - 19:30,CS4046,Game Design and Development
+10-Apr-2025,Thursday,09:00 - 10:00,CS2001,Data Structures
+10-Apr-2025,Thursday,10:30 - 11:30,CS3009,Software Engineering
+10-Apr-2025,Thursday,12:00 - 13:00,AF3003,Financial Institutions and Markets
+10-Apr-2025,Thursday,14:00 - 15:00,AF4008,Taxation
+10-Apr-2025,Thursday,15:30 - 16:30,EE2004,Electrical Network Analysis
+10-Apr-2025,Thursday,17:00 - 18:00,EE3004,Feedback Control System
+10-Apr-2025,Thursday,18:30 - 19:30,CV3006,Environmental Engg.-I
+10-Apr-2025,Thursday,09:00 - 10:00,EE2008,Signals and Systems
+10-Apr-2025,Thursday,10:30 - 11:30,MT1008,Multivariable Calculus
+10-Apr-2025,Thursday,12:00 - 13:00,CS2009,Design and Analysis of Algorithms
+10-Apr-2025,Thursday,14:00 - 15:00,CV3008,Structural Analysis-II
+10-Apr-2025,Thursday,15:30 - 16:30,CS1001,IT in Business
+10-Apr-2025,Thursday,17:00 - 18:00,CS4043,Advanced Programming
+10-Apr-2025,Thursday,18:30 - 19:30,MG4013,Business Strategy
+10-Apr-2025,Thursday,09:00 - 10:00,NS2002,Environmental Studies
+10-Apr-2025,Thursday,12:00 - 13:00,CV2009,Civil Engineering Graphics &amp; Construction
+10-Apr-2025,Thursday,14:00 - 15:00,NS1001,Applied Physics
+10-Apr-2025,Thursday,15:30 - 16:30,CV1003,Engineering Surveying
+10-Apr-2025,Thursday,17:00 - 18:00,CV4010,Design of Structures
+10-Apr-2025,Thursday,18:30 - 19:30,MG2009,Data Analysis for Business II
+10-Apr-2025,Thursday,09:00 - 10:00,SS1006,English – II
+10-Apr-2025,Thursday,12:00 - 13:00,CS2004,Fundamentals of Software Engineering
+10-Apr-2025,Thursday,14:00 - 15:00,CS4054,Bioinformatics
+10-Apr-2025,Thursday,15:30 - 16:30,CS4049,Blockchain and Cryptocurrency
+10-Apr-2025,Thursday,17:00 - 18:00,CS2005,Database Systems
+10-Apr-2025,Thursday,18:30 - 19:30,DS5004,Machine Learning for Data Science
+10-Apr-2025,Thursday,09:00 - 10:00,CV2010,Quality and Cost Estimation
+10-Apr-2025,Thursday,12:00 - 13:00,MT1009,Linear Algebra and Diff. Equations
+10-Apr-2025,Thursday,14:00 - 15:00,DS3002,Data Mining
+10-Apr-2025,Thursday,15:30 - 16:30,MG1001,Fundamentals of Management
+10-Apr-2025,Thursday,17:00 - 18:00,SS2006,Macro Economics
+10-Apr-2025,Thursday,18:30 - 19:30,AF5003,Financial Reporting and Analysis
+10-Apr-2025,Thursday,09:00 - 10:00,CV2008,Quantity Surveying and Estimation
+10-Apr-2025,Thursday,12:00 - 13:00,BA2006,Fundamentals of Business Analytics
+10-Apr-2025,Thursday,14:00 - 15:00,MG4007,Managing Human Resources
+10-Apr-2025,Thursday,15:30 - 16:30,SS3001,Business Communication–II
+10-Apr-2025,Thursday,18:30 - 19:30,BA5002,Data Driven Decision Making and Optimization
+10-Apr-2025,Thursday,18:30 - 19:30,MG5011,Advanced Research Methods
+11-Apr-2025,Friday,09:00 - 10:00,MG3033,Principles of Leadership
+11-Apr-2025,Friday,10:30 - 11:30,SS4001,American History
+11-Apr-2025,Friday,14:00 - 15:00,SS4002,Foreign Policy of Pakistan
+11-Apr-2025,Friday,15:30 - 16:30,CS3001,Computer Networks
+11-Apr-2025,Friday,17:00 - 18:00,CS4031,Compiler Construction
+11-Apr-2025,Friday,18:30 - 19:30,SS2040,Mass Communication
+11-Apr-2025,Friday,09:00 - 10:00,AI4007,Applied Artificial Intelligence
+11-Apr-2025,Friday,10:30 - 11:30,SS1007,Islamic Studies/Ethics
+11-Apr-2025,Friday,14:00 - 15:00,CS1003,Computer Programming
+11-Apr-2025,Friday,15:30 - 16:30,MT2004,Business Math – II
+11-Apr-2025,Friday,17:00 - 18:00,MG4008,Business Ethics
+11-Apr-2025,Friday,18:30 - 19:30,MG3010,Methods in Business Research
+11-Apr-2025,Friday,09:00 - 10:00,SS2038,Critical Thinking
+11-Apr-2025,Friday,10:30 - 11:30,CS4001,Professional Practices in IT
+11-Apr-2025,Friday,14:00 - 15:00,CV3001,Advanced Fluid Mechanics
+11-Apr-2025,Friday,15:30 - 16:30,MT2007,Numerical Analysis
+11-Apr-2025,Friday,17:00 - 18:00,EE2011,Probability and Random Processes
+11-Apr-2025,Friday,18:30 - 19:30,SS2039,International Relations
+11-Apr-2025,Friday,09:00 - 10:00,IO4041,Introduction to the Internet of Things
+11-Apr-2025,Friday,10:30 - 11:30,BA3002,Business Data and Text Mining
+11-Apr-2025,Friday,14:00 - 15:00,MG3008,Engineering Economics
+11-Apr-2025,Friday,15:30 - 16:30,MG1002,Marketing Management
+11-Apr-2025,Friday,17:00 - 18:00,CS4048,Data Science
+11-Apr-2025,Friday,18:30 - 19:30,AF4009,Finance for Managers
+11-Apr-2025,Friday,09:00 - 10:00,CS1004,Object Oriented Programming
+11-Apr-2025,Friday,10:30 - 11:30,CV4011,Irrigation and Drainage Engineering
+11-Apr-2025,Friday,14:00 - 15:00,MG5047,Decision Science for Business
+11-Apr-2025,Friday,15:30 - 16:30,AF5001,Applied Corporate Finance
+11-Apr-2025,Friday,17:00 - 18:00,SS1013,Ideology and Constitution of Pakistan
+11-Apr-2025,Friday,18:30 - 19:30,MG5007,New Trend in HRM
+11-Apr-2025,Friday,09:00 - 10:00,CV3007,Mechanics of Solids-II
+11-Apr-2025,Friday,10:30 - 11:30,MG3035,International Business
+11-Apr-2025,Friday,14:00 - 15:00,CS1002,Programming Fundamentals
+11-Apr-2025,Friday,15:30 - 16:30,SS2031,French Language
+11-Apr-2025,Friday,18:30 - 19:30,BA5007,Generative AI in Business
+11-Apr-2025,Friday,09:00 - 10:00,AF1001,Fundamentals of Accounting
+11-Apr-2025,Friday,10:30 - 11:30,SS2037,Organizational Behavior
+11-Apr-2025,Friday,14:00 - 15:00,CS3005,Theory of Automata
+11-Apr-2025,Friday,15:30 - 16:30,MG1004,Business Calculus II
+11-Apr-2025,Friday,09:00 - 10:00,CE4001,Principles of Software Engineering
+11-Apr-2025,Friday,10:30 - 11:30,SS2015,German Language
+11-Apr-2025,Friday,14:00 - 15:00,MG3013,Brand Management
+11-Apr-2025,Friday,09:00 - 10:00,CS2010,Programming Fundamentals
+11-Apr-2025,Friday,10:30 - 11:30,SS2003,Psychology
+11-Apr-2025,Friday,10:30 - 11:30,SS2036,Modern Politics and Government
+12-Apr-2025,Saturday,09:00 - 10:00,EE3006,Embedded Systems
+12-Apr-2025,Saturday,10:30 - 11:30,CS4055,Digital Image Processing
+12-Apr-2025,Saturday,12:00 - 13:00,CS4045,Deep Learning for Perception
+12-Apr-2025,Saturday,14:00 - 15:00,MG4033,Digital Marketing
+12-Apr-2025,Saturday,15:30 - 16:30,AF1002,Financial Accounting
+12-Apr-2025,Saturday,17:00 - 18:00,AI4009,Generative AI
+12-Apr-2025,Saturday,18:30 - 19:30,AF3002,Financial Statement Analysis
+12-Apr-2025,Saturday,09:00 - 10:00,BA4004,Business Analytics
+12-Apr-2025,Saturday,10:30 - 11:30,MT2005,Probability and Statistics
+12-Apr-2025,Saturday,12:00 - 13:00,EE1005,Digital Logic Design
+12-Apr-2025,Saturday,14:00 - 15:00,DS2003,Advanced Statistics
+12-Apr-2025,Saturday,15:30 - 16:30,CS4061,Ethical Hacking Concepts and Practices
+12-Apr-2025,Saturday,17:00 - 18:00,AF2002,Corporate Accounting – II
+12-Apr-2025,Saturday,18:30 - 19:30,CS3002,Information Security
+12-Apr-2025,Saturday,09:00 - 10:00,SE3003,Web Engineering
+12-Apr-2025,Saturday,10:30 - 11:30,CV4005,Steel Structures
+12-Apr-2025,Saturday,12:00 - 13:00,AI2002,Artificial Intelligence
+12-Apr-2025,Saturday,14:00 - 15:00,CS4064,Advance Database Concepts
+12-Apr-2025,Saturday,15:30 - 16:30,SS2010,Communication Skills
+12-Apr-2025,Saturday,17:00 - 18:00,SS1002,Islamic Studies/Ethics
+12-Apr-2025,Saturday,18:30 - 19:30,MG2010,Business Communication
+12-Apr-2025,Saturday,09:00 - 10:00,MT2006,Probability and Statistics
+12-Apr-2025,Saturday,10:30 - 11:30,MG3001,Legal and Ethical Issues in Business Analytics
+12-Apr-2025,Saturday,12:00 - 13:00,MG5033,Training and Development
+12-Apr-2025,Saturday,14:00 - 15:00,SE2004,Software Design and Architecture
+12-Apr-2025,Saturday,15:30 - 16:30,SS1008,Communication and Presentation Skills
+12-Apr-2025,Saturday,17:00 - 18:00,SS2019,Psychology
+12-Apr-2025,Saturday,18:30 - 19:30,MG1008,Occupational Health and Safety
+12-Apr-2025,Saturday,09:00 - 10:00,MG4524,Applications of Business Analytics
+12-Apr-2025,Saturday,10:30 - 11:30,SS2018,Sociology
+12-Apr-2025,Saturday,14:00 - 15:00,SE2002,Software Design and Architecture
+12-Apr-2025,Saturday,17:00 - 18:00,CS3016,Cyber Security Tools and Technologies
+12-Apr-2025,Saturday,18:30 - 19:30,MT1006,Differential Equations
+12-Apr-2025,Saturday,09:00 - 10:00,CS4039,Software for Mobile Devices
+12-Apr-2025,Saturday,10:30 - 11:30,MG5102,Project Management
+12-Apr-2025,Saturday,14:00 - 15:00,CS2013,Introduction to Database Systems
+12-Apr-2025,Saturday,17:00 - 18:00,MG5015,Strategic HR and Leadership
+12-Apr-2025,Saturday,18:30 - 19:30,SS2008,Business Communication–I
+12-Apr-2025,Saturday,09:00 - 10:00,SS2043,Civics and Community Engagement
+12-Apr-2025,Saturday,14:00 - 15:00,MG2002,Engineering Economics
+12-Apr-2025,Saturday,17:00 - 18:00,BA5004,Machine Learning Models for Business Analytics
+12-Apr-2025,Saturday,09:00 - 10:00,MG4047,Hazards and Disaster Management
+12-Apr-2025,Saturday,17:00 - 18:00,MG4002,Communication for Managers
+12-Apr-2025,Saturday,09:00 - 10:00,MG4012,Quantitative Methods
