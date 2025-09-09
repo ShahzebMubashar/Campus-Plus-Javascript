@@ -6,6 +6,7 @@ import Footer from "../Footer/Footer";
 import Select from "react-select"; // React-Select for searchable dropdowns
 import "./Timetable.css";
 import { getAccessToken } from "../../utils/auth";
+import { fetchCSVData, clearCSVCache } from "../../services/csvDataService";
 import API_BASE_URL from "../../config/api";
 
 const Timetable = () => {
@@ -26,10 +27,17 @@ const Timetable = () => {
     // Check admin status from backend
     checkAdminStatus();
 
-    fetch(require("../../Assets/data/courses.csv"))
-      .then((response) => response.text())
+    // Fetch CSV data from backend with caching
+    fetchCSVData('courses')
       .then((data) => processCsv(parseCsvData(data)))
-      .catch((err) => console.error("Error loading CSV:", err));
+      .catch((err) => {
+        console.error("Error loading CSV:", err);
+        // Fallback to local file if backend fails
+        fetch(require("../../Assets/data/courses.csv"))
+          .then((response) => response.text())
+          .then((data) => processCsv(parseCsvData(data)))
+          .catch((fallbackErr) => console.error("Fallback CSV load failed:", fallbackErr));
+      });
   }, []);
 
   const parseCsvData = (data) => {
@@ -248,6 +256,9 @@ const Timetable = () => {
       // Process the CSV data directly
       const parsedData = parseCsvData(fileContent);
       processCsv(parsedData);
+
+      // Clear cache to force fresh data on next load
+      clearCSVCache('courses');
 
       setUploadStatus("CSV processed successfully! Data updated.");
       setCsvFile(null);

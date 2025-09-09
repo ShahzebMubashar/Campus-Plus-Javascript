@@ -32,8 +32,9 @@ const rateCourse = async (request, response) => {
 
   if (!courseid || !rating) return response.status(400).send("Invalid Input");
 
+  const client = await pool.connect();
+
   try {
-    const client = await pool.connect();
 
     let res = await client.query(
       `Select * from UserCourseRating where userid = $1 and courseid = $2`,
@@ -73,7 +74,7 @@ const rateCourse = async (request, response) => {
     console.error("Error in rateCourse:", error);
     return response.status(500).send("Internal Server Error");
   } finally {
-    if (client) client.release();
+    client.release();
   }
 };
 
@@ -83,8 +84,9 @@ const reviewCourse = async (request, response) => {
     user: { userid },
   } = request;
 
+  const client = await pool.connect();
+
   try {
-    const client = await pool.connect();
 
     await client.query("BEGIN");
 
@@ -108,7 +110,7 @@ const reviewCourse = async (request, response) => {
     await pool.query("ROLLBACK");
     return response.status(500).send("Internal Server Error");
   } finally {
-    if (client) client.release();
+    client.release();
   }
 };
 
@@ -248,7 +250,7 @@ const downloadPastPapers = async (req, res) => {
       return res.status(500).send('Failed to fetch file');
     }
 
-    res.setHeader('Content-Type', 'application/pdf'); 
+    res.setHeader('Content-Type', 'application/pdf');
     response.body.pipe(res);
   } catch (err) {
     console.error(err.message);
@@ -311,8 +313,9 @@ const rateCourseDifficulty = async (request, response) => {
     return response.status(400).json({ message: "Invalid Input" });
   }
 
+  const client = await pool.connect();
+
   try {
-    const client = await pool.connect();
 
     await client.query("BEGIN");
 
@@ -347,7 +350,7 @@ const rateCourseDifficulty = async (request, response) => {
     console.error("Error in rateCourseDifficulty:", error);
     return response.status(500).json({ message: "Internal Server Error" });
   } finally {
-    if (client) client.release();
+    client.release();
   }
 };
 

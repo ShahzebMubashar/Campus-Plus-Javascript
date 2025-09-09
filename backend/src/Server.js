@@ -18,34 +18,24 @@ const emailRoute = require("../routes/emailRoutes");
 const userRoutes = require("../routes/userRoutes");
 const chatroomController = require("../controllers/chatroomController");
 const notificationRoutes = require("../routes/notificationRoutes");
+const csvRoutes = require("../routes/csvRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Trust proxy - Required for secure cookies behind a proxy like Koyeb
 app.set('trust proxy', 1);
 
-// Basic middleware
 app.use(express.json());
 app.use(cookieParser());
 
-// Basic request logging
 app.use((req, res, next) => {
-  console.log(`\n=== ${req.method} ${req.path} ===`);
-  console.log("Request origin:", req.headers.origin);
-  console.log("Authorization header:", req.headers.authorization ? "EXISTS" : "NONE");
   next();
 });
 
-// CORS configuration
 const corsOrigin = process.env.NODE_ENV === "production" 
   ? process.env.FRONTEND_URL || "https://campus-plus-javascript.vercel.app"
   : "http://localhost:3000";
 
-console.log("🔧 CORS Configuration:");
-console.log("NODE_ENV:", process.env.NODE_ENV || "undefined");
-console.log("CORS Origin:", corsOrigin);
-console.log("Environment:", process.env.NODE_ENV === "production" ? "PRODUCTION" : "DEVELOPMENT");
 
 app.use(
   cors({
@@ -56,7 +46,6 @@ app.use(
   })
 );
 
-// Health check endpoint for Koyeb
 app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'healthy', 
@@ -91,10 +80,8 @@ app.post('/api/email/send-email', async (req, res) => {
   }
 });
 
-// Initialize Passport for OAuth (JWT-based, no sessions)
 app.use(passport.initialize());
 
-// Routes
 app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/Courses", courseRoutes);
@@ -102,6 +89,7 @@ app.use("/Chatrooms", chatroomRoute);
 app.use("/Transcripts", transcriptRoute);
 app.use("/api/email", emailRoute);
 app.use("/notifications", notificationRoutes);
+app.use("/api/csv", csvRoutes);
 
 app.get("/test", (req, res) => {
   res.send("Server is running and routes are registered!");
@@ -113,5 +101,4 @@ app.use((err, req, res, next) => {
 });
 
 app.listen(PORT, '0.0.0.0', () => {
-  console.log(`Server running on port ${PORT}`);
 });

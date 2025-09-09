@@ -45,13 +45,8 @@ router.get("/user-info", jwtAuthMiddleware, (req, res) => {
   });
 });
 
-router.get("/current-user", optionalJwtAuth, (req, res) => {
-  console.log("=== /auth/current-user ===");
-  console.log("Auth type:", req.authType);
-  console.log("User object:", req.user);
-  
+router.get("/current-user", optionalJwtAuth, (req, res) => {  
   if (req.user && req.authType === 'jwt') {
-    console.log("Using JWT auth");
     res.json({
       userid: req.user.userid,
       email: req.user.email,
@@ -61,10 +56,8 @@ router.get("/current-user", optionalJwtAuth, (req, res) => {
       isProfileComplete: req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING'
     });
   } else {
-    console.log("No authentication");
     res.json({ isAuthenticated: false });
   }
-  console.log("=== END /auth/current-user ===");
 });
 
 router.post("/complete-profile", jwtAuthMiddleware, async (req, res) => {
@@ -133,27 +126,13 @@ router.get("/google/callback",
   passport.authenticate("google", { failureRedirect: `${frontendUrl}/sign-in?error=oauth_failed`, session: false }),
   (req, res) => {
     try {
-      console.log('Google OAuth callback - User object:', req.user);
-      console.log('Google OAuth callback - User properties:', {
-        userid: req.user?.userid,
-        email: req.user?.email,
-        username: req.user?.username,
-        rollnumber: req.user?.rollnumber,
-        fullName: req.user?.fullName,
-        role: req.user?.role
-      });
-      
       const tokens = generateTokenPair(req.user);
-      console.log('Generated tokens:', { accessToken: tokens.accessToken ? 'EXISTS' : 'MISSING', refreshToken: tokens.refreshToken ? 'EXISTS' : 'MISSING' });
       
       const tokenData = encodeURIComponent(JSON.stringify(tokens));
-      console.log('Token data length:', tokenData.length);
 
       if (req.user.username && req.user.rollnumber && req.user.rollnumber !== 'PENDING') {
-        console.log('Redirecting to auth-success');
         res.redirect(`${frontendUrl}/auth-success?tokens=${tokenData}`);
       } else {
-        console.log('Redirecting to complete-profile');
         res.redirect(`${frontendUrl}/complete-profile?tokens=${tokenData}`);
       }
     } catch (error) {
