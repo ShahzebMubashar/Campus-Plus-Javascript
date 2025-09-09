@@ -8,6 +8,8 @@
   width: 100%;
   max-width: 100vw;
   overflow-x: hidden;
+  padding-left: 320px;
+  /* Add padding to account for fixed sidebar */
 }
 
 .room-view-content {
@@ -16,6 +18,9 @@
   background-color: var(--background);
   position: relative;
   width: 100%;
+  /* Change back to 100% */
+  margin-left: 0;
+  /* Remove margin-left */
   max-width: 100%;
   overflow-x: hidden;
 }
@@ -541,11 +546,10 @@
 
 /* Tablet Portrait and Large Mobile (481px - 768px) */
 @media (max-width: 768px) {
-  /* .room-view-container {
-    flex-direction: column;
-    padding: 0;
-  } */
-
+  .room-view-container {
+    padding-left: 0; /* Remove padding on mobile */
+  }
+  
   .room-view-content {
     padding: 12px;
     margin-left: 0;

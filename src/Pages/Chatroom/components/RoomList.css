@@ -9,14 +9,18 @@
   min-height: 100vh;
   background-color: #f4f8fb;
   padding-top: 100px;
-  width: 100%;
+  padding-left: 150px;
+  width: calc(100% - 150px);
+  max-width: calc(100vw - 150px);
+  margin-left: 12%;
 }
 
 .room-list-header {
   position: absolute;
   top: 5%;
-  left: 21%;
-  width: 76%;
+  left: 24%;
+  /* This is already correct for the new layout */
+  width: 74%;
   z-index: 101;
   background: #f2f4f5;
   box-shadow: 0 8px 16px rgba(6, 6, 6, 0.15);
@@ -156,8 +160,10 @@
 /* Main Content Area */
 .room-list-main-content {
   padding: 20px 40px;
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: none;
+  /* Remove max-width constraint */
+  margin: 0;
+  width: 100%;
 }
 
 /* Create Room Modal */
@@ -267,15 +273,16 @@
 /* Room Grid */
 .room-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 26px !important;
   padding: 20px 0;
   margin-top: 10%;
 }
 
 .room-card {
   background-color: white;
-  width: 70%;
+  width: 100%;
+  /* Change from 70% to 100% */
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -338,7 +345,8 @@
 /* Suggested Room Styles */
 .room-card-suggested {
   background-color: white;
-  width: 70%;
+  width: 100%;
+  /* Change from 70% to 100% */
   padding: 24px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -367,76 +375,35 @@
 
 /* Extra Large Screens (1400px+) */
 @media (min-width: 1400px) {
-  .room-list-header {
-    left: 22%;
-    width: 76%;
-    padding: 24px 48px;
-  }
-
-  .room-list-main-content {
-    padding: 24px 48px;
-  }
-
   .room-grid {
-    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    gap: 24px;
+    grid-template-columns: repeat(3, 1fr);
+    /* FORCE 3 COLUMNS */
+    gap: 40px;
+    /* Increased from 24px to 40px for larger screens */
   }
 }
 
 /* Large Screens (1200px - 1399px) */
 @media (max-width: 1399px) and (min-width: 1200px) {
-  .room-list-header {
-    left: 21%;
-    width: 77%;
-  }
-
   .room-grid {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
+    /* Force 3 columns */
   }
 }
 
 /* Desktop (992px - 1199px) */
 @media (max-width: 1199px) and (min-width: 992px) {
-  .room-list-header {
-    left: 20%;
-    width: 78%;
-    padding: 20px 32px;
-  }
-
-  .room-list-main-content {
-    padding: 20px 32px;
-  }
-
   .room-grid {
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 20px;
+    grid-template-columns: repeat(3, 1fr);
+    /* Force 3 columns */
   }
 }
 
 /* Large Tablet (769px - 991px) */
 @media (max-width: 991px) and (min-width: 769px) {
-  .room-list-container {
-    padding-top: 120px;
-  }
-
-  .room-list-header {
-    top: 6%;
-    left: 18%;
-    width: 80%;
-    padding: 18px 24px;
-  }
-
-  .room-list-title {
-    font-size: 1.8rem;
-  }
-
-  .room-list-header-icon {
-    font-size: 1.9rem;
-  }
-
   .room-grid {
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(3, 1fr);
+    /* Force 3 columns on large tablets too */
   }
 }
 
@@ -444,6 +411,11 @@
 @media (max-width: 768px) {
   .room-list-container {
     padding-top: 140px;
+    padding-left: 0;
+    /* Remove left padding on mobile */
+    width: 100%;
+    /* Full width on mobile */
+    max-width: 100vw;
   }
 
   .room-list-header {
@@ -569,7 +541,7 @@
   }
 
   .room-card {
-    padding: 16px;
+    padding: 14px;
   }
 
   .room-card-title {
@@ -858,4 +830,24 @@
 .suggested-rooms-toggle.active {
   background: #1976d2 !important;
   color: #fff !important;
+}
+
+/* Update media queries to maintain 3 columns on larger screens and fewer on smaller ones */
+
+@media (max-width: 768px) {
+  .room-grid {
+    grid-template-columns: repeat(2, 1fr);
+    /* 2 columns on tablets */
+    gap: 20px;
+    /* Keep reasonable gap on tablets */
+  }
+}
+
+@media (max-width: 480px) {
+  .room-grid {
+    grid-template-columns: 1fr;
+    /* 1 column on mobile */
+    gap: 16px;
+    /* Keep smaller gap on mobile */
+  }
 }
