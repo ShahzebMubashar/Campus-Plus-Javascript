@@ -761,10 +761,9 @@ export default function RoomView({ room, onBack, onLeave }) {
         minHeight: "100vh",
         backgroundColor: colors.background,
         position: "relative",
+        paddingLeft: "320px", // Add this line
       }}
     >
-
-      {/* Main content */}
       <div
         className="room-view-content"
         style={{
@@ -772,6 +771,9 @@ export default function RoomView({ room, onBack, onLeave }) {
           padding: "24px",
           backgroundColor: colors.background,
           position: "relative",
+          width: "100%", // Change from calc(100% - 320px)
+          marginLeft: "0", // Change from 320px
+          overflow: "hidden",
         }}
       >
         {/* Room Header */}
