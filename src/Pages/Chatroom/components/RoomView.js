@@ -796,6 +796,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 fontSize: "26px",
                 color: colors.primary,
                 fontWeight: "600",
+                textAlign: "left"
               }}
             >
               {room.roomname}
@@ -1061,7 +1062,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                 color: postMessage.type === "success" ? "#1e8e3e" : "#d32f2f",
                 border: `1px solid ${postMessage.type === "success" ? "#b7dfca" : "#f5c2c7"}`,
                 display: "flex",
-                alignItems: "center",
+                alignItems: "left",
                 justifyContent: "space-between",
               }}
             >
@@ -1328,6 +1329,7 @@ export default function RoomView({ room, onBack, onLeave }) {
                       color: colors.textPrimary,
                       fontSize: "15px",
                       lineHeight: "1.5",
+                      textAlign: "left"
                     }}
                   >
                     {highlightText(post.content, searchQuery)}
