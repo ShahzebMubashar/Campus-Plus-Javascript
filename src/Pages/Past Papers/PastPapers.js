@@ -32,7 +32,8 @@ const PastPapers = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        // Fetch courses without authentication - public access
+        setLoading(true); // Ensure loading is true
+
         const response = await fetch(`${API_BASE_URL}/Courses`, {
           method: "GET",
           headers: {
@@ -43,18 +44,19 @@ const PastPapers = () => {
           throw new Error("Failed to fetch courses");
         }
         const data = await response.json();
-        // Sort courses with past papers to the top
+
         const sortedData = data.sort((a, b) => {
           if (a.past_papers_count && !b.past_papers_count) return -1;
           if (!a.past_papers_count && b.past_papers_count) return 1;
           return 0;
         });
+
         setCourses(sortedData);
         setFilteredCourses(sortedData);
       } catch (err) {
         setError("Unable to load courses at the moment.");
       } finally {
-        setLoading(false);
+        setLoading(false); // This will trigger the scroll restoration
       }
     };
 
@@ -100,8 +102,66 @@ const PastPapers = () => {
     setFilteredCourses(sorted);
   }, [searchQuery, courses]);
 
+  // Replace the existing scroll position useEffect with this:
+  useEffect(() => {
+    // Only handle saving scroll position here, not restoration
+    const handleScroll = () => {
+      // Throttle the saving to improve performance
+      clearTimeout(window.scrollSaveTimeout);
+      window.scrollSaveTimeout = setTimeout(() => {
+        sessionStorage.setItem('pastPapersScrollPosition', window.scrollY.toString());
+      }, 100);
+    };
+
+    // Save scroll position when leaving page (before unmount)
+    const handleBeforeUnload = () => {
+      sessionStorage.setItem('pastPapersScrollPosition', window.scrollY.toString());
+    };
+
+    // Add event listeners
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+      clearTimeout(window.scrollSaveTimeout);
+    };
+  }, []);
+
+  // Move scroll restoration to AFTER courses are loaded and rendered
+  useEffect(() => {
+    if (!loading && courses.length > 0) {
+      // Wait for courses to be rendered, then restore scroll position
+      const restoreScrollPosition = () => {
+        const savedScrollPosition = sessionStorage.getItem('pastPapersScrollPosition');
+        if (savedScrollPosition) {
+          setTimeout(() => {
+            window.scrollTo({
+              top: parseInt(savedScrollPosition),
+              left: 0,
+              behavior: 'smooth' // Changed from 'instant' to 'smooth'
+            });
+          }, 100);
+        }
+      };
+
+      // Use requestAnimationFrame to ensure DOM is updated
+      requestAnimationFrame(() => {
+        setTimeout(restoreScrollPosition, 50);
+      });
+    }
+  }, [loading, courses.length]); // Depend on loading and courses being available
+
   const handleCourseClick = (courseId) => {
-    navigate(`/past-papers/${courseId}`);
+    // Save current scroll position before navigating
+    sessionStorage.setItem('pastPapersScrollPosition', window.scrollY.toString());
+
+    // Add a small delay to ensure the position is saved
+    setTimeout(() => {
+      navigate(`/past-papers/${courseId}`);
+    }, 10);
   };
 
   const renderCourseCard = (course) => (
@@ -185,6 +245,11 @@ const PastPapers = () => {
     if (rating <= 4.5) return "Challenging";
     return "Advanced";
   };
+
+  // Set the page title
+  useEffect(() => {
+    document.title = "Past Papers | Campus Plus";
+  }, []);
 
   if (loading) {
     return (
