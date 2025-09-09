@@ -359,7 +359,7 @@
 
 .post-header.pending .post-header-main {
   flex-direction: row;
-  align gap: 12px;
+  gap: 12px;
 }
 
 .post-header.pending .approve-reject-row {
