@@ -72,33 +72,35 @@ const DynamicDatesheet = ({ selectedCourses, datesheetData }) => {
   const processedDates = detectConflicts();
 
   // Function to export the datesheet as a JPG image
-  // Uses html-to-image library to convert the HTML table to an image
   const exportToJpg = () => {
-    const datesheetElement = document.getElementById("datesheet-table");
-    const clone = datesheetElement.cloneNode(true);
-
-    const cover = document.createElement("div");
-    cover.style.position = "fixed";
-    cover.style.top = "0";
-    cover.style.left = "0";
-    cover.style.width = "100vw";
-    cover.style.height = "100vh";
-    cover.style.background = "white";
-    cover.style.zIndex = "-998";
-    cover.style.pointerEvents = "none"; // user can’t click it
-    document.body.appendChild(cover);
-
-    clone.style.position = "fixed";
-    clone.style.top = "0";
-    clone.style.left = "0";
-    clone.style.zIndex = "-999";
-    clone.style.width = "1280px";
-    clone.style.height = "auto";
-    clone.style.overflow = "hidden";
-
-    document.body.appendChild(clone);
-
-    toJpeg(clone, { quality: 0.95, useCORS: true })
+    const node = document.getElementById("datesheet-table");
+    if (!node) return;
+  
+    // Save original styles so we can restore later
+    const originalStyle = {
+      width: node.style.width,
+      height: node.style.height,
+      overflow: node.style.overflow,
+    };
+  
+    // Force element to show all content (no scrolling cut)
+    node.style.overflow = "visible";
+    const fullWidth = node.scrollWidth;
+    const fullHeight = node.scrollHeight;
+    node.style.width = fullWidth + "px";
+    node.style.height = fullHeight + "px";
+  
+    const pixelRatio = 2; // ensures good resolution
+  
+    toJpeg(node, {
+      quality: 0.95,
+      backgroundColor: "#ffffff",
+      cacheBust: true,
+      useCORS: true,
+      pixelRatio: pixelRatio,
+      width: fullWidth,
+      height: fullHeight,
+    })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "datesheet.jpg";
@@ -107,8 +109,10 @@ const DynamicDatesheet = ({ selectedCourses, datesheetData }) => {
       })
       .catch((err) => console.error("Error exporting datesheet:", err))
       .finally(() => {
-        document.body.removeChild(clone);
-        document.body.removeChild(cover);
+        // Restore original styles
+        node.style.width = originalStyle.width;
+        node.style.height = originalStyle.height;
+        node.style.overflow = originalStyle.overflow;
       });
   };
 
