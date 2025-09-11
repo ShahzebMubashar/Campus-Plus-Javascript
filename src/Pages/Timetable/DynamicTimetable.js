@@ -10,6 +10,11 @@ const DynamicTimetable = ({ selectedCourses }) => {
   const timelineBodyRef = useRef(null);
   const timeHeaderRef = useRef(null);
 
+  // Reset stacked courses when selected courses change
+  useEffect(() => {
+    setStackedCourses({});
+  }, [selectedCourses]);
+
   const days = [
     "Monday",
     "Tuesday",
@@ -174,16 +179,27 @@ const DynamicTimetable = ({ selectedCourses }) => {
     );
     
     if (conflictingCourses.length > 1) {
-      // Move the clicked course to the bottom by updating the stackedCourses state
+      // Get the current stack (either from state or original courses)
       const currentStack = stackedCourses[key] || conflictingCourses;
-      const newStack = [...currentStack];
-      const clickedCourse = newStack.splice(courseIndex, 1)[0];
-      newStack.push(clickedCourse);
       
-      setStackedCourses(prev => ({
-        ...prev,
-        [key]: newStack
-      }));
+      // Filter to ensure we only have valid courses
+      const validCurrentStack = currentStack.filter(course => 
+        course && course.start_time && course.end_time
+      );
+      
+      // Ensure the courseIndex is within bounds
+      if (courseIndex >= 0 && courseIndex < validCurrentStack.length) {
+        const newStack = [...validCurrentStack];
+        const clickedCourse = newStack.splice(courseIndex, 1)[0];
+        newStack.push(clickedCourse);
+        
+        setStackedCourses(prev => ({
+          ...prev,
+          [key]: newStack
+        }));
+      } else {
+        console.warn('Invalid course index:', courseIndex, 'for stack length:', validCurrentStack.length);
+      }
     }
   };
 
@@ -443,27 +459,42 @@ const DynamicTimetable = ({ selectedCourses }) => {
                       <div key={index} className="time-cell"></div>
                     ))}
                     {barChartData[day] && barChartData[day].length > 0 ? (
-                      barChartData[day].map((course, courseIndex) => (
-                        <div
-                          key={courseIndex}
-                          className={`course-bar ${course.isConflict ? 'conflict-bar' : ''}`}
-                          onClick={() => handleCourseClick(day, `${course.start_time}-${course.end_time}`, courseIndex)}
-                          style={{
-                            left: `${course.leftPosition}px`,
-                            width: `${course.width}px`,
-                            zIndex: course.isConflict ? 5 - courseIndex : 1,
-                            transform: course.isConflict ? `translateY(${courseIndex * 8}px)` : 'none'
-                          }}
-                        >
-                          <div className="course-name">{course.courseName}</div>
-                          {showInstructor && (
-                            <div className="course-instructor">{course.instructor || 'N/A'}</div>
-                          )}
-                          {showVenue && (
-                            <div className="course-venue">{course.venue || 'N/A'}</div>
-                          )}
-                        </div>
-                      ))
+                      (() => {
+                        // Group courses by time slot for proper indexing
+                        const timeSlotGroups = {};
+                        barChartData[day].forEach(course => {
+                          const timeKey = `${course.start_time}-${course.end_time}`;
+                          if (!timeSlotGroups[timeKey]) {
+                            timeSlotGroups[timeKey] = [];
+                          }
+                          timeSlotGroups[timeKey].push(course);
+                        });
+
+                        // Render courses grouped by time slot
+                        return Object.entries(timeSlotGroups).map(([timeKey, courses]) =>
+                          courses.map((course, slotIndex) => (
+                            <div
+                              key={`${timeKey}-${slotIndex}`}
+                              className={`course-bar ${course.isConflict ? 'conflict-bar' : ''}`}
+                              onClick={() => handleCourseClick(day, timeKey, slotIndex)}
+                              style={{
+                                left: `${course.leftPosition}px`,
+                                width: `${course.width}px`,
+                                zIndex: course.isConflict ? 5 - slotIndex : 1,
+                                transform: course.isConflict ? `translateY(${slotIndex * 8}px)` : 'none'
+                              }}
+                            >
+                              <div className="course-name">{course.courseName}</div>
+                              {showInstructor && (
+                                <div className="course-instructor">{course.instructor || 'N/A'}</div>
+                              )}
+                              {showVenue && (
+                                <div className="course-venue">{course.venue || 'N/A'}</div>
+                              )}
+                            </div>
+                          ))
+                        ).flat();
+                      })()
                     ) : (
                       <div className="no-courses">No courses scheduled</div>
                     )}
