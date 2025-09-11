@@ -5,6 +5,7 @@ import "./DynamicTimetable.css";
 const DynamicTimetable = ({ selectedCourses }) => {
   const [showInstructor, setShowInstructor] = useState(true);
   const [showVenue, setShowVenue] = useState(true);
+  const [showTimings, setShowTimings] = useState(false);
   const [viewMode, setViewMode] = useState('table'); // 'table' or 'barchart'
   const [stackedCourses, setStackedCourses] = useState({}); // For managing stacked conflicts
   const timelineBodyRef = useRef(null);
@@ -14,6 +15,17 @@ const DynamicTimetable = ({ selectedCourses }) => {
   useEffect(() => {
     setStackedCourses({});
   }, [selectedCourses]);
+
+  // Handle window resize for responsive bar chart
+  useEffect(() => {
+    const handleResize = () => {
+      // Force re-render by updating a dummy state
+      setStackedCourses(prev => ({ ...prev }));
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const days = [
     "Monday",
@@ -122,7 +134,14 @@ const DynamicTimetable = ({ selectedCourses }) => {
         
         // Get the full width from the time grid
         const timeCells = timeHeader.querySelectorAll('.time-header-cell');
-        const fullWidth = timeCells.length * 60 + 120; // 60px per cell + day label width
+        const getCellWidth = () => {
+          if (window.innerWidth <= 480) return 30;
+          if (window.innerWidth <= 768) return 40;
+          return 60;
+        };
+        const cellWidth = getCellWidth();
+        const dayLabelWidth = window.innerWidth <= 480 ? 60 : window.innerWidth <= 768 ? 80 : 120;
+        const fullWidth = timeCells.length * cellWidth + dayLabelWidth;
         
         node.style.width = fullWidth + "px";
         node.style.height = "auto";
@@ -224,6 +243,13 @@ const DynamicTimetable = ({ selectedCourses }) => {
         timeGrid.push(timeString);
       }
     }
+
+    // Get responsive cell width based on screen size
+    const getCellWidth = () => {
+      if (window.innerWidth <= 480) return 30;
+      if (window.innerWidth <= 768) return 40;
+      return 60;
+    };
     
     // Generate bar chart data with timeline positioning
     const barChartData = {};
@@ -288,13 +314,14 @@ const DynamicTimetable = ({ selectedCourses }) => {
           
           // Ensure end index is at least 1 slot after start
           const finalEndIndex = Math.max(startIndex + 1, endIndex);
+          const cellWidth = getCellWidth();
           
           barChartData[day].push({
             ...course,
             startIndex,
             endIndex: finalEndIndex,
-            width: (finalEndIndex - startIndex) * 60, // 60px per 30min slot
-            leftPosition: startIndex * 60,
+            width: (finalEndIndex - startIndex) * cellWidth, // Responsive width per 30min slot
+            leftPosition: startIndex * cellWidth,
             formattedTime: `${formatTime(course.start_time)} - ${formatTime(course.end_time)}`,
             isConflict: course.isConflict
           });
@@ -369,6 +396,16 @@ const DynamicTimetable = ({ selectedCourses }) => {
           />
           Show Venue
         </label>
+        {viewMode === 'barchart' && (
+          <label>
+            <input
+              type="checkbox"
+              checked={showTimings}
+              onChange={() => setShowTimings(!showTimings)}
+            />
+            Show Timings
+          </label>
+        )}
         <button onClick={exportToJpg} className="export-button">
           Export as JPG
         </button>
@@ -485,6 +522,9 @@ const DynamicTimetable = ({ selectedCourses }) => {
                               }}
                             >
                               <div className="course-name">{course.courseName}</div>
+                              {showTimings && (
+                                <div className="course-timing">{course.formattedTime}</div>
+                              )}
                               {showInstructor && (
                                 <div className="course-instructor">{course.instructor || 'N/A'}</div>
                               )}
@@ -495,9 +535,7 @@ const DynamicTimetable = ({ selectedCourses }) => {
                           ))
                         ).flat();
                       })()
-                    ) : (
-                      <div className="no-courses">No courses scheduled</div>
-                    )}
+                    ) : null}
                   </div>
                 </div>
               ))}
