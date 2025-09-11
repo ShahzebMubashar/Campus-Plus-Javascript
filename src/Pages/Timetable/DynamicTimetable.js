@@ -230,7 +230,12 @@ const DynamicTimetable = ({ selectedCourses }) => {
         const stackKey = `${day}-${timeKey}`;
         const reorderedCourses = stackedCourses[stackKey] || courses;
         
-        reorderedCourses.forEach(course => {
+        // Filter out any undefined or invalid courses
+        const validCourses = reorderedCourses.filter(course => 
+          course && course.start_time && course.end_time
+        );
+        
+        validCourses.forEach(course => {
           const formatTime = (time24) => {
             if (!time24) return "";
             let [hours, minutes] = time24.split(":");
@@ -358,7 +363,7 @@ const DynamicTimetable = ({ selectedCourses }) => {
         </button>
       </div>
       <div id="timetable" className="timetable">
-        <div style={{marginBottom: '10px', fontSize: '12px', color: '#666'}}>
+        <div className="view-indicator">
           Current view: {viewMode === 'table' ? 'Table View' : 'Bar Chart View'}
         </div>
         {viewMode === 'table' ? (

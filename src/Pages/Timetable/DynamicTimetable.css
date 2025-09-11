@@ -46,6 +46,12 @@
   color: #424242;
 }
 
+.view-indicator {
+  margin-bottom: 10px;
+  font-size: 12px;
+  color: #666;
+}
+
 .options label {
   display: flex;
   align-items: center;
