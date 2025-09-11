@@ -211,13 +211,33 @@ const DynamicTimetable = ({ selectedCourses }) => {
     // Get current order or use default
     const currentOrder = stackedCourses[groupKey] || conflictGroup;
     
-    // Move clicked course to front
-    const newOrder = currentOrder.filter(c => 
-      !(c.start_time === courseData.start_time && 
-        c.end_time === courseData.end_time && 
-        c.courseName === courseData.courseName)
+    // Toggle clicked course between front and back
+    const clickedCourseIndex = currentOrder.findIndex(c => 
+      c.start_time === courseData.start_time && 
+      c.end_time === courseData.end_time && 
+      c.courseName === courseData.courseName
     );
-    newOrder.push(courseData);
+    
+    let newOrder;
+    if (clickedCourseIndex >= 0) {
+      newOrder = [...currentOrder];
+      const clickedCourse = newOrder.splice(clickedCourseIndex, 1)[0];
+      
+      // If it was at the front (index 0), move to back; otherwise move to front
+      if (clickedCourseIndex === 0) {
+        newOrder.push(clickedCourse); // Move to back
+      } else {
+        newOrder.unshift(clickedCourse); // Move to front
+      }
+    } else {
+      // Fallback: if course not found in current order, add it to front
+      newOrder = currentOrder.filter(c => 
+        !(c.start_time === courseData.start_time && 
+          c.end_time === courseData.end_time && 
+          c.courseName === courseData.courseName)
+      );
+      newOrder.push(courseData);
+    }
     
     setStackedCourses(prev => ({
       ...prev,
@@ -234,9 +254,6 @@ const DynamicTimetable = ({ selectedCourses }) => {
         allTimeSlots.add(course.end_time);
       });
     });
-    
-    // Convert to array and sort
-    const sortedTimeSlots = Array.from(allTimeSlots).sort();
     
     // Create a fixed time grid from 8 AM to 7 PM with 30-minute intervals
     const timeGrid = [];
