@@ -1,10 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { toJpeg } from "html-to-image";
 import "./DynamicTimetable.css";
 
 const DynamicTimetable = ({ selectedCourses }) => {
   const [showInstructor, setShowInstructor] = useState(true);
   const [showVenue, setShowVenue] = useState(true);
+  const [viewMode, setViewMode] = useState('table'); // 'table' or 'barchart'
+  const [stackedCourses, setStackedCourses] = useState({}); // For managing stacked conflicts
+  const timelineBodyRef = useRef(null);
+  const timeHeaderRef = useRef(null);
+
+  // Reset stacked courses when selected courses change
+  useEffect(() => {
+    setStackedCourses({});
+  }, [selectedCourses]);
 
   const days = [
     "Monday",
@@ -91,32 +100,52 @@ const DynamicTimetable = ({ selectedCourses }) => {
   const timetable = generateTimetable();
 
   const exportToJpg = () => {
-    const timetableElement = document.getElementById("timetable");
-    const clone = timetableElement.cloneNode(true);
-
-    const cover = document.createElement("div");
-    cover.style.position = "fixed";
-    cover.style.top = "0";
-    cover.style.left = "0";
-    cover.style.width = "100vw";
-    cover.style.height = "100vh";
-    cover.style.background = "white";
-    cover.style.zIndex = "-998";
-    cover.style.pointerEvents = "none"; // user can’t click it
-    document.body.appendChild(cover);
-
-    clone.style.position = "fixed";
-    clone.style.top = "0";
-    clone.style.left = "0";
-    clone.style.zIndex = "-999";
-    clone.style.width = "1280px";
-    clone.style.height = "auto";
-    clone.style.overflow = "hidden";
-    clone.classList.add("export-mode");
-
-    document.body.appendChild(clone);
-
-    toJpeg(clone, { quality: 0.95, useCORS: true })
+    const node = document.getElementById("timetable");
+    if (!node) return;
+  
+    // Save original styles so we can restore later
+    const originalStyle = {
+      width: node.style.width,
+      height: node.style.height,
+      overflow: node.style.overflow,
+    };
+  
+    // For bar chart view, we need to handle overflow differently
+    if (viewMode === 'barchart') {
+      const timelineBody = node.querySelector('.timeline-body');
+      const timeHeader = node.querySelector('.time-grid-header');
+      
+      if (timelineBody && timeHeader) {
+        // Force both header and body to show full width
+        timelineBody.style.overflow = "visible";
+        timeHeader.style.overflow = "visible";
+        
+        // Get the full width from the time grid
+        const timeCells = timeHeader.querySelectorAll('.time-header-cell');
+        const fullWidth = timeCells.length * 60 + 120; // 60px per cell + day label width
+        
+        node.style.width = fullWidth + "px";
+        node.style.height = "auto";
+        node.style.overflow = "visible";
+      }
+    } else {
+      // Original table view logic
+      node.style.overflow = "visible";
+      const fullWidth = node.scrollWidth;
+      const fullHeight = node.scrollHeight;
+      node.style.width = fullWidth + "px";
+      node.style.height = fullHeight + "px";
+    }
+  
+    const pixelRatio = 2; // ensures good resolution
+  
+    toJpeg(node, {
+      quality: 0.95,
+      backgroundColor: "#ffffff",
+      cacheBust: true,
+      useCORS: true,
+      pixelRatio: pixelRatio,
+    })
       .then((dataUrl) => {
         const link = document.createElement("a");
         link.download = "timetable.jpg";
@@ -125,14 +154,205 @@ const DynamicTimetable = ({ selectedCourses }) => {
       })
       .catch((err) => console.error("Error exporting timetable:", err))
       .finally(() => {
-        document.body.removeChild(clone);
-        document.body.removeChild(cover);
+        // Restore original styles
+        node.style.width = originalStyle.width;
+        node.style.height = originalStyle.height;
+        node.style.overflow = originalStyle.overflow;
+        
+        // Restore bar chart overflow styles
+        if (viewMode === 'barchart') {
+          const timelineBody = node.querySelector('.timeline-body');
+          const timeHeader = node.querySelector('.time-grid-header');
+          if (timelineBody) timelineBody.style.overflow = "auto";
+          if (timeHeader) timeHeader.style.overflow = "hidden";
+        }
       });
   };
+
+  const handleCourseClick = (day, timeSlot, courseIndex) => {
+    const key = `${day}-${timeSlot}`;
+    
+    // Find courses at the same time slot
+    const dayCourses = timetable[day];
+    const conflictingCourses = dayCourses.filter(course => 
+      `${course.start_time}-${course.end_time}` === timeSlot
+    );
+    
+    if (conflictingCourses.length > 1) {
+      // Get the current stack (either from state or original courses)
+      const currentStack = stackedCourses[key] || conflictingCourses;
+      
+      // Filter to ensure we only have valid courses
+      const validCurrentStack = currentStack.filter(course => 
+        course && course.start_time && course.end_time
+      );
+      
+      // Ensure the courseIndex is within bounds
+      if (courseIndex >= 0 && courseIndex < validCurrentStack.length) {
+        const newStack = [...validCurrentStack];
+        const clickedCourse = newStack.splice(courseIndex, 1)[0];
+        newStack.push(clickedCourse);
+        
+        setStackedCourses(prev => ({
+          ...prev,
+          [key]: newStack
+        }));
+      } else {
+        console.warn('Invalid course index:', courseIndex, 'for stack length:', validCurrentStack.length);
+      }
+    }
+  };
+
+  const generateBarChartData = () => {
+    // Get all unique time slots across all days
+    const allTimeSlots = new Set();
+    days.forEach(day => {
+      timetable[day].forEach(course => {
+        allTimeSlots.add(course.start_time);
+        allTimeSlots.add(course.end_time);
+      });
+    });
+    
+    // Convert to array and sort
+    const sortedTimeSlots = Array.from(allTimeSlots).sort();
+    
+    // Create a fixed time grid from 8 AM to 7 PM with 30-minute intervals
+    const timeGrid = [];
+    for (let hour = 8; hour <= 19; hour++) {
+      for (let minute = 0; minute < 60; minute += 30) {
+        const timeString = `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
+        timeGrid.push(timeString);
+      }
+    }
+    
+    // Generate bar chart data with timeline positioning
+    const barChartData = {};
+    days.forEach(day => {
+      barChartData[day] = [];
+      const dayCourses = timetable[day];
+      
+      // Group courses by time slot and apply reordering if needed
+      const timeSlotGroups = {};
+      dayCourses.forEach(course => {
+        const timeKey = `${course.start_time}-${course.end_time}`;
+        if (!timeSlotGroups[timeKey]) {
+          timeSlotGroups[timeKey] = [];
+        }
+        timeSlotGroups[timeKey].push(course);
+      });
+      
+      // Apply reordering for conflicts
+      Object.entries(timeSlotGroups).forEach(([timeKey, courses]) => {
+        const stackKey = `${day}-${timeKey}`;
+        const reorderedCourses = stackedCourses[stackKey] || courses;
+        
+        // Filter out any undefined or invalid courses
+        const validCourses = reorderedCourses.filter(course => 
+          course && course.start_time && course.end_time
+        );
+        
+        validCourses.forEach(course => {
+          const formatTime = (time24) => {
+            if (!time24) return "";
+            let [hours, minutes] = time24.split(":");
+            hours = parseInt(hours);
+            const amOrPm = hours >= 12 ? "PM" : "AM";
+            hours = hours % 12 || 12;
+            return `${hours}:${minutes} ${amOrPm}`;
+          };
+          
+          // Calculate position and width based on time using fixed scale
+          const findClosestTimeIndex = (targetTime) => {
+            const [targetHour, targetMin] = targetTime.split(':').map(Number);
+            const targetMinutes = targetHour * 60 + targetMin;
+            
+            let closestIndex = 0;
+            let minDiff = Infinity;
+            
+            timeGrid.forEach((gridTime, index) => {
+              const [gridHour, gridMin] = gridTime.split(':').map(Number);
+              const gridMinutes = gridHour * 60 + gridMin;
+              const diff = Math.abs(targetMinutes - gridMinutes);
+              
+              if (diff < minDiff) {
+                minDiff = diff;
+                closestIndex = index;
+              }
+            });
+            
+            return closestIndex;
+          };
+          
+          const startIndex = findClosestTimeIndex(course.start_time);
+          const endIndex = findClosestTimeIndex(course.end_time);
+          
+          // Ensure end index is at least 1 slot after start
+          const finalEndIndex = Math.max(startIndex + 1, endIndex);
+          
+          barChartData[day].push({
+            ...course,
+            startIndex,
+            endIndex: finalEndIndex,
+            width: (finalEndIndex - startIndex) * 60, // 60px per 30min slot
+            leftPosition: startIndex * 60,
+            formattedTime: `${formatTime(course.start_time)} - ${formatTime(course.end_time)}`,
+            isConflict: course.isConflict
+          });
+        });
+      });
+    });
+    
+    return { barChartData, timeGrid };
+  };
+
+
+  const { barChartData, timeGrid } = generateBarChartData();
+  
+  // Synchronize scrolling between header and body
+  useEffect(() => {
+    const timelineBody = timelineBodyRef.current;
+    const timeHeader = timeHeaderRef.current;
+    
+    if (!timelineBody || !timeHeader) return;
+    
+    const handleScroll = (source, target) => {
+      return () => {
+        if (source.scrollLeft !== target.scrollLeft) {
+          target.scrollLeft = source.scrollLeft;
+        }
+      };
+    };
+    
+    const bodyScrollHandler = handleScroll(timelineBody, timeHeader);
+    const headerScrollHandler = handleScroll(timeHeader, timelineBody);
+    
+    timelineBody.addEventListener('scroll', bodyScrollHandler);
+    timeHeader.addEventListener('scroll', headerScrollHandler);
+    
+    return () => {
+      timelineBody.removeEventListener('scroll', bodyScrollHandler);
+      timeHeader.removeEventListener('scroll', headerScrollHandler);
+    };
+  }, [viewMode]);
+  
 
   return (
     <div className="dynamic-timetable-container">
       <div className="options">
+        <div className="view-toggle">
+          <button 
+            className={`toggle-btn ${viewMode === 'table' ? 'active' : ''}`}
+            onClick={() => setViewMode('table')}
+          >
+            Table View
+          </button>
+          <button 
+            className={`toggle-btn ${viewMode === 'barchart' ? 'active' : ''}`}
+            onClick={() => setViewMode('barchart')}
+          >
+            Bar Chart
+          </button>
+        </div>
         <label>
           <input
             type="checkbox"
@@ -154,58 +374,136 @@ const DynamicTimetable = ({ selectedCourses }) => {
         </button>
       </div>
       <div id="timetable" className="timetable">
-        <table>
-          <thead>
-            <tr>
-              <th>Day</th>
-              <th>Course</th>
-              <th>Time</th>
-              {showInstructor && <th>Instructor</th>}
-              {showVenue && <th>Venue</th>}
-            </tr>
-          </thead>
-          <tbody>
-            {days.map((day) => (
-              <tr key={day}>
-                <td className="day-column">{day}</td>
-                <td>
-                  {timetable[day].map((entry, index) => (
-                    <div
-                      key={index}
-                      className={entry.isConflict ? "conflict" : ""}
-                    >
-                      {entry.courseName}
-                    </div>
-                  ))}
-                </td>
-                <td>
-                  {timetable[day].map((entry, index) => (
-                    <div
-                      key={index}
-                      className={entry.isConflict ? "conflict" : ""}
-                    >
-                      {entry.time}
-                    </div>
-                  ))}
-                </td>
-                {showInstructor && (
-                  <td>
-                    {timetable[day].map((entry, index) => (
-                      <div key={index}>{entry.instructor}</div>
-                    ))}
-                  </td>
-                )}
-                {showVenue && (
-                  <td>
-                    {timetable[day].map((entry, index) => (
-                      <div key={index}>{entry.venue}</div>
-                    ))}
-                  </td>
-                )}
+        <div className="view-indicator">
+          Current view: {viewMode === 'table' ? 'Table View' : 'Bar Chart View'}
+        </div>
+        {viewMode === 'table' ? (
+          <table>
+            <thead>
+              <tr>
+                <th>Day</th>
+                <th>Course</th>
+                <th>Time</th>
+                {showInstructor && <th>Instructor</th>}
+                {showVenue && <th>Venue</th>}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {days.map((day) => (
+                <tr key={day}>
+                  <td className="day-column">{day}</td>
+                  <td>
+                    {timetable[day].map((entry, index) => (
+                      <div
+                        key={index}
+                        className={entry.isConflict ? "conflict" : ""}
+                      >
+                        {entry.courseName}
+                      </div>
+                    ))}
+                  </td>
+                  <td>
+                    {timetable[day].map((entry, index) => (
+                      <div
+                        key={index}
+                        className={entry.isConflict ? "conflict" : ""}
+                      >
+                        {entry.time}
+                      </div>
+                    ))}
+                  </td>
+                   {showInstructor && (
+                     <td>
+                       {timetable[day].map((entry, index) => (
+                         <div key={index}>{entry.instructor || 'N/A'}</div>
+                       ))}
+                     </td>
+                   )}
+                   {showVenue && (
+                     <td>
+                       {timetable[day].map((entry, index) => (
+                         <div key={index}>{entry.venue || 'N/A'}</div>
+                       ))}
+                     </td>
+                   )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <div className="bar-chart-view">
+            <div className="timeline-header">
+              <div className="day-label-header">Day</div>
+              <div className="time-grid-header" ref={timeHeaderRef}>
+                {timeGrid.length > 0 ? timeGrid.map((time, index) => (
+                  <div key={index} className="time-header-cell">
+                    {(() => {
+                      const [hours, minutes] = time.split(':');
+                      const hour = parseInt(hours);
+                      const amOrPm = hour >= 12 ? 'PM' : 'AM';
+                      const displayHour = hour % 12 || 12;
+                      return minutes === '00' ? `${displayHour} ${amOrPm}` : '';
+                    })()}
+                  </div>
+                )) : (
+                  <div className="time-header-cell">No time data</div>
+                )}
+              </div>
+            </div>
+            <div className="timeline-body" ref={timelineBodyRef}>
+              {days.map((day) => (
+                <div key={day} className="timeline-row">
+                  <div className="day-label">{day}</div>
+                  <div className="time-grid">
+                    {timeGrid.map((time, index) => (
+                      <div key={index} className="time-cell"></div>
+                    ))}
+                    {barChartData[day] && barChartData[day].length > 0 ? (
+                      (() => {
+                        // Group courses by time slot for proper indexing
+                        const timeSlotGroups = {};
+                        barChartData[day].forEach(course => {
+                          const timeKey = `${course.start_time}-${course.end_time}`;
+                          if (!timeSlotGroups[timeKey]) {
+                            timeSlotGroups[timeKey] = [];
+                          }
+                          timeSlotGroups[timeKey].push(course);
+                        });
+
+                        // Render courses grouped by time slot
+                        return Object.entries(timeSlotGroups).map(([timeKey, courses]) =>
+                          courses.map((course, slotIndex) => (
+                            <div
+                              key={`${timeKey}-${slotIndex}`}
+                              className={`course-bar ${course.isConflict ? 'conflict-bar' : ''}`}
+                              onClick={() => handleCourseClick(day, timeKey, slotIndex)}
+                              style={{
+                                left: `${course.leftPosition}px`,
+                                width: `${course.width}px`,
+                                zIndex: course.isConflict ? 5 - slotIndex : 1,
+                                transform: course.isConflict ? `translateY(${slotIndex * 8}px)` : 'none'
+                              }}
+                            >
+                              <div className="course-name">{course.courseName}</div>
+                              {showInstructor && (
+                                <div className="course-instructor">{course.instructor || 'N/A'}</div>
+                              )}
+                              {showVenue && (
+                                <div className="course-venue">{course.venue || 'N/A'}</div>
+                              )}
+                            </div>
+                          ))
+                        ).flat();
+                      })()
+                    ) : (
+                      <div className="no-courses">No courses scheduled</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
