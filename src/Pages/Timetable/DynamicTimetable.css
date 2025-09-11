@@ -66,8 +66,7 @@
 
 .timetable table {
   width: 100%;
-  border-collapse: separate;
-  border-spacing: 0;
+  border-collapse: collapse;
   margin: 0;
   background: #fff;
   border-radius: 12px;
@@ -85,7 +84,7 @@
   color: white;
   font-weight: 500;
   padding: 16px 12px;
-  border: none;
+  border: 1px solid #e0e0e0;
   text-transform: uppercase;
   font-size: 12px;
   letter-spacing: 1px;
@@ -93,11 +92,12 @@
 
 .timetable td {
   padding: 16px 12px;
-  border: none;
+  border: 1px solid #e0e0e0;
   text-align: center;
   font-size: 14px;
-  border-bottom: 1px solid #e0e0e0;
   transition: background-color 0.2s ease;
+  vertical-align: top;
+  white-space: nowrap;
 }
 
 .day-column {
@@ -121,13 +121,14 @@ tbody tr:hover {
 }
 
 .conflict {
-  color: #f44336;
-  font-weight: 500;
-  background: #ffebee;
+  color: #d32f2f !important;
+  font-weight: 600 !important;
+  background: #ffcdd2 !important;
   padding: 4px 8px;
   border-radius: 4px;
-  display: inline-block;
+  display: block;
   margin: 2px 0;
+  border: 1px solid #f44336;
 }
 
 /* Course entries - clean cell styling */
@@ -137,10 +138,23 @@ tbody tr:hover {
   text-overflow: ellipsis;
 }
 
+/* Conflict styling for table cells */
 .timetable td.conflict {
-  background: #ffebee !important;
-  color: #f44336 !important;
-  font-weight: 500 !important;
+  background: #ffcdd2 !important;
+  color: #d32f2f !important;
+  font-weight: 600 !important;
+  border: 2px solid #f44336 !important;
+}
+
+/* Conflict styling for table rows (if needed) */
+.timetable tr.conflict {
+  background: #ffcdd2 !important;
+}
+
+.timetable tr.conflict td {
+  color: #d32f2f !important;
+  font-weight: 600 !important;
+  border: 1px solid #f44336 !important;
 }
 
 /* Responsive design */

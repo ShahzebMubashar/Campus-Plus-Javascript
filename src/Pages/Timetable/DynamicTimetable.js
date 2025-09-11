@@ -134,6 +134,7 @@ const DynamicTimetable = ({ selectedCourses }) => {
       });
   };
 
+
   return (
     <div className="dynamic-timetable-container">
       <div className="options">
@@ -192,20 +193,20 @@ const DynamicTimetable = ({ selectedCourses }) => {
                     </div>
                   ))}
                 </td>
-                {showInstructor && (
-                  <td>
-                    {timetable[day].map((entry, index) => (
-                      <div key={index}>{entry.instructor}</div>
-                    ))}
-                  </td>
-                )}
-                {showVenue && (
-                  <td>
-                    {timetable[day].map((entry, index) => (
-                      <div key={index}>{entry.venue}</div>
-                    ))}
-                  </td>
-                )}
+                 {showInstructor && (
+                   <td>
+                     {timetable[day].map((entry, index) => (
+                       <div key={index}>{entry.instructor || 'N/A'}</div>
+                     ))}
+                   </td>
+                 )}
+                 {showVenue && (
+                   <td>
+                     {timetable[day].map((entry, index) => (
+                       <div key={index}>{entry.venue || 'N/A'}</div>
+                     ))}
+                   </td>
+                 )}
               </tr>
             ))}
           </tbody>
