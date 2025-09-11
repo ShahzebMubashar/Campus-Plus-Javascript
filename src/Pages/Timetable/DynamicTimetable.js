@@ -105,12 +105,32 @@ const DynamicTimetable = ({ selectedCourses }) => {
       overflow: node.style.overflow,
     };
   
-    // Force element to show all content (no scrolling cut)
-    node.style.overflow = "visible";
-    const fullWidth = node.scrollWidth;
-    const fullHeight = node.scrollHeight;
-    node.style.width = fullWidth + "px";
-    node.style.height = fullHeight + "px";
+    // For bar chart view, we need to handle overflow differently
+    if (viewMode === 'barchart') {
+      const timelineBody = node.querySelector('.timeline-body');
+      const timeHeader = node.querySelector('.time-grid-header');
+      
+      if (timelineBody && timeHeader) {
+        // Force both header and body to show full width
+        timelineBody.style.overflow = "visible";
+        timeHeader.style.overflow = "visible";
+        
+        // Get the full width from the time grid
+        const timeCells = timeHeader.querySelectorAll('.time-header-cell');
+        const fullWidth = timeCells.length * 60 + 120; // 60px per cell + day label width
+        
+        node.style.width = fullWidth + "px";
+        node.style.height = "auto";
+        node.style.overflow = "visible";
+      }
+    } else {
+      // Original table view logic
+      node.style.overflow = "visible";
+      const fullWidth = node.scrollWidth;
+      const fullHeight = node.scrollHeight;
+      node.style.width = fullWidth + "px";
+      node.style.height = fullHeight + "px";
+    }
   
     const pixelRatio = 2; // ensures good resolution
   
@@ -120,8 +140,6 @@ const DynamicTimetable = ({ selectedCourses }) => {
       cacheBust: true,
       useCORS: true,
       pixelRatio: pixelRatio,
-      width: fullWidth,
-      height: fullHeight,
     })
       .then((dataUrl) => {
         const link = document.createElement("a");
@@ -135,6 +153,14 @@ const DynamicTimetable = ({ selectedCourses }) => {
         node.style.width = originalStyle.width;
         node.style.height = originalStyle.height;
         node.style.overflow = originalStyle.overflow;
+        
+        // Restore bar chart overflow styles
+        if (viewMode === 'barchart') {
+          const timelineBody = node.querySelector('.timeline-body');
+          const timeHeader = node.querySelector('.time-grid-header');
+          if (timelineBody) timelineBody.style.overflow = "auto";
+          if (timeHeader) timeHeader.style.overflow = "hidden";
+        }
       });
   };
 
