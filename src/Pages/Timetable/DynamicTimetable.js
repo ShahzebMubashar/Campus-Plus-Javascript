@@ -314,11 +314,6 @@ const DynamicTimetable = ({ selectedCourses }) => {
     };
   }, [viewMode]);
   
-  // Debug logging (can be removed in production)
-  // console.log('Current view mode:', viewMode);
-  // console.log('Timetable data:', timetable);
-  // console.log('Bar chart data:', barChartData);
-  // console.log('Time grid:', timeGrid);
 
   return (
     <div className="dynamic-timetable-container">
