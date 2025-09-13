@@ -54,6 +54,60 @@ app.get('/health', (req, res) => {
   });
 });
 
+// Connection cleanup endpoint (for manual cleanup if needed)
+app.post('/cleanup-connections', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    
+    // Get connection stats before cleanup
+    const beforeStats = await client.query(`
+      SELECT 
+        count(*) as total_connections,
+        count(*) FILTER (WHERE state = 'idle') as idle_connections,
+        count(*) FILTER (WHERE state = 'active') as active_connections
+      FROM pg_stat_activity 
+      WHERE datname = current_database()
+    `);
+    
+    // Kill idle connections (except current one)
+    const killResult = await client.query(`
+      SELECT pg_terminate_backend(pid) as killed_connections
+      FROM pg_stat_activity 
+      WHERE state = 'idle' 
+      AND pid <> pg_backend_pid()
+      AND usename = 'avnadmin'
+      AND state_change < NOW() - INTERVAL '5 minutes'
+    `).catch(error => {
+      console.error('Error killing idle connections:', error);
+      return { rowCount: 0 };
+    });
+    console.log(killResult);
+    
+    // Get connection stats after cleanup
+    const afterStats = await client.query(`
+      SELECT 
+        count(*) as total_connections,
+        count(*) FILTER (WHERE state = 'idle') as idle_connections,
+        count(*) FILTER (WHERE state = 'active') as active_connections
+      FROM pg_stat_activity 
+      WHERE datname = current_database()
+    `);
+    
+    client.release();
+    
+    res.status(200).json({
+      message: 'Connection cleanup completed',
+      before: beforeStats.rows[0],
+      after: afterStats.rows[0],
+      killed_count: killResult.rowCount
+    });
+    
+  } catch (error) {
+    console.error('Connection cleanup error:', error);
+    res.status(500).json({ error: 'Cleanup failed', message: error.message });
+  }
+});
+
 app.post('/api/email/send-email', async (req, res) => {
   const { name, email, phone, message } = req.body;
   const transporter = nodemailer.createTransporter({
