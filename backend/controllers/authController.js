@@ -58,6 +58,36 @@ exports.newRegister = async (request, response) => {
 
     const formattedRoll = `${batch}${city}-${digits}`;
 
+    // Check for duplicate email, username, and roll number before proceeding
+    let client = await pool.connect();
+    try {
+      const existingUser = await client.query(
+        `SELECT email FROM Users WHERE email = $1`,
+        [email]
+      );
+
+      if (existingUser.rowCount > 0) {
+        return response.status(409).json({
+          error: "Email already exists. Please use a different email or try logging in."
+        });
+      }
+
+      const existingUsername = await client.query(
+        `SELECT username FROM Users WHERE username = $1`,
+        [username]
+      );
+
+      if (existingUsername.rowCount > 0) {
+        return response.status(409).json({
+          error: "Username already exists. Please choose a different username."
+        });
+      }
+
+
+    } finally {
+      client.release();
+    }
+
     const otp = Math.floor(100000 + Math.random() * 900000);
 
     const transporter = nodemailer.createTransport({
@@ -78,11 +108,14 @@ exports.newRegister = async (request, response) => {
              <p>Thank you,<br/>FAST Registration Team</p>`
     });
 
-    let client = await pool.connect();
-
+    client = await pool.connect();
 
     try {
       await client.query('BEGIN');
+      
+      // Delete any existing OTP for this email first
+      await client.query(`DELETE FROM OTPVerification WHERE email = $1`, [email]);
+      
       const res = await client.query(`Insert into OTPVerification (email, otp, expires_at)
         Values ($1, $2, current_timestamp + Interval '10 minutes') returning *`,
         [email, otp]
