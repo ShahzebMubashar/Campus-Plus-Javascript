@@ -430,12 +430,19 @@ function ProfilePage() {
                 </div>
                 <div className="lms-form-group">
                   <label>Program</label>
-                  <input
-                    type="text"
+                  <select
                     name="degree"
                     value={editForm.degree || ""}
                     onChange={handleEditFormChange}
-                  />
+                    className="lms-select"
+                  >
+                    <option value="">Select Program</option>
+                    <option value="BS(CS)">BS(CS) - Computer Science</option>
+                    <option value="BS(SE)">BS(SE) - Software Engineering</option>
+                    <option value="BS(AF)">BS(AF) - Accounting & Finance</option>
+                    <option value="BS(DS)">BS(DS) - Data Science</option>
+                    <option value="BS(CV)">BS(CV) - Civil Engineering</option>
+                  </select>
                 </div>
                 <div className="lms-form-group">
                   <label>Batch</label>

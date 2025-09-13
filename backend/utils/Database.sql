@@ -2,6 +2,9 @@
 -- Please log an issue at https://github.com/pgadmin-org/pgadmin4/issues/new/choose if you find any bugs, including reproduction steps.
 BEGIN;
 
+-- Create enum types
+CREATE TYPE degtype AS ENUM('BS(CS)', 'BS(SE)', 'BS(AF)', 'BS(DS)', 'BS(CV)');
+
 
 CREATE TABLE IF NOT EXISTS public.courseinfo
 (

@@ -64,10 +64,10 @@ const editUserInfo = async (request, response) => {
     return response.status(200).json("Information Updated Successfully");
   } catch (error) {
     console.error(error.message);
-    await pool.query("ROLLBACK");
+    await client.query("ROLLBACK");
     return response.status(500).send("Internal Server Error");
   } finally {
-    if (client) client.release();
+    client.release();
   }
 };
 
