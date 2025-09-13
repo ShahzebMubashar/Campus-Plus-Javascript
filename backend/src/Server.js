@@ -69,6 +69,13 @@ app.post('/cleanup-connections', async (req, res) => {
       WHERE datname = current_database()
     `);
     
+    // Get maximum connections allowed
+    const maxConnections = await client.query(`
+      SELECT setting::int as max_connections 
+      FROM pg_settings 
+      WHERE name = 'max_connections'
+    `);
+    
     // Kill idle connections (except current one)
     const killResult = await client.query(`
       SELECT pg_terminate_backend(pid) as killed_connections
@@ -81,7 +88,6 @@ app.post('/cleanup-connections', async (req, res) => {
       console.error('Error killing idle connections:', error);
       return { rowCount: 0 };
     });
-    console.log(killResult);
     
     // Get connection stats after cleanup
     const afterStats = await client.query(`
@@ -93,13 +99,29 @@ app.post('/cleanup-connections', async (req, res) => {
       WHERE datname = current_database()
     `);
     
+    // Calculate usage percentage
+    const maxConn = maxConnections.rows[0].max_connections;
+    const beforeUsage = Math.round((beforeStats.rows[0].total_connections / maxConn) * 100);
+    const afterUsage = Math.round((afterStats.rows[0].total_connections / maxConn) * 100);
+    
     client.release();
     
     res.status(200).json({
       message: 'Connection cleanup completed',
-      before: beforeStats.rows[0],
-      after: afterStats.rows[0],
-      killed_count: killResult.rowCount
+      max_connections_allowed: maxConn,
+      before: {
+        ...beforeStats.rows[0],
+        usage_percentage: beforeUsage
+      },
+      after: {
+        ...afterStats.rows[0],
+        usage_percentage: afterUsage
+      },
+      killed_count: killResult.rowCount,
+      improvement: {
+        connections_freed: beforeStats.rows[0].total_connections - afterStats.rows[0].total_connections,
+        usage_reduction: beforeUsage - afterUsage
+      }
     });
     
   } catch (error) {
