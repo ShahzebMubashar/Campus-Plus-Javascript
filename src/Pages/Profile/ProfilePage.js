@@ -446,12 +446,30 @@ function ProfilePage() {
                 </div>
                 <div className="lms-form-group">
                   <label>Batch</label>
-                  <input
-                    type="text"
+                  <select
                     name="batch"
                     value={editForm.batch || ""}
                     onChange={handleEditFormChange}
-                  />
+                    className="lms-select"
+                  >
+                    <option value="">Select Batch</option>
+                    {(() => {
+                      const currentYear = new Date().getFullYear();
+                      const currentYear2Digit = currentYear % 100;
+                      const batchOptions = [];
+                      
+                      // Generate batch options for the last 5 years
+                      for (let i = currentYear2Digit; i >= currentYear2Digit - 4; i--) {
+                        const fullYear = currentYear - (currentYear2Digit - i);
+                        batchOptions.push(
+                          <option key={i} value={i.toString()}>
+                            {i} ({fullYear})
+                          </option>
+                        );
+                      }
+                      return batchOptions;
+                    })()}
+                  </select>
                 </div>
                 <div className="lms-modal-actions">
                   <button type="submit" className="lms-btn lms-primary">

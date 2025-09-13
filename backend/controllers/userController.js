@@ -34,9 +34,37 @@ const editUserInfo = async (request, response) => {
   if (!batch || !degree || !name)
     return response.status(400).json(`Please Enter all the fields`);
 
-  try {
-    const client = await pool.connect();
+  // Validate batch - should be 2-digit year within last 5 years (matches DB constraint)
+  const currentYear = new Date().getFullYear();
+  const currentYear2Digit = currentYear % 100; // Get last 2 digits of current year
+  const batchNum = parseInt(batch);
+  
+  if (isNaN(batchNum) || batchNum < (currentYear2Digit - 4) || batchNum > currentYear2Digit) {
+    return response.status(400).json({
+      error: `Invalid batch year. Please enter a 2-digit year between ${currentYear2Digit - 4} and ${currentYear2Digit} (representing years ${currentYear - 4} to ${currentYear})`
+    });
+  }
 
+  // Validate degree against allowed enum values from database
+  try {
+    const allowedDegrees = await pool.query('SELECT unnest(enum_range(NULL::degtype)) as degree_type');
+    const degreeValues = allowedDegrees.rows.map(row => row.degree_type);
+    
+    if (!degreeValues.includes(degree)) {
+      return response.status(400).json({
+        error: `Invalid degree type. Allowed values: ${degreeValues.join(', ')}`
+      });
+    }
+  } catch (error) {
+    console.error('Error validating degree type:', error);
+    return response.status(500).json({
+      error: 'Error validating degree type. Please try again.'
+    });
+  }
+
+  const client = await pool.connect();
+
+  try {
     let res = await client.query(`Select * from UserInfo where userid = $1`, [
       userid,
     ]);
